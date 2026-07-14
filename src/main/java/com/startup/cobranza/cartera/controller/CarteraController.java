@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -25,9 +26,10 @@ public class CarteraController {
 
     @GetMapping("/importar")
     @PreAuthorize("hasRole('ADMIN')")
-    public String importarForm(Model model) {
+    public String importarForm(Model model, HttpServletRequest request) {
         List<EmpresaDTO> empresas = empresaService.listarActivas();
         model.addAttribute("empresas", empresas);
+        model.addAttribute("usuarioNombre", request.getUserPrincipal().getName());
         return "cartera/importar";
     }
 

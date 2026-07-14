@@ -56,7 +56,7 @@
                         <label for="archivo" class="form-label">Archivo Excel *</label>
                         <input type="file" class="form-control" id="archivo" name="archivo" accept=".xlsx,.xls" required>
                     </div>
-                    <input type="hidden" name="usuario" th:value="${#authentication.name}">
+                    <input type="hidden" name="usuario" th:value="${usuarioNombre}">
                     <button type="submit" class="btn btn-primary">Importar</button>
                 </form>
             </div>

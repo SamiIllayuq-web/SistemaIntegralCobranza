@@ -140,18 +140,154 @@
             </div>
         </div>
 
-        <!-- Sección de Gestión (para fases futuras) -->
-        <div class="card">
+        <!-- Sección de Gestiones -->
+        <div class="card mb-4">
             <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Gestiones</h5>
+                <h5 class="mb-0">Registrar Gestión</h5>
             </div>
             <div class="card-body">
-                <p class="text-muted">Próximamente: aquí se mostrará el historial de gestiones y se podrán registrar nuevas.</p>
-                <a th:href="@{/clientes}" class="btn btn-secondary">Volver al listado</a>
+                <form id="gestionForm">
+                    <input type="hidden" name="clienteId" th:value="${cliente.id}">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="tipo" class="form-label">Tipo de Gestión *</label>
+                            <select class="form-select" id="tipo" name="tipo" required>
+                                <option value="">Seleccione...</option>
+                                <option value="LLAMADA">Llamada</option>
+                                <option value="VISITA">Visita</option>
+                                <option value="OBSERVACION">Observación</option>
+                                <option value="COMPROMISO_PAGO">Compromiso de Pago</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="fechaGestion" class="form-label">Fecha y Hora</label>
+                            <input type="datetime-local" class="form-control" id="fechaGestion" name="fechaGestion">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="observaciones" class="form-label">Observaciones</label>
+                            <textarea class="form-control" id="observaciones" name="observaciones" rows="1"></textarea>
+                        </div>
+                    </div>
+                    <div class="row" id="compromisoFields" style="display:none;">
+                        <div class="col-md-6 mb-3">
+                            <label for="montoCompromiso" class="form-label">Monto Compromiso (S/) *</label>
+                            <input type="number" class="form-control" id="montoCompromiso" name="montoCompromiso" step="0.01" min="0">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="fechaCompromiso" class="form-label">Fecha Compromiso *</label>
+                            <input type="date" class="form-control" id="fechaCompromiso" name="fechaCompromiso">
+                        </div>
+                    </div>
+                    <div id="gestionError" class="alert alert-danger" style="display:none;"></div>
+                    <div id="gestionSuccess" class="alert alert-success" style="display:none;"></div>
+                    <button type="submit" class="btn btn-primary">Registrar Gestión</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Historial de Gestiones -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Historial de Gestiones</h5>
+            </div>
+            <div class="card-body">
+                <div th:if="${#lists.isEmpty(gestiones)}">
+                    <p class="text-muted">No hay gestiones registradas para este cliente.</p>
+                </div>
+                <div th:if="${!#lists.isEmpty(gestiones)}">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Tipo</th>
+                                <th>Observaciones</th>
+                                <th>Monto Compromiso</th>
+                                <th>Fecha Compromiso</th>
+                                <th>Usuario</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="g : ${gestiones}">
+                                <td th:text="${#temporals.format(g.fechaGestion, 'yyyy-MM-dd HH:mm')}"></td>
+                                <td>
+                                    <span th:class="${'badge bg-' + 
+                                        (g.tipo.name() == 'LLAMADA' ? 'info' : 
+                                         g.tipo.name() == 'VISITA' ? 'secondary' : 
+                                         g.tipo.name() == 'OBSERVACION' ? 'warning' : 'success')}"
+                                          th:text="${g.tipoLabel}"></span>
+                                </td>
+                                <td th:text="${g.observaciones ?: '-'}"></td>
+                                <td th:text="${g.montoCompromiso != null ? 'S/ ' + #numbers.formatDecimal(g.montoCompromiso, 1, 2) : '-'}"></td>
+                                <td th:text="${g.fechaCompromiso != null ? #temporals.format(g.fechaCompromiso, 'yyyy-MM-dd') : '-'}"></td>
+                                <td th:text="${g.usuarioRegistra}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:inline="javascript">
+        // Mostrar/ocultar campos de compromiso según tipo
+        document.getElementById('tipo').addEventListener('change', function() {
+            var fields = document.getElementById('compromisoFields');
+            if (this.value === 'COMPROMISO_PAGO') {
+                fields.style.display = 'flex';
+            } else {
+                fields.style.display = 'none';
+            }
+        });
+
+        // Envío del formulario
+        document.getElementById('gestionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            var tipo = document.getElementById('tipo').value;
+            var clienteId = /*[[${cliente.id}]]*/;
+            var fechaGestion = document.getElementById('fechaGestion').value;
+            var observaciones = document.getElementById('observaciones').value;
+            var montoCompromiso = document.getElementById('montoCompromiso').value;
+            var fechaCompromiso = document.getElementById('fechaCompromiso').value;
+
+            var body = {
+                tipo: tipo,
+                observaciones: observaciones
+            };
+
+            if (fechaGestion) body.fechaGestion = fechaGestion;
+            if (montoCompromiso) body.montoCompromiso = parseFloat(montoCompromiso);
+            if (fechaCompromiso) body.fechaCompromiso = fechaCompromiso;
+
+            fetch('/clientes/' + clienteId + '/gestiones/guardar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            })
+            .then(function(response) {
+                if (response.ok) {
+                    document.getElementById('gestionSuccess').textContent = 'Gestión registrada correctamente';
+                    document.getElementById('gestionSuccess').style.display = 'block';
+                    document.getElementById('gestionError').style.display = 'none';
+                    document.getElementById('gestionForm').reset();
+                    document.getElementById('compromisoFields').style.display = 'none';
+                    setTimeout(function() { location.reload(); }, 1000);
+                } else {
+                    return response.json().then(function(data) {
+                        document.getElementById('gestionError').textContent = data.error || 'Error al registrar';
+                        document.getElementById('gestionError').style.display = 'block';
+                        document.getElementById('gestionSuccess').style.display = 'none';
+                    });
+                }
+            })
+            .catch(function(err) {
+                document.getElementById('gestionError').textContent = 'Error de conexión';
+                document.getElementById('gestionError').style.display = 'block';
+            });
+        });
+    </script>
 </body>
 </html>

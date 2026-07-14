@@ -7,6 +7,8 @@ import com.startup.cobranza.cliente.exception.ClienteException;
 import com.startup.cobranza.cliente.service.ClienteService;
 import com.startup.cobranza.empresa.dto.EmpresaDTO;
 import com.startup.cobranza.empresa.service.EmpresaService;
+import com.startup.cobranza.gestion.dto.GestionDTO;
+import com.startup.cobranza.gestion.service.GestionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,6 +27,7 @@ public class ClienteController {
 
     private final ClienteService clienteService;
     private final EmpresaService empresaService;
+    private final GestionService gestionService;
 
     @GetMapping
     public String listar(@ModelAttribute ClienteBusquedaDTO busqueda, Model model) {
@@ -54,7 +57,9 @@ public class ClienteController {
     public String detalle(@PathVariable Long id, Model model, RedirectAttributes redirectAttrs) {
         try {
             ClienteDTO cliente = clienteService.obtenerPorId(id);
+            List<GestionDTO> gestiones = gestionService.listarPorCliente(id);
             model.addAttribute("cliente", cliente);
+            model.addAttribute("gestiones", gestiones);
             return "cliente/detalle";
         } catch (ClienteException e) {
             redirectAttrs.addFlashAttribute("error", e.getMessage());
