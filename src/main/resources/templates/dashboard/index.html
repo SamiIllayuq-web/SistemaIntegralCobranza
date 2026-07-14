@@ -29,6 +29,12 @@
                     <li class="nav-item" sec:authorize="hasRole('ADMIN')">
                         <a class="nav-link" th:href="@{/usuarios}">Usuarios</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/clientes}">Clientes</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                        <a class="nav-link" th:href="@{/cartera/importar}">Cartera</a>
+                    </li>
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item">
@@ -54,27 +60,27 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
+                        <h5 class="card-title">Clientes</h5>
+                        <p class="card-text">Consultar y gestionar cartera de clientes</p>
+                        <a th:href="@{/clientes}" class="btn btn-primary">Ir a Clientes</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4" sec:authorize="hasRole('ADMIN')">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Importar Cartera</h5>
+                        <p class="card-text">Importar cartera desde archivo Excel</p>
+                        <a th:href="@{/cartera/importar}" class="btn btn-primary">Ir a Importar</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4" sec:authorize="hasRole('ADMIN')">
+                <div class="card">
+                    <div class="card-body">
                         <h5 class="card-title">Empresas</h5>
                         <p class="card-text">Gestionar empresas y entidades financieras</p>
-                        <a th:href="@{/empresas}" class="btn btn-primary" sec:authorize="hasRole('ADMIN')">Ir a Empresas</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Agencias</h5>
-                        <p class="card-text">Gestionar agencias por empresa</p>
-                        <a th:href="@{/agencias}" class="btn btn-primary" sec:authorize="hasRole('ADMIN')">Ir a Agencias</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Usuarios</h5>
-                        <p class="card-text">Administrar usuarios del sistema</p>
-                        <a th:href="@{/usuarios}" class="btn btn-primary" sec:authorize="hasRole('ADMIN')">Ir a Usuarios</a>
+                        <a th:href="@{/empresas}" class="btn btn-primary">Ir a Empresas</a>
                     </div>
                 </div>
             </div>
