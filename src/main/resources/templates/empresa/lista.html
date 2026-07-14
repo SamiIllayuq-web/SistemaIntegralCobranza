@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empresas - Sistema de Cobranza</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Sistema de Cobranza</a>
+            <div class="navbar-nav">
+                <a class="nav-link" th:href="@{/dashboard}">Inicio</a>
+                <a class="nav-link" th:href="@{/empresas}">Empresas</a>
+                <a class="nav-link" th:href="@{/agencias}">Agencias</a>
+                <a class="nav-link" th:href="@{/usuarios}">Usuarios</a>
+            </div>
+            <form th:action="@{/logout}" method="post" class="d-inline">
+                <button type="submit" class="btn btn-light btn-sm">Cerrar Sesión</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Empresas</h2>
+            <a th:href="@{/empresas/nuevo}" class="btn btn-success" sec:authorize="hasRole('ADMIN')">Nueva Empresa</a>
+        </div>
+
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>RUC</th>
+                    <th>Teléfono</th>
+                    <th>Email</th>
+                    <th>Activo</th>
+                    <th sec:authorize="hasRole('ADMIN')">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="empresa : ${empresas}">
+                    <td th:text="${empresa.id}"></td>
+                    <td th:text="${empresa.nombre}"></td>
+                    <td th:text="${empresa.ruc}"></td>
+                    <td th:text="${empresa.telefono}"></td>
+                    <td th:text="${empresa.email}"></td>
+                    <td th:text="${empresa.activo ? 'Sí' : 'No'}"></td>
+                    <td sec:authorize="hasRole('ADMIN')">
+                        <a th:href="@{/empresas/editar/{id}(id=${empresa.id})}" class="btn btn-sm btn-warning">Editar</a>
+                        <a th:href="@{/empresas/eliminar/{id}(id=${empresa.id})}" class="btn btn-sm btn-danger"
+                           onclick="return confirm('¿Está seguro de eliminar esta empresa?')">Eliminar</a>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(empresas)}">
+                    <td colspan="7" class="text-center">No hay empresas registradas</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

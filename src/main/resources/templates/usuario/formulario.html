@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${usuarioId != null ? 'Editar Usuario' : 'Nuevo Usuario'}">Usuario</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Sistema de Cobranza</a>
+            <div class="navbar-nav">
+                <a class="nav-link" th:href="@{/dashboard}">Inicio</a>
+                <a class="nav-link" th:href="@{/usuarios}">Usuarios</a>
+            </div>
+            <form th:action="@{/logout}" method="post" class="d-inline">
+                <button type="submit" class="btn btn-light btn-sm">Cerrar Sesión</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2 th:text="${usuarioId != null ? 'Editar Usuario' : 'Nuevo Usuario'}"></h2>
+
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+        <form th:action="@{/usuarios/guardar}" th:object="${usuarioForm}" method="post">
+            <input type="hidden" name="usuarioId" th:value="${usuarioId}" />
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="username" class="form-label">Nombre de Usuario *</label>
+                    <input type="text" class="form-control" id="username" th:field="*{username}" required>
+                    <div class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="nombreCompleto" class="form-label">Nombre Completo *</label>
+                    <input type="text" class="form-control" id="nombreCompleto" th:field="*{nombreCompleto}" required>
+                    <div class="text-danger" th:if="${#fields.hasErrors('nombreCompleto')}" th:errors="*{nombreCompleto}"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="password" class="form-label">Contraseña <span th:if="${usuarioId == null}">*</span></label>
+                    <input type="password" class="form-control" id="password" th:field="*{password}"
+                           th:required="${usuarioId == null}">
+                    <div class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                    <small class="text-muted" th:if="${usuarioId != null}">Solo llenar si desea cambiar la contraseña</small>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="rol" class="form-label">Rol *</label>
+                    <select class="form-select" id="rol" th:field="*{rol}" required>
+                        <option value="">Seleccione un rol</option>
+                        <option value="ADMIN">Administrador</option>
+                        <option value="SECRETARIO">Secretario</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a th:href="@{/usuarios}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,948 @@
+﻿ESPECIFICACIÓN TÉCNICA DEL SISTEMA
+1. Objetivo y Alcance
+1.1 Introducción
+El presente documento describe la especificación técnica del Sistema Integral de Cobranza desarrollado para el estudio jurídico.
+Su finalidad es definir la arquitectura, las tecnologías, los componentes y los criterios técnicos que servirán como guía durante el desarrollo del Producto Mínimo Viable (MVP).
+Este documento complementa el documento de Análisis y Planificación, el cual describe el problema de negocio, los requisitos funcionales y el alcance del sistema.
+Mientras el documento funcional responde qué se va a construir, esta especificación técnica define cómo será implementada la solución.
+1.2 Objetivo
+Establecer las decisiones técnicas necesarias para desarrollar un sistema web mantenible, modular y escalable, que permita gestionar la cartera de clientes del estudio jurídico e integrar servicios externos como la API de Kmente.
+La especificación técnica servirá como referencia para el desarrollo del backend, frontend, base de datos y futuras mejoras del sistema.
+1.3 Alcance
+La presente especificación técnica comprende los siguientes aspectos:
+* Arquitectura general del sistema.
+* Tecnologías seleccionadas.
+* Organización del backend y frontend.
+* Diseño de la base de datos.
+* Diseño de la API REST.
+* Estrategia de autenticación y autorización.
+* Integración con servicios externos.
+* Organización del proyecto y buenas prácticas de desarrollo.
+No forma parte de este documento la implementación del código fuente, la documentación de pruebas ni los procedimientos de despliegue en producción, los cuales podrán documentarse en etapas posteriores del proyecto.
+1.4 Público objetivo
+Este documento está dirigido a:
+* Desarrolladores del proyecto.
+* Arquitectos de software.
+* Integrantes técnicos de la startup.
+* Colaboradores que participen en el mantenimiento o evolución del sistema.
+Su propósito es facilitar la comprensión de las decisiones técnicas adoptadas y mantener una base común de conocimiento para el equipo de desarrollo.
+1.5 Principios de desarrollo
+Durante la implementación del sistema se seguirán los siguientes principios:
+* Mantener el enfoque en el Producto Mínimo Viable (MVP).
+* Priorizar soluciones simples antes que arquitecturas complejas.
+* Desarrollar componentes reutilizables y fáciles de mantener.
+* Separar claramente la lógica de negocio de la interfaz de usuario.
+* Justificar cada decisión tecnológica en función de las necesidades del proyecto.
+* Diseñar el sistema pensando en su crecimiento progresivo, evitando incorporar complejidad innecesaria en las primeras versiones.
+1.6 Relación con el documento funcional
+La Especificación Técnica del Sistema se basa en el documento de Análisis y Planificación, el cual define el problema, los actores, los módulos, los requisitos y el alcance del MVP.
+Cualquier modificación funcional que afecte el comportamiento del sistema deberá reflejarse primero en el documento funcional antes de ser incorporada en esta especificación técnica.
+2. Decisiones Tecnológicas
+2.1 Introducción
+La selección de tecnologías para el desarrollo del Sistema Integral de Cobranza se realizó considerando las necesidades del proyecto, la experiencia del equipo de desarrollo y la proyección de crecimiento del producto.
+Las tecnologías elegidas buscan ofrecer un equilibrio entre simplicidad, mantenibilidad, rendimiento y escalabilidad, evitando incorporar herramientas que incrementen la complejidad sin aportar beneficios al Producto Mínimo Viable (MVP).
+2.2 Criterios de selección
+Para la elección del stack tecnológico se consideraron los siguientes criterios:
+* Experiencia del equipo de desarrollo.
+* Facilidad de mantenimiento.
+* Curva de aprendizaje.
+* Comunidad y documentación.
+* Compatibilidad entre tecnologías.
+* Facilidad de integración con servicios externos.
+* Facilidad para incorporar nuevas funcionalidades conforme evolucione el sistema.
+2.3 Frontend
+Tecnología seleccionada
+La interfaz de usuario será desarrollada utilizando Thymeleaf como motor de plantillas integrado con Spring Boot.
+Para el diseño visual se utilizará Bootstrap 5, complementado con HTML5, CSS3 y JavaScript para aquellas funcionalidades que requieran interacción dinámica.
+Justificación
+Esta decisión permite mantener una única aplicación, reduciendo la complejidad del proyecto y facilitando el mantenimiento del código durante el desarrollo del MVP.
+Al tratarse de un sistema de uso interno, con pocos usuarios concurrentes y enfocado principalmente en operaciones de consulta y registro de información, una arquitectura basada en Thymeleaf resulta suficiente y adecuada para cubrir las necesidades actuales del proyecto.
+2.4 Backend
+Tecnología seleccionada
+Para el desarrollo del backend se utilizará Java 21 junto con Spring Boot 3.
+Justificación
+Spring Boot fue seleccionado por ser un framework robusto, ampliamente utilizado en aplicaciones empresariales y por ofrecer un ecosistema completo para el desarrollo de aplicaciones web. Facilita la implementación de la lógica de negocio, la seguridad, el acceso a datos y la integración con servicios externos, permitiendo construir una solución mantenible y escalable.
+Además, Spring Boot se integra de forma natural con Thymeleaf, permitiendo desarrollar una aplicación web completa dentro de un único proyecto.
+2.5 Base de Datos
+Tecnología seleccionada
+La información será almacenada en PostgreSQL, utilizando Supabase Cloud como proveedor de la base de datos.
+Justificación
+Esta decisión permite trabajar desde el inicio sobre una base de datos disponible en la nube, simplificando el proceso de despliegue y manteniendo el mismo proveedor de base de datos durante todas las etapas del proyecto.
+PostgreSQL fue seleccionado por su estabilidad, alto rendimiento y excelente integración con Spring Boot mediante Spring Data JPA.
+2.6 Persistencia de Datos
+Tecnología seleccionada
+* Spring Data JPA.
+* Hibernate.
+Justificación
+Estas tecnologías simplifican el acceso a la base de datos, reduciendo la cantidad de consultas SQL escritas manualmente y facilitando el mantenimiento del código.
+Además, permiten trabajar con entidades orientadas a objetos de forma natural dentro del ecosistema Java.
+2.7 Seguridad
+Tecnología seleccionada
+Spring Security
+Justificación
+Spring Security será el framework encargado de la autenticación y autorización del sistema.
+Para el MVP se utilizará autenticación basada en sesión (Session Authentication), por tratarse de una aplicación web renderizada mediante Thymeleaf.
+Esta estrategia reduce la complejidad de la implementación y se adapta mejor al tipo de aplicación desarrollada.
+
+
+2.8 Comunicación entre Frontend y Backend
+La comunicación entre la interfaz desarrollada con Thymeleaf y el backend se realizará mediante peticiones HTTP.
+
+Para operaciones dinámicas podrá utilizarse JavaScript con solicitudes AJAX cuando sea necesario.
+2.9 Integración con Servicios Externos
+El sistema integrará la API de Kmente para consultar información actualizada de los clientes.
+La comunicación con este servicio se realizará mediante peticiones HTTP desde el backend, evitando exponer credenciales o lógica de integración en el frontend.
+Toda la información obtenida será procesada por el backend antes de enviarse al cliente web.
+2.10 Control de Versiones
+Tecnología seleccionada
+* Git.
+* GitHub.
+Justificación
+Git permitirá gestionar el historial del proyecto y facilitar el trabajo colaborativo entre los integrantes del equipo.
+GitHub será utilizado como repositorio central del código fuente y como plataforma para el seguimiento de cambios durante el desarrollo.
+2.11 Herramientas de Desarrollo
+Durante el desarrollo del proyecto se utilizarán las siguientes herramientas:
+Herramienta
+	Propósito
+	Visual Studio Code
+	Desarrollo del proyecto
+	Maven
+	Gestión de dependencias
+	Postman
+	Pruebas de API
+	pgAdmin
+	Administración de PostgreSQL.
+	Git
+	Control de versiones.
+	GitHub
+	Repositorio del proyecto.
+	
+
+2.12 Resumen del Stack Tecnológico
+Capa
+	Tecnología
+	Frontend
+	Thymeleaf + Bootstrap 5 + HTML + CSS + JavaScript
+	Backend
+	Java 21 + Spring Boot 3
+	Base de Datos
+	PostgreSQL(Supabase)
+	Persistencia
+	Spring Data JPA + Hibernate
+	Seguridad
+	Spring Security
+	Comunicación
+	HTTP + Thymeleaf + AJAX (cuando aplique)
+	API Externa
+	Kmente
+	Dependencias
+	Maven
+	Control de Versiones
+	Git + GitHub
+	
+
+2.13 Dependencias Externas
+
+
+El sistema depende de los siguientes servicios externos:
+
+
+• API Kmente
+    Consulta de información de clientes.
+
+
+• Supabase Cloud
+    Servicio de alojamiento de PostgreSQL.
+
+
+La indisponibilidad temporal de alguno de estos servicios no impedirá el funcionamiento general del sistema, salvo las funcionalidades directamente relacionadas con ellos.
+3. Arquitectura General del Sistema
+3.1 Introducción
+La arquitectura del Sistema Integral de Cobranza define la organización general de los componentes que conforman la aplicación y la forma en que interactúan entre sí.
+Para el desarrollo del Producto Mínimo Viable (MVP) se ha seleccionado una arquitectura cliente-servidor de tres capas, por ser una solución ampliamente utilizada en aplicaciones empresariales, sencilla de mantener y adecuada para las necesidades actuales del proyecto.
+Esta arquitectura permitirá separar claramente la interfaz de usuario, la lógica de negocio y la persistencia de los datos, favoreciendo el mantenimiento y la evolución del sistema.
+3.2 Arquitectura General
+
+
+ +---------------------------+
+ |       Navegador          |
+ |     Thymeleaf Views   |
+ +------------+--------------+
+                             |
+                         v
+ +---------------------------+
+ |      Controllers          |
+ +---------------------------+
+                               |
+                           v
+ +---------------------------+
+ |        Services            |
+ +---------------------------+
+                                   |
+                     +------+------+
+                     |                  |
+                         v                 v
+Repositories      RestClient
+                        |                   |
+          v                   v
+         PostgreSQL      API Kmente
+       
+Cada componente tendrá una responsabilidad específica, evitando que la lógica del negocio dependa directamente de la interfaz de usuario o de servicios externos.
+3.3 Componentes del Sistema
+Frontend
+-Thymeleaf
+-Bootstrap
+-HTML
+-CSS
+-JavaScript
+El frontend no contendrá lógica de negocio ni realizará consultas directas a la base de datos o a la API de Kmente.
+Backend
+El backend será desarrollado utilizando Java 21 y Spring Boot 3.
+Será el núcleo del sistema y tendrá las siguientes responsabilidades:
+* Implementar la lógica de negocio.
+* Gestionar la autenticación de usuarios.
+* Administrar los permisos según el rol.
+* Procesar la importación de archivos Excel.
+* Registrar gestiones y compromisos.
+* Consultar la API de Kmente.
+* Acceder a la base de datos.
+* Generar la información solicitada por el frontend.
+Toda comunicación con sistemas externos se realizará exclusivamente desde el backend.
+Renderizar vistas Thymeleaf.
+Base de Datos
+PostgreSQL será el sistema gestor de base de datos.
+Será responsable de almacenar toda la información relacionada con:
+* Usuarios.
+* Empresas.
+* Agencias.
+* Clientes.
+* Gestiones.
+* Compromisos de pago.
+* Seguimientos.
+* Historial de importaciones.
+API Externa (Kmente)
+La API de Kmente será utilizada para consultar información adicional de los clientes.
+El sistema consumirá este servicio únicamente cuando el usuario lo solicite desde el detalle del cliente.
+La información obtenida será procesada por el backend antes de mostrarse en la interfaz.
+3.4 Flujo General de una Solicitud
+El backend procesa la información obtenida, prepara el modelo correspondiente y genera la vista mediante Thymeleaf. Cuando una funcionalidad requiera actualización parcial de la información, podrá devolver respuestas en formato JSON para ser procesadas mediante JavaScript.
+3.5 Principios Arquitectónicos
+Durante el desarrollo del sistema se seguirán los siguientes principios:
+Separación de responsabilidades
+Cada componente tendrá una función claramente definida, evitando mezclar lógica de negocio con la interfaz de usuario.
+Modularidad
+Cada módulo del sistema será desarrollado de forma independiente, permitiendo agregar nuevas funcionalidades sin afectar los módulos existentes.
+Reutilización
+Siempre que sea posible, los componentes y servicios serán reutilizados para evitar duplicidad de código.
+Simplicidad
+Las soluciones implementadas buscarán resolver el problema con el menor nivel de complejidad posible.
+Se evitará incorporar patrones o tecnologías que no aporten valor al MVP.
+Escalabilidad
+Aunque el sistema se desarrollará para cubrir las necesidades actuales del estudio jurídico, la arquitectura permitirá incorporar nuevos módulos y funcionalidades sin requerir cambios estructurales importantes.
+3.6 Arquitectura de Comunicación
+La comunicación entre los componentes será la siguiente:
+Origen
+	Destino
+	Medio
+	Navegador
+	Spring Boot
+	HTTPS (REST API)
+	Backend
+	PostgreSQL
+	Spring Data JPA / Hibernate
+	Backend
+	API Kmente
+	RestClient
+	Backend
+	Excel
+	Apache POI
+	3.7 Justificación de la Arquitectura
+Se seleccionó una arquitectura cliente-servidor en capas porque ofrece un equilibrio adecuado entre simplicidad, organización y capacidad de crecimiento.
+Esta arquitectura facilita el mantenimiento del sistema, permite mantener una única aplicación, simplifica el mantenimiento y reduce la complejidad del despliegue.
+Para el alcance del MVP no se considera necesario adoptar arquitecturas más complejas como microservicios o sistemas distribuidos, ya que incrementarían la complejidad sin aportar beneficios significativos al proyecto.
+4. Arquitectura del Backend
+4.1 Introducción
+El backend del Sistema Integral de Cobranza será desarrollado utilizando Java 21 y Spring Boot 3.
+Su principal responsabilidad será implementar la lógica de negocio, administrar el acceso a la información, gestionar la seguridad del sistema e integrar los servicios externos necesarios para el funcionamiento del MVP.
+La arquitectura buscará mantener una clara separación de responsabilidades, facilitando el mantenimiento y la incorporación de nuevas funcionalidades.
+4.2 Estilo Arquitectónico
+El backend seguirá una arquitectura monolítica modular.
+Cada módulo representará un dominio del negocio y contendrá todos los componentes necesarios para su funcionamiento.
+Esta organización permitirá que cada funcionalidad evolucione de forma independiente sin perder la simplicidad de un único proyecto.
+4.3 Organización del Proyecto
+La estructura general del proyecto será la siguiente:
+src
+└── main
+    ├── java
+    │   └── com.startup.cobranza
+    │       ├── config
+    │       ├── security
+    │       ├── common
+    │       ├── cliente
+    │       ├── usuario
+    │       ├── empresa
+    │       ├── agencia
+    │       ├── cartera
+    │       ├── gestion
+    │       ├── compromiso
+    │       ├── seguimiento
+    │       ├── kmente
+    │       └── reporte
+    │
+    └── resources
+        ├── application.yml
+        └── db
+Cada módulo contendrá únicamente los componentes relacionados con su responsabilidad.
+4.4 Organización Interna de un Módulo
+Todos los módulos mantendrán una estructura similar.
+Ejemplo:
+cliente
+│
+├── controller
+├── service
+├── repository
+├── entity
+├── dto
+├── mapper
+└── exception
+Esta organización permitirá localizar rápidamente cualquier componente relacionado con un módulo específico.
+4.5 Responsabilidad de cada Capa
+Controller
+Responsabilidades:
+* Recibir solicitudes HTTP.
+* Validar datos básicos.
+* Invocar los servicios correspondientes.
+* Retornar respuestas al cliente.
+Los controladores no implementarán lógica de negocio.
+Service
+Responsabilidades:
+* Implementar las reglas del negocio.
+* Coordinar operaciones entre diferentes módulos.
+* Validar procesos del sistema.
+* Invocar repositorios y servicios externos.
+Toda la lógica del sistema residirá en esta capa.
+Repository
+Responsabilidades:
+* Acceder a la base de datos.
+* Ejecutar operaciones de persistencia.
+* Consultar información mediante Spring Data JPA.
+Los repositorios no contendrán reglas del negocio.
+Entity
+Representan las entidades persistidas en la base de datos.
+Serán utilizadas exclusivamente por la capa de persistencia.
+DTO
+Los Data Transfer Objects serán utilizados para intercambiar información entre el frontend y el backend.
+Su objetivo será evitar exponer directamente las entidades de la base de datos.
+Mapper
+Será responsable de transformar entidades en DTOs y viceversa.
+Esto permitirá mantener desacoplada la capa de persistencia de la capa de presentación.
+Exception
+Cada módulo podrá definir excepciones específicas para manejar errores relacionados con su dominio.
+4.6 Componentes Compartidos
+Además de los módulos funcionales, el backend contará con componentes de uso común.
+Config
+Contendrá la configuración general de la aplicación.
+Por ejemplo:
+* Configuración de CORS.
+* Configuración de RestClient.
+* Configuración de zonas horarias.
+* Configuración de serialización JSON.
+Security
+Contendrá todos los componentes relacionados con la autenticación y autorización.
+Incluye:
+* Spring Security
+* Control de sesiones
+* Autorización por roles
+Common
+Agrupará componentes reutilizables por todo el sistema.
+Ejemplos:
+* Respuestas estándar.
+* Utilidades.
+* Constantes.
+* Validaciones compartidas.
+4.7 Comunicación entre Módulos
+La comunicación entre módulos se realizará a través de la capa Service.
+No se permitirá que un controlador acceda directamente al repositorio de otro módulo.
+Esta regla busca mantener un bajo acoplamiento y facilitar el mantenimiento del sistema.
+4.8 Principios de Desarrollo
+Durante la implementación del backend se seguirán los siguientes principios:
+* Una responsabilidad por clase.
+* Evitar duplicación de código.
+* Mantener métodos pequeños y legibles.
+* Utilizar nombres descriptivos.
+* Centralizar la lógica de negocio en los servicios.
+* Evitar dependencias innecesarias entre módulos.
+4.9 Manejo de Errores
+El sistema implementará un manejo centralizado de excepciones.
+Los errores serán convertidos en respuestas claras para el frontend, evitando exponer información técnica interna.
+Cada respuesta de error incluirá información suficiente para facilitar su comprensión y tratamiento por parte de la interfaz de usuario.
+4.10 Consideraciones
+La arquitectura propuesta busca mantener un equilibrio entre organización y simplicidad.
+Se prioriza un diseño modular que facilite la evolución del sistema conforme aumenten las funcionalidades, sin incorporar patrones arquitectónicos que incrementen la complejidad del proyecto durante la etapa del MVP.
+5. Arquitectura de la Interfaz Web
+5.1 Introducción
+La interfaz del Sistema Integral de Cobranza será desarrollada utilizando Thymeleaf como motor de plantillas integrado con Spring Boot.
+El sistema estará orientado al uso interno del estudio jurídico, por lo que se priorizará una interfaz sencilla, clara y enfocada en facilitar las actividades diarias de cobranza.
+El uso de Thymeleaf permitirá generar las vistas directamente desde el servidor, reduciendo la complejidad de la aplicación al mantener el frontend y el backend dentro de un mismo proyecto.
+5.2 Objetivos de la Interfaz
+La interfaz tendrá los siguientes objetivos:
+* Presentar la información de forma clara y organizada.
+* Facilitar la consulta de clientes y el registro de gestiones.
+* Reducir la cantidad de pasos necesarios para realizar una tarea.
+* Mantener una navegación simple e intuitiva.
+* Adaptarse al flujo de trabajo del estudio jurídico.
+Toda la lógica de negocio permanecerá implementada en el backend.
+5.3 Tecnologías Utilizadas
+La interfaz estará desarrollada utilizando las siguientes tecnologías:
+Tecnología
+	Propósito
+	Thymeleaf
+	Renderizado de vistas desde el servidor.
+	Bootstrap 5
+	Diseño responsivo y componentes visuales.
+	HTML5
+	Estructura de las páginas.
+	CSS3
+	Personalización de estilos.
+	JavaScript
+	Interacciones dinámicas cuando sean necesarias.
+	Estas tecnologías permiten construir una aplicación web ligera, fácil de mantener y totalmente integrada con Spring Boot.
+5.4 Organización de Recursos
+La estructura general de los recursos de la interfaz será la siguiente:
+src
+└── main
+    ├── java
+    └── resources
+        ├── templates
+        │   ├── login
+        │   ├── dashboard
+        │   ├── empresa
+        │   ├── agencia
+        │   ├── cliente
+        │   ├── cartera
+        │   ├── error
+        │   └── fragments
+        │
+        └── static
+            ├── css
+            ├── js
+            ├── img
+            └── icons
+Esta organización facilita la localización de las vistas y mantiene separados los recursos estáticos del contenido generado por el servidor.
+5.5 Pantallas Iniciales del MVP
+Durante el desarrollo del Producto Mínimo Viable se implementarán las siguientes pantallas:
+* Inicio de sesión.
+* Panel principal (Dashboard).
+* Gestión de empresas.
+* Gestión de agencias.
+* Importación de cartera.
+* Lista de clientes.
+* Detalle del cliente.
+Estas pantallas cubren las funcionalidades definidas dentro del alcance del MVP.
+5.6 Fragmentos Reutilizables
+Para mantener una interfaz consistente y evitar duplicación de código, se utilizarán fragmentos de Thymeleaf para los elementos comunes del sistema.
+Entre ellos:
+* Barra de navegación.
+* Menú lateral.
+* Encabezado de página.
+* Pie de página.
+* Mensajes de éxito o error.
+* Ventanas de confirmación cuando corresponda.
+Esta estrategia facilita el mantenimiento de la interfaz y mejora la reutilización de componentes.
+5.7 Comunicación con el Backend
+La interfaz estará integrada directamente con Spring Boot mediante Thymeleaf.
+Cuando el usuario realice una acción, el navegador enviará una solicitud HTTP al servidor.
+El backend será responsable de:
+* Procesar la solicitud.
+* Ejecutar la lógica de negocio.
+* Consultar la base de datos cuando sea necesario.
+* Consultar la API de Kmente cuando el usuario solicite información adicional del cliente.
+* Generar la respuesta que será presentada al usuario.
+En aquellas funcionalidades que requieran actualización parcial de la información, podrá utilizarse JavaScript para realizar solicitudes HTTP sin recargar completamente la página.
+5.8 Navegación
+La navegación seguirá una estructura simple basada en las funcionalidades principales del sistema.
+Después de autenticarse, el usuario accederá al panel principal desde donde podrá ingresar a los diferentes módulos según los permisos asignados.
+Las opciones visibles dependerán del rol del usuario autenticado.
+5.9 Diseño Responsivo
+La interfaz utilizará Bootstrap 5 para adaptarse a diferentes resoluciones de pantalla.
+Aunque el sistema estará orientado principalmente a equipos de escritorio, las páginas mantendrán un comportamiento adecuado en dispositivos con pantallas de menor tamaño.
+5.10 Principios de Diseño
+Durante el desarrollo de la interfaz se seguirán los siguientes principios:
+* Priorizar la simplicidad sobre la complejidad visual.
+* Mantener una apariencia consistente entre todas las pantallas.
+* Utilizar componentes reutilizables siempre que sea posible.
+* Reducir la cantidad de clics necesarios para realizar una tarea.
+* Mostrar únicamente la información relevante para cada proceso.
+* Evitar elementos visuales que no aporten valor a la operación diaria.
+5.11 Consideraciones
+La arquitectura de la interfaz propuesta responde a las necesidades actuales del Producto Mínimo Viable y mantiene una integración directa con el backend desarrollado en Spring Boot.
+Esta decisión reduce la complejidad del proyecto, facilita el mantenimiento y permite incorporar nuevas funcionalidades de forma progresiva conforme evolucionen los requerimientos del sistema, sin necesidad de modificar la arquitectura principal.
+
+
+6. Diseño de la Base de Datos
+6.1 Introducción
+La base de datos almacenará toda la información necesaria para el funcionamiento del Sistema Integral de Cobranza.
+Su diseño busca representar de manera sencilla las entidades del negocio identificadas durante la fase de análisis, manteniendo una estructura organizada y preparada para futuras ampliaciones.
+Para el desarrollo del MVP se utilizará PostgreSQL como sistema gestor de base de datos.
+6.2 Objetivos
+El diseño de la base de datos tiene los siguientes objetivos:
+* Centralizar la información del sistema.
+* Evitar duplicidad de datos.
+* Mantener la integridad de la información.
+* Facilitar las consultas realizadas por el sistema.
+* Servir como base para el desarrollo del backend.
+6.3 Entidades Principales
+Durante el MVP se trabajará con las siguientes entidades:
+* Usuario
+* Empresa
+* Agencia
+* Cliente
+* Gestión
+* Compromiso de Pago
+* Seguimiento
+Estas entidades representan la información mínima necesaria para cubrir el alcance definido del proyecto.
+6.4 Relación General de Entidades
+La relación conceptual entre las entidades será la siguiente:
+Empresa
+   │
+   └───────────┐
+               │
+            Agencia
+               │
+               │
+            Cliente
+        ┌──────┴──────────┐
+        │                 │
+     Gestión       Compromiso
+        │                 │
+        └──────────┐──────┘
+                   │
+             Seguimiento
+
+
+Usuario
+   │
+   ├──── registra Gestiones
+   ├──── registra Compromisos
+   └──── registra Seguimientos
+Esta representación describe las relaciones generales del sistema y servirá como base para el diseño físico de la base de datos.
+6.5 Descripción de las Entidades
+Usuario
+Almacena la información de las personas autorizadas para utilizar el sistema.
+Responsabilidades:
+* Acceder al sistema.
+* Registrar gestiones.
+* Registrar compromisos.
+* Registrar seguimientos.
+Empresa
+Representa la entidad financiera o empresa propietaria de la cartera.
+Ejemplos:
+* Caja Arequipa.
+* Caja Trujillo.
+Cada empresa podrá administrar múltiples agencias.
+Agencia
+Representa una oficina perteneciente a una empresa.
+Cada agencia administrará una cartera de clientes.
+Ejemplos:
+* Chanchamayo.
+* Oxapampa.
+* Pichanaqui.
+Cliente
+Representa un registro importado desde la cartera entregada por la entidad financiera.
+Almacenará información como:
+* DNI.
+* Nombre.
+* Número de operación.
+* Número de cuenta.
+* Deuda capital.
+* Deuda total.
+* Estado actual del proceso de cobranza.
+Además, desde esta entidad se accederá a las gestiones, compromisos y seguimientos realizados.
+Gestión
+Representa cada interacción realizada con un cliente.
+Ejemplos:
+* Llamada.
+* Visita.
+* Observación.
+Cada gestión quedará asociada al usuario que la registró.
+Compromiso de Pago
+Representa un acuerdo realizado con el cliente.
+Permitirá registrar:
+* Fecha.
+* Monto comprometido.
+* Estado.
+* Observaciones.
+Seguimiento
+Representa la próxima actividad programada para un cliente.
+Permitirá controlar:
+* Fecha.
+* Tipo de seguimiento.
+* Estado.
+6.6 Integridad de la Información
+Para mantener la consistencia de los datos se aplicarán las siguientes reglas generales:
+* Una agencia pertenece a una única empresa.
+* Un cliente pertenece a una única agencia.
+* Una gestión pertenece a un único cliente.
+* Un compromiso pertenece a un único cliente.
+* Un seguimiento pertenece a un único cliente.
+* Toda gestión registrada deberá estar asociada a un usuario.
+6.7 Información Proveniente de Kmente
+Los datos obtenidos mediante la API de Kmente serán utilizados para apoyar la gestión del usuario.
+Durante el MVP, la información consultada no reemplazará automáticamente los datos almacenados en la base de datos.
+Será el usuario quien decida si corresponde actualizar la información del cliente.
+6.8 Importación de Cartera
+La información inicial de los clientes será registrada mediante la importación de archivos Excel proporcionados por las entidades financieras.
+Durante este proceso el sistema validará que el archivo corresponda a un formato compatible antes de iniciar la carga de datos.
+Durante la importación también se validará que no existan registros duplicados según las reglas definidas por el sistema.
+6.9 Consideraciones
+El diseño presentado corresponde al modelo de datos necesario para el Producto Mínimo Viable.
+En futuras versiones podrán incorporarse nuevas entidades conforme evolucionen las necesidades del estudio jurídico o se integren nuevos procesos de negocio.
+7. Diseño de la API REST
+7.1 Introducción
+El backend expondrá una API REST que permitirá la comunicación entre la aplicación web desarrollada en Interfaz Thymeleaf y la lógica de negocio implementada en Spring Boot.
+La API utilizará el protocolo HTTP y el formato JSON para el intercambio de información.
+Todas las solicitudes serán atendidas por el backend, el cual será responsable de validar la información recibida, ejecutar las reglas de negocio y devolver la respuesta correspondiente.
+7.2 Principios de Diseño
+Durante el desarrollo de la API se seguirán los siguientes principios:
+* Utilizar recursos con nombres claros.
+* Mantener una estructura uniforme en las URLs.
+* Utilizar los métodos HTTP de acuerdo con su propósito.
+* Devolver respuestas en formato JSON.
+* Validar toda la información recibida antes de procesarla.
+* Proteger los recursos mediante autenticación.
+7.3 Métodos HTTP
+Método
+	Descripción
+	GET
+	Consultar información.
+	POST
+	Registrar información.
+	PUT
+	Actualizar información existente.
+	DELETE
+	Eliminar información cuando corresponda.
+	7.4 Autenticación
+Inicio de sesión
+POST /api/auth/login
+Descripción:
+Permite autenticar al usuario e iniciar una sesión administrada por Spring Security.
+7.5 Empresas
+Obtener empresas
+GET /api/empresas
+Obtiene la lista de empresas registradas.
+Registrar empresa
+POST /api/empresas
+Disponible únicamente para el Administrador.
+Actualizar empresa
+PUT /api/empresas/{id}
+Disponible únicamente para el Administrador.
+Eliminar empresa
+DELETE /api/empresas/{id}
+Disponible únicamente para el Administrador.
+7.6 Agencias
+Obtener agencias
+GET /api/agencias
+Obtiene las agencias registradas.
+Registrar agencia
+POST /api/agencias
+Disponible únicamente para el Administrador.
+Actualizar agencia
+PUT /api/agencias/{id}
+Eliminar agencia
+DELETE /api/agencias/{id}
+7.7 Clientes
+Obtener clientes
+GET /api/clientes
+Permite consultar la cartera de clientes.
+Obtener detalle de un cliente
+GET /api/clientes/{id}
+Devuelve toda la información registrada del cliente.
+Actualizar cliente
+PUT /api/clientes/{id}
+Permite modificar información básica del cliente.
+7.8 Importación de Cartera
+Importar archivo Excel
+POST /api/cartera/importar
+Descripción:
+Permite cargar un archivo Excel con la cartera de clientes.
+El backend validará:
+* Que el archivo exista.
+* Que corresponda a un archivo Excel.
+* Que el formato sea compatible con la estructura esperada.
+7.9 Gestiones
+Registrar gestión
+POST /api/gestiones
+Permite registrar una llamada, visita u observación realizada sobre un cliente.
+Obtener historial de gestiones
+GET /api/gestiones/cliente/{clienteId}
+Devuelve las gestiones registradas para un cliente.
+7.10 Compromisos de Pago
+Registrar compromiso
+POST /api/compromisos
+Permite registrar un compromiso de pago asociado a un cliente.
+Obtener compromisos
+GET /api/compromisos/cliente/{clienteId}
+Consulta los compromisos registrados para un cliente.
+7.11 Seguimientos
+Registrar seguimiento
+POST /api/seguimientos
+Permite programar una nueva fecha de seguimiento para un cliente.
+Consultar seguimientos
+GET /api/seguimientos
+Obtiene los seguimientos registrados.
+7.12 Consulta Kmente
+Consultar información del cliente
+GET /api/kmente/{dni}
+Descripción:
+Realiza la consulta a la API de Kmente utilizando el DNI del cliente.
+La información obtenida será enviada al frontend para que el usuario decida si desea utilizarla.
+7.13 Formato General de Respuesta
+Todas las respuestas de la API se devolverán en formato JSON.
+Ejemplo:
+{
+  "success": true,
+  "message": "Operación realizada correctamente.",
+  "data": {}
+}
+En caso de error:
+{
+  "success": false,
+  "message": "No fue posible completar la operación.",
+  "data": null
+}
+Este formato uniforme facilitará el tratamiento de las respuestas desde el frontend.
+7.14 Consideraciones
+La API REST definida en este documento representa los servicios necesarios para el Producto Mínimo Viable.
+Conforme el sistema evolucione podrán incorporarse nuevos endpoints, manteniendo la misma estructura y principios de diseño.
+8. Seguridad del Sistema
+8.1 Introducción
+La seguridad del Sistema Integral de Cobranza tiene como objetivo garantizar que únicamente los usuarios autorizados puedan acceder a la información y realizar operaciones dentro del sistema.
+Durante el desarrollo del Producto Mínimo Viable (MVP), la seguridad estará basada en autenticación mediante Spring Security + Session y autorización por roles.
+8.2 Autenticación
+El acceso al sistema se realizará mediante una pantalla de inicio de sesión.
+Cada usuario deberá ingresar:
+* Nombre de usuario.
+* Contraseña.
+
+
+Diagrama:
+
+                Usuario
+                    │
+                    ▼
+             Login (Thymeleaf)
+                    │
+        Usuario / Contraseña
+                    │
+                    ▼
+          Spring Security
+                    │
+        Autenticación Exitosa
+                    │
+                    ▼
+          Sesión Activa (HTTP Session)
+                    │
+                    ▼
+        Acceso según Rol del Usuario
+
+
+8.3 Spring Security + Session.
+Spring Security será el encargado de gestionar la autenticación y autorización de los usuarios del sistema.
+Una vez que el usuario inicie sesión correctamente, Spring Security creará una sesión autenticada en el servidor, la cual se utilizará para identificar al usuario durante su navegación por la aplicación.
+Esta estrategia resulta adecuada para una aplicación web desarrollada con Spring Boot y Thymeleaf, ya que simplifica la implementación de la seguridad y reduce la complejidad del sistema durante el desarrollo del MVP.
+8.4 Roles del Sistema
+Durante el MVP existirán dos roles:
+Administrador
+El Administrador tendrá acceso completo al sistema.
+Podrá realizar operaciones como:
+* Gestionar usuarios.
+* Registrar, modificar y eliminar empresas.
+* Registrar, modificar y eliminar agencias.
+* Importar cartera.
+* Consultar clientes.
+* Modificar información de clientes.
+* Registrar gestiones.
+* Registrar compromisos de pago.
+* Registrar seguimientos.
+* Consultar información mediante la API de Kmente.
+Secretario
+El Secretario tendrá acceso únicamente a las funciones necesarias para la operación diaria.
+Podrá realizar operaciones como:
+* Consultar clientes.
+* Registrar gestiones.
+* Registrar compromisos de pago.
+* Registrar seguimientos.
+* Consultar información mediante la API de Kmente.
+No podrá realizar tareas administrativas como la gestión de usuarios, empresas, agencias o la importación de cartera.
+8.5 Protección de Rutas
+Todas las rutas protegidas del sistema requerirán que el usuario haya iniciado sesión previamente.
+Spring Security verificará automáticamente la autenticación antes de permitir el acceso a cada recurso protegido.
+Si un usuario intenta acceder a una página o funcionalidad sin una sesión válida, será redirigido a la pantalla de inicio de sesión o recibirá una respuesta de acceso denegado, según corresponda.
+8.6 Control de Permisos
+Antes de ejecutar una operación, el backend verificará que el usuario autenticado posea el rol necesario.
+Si el usuario no tiene permisos suficientes, la operación será rechazada.
+La validación de permisos se realizará exclusivamente en el backend.
+8.7 Almacenamiento de Contraseñas
+Las contraseñas de los usuarios no serán almacenadas en texto plano.
+Se utilizará un algoritmo BCrypt proporcionado por Spring Security para proteger esta información en la base de datos.
+8.8 Cierre de Sesión
+El usuario podrá cerrar sesión desde cualquier pantalla del sistema.
+Al cerrar sesión, Spring Security invalidará la sesión activa y eliminará la información de autenticación almacenada en el servidor.
+Para volver a acceder al sistema será necesario iniciar sesión nuevamente.
+8.9 Consideraciones
+La estrategia de seguridad definida es suficiente para cubrir las necesidades del Producto Mínimo Viable.
+Si en futuras versiones se incorporan nuevos tipos de usuarios o se requiere integrar otros mecanismos de autenticación, la arquitectura permitirá extender este modelo sin afectar el funcionamiento general del sistema.
+9. Integración con la API de Kmente
+9.1 Introducción
+Uno de los componentes principales del Sistema Integral de Cobranza será la integración con la API de Kmente.
+Esta integración permitirá consultar información actualizada de los clientes, facilitando el trabajo del estudio jurídico durante las actividades de cobranza.
+El sistema utilizará esta información como apoyo para la gestión del usuario, sin reemplazar los datos propios registrados en la aplicación.
+9.2 Objetivo
+-El objetivo de la integración es permitir que los usuarios consulten información adicional de un cliente desde el sistema, evitando realizar búsquedas manuales en otras plataformas.
+-La consulta se realizará únicamente cuando el usuario la solicite.
+9.3 Arquitectura de la Integración
+La comunicación seguirá el siguiente flujo:
+               Usuario
+                  │
+                 ▼
+      Navegador Web (Thymeleaf)
+                  │
+             Solicitud HTTP
+                  │
+                 ▼
+      Spring Boot (RestController / Service)
+                  │
+          RestClient (HTTP)
+                  │
+                 ▼
+             API de Kmente
+                  │
+                 ▼
+      Respuesta procesada al usuario
+El navegador nunca se comunicará directamente con la API de Kmente. Toda la integración será gestionada por el backend mediante RestClient.
+9.4 Responsabilidades del Backend
+El backend será responsable de:
+* Recibir la solicitud del frontend.
+* Validar la información enviada.
+* Realizar la consulta a la API de Kmente mediante RestClient.
+* Procesar la respuesta recibida.
+* Gestionar posibles errores de comunicación con el servicio externo antes de enviar la respuesta al usuario.
+* Enviar únicamente la información necesaria al frontend.
+9.5 Consulta de Información
+La consulta se realizará utilizando el documento de identidad (DNI) del cliente.
+Cuando el usuario solicite consultar la información del cliente, el backend enviará la petición a la API de Kmente y devolverá los datos obtenidos.
+La información consultada podrá incluir, según el servicio contratado con Kmente:
+* Datos personales.
+* Teléfonos registrados.
+* Direcciones.
+* Información laboral.
+* Información disponible en entidades públicas.
+* Otros datos proporcionados por la API.
+La disponibilidad de cada dato dependerá del servicio contratado con Kmente.
+9.6 Uso de la Información
+La información obtenida desde Kmente tendrá como finalidad apoyar las actividades de cobranza realizadas por el estudio jurídico.
+Por ejemplo:
+* Verificar teléfonos disponibles.
+* Consultar direcciones registradas.
+* Obtener información adicional del cliente antes de una visita o contacto.
+La información mostrada será únicamente de consulta para el usuario.
+9.7 Manejo de Errores
+Si durante la consulta ocurre algún inconveniente, el sistema informará al usuario mediante un mensaje apropiado.
+Algunos casos posibles son:
+* Cliente no encontrado.
+* Error de comunicación con la API.
+* Tiempo de espera excedido.
+* Servicio no disponible.
+Estos errores no afectarán el funcionamiento general del sistema.
+9.8 Seguridad de la Integración
+Las credenciales necesarias para consumir la API de Kmente serán administradas exclusivamente por el backend.
+En ningún caso serán enviadas al frontend ni quedarán expuestas al usuario.
+La comunicación con la API se realizará mediante conexiones seguras utilizando HTTPS.
+9.9 Consideraciones
+La integración con Kmente será utilizada únicamente como un servicio de consulta.
+El sistema no almacenará de forma automática la información obtenida desde la API ni realizará procesos de sincronización masiva durante el MVP.
+Cualquier actualización de los datos del cliente será una decisión del usuario, de acuerdo con las necesidades del proceso de cobranza.
+10. Estrategia de Desarrollo
+10.1 Introducción
+La estrategia de desarrollo define las prácticas generales que se seguirán durante la implementación del Sistema Integral de Cobranza.
+Su objetivo es mantener un desarrollo ordenado, facilitar el mantenimiento del código y permitir la incorporación de nuevas funcionalidades sin afectar la estabilidad del sistema.
+10.2 Control de Versiones
+El proyecto utilizará Git como sistema de control de versiones y GitHub como repositorio central del código fuente.
+Todos los cambios realizados durante el desarrollo deberán registrarse mediante commits descriptivos, permitiendo mantener un historial claro de la evolución del proyecto.
+10.3 Organización del Repositorio
+
+
+Sistema-Cobranza/
+
+
+docs/
+
+
+src/
+
+
+pom.xml
+
+
+PROJECT_CONTEXT.md
+
+
+.gitignore
+
+
+README.md
+
+
+10.4 Convención de Commits
+Se recomienda utilizar mensajes de commit claros y descriptivos.
+Ejemplos:
+feat: registrar gestión de cliente
+
+
+fix: corregir validación al importar cartera
+
+
+refactor: reorganizar módulo de clientes
+
+
+docs: actualizar especificación técnica
+El objetivo es facilitar el seguimiento de los cambios realizados durante el desarrollo.
+10.5 Variables de Entorno
+La información sensible del sistema no deberá almacenarse directamente en el código fuente ni publicarse en el repositorio Git.
+Durante el desarrollo se utilizarán archivos de configuración separados para cada entorno.
+Ejemplo:
+-application.yml         (configuración común)
+-application-dev.yml        (desarrollo) 
+-application-prod.yml        (producción)
+Las configuraciones específicas de cada entorno se gestionarán mediante variables de entorno o archivos locales que no serán versionados.
+Entre las configuraciones que se manejarán de esta forma se encuentran:
+* Credenciales de la base de datos PostgreSQL (Supabase).
+* Credenciales de acceso a la API de Kmente.
+* Usuario y contraseña del correo electrónico (si en futuras versiones se implementan notificaciones).
+* Configuración del entorno de ejecución.
+* Cualquier otra información sensible requerida por el sistema.
+Los archivos que contengan información específica del entorno deberán incluirse en el archivo .gitignore para evitar su publicación accidental en el repositorio.
+10.6 Convenciones de Desarrollo
+Durante la implementación del sistema se seguirán las siguientes prácticas:
+* Utilizar nombres descriptivos para clases, métodos y variables.
+* Mantener una única responsabilidad por clase.
+* Evitar la duplicación de código.
+* Documentar únicamente cuando aporte valor.
+* Mantener el código simple y fácil de entender.
+* No implementar funcionalidades fuera del MVP.
+* Código simple.
+* Evitar sobreingeniería.
+10.7 Desarrollo Incremental
+El sistema será desarrollado de forma incremental.
+Cada iteración incorporará nuevas funcionalidades completamente operativas antes de iniciar la siguiente.
+Cada etapa debe completarse antes de iniciar la siguiente.
+Esta estrategia permitirá validar el funcionamiento del sistema de manera continua y realizar ajustes conforme se obtenga retroalimentación del cliente.
+10.8 Prioridad del MVP
+Durante esta primera versión se desarrollarán únicamente las funcionalidades definidas en el alcance del Producto Mínimo Viable.
+Las mejoras o nuevas funcionalidades identificadas durante el desarrollo serán registradas para futuras versiones del sistema, evitando incrementar innecesariamente el alcance del proyecto.
+10.9 Documentación
+Toda modificación importante en la arquitectura o en las decisiones técnicas deberá reflejarse en la documentación del proyecto.
+Esto permitirá mantener la coherencia entre el sistema implementado y los documentos elaborados durante la etapa de análisis y diseño.
+10.10 Consideraciones Finales
+El objetivo principal de esta estrategia es desarrollar un sistema funcional, mantenible y alineado con las necesidades reales del estudio jurídico.
+Las decisiones técnicas adoptadas priorizan la simplicidad, la calidad del código y la posibilidad de evolucionar el sistema de manera progresiva conforme crezcan los requerimientos del negocio.

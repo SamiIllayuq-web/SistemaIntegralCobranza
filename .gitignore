@@ -1,0 +1,33 @@
+# Environment
+.env
+.env.*
+application-local.yml
+
+# Build
+target/
+mvnw
+mvnw.cmd
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Logs
+logs/
+*.log
+
+# Node (si aplica)
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temp files
+*.tmp
+*.bak
+*.swp
+
+# Credenciales
+credenciales

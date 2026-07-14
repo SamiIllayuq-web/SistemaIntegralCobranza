@@ -1,0 +1,809 @@
+﻿1. Introducción
+1.1 Presentación
+El presente documento describe el análisis y la planificación del desarrollo de un sistema web para la gestión de cobranza extrajudicial de un estudio jurídico.
+Actualmente, el estudio administra la información de sus clientes utilizando hojas de cálculo en Microsoft Excel y diversas herramientas externas. Este método dificulta el seguimiento de los casos, la actualización de la información y la organización de las actividades diarias relacionadas con la cobranza.
+Como parte de la mejora de estos procesos, se propone desarrollar un sistema web que permita centralizar la información de los clientes, registrar las gestiones realizadas y facilitar la consulta de información mediante la integración con la API de Kmente.
+El desarrollo del sistema se realizará siguiendo un enfoque incremental, implementando inicialmente un Producto Mínimo Viable (MVP) que cubra las necesidades más importantes identificadas durante las entrevistas con el cliente.
+1.2 Propósito del documento
+El propósito de este documento es definir el alcance del proyecto, comprender el problema del negocio y establecer las funcionalidades que formarán parte del Producto Mínimo Viable (MVP).
+Asimismo, servirá como documento de referencia durante el desarrollo del sistema, permitiendo mantener una visión clara de los objetivos del proyecto y facilitando futuras mejoras conforme evolucionen las necesidades del cliente.
+1.3 Descripción general del proyecto
+El proyecto consiste en desarrollar un sistema web de uso interno para un estudio jurídico especializado en recuperación de créditos mediante procesos de cobranza extrajudicial.
+El sistema permitirá administrar la cartera de clientes asignada por diferentes entidades financieras, registrar las gestiones realizadas sobre cada cliente, consultar información actualizada mediante la API de Kmente y realizar el seguimiento de los compromisos de pago registrados.
+En esta primera versión, el sistema estará orientado únicamente al personal del estudio jurídico y no contará con acceso para los clientes finales.
+1.4 Alcance general
+El desarrollo del MVP comprenderá las siguientes funcionalidades principales:
+* Autenticación de usuarios.
+* Administración de empresas y agencias.
+* Importación de cartera de clientes mediante archivos Excel.
+* Consulta y búsqueda de clientes.
+* Registro de gestiones de cobranza.
+* Registro de compromisos de pago.
+* Consulta de información mediante la API de Kmente.
+* Seguimiento de clientes pendientes.
+* Generación de reportes básicos.
+Las funcionalidades más avanzadas, como automatización de mensajes, integración con Citrix y otras mejoras, serán consideradas para versiones posteriores del sistema.
+1.5 Objetivos
+Objetivo General
+Desarrollar un sistema web que permita mejorar la gestión de cobranza extrajudicial del estudio jurídico, centralizando la información de los clientes y facilitando el seguimiento de las gestiones realizadas.
+Objetivos Específicos
+* Centralizar la información de la cartera de clientes en una única plataforma.
+* Facilitar la consulta y actualización de información de los clientes.
+* Integrar la consulta de datos mediante la API de Kmente.
+* Registrar las gestiones realizadas durante el proceso de cobranza.
+* Controlar los compromisos de pago registrados con los clientes.
+* Reducir la dependencia de archivos Excel para la administración de la cartera.
+2. Contexto del Negocio
+2.1 Descripción de la empresa
+El proyecto está orientado a un estudio jurídico dedicado principalmente a la recuperación de créditos mediante procesos de cobranza extrajudicial. Además de brindar asesoría legal, el estudio administra carteras de clientes asignadas por diferentes entidades financieras, entre ellas Caja Arequipa, Caja Trujillo y una empresa del sector inmobiliario.
+Como parte de sus actividades diarias, el personal realiza llamadas, visitas, negociaciones y seguimiento de compromisos de pago con el objetivo de recuperar las deudas pendientes de los clientes asignados.
+2.2 Situación actual
+Actualmente, la gestión de la cartera se realiza utilizando principalmente archivos de Microsoft Excel, donde se registra la información de los clientes, datos de contacto, observaciones y el seguimiento de las gestiones realizadas.
+Para obtener información más actualizada sobre un cliente, el personal consulta manualmente diferentes herramientas externas, como la plataforma Kmente, desde donde obtiene teléfonos, direcciones u otros datos disponibles.
+Las actividades de seguimiento, registro de llamadas y control de compromisos también se realizan de forma manual, lo que incrementa el tiempo requerido para administrar cada expediente y dificulta mantener la información organizada.
+2.3 Problemas identificados
+Durante la entrevista con el cliente se identificaron los siguientes problemas principales:
+P1. Información dispersa
+La información de los clientes se encuentra distribuida entre archivos Excel y plataformas externas, obligando al usuario a consultar varias fuentes para completar una gestión.
+P2. Dependencia de procesos manuales
+El registro de llamadas, visitas, observaciones y compromisos de pago se realiza manualmente, generando mayor tiempo de trabajo y aumentando el riesgo de omitir información importante.
+P3. Actualización de información del cliente
+Los teléfonos y direcciones registrados inicialmente por las entidades financieras pueden quedar desactualizados con el tiempo, por lo que es necesario consultar información más reciente antes de continuar con la gestión de cobranza.
+P4. Seguimiento de compromisos
+El seguimiento de clientes depende principalmente del control manual realizado por el personal, dificultando identificar qué clientes requieren una nueva llamada, visita o seguimiento.
+P5. Elaboración de reportes
+La generación de reportes para las entidades financieras requiere revisar y organizar manualmente la información registrada en diferentes archivos.
+2.4 Oportunidad de mejora
+La implementación de un sistema web permitirá centralizar la información de la cartera de clientes en una única plataforma, facilitando el registro de las gestiones realizadas, la consulta de información mediante la API de Kmente y el seguimiento de los compromisos de pago.
+De esta manera, se reducirá la dependencia de archivos Excel como herramienta principal de trabajo y se mejorará la organización de la información utilizada por el estudio jurídico.
+2.5 Alcance del problema
+El sistema propuesto se enfocará exclusivamente en apoyar la gestión de cobranza extrajudicial realizada por el estudio jurídico.
+No forman parte del alcance del MVP los procesos judiciales, la integración con sistemas internos de las entidades financieras ni otras funcionalidades que no hayan sido identificadas como prioritarias durante la entrevista con el cliente.
+3. Actores del Sistema
+3.1 Introducción
+Los actores representan las personas que utilizarán el sistema durante sus actividades diarias.
+De acuerdo con la información obtenida durante la entrevista, el sistema será de uso interno y únicamente estará disponible para el personal del estudio jurídico.
+Los clientes de las entidades financieras no tendrán acceso al sistema.
+3.2 Administrador
+El Administrador será el responsable de la configuración general del sistema y tendrá acceso completo a todas las funcionalidades.
+Responsabilidades
+* Iniciar sesión.
+* Registrar empresas.
+* Registrar agencias.
+* Importar la cartera de clientes desde archivos Excel.
+* Crear y administrar usuarios.
+* Consultar la información de los clientes.
+* Registrar gestiones de cobranza.
+* Consultar información mediante la API de Kmente.
+* Generar reportes.
+3.3 Secretario
+El Secretario será el usuario encargado de realizar la gestión diaria de cobranza.
+Tendrá acceso únicamente a las funciones necesarias para desarrollar sus actividades.
+Responsabilidades
+* Iniciar sesión.
+* Buscar clientes.
+* Consultar información del cliente.
+* Registrar llamadas.
+* Registrar visitas.
+* Registrar observaciones.
+* Registrar compromisos de pago.
+* Consultar información mediante la API de Kmente.
+* Consultar los seguimientos pendientes.
+3.4 Permisos generales
+Funcionalidad
+	Administrador
+	Secretario
+	Iniciar sesión
+	✔
+	✔
+	Consultar clientes
+	✔
+	✔
+	Registrar gestiones
+	✔
+	✔
+	Consultar Kmente
+	✔
+	✔
+	Registrar compromisos
+	✔
+	✔
+	Consultar seguimientos
+	✔
+	✔
+	Importar cartera
+	✔
+	✘
+	Administrar empresas
+	✔
+	✘
+	Administrar agencias
+	✔
+	✘
+	Administrar usuarios
+	✔
+	✘
+	Generar reportes
+	✔
+	✔ (solo consulta y exportación)
+	3.5 Consideraciones
+Para el MVP únicamente existirán dos perfiles de usuario:
+* Administrador.
+* Secretario.
+En futuras versiones podrán incorporarse nuevos roles si el crecimiento del estudio jurídico así lo requiere.
+4. Módulos del Sistema
+4.1 Introducción
+El sistema estará dividido en módulos funcionales, donde cada uno agrupa un conjunto de operaciones relacionadas con una actividad específica del estudio jurídico.
+Esta organización permitirá desarrollar el sistema de forma incremental, facilitando futuras mejoras sin afectar el funcionamiento de los demás módulos.
+Para el Producto Mínimo Viable (MVP), únicamente se desarrollarán los módulos necesarios para cubrir las necesidades identificadas durante la entrevista con el cliente.
+4.2 Módulo de Autenticación
+Este módulo permitirá controlar el acceso al sistema mediante un usuario y una contraseña.
+Su función principal será identificar al usuario y habilitar únicamente las opciones permitidas según su rol dentro del sistema.
+Funcionalidades
+* Inicio de sesión.
+* Cierre de sesión.
+* Validación de credenciales.
+* Acceso según el rol del usuario.
+4.3 Módulo de Empresas y Agencias
+Este módulo permitirá administrar las entidades financieras y sus respectivas agencias.
+La información registrada servirá para organizar correctamente las carteras de clientes.
+Funcionalidades
+* Registrar empresa.
+* Editar empresa.
+* Registrar agencia.
+* Editar agencia.
+* Consultar empresas y agencias.
+4.4 Módulo de Cartera
+Este módulo permitirá importar y administrar la cartera de clientes entregada por las entidades financieras.
+Cada cartera será cargada mediante un archivo Excel proporcionado por el cliente.
+Funcionalidades
+* Importar cartera desde Excel.
+* Validar la estructura del archivo.
+* Registrar clientes importados.
+* Consultar la cartera cargada.
+4.5 Módulo de Clientes
+Este módulo permitirá consultar la información de los clientes registrados en la cartera.
+Desde este módulo será posible acceder al detalle de cada cliente para continuar con la gestión de cobranza.
+Funcionalidades
+* Buscar clientes.
+* Filtrar clientes.
+* Visualizar información general.
+* Consultar historial de gestiones.
+4.6 Módulo de Gestión de Cobranza
+Este módulo permitirá registrar las acciones realizadas durante el proceso de cobranza.
+Cada gestión quedará asociada al cliente correspondiente para mantener un historial de seguimiento.
+Funcionalidades
+* Registrar llamada.
+* Registrar visita.
+* Registrar observaciones.
+* Registrar compromiso de pago.
+* Consultar historial de gestiones.
+4.7 Módulo de Consulta de Información
+Este módulo integrará la API de Kmente para consultar información actualizada del cliente cuando sea necesario.
+Los datos obtenidos podrán ser revisados por el usuario antes de actualizar la información almacenada en el sistema.
+Funcionalidades
+* Consultar información mediante la API de Kmente.
+* Visualizar teléfonos obtenidos.
+* Visualizar direcciones obtenidas.
+* Actualizar información del cliente previa confirmación del usuario.
+4.8 Módulo de Seguimiento
+Este módulo permitirá controlar los clientes que requieren una nueva gestión o tienen un compromiso pendiente.
+Su objetivo es facilitar el seguimiento de la cartera sin depender de controles manuales.
+Funcionalidades
+* Registrar fecha de seguimiento.
+* Consultar seguimientos pendientes.
+* Consultar compromisos registrados.
+4.9 Módulo de Reportes
+Este módulo permitirá obtener información general sobre la cartera administrada.
+Los reportes estarán orientados a apoyar el control interno del estudio jurídico.
+Funcionalidades
+* Reporte por empresa.
+* Reporte por agencia.
+* Reporte de compromisos.
+* Exportar información a Excel.
+4.10 Resumen de módulos
+Módulo
+	Objetivo
+	Autenticación
+	Controlar el acceso al sistema.
+	Empresas y Agencias
+	Organizar las entidades financieras y sus agencias.
+	Cartera
+	Importar y administrar la cartera de clientes.
+	Clientes
+	Consultar la información de los clientes.
+	Gestión de Cobranza
+	Registrar las gestiones realizadas.
+	Consulta de Información
+	Obtener datos mediante la API de Kmente.
+	Seguimiento
+	Controlar clientes pendientes y compromisos.
+	Reportes
+	Consultar y exportar información.
+	
+
+
+
+5. Requisitos Funcionales
+5.1 Introducción
+Los requisitos funcionales describen las funcionalidades que deberá ofrecer el sistema para apoyar las actividades de gestión de cobranza extrajudicial del estudio jurídico.
+Los requisitos presentados corresponden únicamente al Producto Mínimo Viable (MVP) y fueron definidos a partir de la información obtenida durante la entrevista con el cliente.
+5.2 Módulo de Autenticación
+Código
+	Requisito
+	RF-001
+	El sistema permitirá iniciar sesión mediante usuario y contraseña.
+	RF-002
+	El sistema identificará el rol del usuario al iniciar sesión.
+	RF-003
+	El sistema mostrará únicamente las opciones permitidas según el rol del usuario.
+	RF-004
+	El usuario podrá cerrar sesión de forma segura.
+	5.3 Módulo de Empresas y Agencias
+Código
+	Requisito
+	RF-005
+	Registrar empresas.
+	RF-006
+	Registrar agencias asociadas a una empresa.
+	RF-007
+	Consultar el listado de empresas y agencias.
+	RF-008
+	Editar la información de empresas y agencias.
+	5.4 Módulo de Cartera
+Código
+	Requisito
+	RF-009
+	Importar una cartera de clientes desde un archivo Excel.
+	RF-010
+	Validar la estructura del archivo antes de importar la información.
+	RF-011
+	Registrar los clientes importados en el sistema.
+	RF-012
+	Consultar la cartera importada.
+	5.5 Módulo de Clientes
+Código
+	Requisito
+	RF-013
+	Buscar clientes por nombre, DNI, número de cuenta o número de operación.
+	RF-014
+	Visualizar la información general del cliente.
+	RF-015
+	Consultar el historial de gestiones realizadas.
+	RF-016
+	Actualizar la información básica del cliente cuando sea necesario.
+	5.6 Módulo de Gestión de Cobranza
+Código
+	Requisito
+	RF-017
+	Registrar llamadas realizadas al cliente.
+	RF-018
+	Registrar visitas realizadas al cliente.
+	RF-019
+	Registrar observaciones relacionadas con la gestión.
+	RF-020
+	Registrar compromisos de pago.
+	RF-021
+	Consultar el historial completo de gestiones realizadas.
+	5.7 Módulo de Consulta de Información
+Código
+	Requisito
+	RF-022
+	Consultar información del cliente mediante la API de Kmente.
+	RF-023
+	Visualizar los teléfonos obtenidos durante la consulta.
+	RF-024
+	Visualizar las direcciones obtenidas durante la consulta.
+	RF-025
+	Permitir actualizar la información del cliente utilizando los datos obtenidos mediante Kmente.
+	5.8 Módulo de Seguimiento
+Código
+	Requisito
+	RF-026
+	Registrar una fecha de seguimiento para un cliente.
+	RF-027
+	Consultar los seguimientos pendientes.
+	RF-028
+	Consultar los compromisos de pago registrados.
+	5.9 Módulo de Reportes
+Código
+	Requisito
+	RF-029
+	Generar reportes por empresa.
+	RF-030
+	Generar reportes por agencia.
+	RF-031
+	Exportar reportes a formato Excel.
+	5.10 Resumen
+El MVP estará conformado por un total de 31 requisitos funcionales, distribuidos entre los diferentes módulos del sistema.
+Estos requisitos representan las funcionalidades mínimas necesarias para que el estudio jurídico pueda administrar su cartera de clientes, registrar las gestiones realizadas y consultar información actualizada durante el proceso de cobranza.
+6. Diseño Funcional de las Pantallas
+6.1 Introducción
+En este capítulo se describen las pantallas que formarán parte del Producto Mínimo Viable (MVP).
+El objetivo es definir la información que visualizará el usuario, las acciones disponibles y las validaciones necesarias para cada pantalla, sin entrar todavía en aspectos relacionados con el diseño visual o la implementación técnica.
+6.2 Pantalla: Inicio de Sesión
+Objetivo
+Permitir el acceso al sistema únicamente a usuarios autorizados.
+Información mostrada
+* Usuario
+* Contraseña
+Acciones
+* Iniciar sesión.
+Validaciones
+* Usuario obligatorio.
+* Contraseña obligatoria.
+* Mostrar mensaje cuando las credenciales sean incorrectas.
+6.3 Pantalla: Lista de Clientes
+Objetivo
+Permitir consultar y localizar rápidamente los clientes pertenecientes a la cartera de cobranza.
+Información mostrada
+* Nombre del cliente.
+* Empresa.
+* Agencia.
+* Número de cuenta.
+* Número de operación.
+* Deuda capital.
+* Deuda total.
+* Estado de la gestión.
+* Fecha del último seguimiento.
+Filtros
+* Empresa.
+* Agencia.
+* Nombre del cliente.
+* DNI.
+* Número de cuenta.
+* Número de operación.
+Acciones
+Administrador
+* Consultar cliente.
+* Crear cliente (si fuera necesario).
+* Editar información.
+* Eliminar cliente.
+* Abrir detalle del cliente.
+Secretario
+* Consultar cliente.
+* Buscar cliente.
+* Abrir detalle del cliente.
+Validaciones
+* Mostrar únicamente la información registrada en la cartera.
+* Aplicar los filtros seleccionados por el usuario.
+6.4 Pantalla: Detalle del Cliente
+Objetivo
+Centralizar toda la información necesaria para realizar la gestión de cobranza de un cliente.
+Información mostrada
+Información general
+* Nombre del cliente.
+* DNI.
+* Empresa.
+* Agencia.
+* Número de cuenta.
+* Número de operación.
+* Estado.
+* Deuda capital.
+* Deuda total.
+Información obtenida mediante Kmente
+Cuando el usuario realice la consulta, el sistema mostrará la información disponible proporcionada por la API de Kmente, como por ejemplo:
+* Teléfonos.
+* Direcciones.
+* Otros datos disponibles según la respuesta del servicio.
+Secciones de trabajo
+Gestión de cobranza
+Permite registrar:
+* Llamadas.
+* Visitas.
+* Observaciones.
+* Resultado de la gestión.
+* Fecha de la gestión.
+Compromisos de pago
+Permite registrar:
+* Fecha del compromiso.
+* Monto comprometido.
+* Observaciones.
+* Estado del compromiso.
+Seguimiento
+Permite registrar:
+* Próxima llamada.
+* Próxima visita.
+* Fecha del siguiente seguimiento.
+Historial
+Visualiza todas las gestiones realizadas al cliente ordenadas cronológicamente.
+Acciones
+* Consultar información en Kmente.
+* Registrar gestión.
+* Registrar compromiso.
+* Actualizar información del cliente.
+* Guardar cambios.
+Validaciones
+* La información proveniente de Kmente no deberá actualizarse automáticamente.
+* El usuario decidirá qué información conservar dentro del sistema.
+6.5 Pantalla: Importar Cartera
+Objetivo
+Registrar la cartera de clientes entregada por la entidad financiera.
+Información mostrada
+* Empresa.
+* Agencia.
+* Selección del archivo Excel.
+Acciones
+* Seleccionar archivo.
+* Importar cartera.
+* Cancelar operación.
+Validaciones
+* Solo se permitirán archivos Excel (.xlsx o .xls).
+* Verificar que el archivo tenga la estructura esperada.
+* Mostrar un mensaje si existen errores durante la importación.
+6.6 Pantalla: Seguimientos
+Objetivo
+Facilitar el control de los clientes que requieren una nueva gestión.
+Información mostrada
+* Cliente.
+* Empresa.
+* Agencia.
+* Fecha del seguimiento.
+* Tipo de seguimiento.
+* Estado.
+Acciones
+* Abrir cliente.
+* Registrar nueva gestión.
+* Actualizar seguimiento.
+6.7 Pantalla: Reportes
+Objetivo
+Consultar información resumida sobre la cartera administrada por el estudio jurídico.
+Información mostrada
+* Reporte por empresa.
+* Reporte por agencia.
+* Reporte de compromisos registrados.
+Acciones
+* Generar reporte.
+* Exportar a Excel.
+7. Flujo de Navegación del Sistema
+7.1 Introducción
+El flujo de navegación describe el recorrido que realizará el usuario dentro del sistema para ejecutar las actividades relacionadas con la gestión de cobranza.
+Su objetivo es definir la secuencia general de uso del sistema antes de iniciar el diseño de la interfaz y el desarrollo de cada módulo.
+7.2 Flujo General
+El flujo principal del sistema será el siguiente:
+Inicio de Sesión
+        │
+        ▼
+Página Principal
+        │
+        ├──────────────┐
+        │              │
+        ▼              ▼
+Empresas         Agencias
+        │              │
+        └──────┬───────┘
+               │
+               ▼
+      Importar Cartera
+               │
+               ▼
+       Lista de Clientes
+               │
+               ▼
+      Detalle del Cliente
+               │
+      ┌────────┼────────┐
+      │        │        │
+      ▼        ▼        ▼
+Consultar   Registrar  Registrar
+ Kmente     Gestión   Compromiso
+      │        │        │
+      └────────┼────────┘
+               ▼
+     Programar Seguimiento
+               │
+               ▼
+           Guardar
+               │
+               ▼
+          Reportes
+7.3 Flujo de Gestión de un Cliente
+El proceso principal del sistema estará orientado a la gestión de cada cliente registrado en la cartera.
+El flujo será el siguiente:
+1. El usuario inicia sesión.
+2. Selecciona la empresa correspondiente.
+3. Consulta la cartera de clientes.
+4. Busca un cliente mediante los filtros disponibles.
+5. Abre el detalle del cliente.
+6. Revisa la información registrada.
+7. Si es necesario, consulta información actualizada mediante Kmente.
+8. Registra la gestión realizada (llamada, visita u observación).
+9. Si existe un acuerdo, registra un compromiso de pago.
+10. Programa una fecha para el siguiente seguimiento.
+11. Guarda la información.
+7.4 Flujo de Importación de Cartera
+El proceso para registrar una nueva cartera será el siguiente:
+1. El Administrador ingresa al módulo de Importación.
+2. Selecciona la empresa.
+3. Selecciona la agencia correspondiente.
+4. Adjunta el archivo Excel.
+5. El sistema valida el formato del archivo.
+6. Si el archivo es válido, se registra la información.
+7. Si existe algún error, el sistema informa el motivo antes de realizar la importación.
+7.5 Flujo de Consulta mediante Kmente
+Cuando la información del cliente requiera actualización, el usuario podrá realizar una consulta utilizando la API de Kmente.
+El flujo será el siguiente:
+1. Abrir el detalle del cliente.
+2. Seleccionar la opción Consultar Kmente.
+3. El sistema realiza la consulta.
+4. Se muestran los datos obtenidos.
+5. El usuario decide si desea actualizar la información registrada en el sistema.
+7.6 Flujo de Seguimiento
+El seguimiento permitirá mantener el control de los clientes pendientes de gestión.
+El flujo será el siguiente:
+1. El usuario consulta la lista de seguimientos pendientes.
+2. Selecciona un cliente.
+3. Registra una nueva gestión.
+4. Actualiza el compromiso, si corresponde.
+5. Programa una nueva fecha de seguimiento.
+6. Guarda los cambios.
+7.7 Consideraciones
+Durante el MVP se trabajará con un flujo de navegación sencillo, evitando procesos innecesarios o múltiples pasos para realizar una gestión.
+Cada funcionalidad estará orientada a reducir el tiempo que el usuario dedica a consultar información y registrar el seguimiento de sus clientes.
+8. Diccionario de Datos del MVP
+8.1 Introducción
+El presente capítulo describe la información que será administrada por el sistema durante la gestión de cobranza extrajudicial.
+Su objetivo es identificar los datos necesarios para el funcionamiento del MVP, sirviendo como base para el diseño de la base de datos, el desarrollo del backend y la construcción de las interfaces de usuario.
+Los datos descritos corresponden únicamente a la primera versión del sistema y podrán ampliarse conforme evolucionen las necesidades del estudio jurídico.
+8.2 Usuario
+Representa a las personas autorizadas para acceder al sistema.
+Información
+Campo
+	Descripción
+	Usuario
+	Nombre de acceso al sistema.
+	Contraseña
+	Clave de acceso.
+	Nombre completo
+	Nombre del usuario.
+	Rol
+	Administrador o Secretario.
+	Estado
+	Activo o Inactivo.
+	8.3 Empresa
+Representa a la entidad financiera o empresa que asigna la cartera.
+Información
+Campo
+	Descripción
+	Nombre
+	Nombre de la empresa.
+	Estado
+	Activa o Inactiva.
+	8.4 Agencia
+Representa la agencia perteneciente a una empresa.
+Información
+Campo
+	Descripción
+	Nombre
+	Nombre de la agencia.
+	Empresa
+	Empresa a la que pertenece.
+	Estado
+	Activa o Inactiva.
+	8.5 Cliente
+Representa al cliente incluido dentro de una cartera de cobranza.
+Información
+Campo
+	Descripción
+	DNI
+	Documento de identidad.
+	Nombre completo
+	Nombre del cliente.
+	Empresa
+	Empresa que asignó la cartera.
+	Agencia
+	Agencia responsable.
+	Número de cuenta
+	Cuenta asociada al crédito.
+	Número de operación
+	Operación del crédito.
+	Deuda capital
+	Capital pendiente.
+	Deuda total
+	Deuda total registrada.
+	Estado
+	Estado actual de la gestión.
+	Nota: Algunos datos podrán actualizarse mediante la consulta realizada a la API de Kmente.
+8.6 Información obtenida mediante Kmente
+Corresponde a la información consultada desde la API de Kmente.
+Información
+Campo
+	Descripción
+	Teléfonos
+	Números telefónicos disponibles.
+	Direcciones
+	Direcciones registradas.
+	Otros datos
+	Información adicional disponible según la respuesta de la API.
+	La información consultada no modificará automáticamente los datos registrados en el sistema. El usuario decidirá si desea actualizarla.
+8.7 Gestión de Cobranza
+Representa las acciones realizadas durante el seguimiento del cliente.
+Información
+Campo
+	Descripción
+	Fecha
+	Fecha de la gestión.
+	Tipo de gestión
+	Llamada, visita u observación.
+	Resultado
+	Resultado obtenido durante la gestión.
+	Observación
+	Comentarios registrados por el usuario.
+	Usuario
+	Responsable que realizó la gestión.
+	8.8 Compromiso de Pago
+Representa un acuerdo registrado con el cliente.
+Información
+Campo
+	Descripción
+	Fecha del compromiso
+	Fecha del acuerdo.
+	Monto
+	Monto comprometido.
+	Observación
+	Comentarios adicionales.
+	Estado
+	Pendiente, Cumplido o Incumplido.
+	8.9 Seguimiento
+Permite controlar las próximas actividades relacionadas con un cliente.
+Información
+Campo
+	Descripción
+	Fecha de seguimiento
+	Fecha programada.
+	Tipo
+	Llamada o visita.
+	Estado
+	Pendiente o Realizado.
+	8.10 Cartera
+Representa el conjunto de clientes importados desde un archivo Excel.
+Información
+Campo
+	Descripción
+	Empresa
+	Empresa propietaria de la cartera.
+	Agencia
+	Agencia correspondiente.
+	Archivo importado
+	Archivo Excel utilizado para la carga.
+	Fecha de importación
+	Fecha del registro.
+	Usuario responsable
+	Usuario que realizó la importación.
+	8.11 Consideraciones
+El diccionario de datos presentado constituye la información mínima necesaria para el funcionamiento del Producto Mínimo Viable (MVP).
+A medida que el sistema evolucione y se incorporen nuevas funcionalidades, este documento podrá ampliarse para incluir nuevos datos o modificar los existentes.
+9. Requisitos No Funcionales
+9.1 Introducción
+Los requisitos no funcionales describen las características de calidad que deberá cumplir el sistema durante su funcionamiento.
+Estos requisitos no representan funcionalidades visibles para el usuario, pero garantizan que el sistema sea seguro, confiable y fácil de utilizar.
+9.2 Seguridad
+El sistema deberá permitir el acceso únicamente a usuarios autorizados mediante un nombre de usuario y contraseña.
+Cada usuario visualizará únicamente las opciones permitidas según el rol asignado (Administrador o Secretario).
+Las acciones realizadas dentro del sistema deberán quedar asociadas al usuario que las ejecutó.
+9.3 Disponibilidad
+El sistema será una aplicación web de acceso interno para el estudio jurídico.
+Su funcionamiento dependerá de una conexión a Internet, ya que utilizará servicios externos como la API de Kmente.
+9.4 Usabilidad
+La interfaz deberá ser sencilla e intuitiva, permitiendo que los usuarios realicen las gestiones diarias sin necesidad de procesos complejos.
+Se priorizará reducir la cantidad de pasos necesarios para consultar un cliente y registrar una gestión.
+9.5 Rendimiento
+Las consultas de clientes deberán responder en un tiempo adecuado para no afectar el trabajo diario del usuario.
+La importación de archivos Excel deberá informar el progreso o el resultado del proceso, evitando que el usuario desconozca el estado de la operación.
+9.6 Integridad de la Información
+La información registrada por los usuarios deberá almacenarse correctamente y mantenerse consistente.
+Los datos obtenidos mediante la API de Kmente no modificarán automáticamente la información del sistema; cualquier actualización requerirá la confirmación del usuario.
+9.7 Compatibilidad
+El sistema deberá funcionar correctamente en los navegadores web modernos más utilizados, tales como:
+* Google Chrome.
+* Microsoft Edge.
+* Mozilla Firefox.
+9.8 Mantenibilidad
+El sistema será desarrollado de forma modular, permitiendo incorporar nuevas funcionalidades sin afectar el funcionamiento de los módulos existentes.
+Las mejoras futuras deberán poder implementarse de manera incremental.
+9.9 Respaldo de la Información
+La información almacenada deberá contar con mecanismos de respaldo que permitan su recuperación en caso de fallos o pérdida de datos.
+La estrategia de respaldo será definida durante la etapa de implementación.
+9.10 Escalabilidad
+El diseño del sistema permitirá incorporar nuevos módulos y funcionalidades conforme evolucionen las necesidades del estudio jurídico, sin requerir una reconstrucción completa del sistema.
+10. Plan de Desarrollo del MVP
+10.1 Introducción
+El desarrollo del sistema se realizará de manera incremental, implementando primero las funcionalidades que generan mayor valor para el estudio jurídico.
+Cada etapa tendrá como objetivo entregar una parte funcional del sistema, permitiendo validar el avance y realizar ajustes conforme se obtenga retroalimentación del cliente.
+10.2 Estrategia de desarrollo
+El proyecto seguirá una estrategia incremental basada en módulos.
+Cada módulo será desarrollado, probado y validado antes de iniciar el siguiente, reduciendo el riesgo de errores y facilitando la incorporación de mejoras durante el proceso.
+Esta estrategia permitirá contar con un sistema funcional desde las primeras etapas del desarrollo.
+10.3 Etapas de desarrollo
+Etapa 1 – Configuración inicial
+Objetivo:
+Preparar la estructura básica del sistema.
+Incluye:
+* Inicio de sesión.
+* Gestión de usuarios.
+* Empresas.
+* Agencias.
+Etapa 2 – Gestión de cartera
+Objetivo:
+Permitir registrar la cartera entregada por las entidades financieras.
+Incluye:
+* Importación de archivos Excel.
+* Validación del archivo.
+* Registro de clientes.
+* Consulta de cartera.
+Etapa 3 – Gestión del cliente
+Objetivo:
+Centralizar toda la información relacionada con cada cliente.
+Incluye:
+* Consulta de clientes.
+* Detalle del cliente.
+* Historial de gestiones.
+* Actualización de información básica.
+Etapa 4 – Gestión de cobranza
+Objetivo:
+Registrar todas las acciones realizadas durante el proceso de cobranza.
+Incluye:
+* Registro de llamadas.
+* Registro de visitas.
+* Observaciones.
+* Compromisos de pago.
+* Seguimientos.
+Etapa 5 – Integración con Kmente
+Objetivo:
+Consultar información actualizada del cliente mediante la API de Kmente.
+Incluye:
+* Consulta de información.
+* Visualización de teléfonos.
+* Visualización de direcciones.
+* Actualización manual de información.
+Etapa 6 – Reportes
+Objetivo:
+Facilitar la consulta de información de la cartera.
+Incluye:
+* Reportes por empresa.
+* Reportes por agencia.
+* Reportes de compromisos.
+* Exportación a Excel.
+10.4 Priorización del desarrollo
+La prioridad de implementación será la siguiente:
+Prioridad
+	Módulo
+	Alta
+	Autenticación
+	Alta
+	Empresas y Agencias
+	Alta
+	Importación de Cartera
+	Alta
+	Clientes
+	Alta
+	Gestión de Cobranza
+	Media
+	Integración con Kmente
+	Media
+	Seguimientos
+	Media
+	Reportes
+	10.5 Criterios para considerar el MVP terminado
+El Producto Mínimo Viable se considerará finalizado cuando sea posible:
+* Iniciar sesión con los diferentes roles de usuario.
+* Registrar empresas y agencias.
+* Importar una cartera desde Excel.
+* Consultar clientes.
+* Visualizar el detalle del cliente.
+* Registrar llamadas, visitas y observaciones.
+* Registrar compromisos de pago.
+* Consultar información mediante la API de Kmente.
+* Programar seguimientos.
+* Generar reportes básicos.
+10.6 Funcionalidades fuera del alcance del MVP
+Las siguientes funcionalidades no forman parte de esta primera versión del sistema y podrán evaluarse en futuras etapas del proyecto:
+* Automatización del envío de mensajes por WhatsApp.
+* Integración con Citrix.
+* Gestión de procesos judiciales.
+* Paneles de indicadores avanzados.
+* Automatizaciones adicionales.
+* Nuevos módulos derivados de futuras necesidades del cliente.
+10.7 Consideraciones finales
+El presente plan constituye una guía para el desarrollo del Producto Mínimo Viable.
+Durante la implementación podrán realizarse ajustes derivados de nuevas reuniones con el cliente o de cambios en los procesos internos del estudio jurídico, siempre que dichos cambios sean evaluados antes de incorporarse al alcance del proyecto.

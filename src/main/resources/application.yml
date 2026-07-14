@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: SistemaIntegralCobranza
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/cobranza}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+
+  web:
+    resources:
+      static-locations: classpath:/static/
+
+server:
+  port: ${SERVER_PORT:8080}
+  address: ${SERVER_ADDRESS:0.0.0.0}
+
+# Variables de entorno requeridas en producción:
+# DB_URL, DB_USER, DB_PASSWORD, SERVER_PORT, SERVER_ADDRESS
