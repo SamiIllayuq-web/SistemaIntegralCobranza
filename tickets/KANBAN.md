@@ -7,7 +7,7 @@
 - _(vacío)_
 
 ## In Progress
-- _(vacío)_
+- `001-grilling-disenos-decisiones.md` — sesión de preguntas, 3/4 respondidas
 
 ## Ready for Review
 - _(vacío)_
