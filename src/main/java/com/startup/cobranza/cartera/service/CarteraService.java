@@ -44,8 +44,8 @@ public class CarteraService {
         }
 
         String nombreOriginal = archivo.getOriginalFilename();
-        if (nombreOriginal == null || (!nombreOriginal.endsWith(".xlsx") && !nombreOriginal.endsWith(".xls"))) {
-            throw new CarteraException("Solo se permiten archivos Excel (.xlsx o .xls)");
+        if (nombreOriginal == null || !nombreOriginal.toLowerCase().endsWith(".xlsx")) {
+            throw new CarteraException("Solo se permiten archivos Excel (.xlsx)");
         }
 
         Empresa empresa = empresaRepository.findById(empresaId)
