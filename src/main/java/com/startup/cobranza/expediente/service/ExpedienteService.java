@@ -256,40 +256,23 @@ public class ExpedienteService {
                 clienteExistente.setObservacion(rd.observacion);
                 expedienteClienteRepository.save(clienteExistente);
             } else {
-                // buscar o crear Cliente
+                // buscar o crear Cliente (por DNI, sin cuenta/operacion — esos datos van en Operacion)
                 Cliente cliente = null;
                 if (rd.dni != null && !rd.dni.isEmpty()) {
-                    log.info("IMPORT: buscando cliente dni=[{}] cuenta=[{}] operacion=[{}]", rd.dni, rd.cuenta, rd.operacion);
-                    List<Cliente> encontrados = clienteRepository.findByDni(rd.dni);
-                    log.info("IMPORT: encontrados {} con dni=[{}]", encontrados.size(), rd.dni);
-                    for (Cliente c : encontrados) {
-                        log.info("IMPORT: comparando c.cuenta=[{}] c.operacion=[{}]", c.getNumeroCuenta(), c.getNumeroOperacion());
-                        if (eq(c.getNumeroCuenta(), rd.cuenta) && eq(c.getNumeroOperacion(), rd.operacion)) {
-                            cliente = c;
-                            // actualizar datos del cliente con datos frescos del Excel
-                            cliente.setNombreCompleto(rd.nombreCliente);
-                            cliente.setDeudaCapital(rd.deudaCap);
-                            cliente.setDeudaTotal(rd.deudaTotal);
-                            cliente.setObservaciones(rd.observacion);
-                            if (agencia != null) cliente.setAgencia(agencia);
-                            cliente = clienteRepository.save(cliente);
-                            log.info("IMPORT: Cliente actualizado id={}", cliente.getId());
-                            break;
-                        }
+                    log.info("IMPORT: buscando cliente dni=[{}]", rd.dni);
+                    cliente = clienteRepository.findByDni(rd.dni).orElse(null);
+                    if (cliente != null) {
+                        log.info("IMPORT: Cliente encontrado id={}, actualizando datos", cliente.getId());
+                        cliente.setNombreCompleto(rd.nombreCliente);
+                        cliente = clienteRepository.save(cliente);
                     }
                 }
                 if (cliente == null) {
-                    log.info("IMPORT: creando Cliente nombre={} dni={} cuenta={} operacion={}", rd.nombreCliente, rd.dni, rd.cuenta, rd.operacion);
+                    log.info("IMPORT: creando Cliente nombre={} dni={}", rd.nombreCliente, rd.dni);
                     cliente = Cliente.builder()
                             .empresa(empresa)
-                            .agencia(agencia)
                             .nombreCompleto(rd.nombreCliente)
                             .dni(rd.dni)
-                            .numeroCuenta(rd.cuenta)
-                            .numeroOperacion(rd.operacion)
-                            .deudaCapital(rd.deudaCap)
-                            .deudaTotal(rd.deudaTotal)
-                            .observaciones(rd.observacion)
                             .activo(true)
                             .build();
                     cliente = clienteRepository.save(cliente);

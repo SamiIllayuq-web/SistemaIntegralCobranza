@@ -47,10 +47,7 @@ public class ClienteController {
     private boolean hasBusqueda(ClienteBusquedaDTO busqueda) {
         return (busqueda.getNombre() != null && !busqueda.getNombre().isBlank())
                 || (busqueda.getDni() != null && !busqueda.getDni().isBlank())
-                || (busqueda.getNumeroCuenta() != null && !busqueda.getNumeroCuenta().isBlank())
-                || (busqueda.getNumeroOperacion() != null && !busqueda.getNumeroOperacion().isBlank())
-                || busqueda.getEmpresaId() != null
-                || busqueda.getAgenciaId() != null;
+                || busqueda.getEmpresaId() != null;
     }
 
     @GetMapping("/{id}")
@@ -139,18 +136,11 @@ public class ClienteController {
         return ClienteFormDTO.builder()
                 .nombreCompleto(dto.getNombreCompleto())
                 .dni(dto.getDni())
-                .numeroCuenta(dto.getNumeroCuenta())
-                .numeroOperacion(dto.getNumeroOperacion())
-                .deudaCapital(dto.getDeudaCapital())
-                .deudaTotal(dto.getDeudaTotal())
                 .telefono(dto.getTelefono())
                 .telefono2(dto.getTelefono2())
                 .telefono3(dto.getTelefono3())
                 .direccion(dto.getDireccion())
-                .estadoGestion(dto.getEstadoGestion())
-                .observaciones(dto.getObservaciones())
                 .empresaId(dto.getEmpresaId())
-                .agenciaId(dto.getAgenciaId())
                 .build();
     }
 }

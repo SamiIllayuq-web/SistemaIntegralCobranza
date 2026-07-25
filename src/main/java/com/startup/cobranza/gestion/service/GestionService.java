@@ -52,10 +52,6 @@ public class GestionService {
 
         Gestion saved = gestionRepository.save(gestion);
 
-        // Actualizar fecha última gestión del cliente
-        cliente.setFechaUltimaGestion(saved.getFechaGestion());
-        clienteRepository.save(cliente);
-
         return toDTO(saved);
     }
 

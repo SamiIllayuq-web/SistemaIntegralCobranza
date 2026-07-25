@@ -61,20 +61,8 @@ public class ClienteService {
                 && !cliente.getDni().contains(busqueda.getDni())) {
             return false;
         }
-        if (busqueda.getNumeroCuenta() != null && !busqueda.getNumeroCuenta().isBlank()
-                && !cliente.getNumeroCuenta().contains(busqueda.getNumeroCuenta())) {
-            return false;
-        }
-        if (busqueda.getNumeroOperacion() != null && !busqueda.getNumeroOperacion().isBlank()
-                && !cliente.getNumeroOperacion().contains(busqueda.getNumeroOperacion())) {
-            return false;
-        }
         if (busqueda.getEmpresaId() != null
                 && !busqueda.getEmpresaId().equals(cliente.getEmpresaId())) {
-            return false;
-        }
-        if (busqueda.getAgenciaId() != null
-                && !busqueda.getAgenciaId().equals(cliente.getAgenciaId())) {
             return false;
         }
         return true;
@@ -85,12 +73,7 @@ public class ClienteService {
         Empresa empresa = empresaRepository.findById(form.getEmpresaId())
                 .orElseThrow(() -> new ClienteException("Empresa no encontrada con id: " + form.getEmpresaId()));
 
-        Agencia agencia = null;
-        if (form.getAgenciaId() != null) {
-            agencia = agenciaRepository.findById(form.getAgenciaId()).orElse(null);
-        }
-
-        Cliente cliente = clienteMapper.toEntityFromForm(form, empresa, agencia);
+        Cliente cliente = clienteMapper.toEntityFromForm(form, empresa, null);
         return clienteMapper.toDTO(clienteRepository.save(cliente));
     }
 
@@ -102,25 +85,13 @@ public class ClienteService {
         Empresa empresa = empresaRepository.findById(form.getEmpresaId())
                 .orElseThrow(() -> new ClienteException("Empresa no encontrada con id: " + form.getEmpresaId()));
 
-        Agencia agencia = null;
-        if (form.getAgenciaId() != null) {
-            agencia = agenciaRepository.findById(form.getAgenciaId()).orElse(null);
-        }
-
         cliente.setNombreCompleto(form.getNombreCompleto());
         cliente.setDni(form.getDni());
-        cliente.setNumeroCuenta(form.getNumeroCuenta());
-        cliente.setNumeroOperacion(form.getNumeroOperacion());
-        cliente.setDeudaCapital(form.getDeudaCapital());
-        cliente.setDeudaTotal(form.getDeudaTotal());
         cliente.setTelefono(form.getTelefono());
         cliente.setTelefono2(form.getTelefono2());
         cliente.setTelefono3(form.getTelefono3());
         cliente.setDireccion(form.getDireccion());
-        cliente.setEstadoGestion(form.getEstadoGestion());
-        cliente.setObservaciones(form.getObservaciones());
         cliente.setEmpresa(empresa);
-        cliente.setAgencia(agencia);
 
         return clienteMapper.toDTO(clienteRepository.save(cliente));
     }
