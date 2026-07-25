@@ -17,7 +17,4 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long>, JpaSpec
 
     Optional<Cliente> findFirstByDni(String dni);
 
-    List<Cliente> findByEmpresaId(Long empresaId);
-
-    List<Cliente> findByAgenciaId(Long agenciaId);
 }
