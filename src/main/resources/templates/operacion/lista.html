@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operaciones - Sistema de Cobranza</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Sistema de Cobranza</a>
+            <div class="navbar-nav">
+                <a class="nav-link" th:href="@{/dashboard}">Inicio</a>
+                <a class="nav-link" th:href="@{/empresas}">Empresas</a>
+                <a class="nav-link" th:href="@{/agencias}">Agencias</a>
+                <a class="nav-link" th:href="@{/usuarios}">Usuarios</a>
+                <a class="nav-link" th:href="@{/clientes}">Clientes</a>
+                <a class="nav-link" th:href="@{/cartera/importar}">Cartera</a>
+                <a class="nav-link active" th:href="@{/operaciones}">Operaciones</a>
+            </div>
+            <form th:action="@{/logout}" method="post" class="d-inline">
+                <button type="submit" class="btn btn-light btn-sm">Cerrar Sesión</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Operaciones</h2>
+            <span class="badge bg-secondary fs-6" th:text="${total + ' registros'}">0 registros</span>
+        </div>
+
+        <!-- Filtros -->
+        <div class="card mb-4">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">Filtros</h5>
+            </div>
+            <div class="card-body">
+                <form method="get" th:action="@{/operaciones}">
+                    <div class="row g-3">
+                        <div class="col-md-2">
+                            <label class="form-label">Agencia</label>
+                            <input type="text" class="form-control" name="agencia" th:value="${filtros.agencia}" placeholder="Ej: OXAPAMPA">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Situación</label>
+                            <input type="text" class="form-control" name="situacion" th:value="${filtros.situacion}" placeholder="Ej: Judicial">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">N° Expediente</label>
+                            <input type="text" class="form-control" name="expediente" th:value="${filtros.expediente}" placeholder="Ej: 00265-2025">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">DNI</label>
+                            <input type="text" class="form-control" name="dni" th:value="${filtros.dni}" placeholder="DNI">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Cuenta</label>
+                            <input type="text" class="form-control" name="cuenta" th:value="${filtros.cuenta}" placeholder="Cuenta">
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end gap-1">
+                            <button type="submit" class="btn btn-primary">Filtrar</button>
+                            <a th:href="@{/operaciones}" class="btn btn-secondary">Limpiar</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tabla -->
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-sm">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Cliente</th>
+                                <th>DNI</th>
+                                <th>Cuenta</th>
+                                <th>Operación</th>
+                                <th>Agencia</th>
+                                <th>Situación</th>
+                                <th>Abogado</th>
+                                <th>Deuda Total</th>
+                                <th>N° Expediente</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="op : ${operaciones}">
+                                <td th:text="${op.clienteNombre ?: '-'}"></td>
+                                <td th:text="${op.clienteDni ?: '-'}"></td>
+                                <td th:text="${op.cuenta}"></td>
+                                <td th:text="${op.numeroOperacion}"></td>
+                                <td th:text="${op.agenciaNombre ?: '-'}"></td>
+                                <td>
+                                    <span th:class="${'badge ' + (
+                                        op.situacion == 'Judicial' ? 'bg-danger' :
+                                        op.situacion == 'Extrajudicial' ? 'bg-warning text-dark' : 'bg-secondary')}"
+                                          th:text="${op.situacion ?: '-'}"></span>
+                                </td>
+                                <td th:text="${op.abogadoNombre ?: '-'}"></td>
+                                <td th:text="${op.deudaTotal != null ? 'S/ ' + #numbers.formatDecimal(op.deudaTotal, 1, 2) : '-'}"></td>
+                                <td th:text="${op.numeroExpediente ?: '-'}"></td>
+                                <td>
+                                    <a th:href="@{/operaciones/{id}(id=${op.id})}" class="btn btn-primary btn-sm">Ver</a>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(operaciones)}">
+                                <td colspan="10" class="text-center text-muted py-4">No hay operaciones registradas</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

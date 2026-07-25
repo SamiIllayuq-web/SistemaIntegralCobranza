@@ -7,6 +7,8 @@ import com.startup.cobranza.cliente.exception.ClienteException;
 import com.startup.cobranza.cliente.service.ClienteService;
 import com.startup.cobranza.empresa.dto.EmpresaDTO;
 import com.startup.cobranza.empresa.service.EmpresaService;
+import com.startup.cobranza.cartera.dto.OperacionDTO;
+import com.startup.cobranza.cartera.service.OperacionService;
 import com.startup.cobranza.gestion.dto.GestionDTO;
 import com.startup.cobranza.gestion.service.GestionService;
 import jakarta.validation.Valid;
@@ -28,6 +30,7 @@ public class ClienteController {
     private final ClienteService clienteService;
     private final EmpresaService empresaService;
     private final GestionService gestionService;
+    private final OperacionService operacionService;
 
     @GetMapping
     public String listar(@ModelAttribute ClienteBusquedaDTO busqueda, Model model) {
@@ -55,8 +58,10 @@ public class ClienteController {
         try {
             ClienteDTO cliente = clienteService.obtenerPorId(id);
             List<GestionDTO> gestiones = gestionService.listarPorCliente(id);
+            List<OperacionDTO> operaciones = operacionService.listarPorCliente(id);
             model.addAttribute("cliente", cliente);
             model.addAttribute("gestiones", gestiones);
+            model.addAttribute("operaciones", operaciones);
             return "cliente/detalle";
         } catch (ClienteException e) {
             redirectAttrs.addFlashAttribute("error", e.getMessage());

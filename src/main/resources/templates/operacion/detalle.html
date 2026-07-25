@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${operacion.cuenta + ' - ' + operacion.numeroOperacion}">Detalle de Operación</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Sistema de Cobranza</a>
+            <div class="navbar-nav">
+                <a class="nav-link" th:href="@{/dashboard}">Inicio</a>
+                <a class="nav-link" th:href="@{/operaciones}">Operaciones</a>
+                <a class="nav-link" th:href="@{/clientes}">Clientes</a>
+            </div>
+            <form th:action="@{/logout}" method="post" class="d-inline">
+                <button type="submit" class="btn btn-light btn-sm">Cerrar Sesión</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 th:text="${operacion.cuenta + ' / ' + operacion.numeroOperacion}">Operación</h2>
+            <a th:href="@{/operaciones}" class="btn btn-secondary">Volver</a>
+        </div>
+
+        <!-- Cliente y Operación -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Cliente</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-borderless">
+                            <tr><th>Nombre:</th><td th:text="${operacion.clienteNombre}"></td></tr>
+                            <tr><th>DNI:</th><td th:text="${operacion.clienteDni}"></td></tr>
+                            <tr><th>Agencia:</th><td th:text="${operacion.agenciaNombre ?: '-'}"></td></tr>
+                            <tr><th>Empresa:</th><td>-</td></tr>
+                        </table>
+                        <a th:if="${operacion.clienteId}" th:href="@{/clientes/{id}(id=${operacion.clienteId})}" class="btn btn-sm btn-outline-primary">Ver Cliente</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Operación</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-borderless">
+                            <tr><th>Cuenta:</th><td th:text="${operacion.cuenta}"></td></tr>
+                            <tr><th>N° Operación:</th><td th:text="${operacion.numeroOperacion}"></td></tr>
+                            <tr><th>Situación:</th><td><span th:class="${'badge ' + (operacion.situacion == 'Judicial' ? 'bg-danger' : 'bg-secondary')}" th:text="${operacion.situacion}"></span></td></tr>
+                            <tr><th>Abogado:</th><td th:text="${operacion.abogadoNombre ?: '-'}"></td></tr>
+                            <tr><th>Transferido:</th><td th:text="${operacion.transferido ?: '-'}"></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deuda -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Información Financiera</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <table class="table table-borderless">
+                            <tr><th>Deuda Capital:</th><td th:text="${operacion.deudaCap != null ? 'S/ ' + #numbers.formatDecimal(operacion.deudaCap, 1, 2) : '-'}"></td></tr>
+                            <tr><th>Deuda Total:</th><td th:text="${operacion.deudaTotal != null ? 'S/ ' + #numbers.formatDecimal(operacion.deudaTotal, 1, 2) : '-'}"></td></tr>
+                            <tr><th>Monto Demandado:</th><td th:text="${operacion.montoDemandado != null ? 'S/ ' + #numbers.formatDecimal(operacion.montoDemandado, 1, 2) : '-'}"></td></tr>
+                            <tr><th>Moneda:</th><td th:text="${operacion.moneda ?: '-'}"></td></tr>
+                        </table>
+                    </div>
+                    <div class="col-md-3">
+                        <table class="table table-borderless">
+                            <tr><th>Búsqueda Bienes:</th><td th:text="${operacion.busquedaBienes ?: '-'}"></td></tr>
+                            <tr><th>Observaciones:</th><td th:text="${operacion.observaciones ?: '-'}"></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Datos Judiciales -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Datos Judiciales</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <table class="table table-sm table-borderless">
+                            <tr><th>Tipo Proceso:</th><td th:text="${operacion.tipoProceso ?: '-'}"></td></tr>
+                            <tr><th>Tipo Juzgado:</th><td th:text="${operacion.tipoJuzgado ?: '-'}"></td></tr>
+                            <tr><th>Distrito Judicial:</th><td th:text="${operacion.distritoJudicial ?: '-'}"></td></tr>
+                            <tr><th>N° Juzgado:</th><td th:text="${operacion.numeroJuzgado ?: '-'}"></td></tr>
+                            <tr><th>N° Expediente:</th><td th:text="${operacion.numeroExpediente ?: '-'}"></td></tr>
+                            <tr><th>Incidente:</th><td th:text="${operacion.tieneIncidente != null ? (operacion.tieneIncidente ? 'Sí' : 'No') : '-'}"></td></tr>
+                        </table>
+                    </div>
+                    <div class="col-md-4">
+                        <table class="table table-sm table-borderless">
+                            <tr><th>Secretario Legal:</th><td th:text="${operacion.secretarioLegal ?: '-'}"></td></tr>
+                            <tr><th>Cód. Exp. Cautelar:</th><td th:text="${operacion.codigoExpedienteCautelar ?: '-'}"></td></tr>
+                            <tr><th>Detalle Bien:</th><td th:text="${operacion.detalleBienEmbargado ?: '-'}"></td></tr>
+                            <tr><th>N° Partida:</th><td th:text="${operacion.numeroPartida ?: '-'}"></td></tr>
+                            <tr><th>Tipo Bien:</th><td th:text="${operacion.tipoBienEmbargado ?: '-'}"></td></tr>
+                            <tr><th>Rango:</th><td th:text="${operacion.rango ?: '-'}"></td></tr>
+                        </table>
+                    </div>
+                    <div class="col-md-4">
+                        <table class="table table-sm table-borderless">
+                            <tr><th>Detalle Acreedores:</th><td th:text="${operacion.detalleAcreedores ?: '-'}"></td></tr>
+                            <tr><th>Tipo Preferente:</th><td th:text="${operacion.tipoPreferente ?: '-'}"></td></tr>
+                            <tr><th>Audiencia Tipo:</th><td th:text="${operacion.audienciaTipo ?: '-'}"></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Medida Cautelar -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Medida Cautelar</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <table class="table table-sm table-borderless">
+                            <tr><th>Monto MC:</th><td th:text="${operacion.montoMedidaCautelar != null ? 'S/ ' + #numbers.formatDecimal(operacion.montoMedidaCautelar, 1, 2) : '-'}"></td></tr>
+                            <tr><th>Moneda MC:</th><td th:text="${operacion.monedaMc ?: '-'}"></td></tr>
+                            <tr><th>MC Ejecutada:</th><td th:text="${operacion.medidaCautelarEjecutada ?: '-'}"></td></tr>
+                        </table>
+                    </div>
+                    <div class="col-md-3">
+                        <table class="table table-sm table-borderless">
+                            <tr><th>F. Inscrip. Embargo:</th><td th:text="${operacion.fechaInscripcionEmbargo ?: '-'}"></td></tr>
+                            <tr><th>F. Pres. Título RRPP:</th><td th:text="${operacion.fechaPresentacionTituloRrpp ?: '-'}"></td></tr>
+                            <tr><th>Asiento Inscripción:</th><td th:text="${operacion.asientoInscripcion ?: '-'}"></td></tr>
+                        </table>
+                    </div>
+                    <div class="col-md-3">
+                        <table class="table table-sm table-borderless">
+                            <tr><th>F. Presentación MC:</th><td th:text="${operacion.fechaPresentacionMc ?: '-'}"></td></tr>
+                            <tr><th>F. Inadmisible:</th><td th:text="${operacion.fechaInadmisible ?: '-'}"></td></tr>
+                            <tr><th>F. Admisión:</th><td th:text="${operacion.fechaAdmision ?: '-'}"></td></tr>
+                        </table>
+                    </div>
+                    <div class="col-md-3">
+                        <table class="table table-sm table-borderless">
+                            <tr><th>Comentario:</th><td th:text="${operacion.comentario ?: '-'}"></td></tr>
+                            <tr><th>F. Presentación:</th><td th:text="${operacion.fechaPresentacion ?: '-'}"></td></tr>
+                            <tr><th>F. Inadmisible 2:</th><td th:text="${operacion.fechaInadmisible2 ?: '-'}"></td></tr>
+                            <tr><th>F. Admisión 2:</th><td th:text="${operacion.fechaAdmision2 ?: '-'}"></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resoluciones y Remates -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Resoluciones y Ejecutoria</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm table-borderless">
+                            <tr><th>F. Auto Final:</th><td th:text="${operacion.fechaAutoFinal ?: '-'}"></td></tr>
+                            <tr><th>F. Ejecutoriada:</th><td th:text="${operacion.fechaEjecutoriada ?: '-'}"></td></tr>
+                            <tr><th>F. Nombramiento Peritos:</th><td th:text="${operacion.fechaNombramientoPeritos ?: '-'}"></td></tr>
+                            <tr><th>F. Nombramiento Martillero:</th><td th:text="${operacion.fechaNombramientoMartillero ?: '-'}"></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Remates</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm table-borderless">
+                            <tr><th>F. Remate 1°:</th><td th:text="${operacion.fechaRemate1 ?: '-'}"></td></tr>
+                            <tr><th>F. Remate 2°:</th><td th:text="${operacion.fechaRemate2 ?: '-'}"></td></tr>
+                            <tr><th>F. Remate 3°:</th><td th:text="${operacion.fechaRemate3 ?: '-'}"></td></tr>
+                            <tr><th>F. Próx. Acto Procesal:</th><td th:text="${operacion.fechaProximoActoProcesal ?: '-'}"></td></tr>
+                            <tr><th>Comentario Procesal:</th><td th:text="${operacion.comentarioProcesal ?: '-'}"></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
