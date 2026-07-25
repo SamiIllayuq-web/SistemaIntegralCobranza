@@ -69,16 +69,19 @@ public class CarteraService {
              Workbook workbook = new XSSFWorkbook(is)) {
 
             Sheet sheet = workbook.getSheetAt(0);
-            Row headerRow = sheet.getRow(0);
+            // Los headers reales están en la FILA 2 (índice 1)
+            // La fila 1 (índice 0) suele estar vacía o ser informativa
+            Row headerRow = sheet.getRow(1);
 
             if (headerRow == null) {
                 throw new CarteraException("El archivo no tiene encabezado");
             }
 
-            // Validar encabezado mínimo: vérifier que las columnas clave existan
+            // Validar que las columnas clave existan en la fila de headers (índice 1)
             validarEncabezados(headerRow);
 
-            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+            // Data empieza en fila 3 (índice 2)
+            for (int i = 2; i <= sheet.getLastRowNum(); i++) {
                 Row row = sheet.getRow(i);
                 // Ignorar filas vacías o filas que son continuación (sin NRO ni cuenta)
                 if (row == null || isRowVacia(row)) continue;
@@ -120,27 +123,26 @@ public class CarteraService {
      * 3. Actualiza todos los campos de la Operacion
      */
     private void procesarRow(Row row, Empresa empresa, Agencia agencia) {
-        // Columnas del Excel (índice 0-based):
-        // A=NRO (ignorar), B=ABOGADO, C=C&O (ignorar), D=CUENTA, E=OPERACIÓN,
-        // F=MONEDA, G=TRANS., H=SITUACION, I=DEUDA CAP, J=DEUDA TOTAL,
-        // K=BUSQUEDA DE BIENES, L=TELÉFONO, M=DIRECCIÓN,
-        // N=TIPO PROCESO, O=TIPO JUZGADO, P=DISTRITO JUDICIAL, Q=N° JUZGADO,
-        // R=N° EXPEDIENTE, S=¿TIENE INCIDENTE?, T=MONTO DEMANDADO,
-        // U=SECRETARIO LEGAL, V=CÓD. EXPEDIENTE CAUTELAR, W=DETALLE BIEN EMBARGADO,
-        // X=N° PARTIDA, Y=TIPO BIEN EMBARGADO, Z=RANGO,
-        // AA=DETALLE ACREEDORES, AB=TIPO PREFERENTE,
-        // AC=MONTO MEDIDA CAUTELAR, AD=MONEDA MC, AE=M. CAUTELAR EJECUTADA,
-        // AF=F. INSCRIPCIÓN EMBARGO, AG=F. PRESENTACIÓN TÍTULO RRPP,
-        // AH=ASIENTO INSCRIPCIÓN, AI=F. PRESENTACIÓN MC,
-        // AJ=F. INADMISIBLE, AK=F. ADMISION, AL=COMENTARIO,
-        // AM=F. PRESENTACIÓN, AN=F. INADMISIBLE 2, AO=F. ADMISION 2,
-        // AP=TIPO AUDIENCIA, AQ=F. AUTO FINAL, AR=EJECUTORIADA,
-        // AS=F. NOMBRAMIENTO PERITOS, AT=F. NOMBRAMIENTO MARTILLERO,
-        // AU=F. REMATE 1, AV=F. REMATE 2, AW=F. REMATE 3,
-        // AX=F. PRÓXIMO ACTO PROCESAL, AY=COMENTARIO PROCESAL
+        // Mapeo de columnas Excel (índice 0-based):
+        //  A=NRO, B=ABOGADO, C=C&O, D=CUENTA, E=OPERACIÓN,
+        //  F=NOMBRE DEL CLIENTE, G=DNI, H=TRANS., I=OBSERVACION, J=SITUACION,
+        //  K=AGENCIA, L=MONEDA, M=BUSQUEDA DE BIENES, N=DEUDA CAP, O=DEUDA TOTAL,
+        //  P=TIPO PROCESO, Q=TIPO JUZGADO, R=DISTRITO JUDICIAL, S=N° JUZGADO,
+        //  T=N° EXPEDIENTE, U=INCIDENTE SI/NO, V=MONTO DDO.,
+        //  W=SECRETARIO LEGAL, X=CÓDIGO EXP. CAUTELAR, Y=DETALLE BIEN EMBARGADO,
+        //  Z=N° PARTIDA, [=TIPO BIEN EMBARGADO, \=RANGO, ]=DETALLE ACREEDORES,
+        //  ^=TIPO PREFERENTE, _=MONTO MC, `=MONEDA MC, a=MC EJECUTADA,
+        //  b=F. INSCRIP. EMBARGO, c=F. PRESENTACIÓN TÍTULO RRPP, d=ASIENTO INSCRIPCIÓN,
+        //  e=F. PRESENTACIÓN MC, f=F. INADMISIBLE, g=F. ADMISION, h=COMENTARIO,
+        //  i=F. PRESENTACIÓN, j=F. INADMISIBLE 2, k=F. ADMISION 2,
+        //  l=AUDIENCIA TIPO, m=F. AUTO FINAL, n=F. EJECUTORIADA,
+        //  o=F. NOMBRAMIENTO PERITOS, p=F. NOMBRAMIENTO MARTILLERO,
+        //  q=F. REMATE 1, r=F. REMATE 2, s=F. REMATE 3,
+        //  t=OBSERVACION/ACTOS PROCESALES, u=COMENTARIO
 
-        String nombre = getCellString(row.getCell(1));  // Columna B: NOMBRE
-        String dni = getCellString(row.getCell(2)).replaceAll("[^0-9]", "");  // Columna C: DNI (solo números)
+        // 5=F NOMBRE, 6=G DNI, 3=D CUENTA, 4=E OPERACIÓN
+        String nombre = getCellString(row.getCell(5));   // F: NOMBRE DEL CLIENTE
+        String dni = getCellString(row.getCell(6)).replaceAll("[^0-9]", ""); // G: DNI
 
         if (dni.isEmpty()) {
             throw new IllegalArgumentException("DNI vacío, no se puede procesar la fila");
@@ -149,33 +151,40 @@ public class CarteraService {
         // 1. Buscar o crear Cliente
         Cliente clienteExistente = clienteRepository.findByDni(dni)
                 .map(c -> {
-                    String tel = getCellString(row.getCell(11));  // Columna L: TELÉFONO
-                    String dir = getCellString(row.getCell(12)); // Columna M: DIRECCIÓN
-                    if (!tel.isEmpty()) c.setTelefono(tel);
-                    if (!dir.isEmpty()) c.setDireccion(dir);
                     if (!nombre.isEmpty()) c.setNombreCompleto(nombre);
+                    // Teléfono y dirección ya no están en este Excel
                     return c;
                 })
                 .orElseGet(() -> Cliente.builder()
                         .nombreCompleto(nombre.isEmpty() ? "SIN NOMBRE" : nombre)
                         .dni(dni)
-                        .telefono(getCellString(row.getCell(11)))
-                        .direccion(getCellString(row.getCell(12)))
                         .empresa(empresa)
                         .activo(true)
                         .build());
 
         Cliente cliente = clienteRepository.save(clienteExistente);
 
-        // 2. Preparar datos de la operación desde el row
-        String cuenta = getCellString(row.getCell(3));  // Columna D: CUENTA
-        String numeroOperacion = getCellString(row.getCell(4));  // Columna E: OPERACIÓN
+        // 2. Buscar datos de operación
+        // D (índice 3) y E (índice 4) pueden ser numéricos en el Excel
+        String cuenta = getCellString(row.getCell(3));
+        String numeroOperacion = getCellString(row.getCell(4));
 
         if (cuenta.isEmpty() || numeroOperacion.isEmpty()) {
             throw new IllegalArgumentException("Cuenta u operación vacía");
         }
 
-        // 3. Buscar o crear Operacion
+        // 3. Determinar la agencia: prioridad al nombre del Excel (col K=10)
+        //    si está vacía, usar la agencia del formulario
+        Agencia agenciaOperacion = agencia;
+        String agenciaNombreExcel = getCellString(row.getCell(10)).trim();
+        if (!agenciaNombreExcel.isEmpty() && !agenciaNombreExcel.equals(" ") && agencia == null) {
+            // Buscar agencia por nombre en la empresa
+            agenciaOperacion = agenciaRepository
+                    .findByNombreIgnoreCaseAndEmpresaId(agenciaNombreExcel, empresa.getId())
+                    .orElse(null);
+        }
+
+        // 4. Buscar o crear Operacion
         Operacion operacion = operacionRepository
                 .findByCuentaAndNumeroOperacion(cuenta, numeroOperacion)
                 .orElseGet(() -> Operacion.builder()
@@ -184,66 +193,66 @@ public class CarteraService {
                         .cliente(cliente)
                         .build());
 
-        // 4. Actualizar todos los campos de la operación
-        actualizarOperacion(operacion, row, agencia);
+        // 5. Actualizar todos los campos de la operación
+        actualizarOperacion(operacion, row, agenciaOperacion);
 
         operacionRepository.save(operacion);
     }
 
     private void actualizarOperacion(Operacion op, Row row, Agencia agencia) {
         op.setAgencia(agencia);
-        op.setAbogadoNombre(getCellString(row.getCell(1)));  // B: ABOGADO
-        op.setMoneda(getCellString(row.getCell(5)));         // F: MONEDA
-        op.setTransferido(getCellString(row.getCell(6)));    // G: TRANS.
-        op.setSituacion(getCellString(row.getCell(7)));      // H: SITUACION
-        op.setDeudaCap(getCellDecimal(row.getCell(8)));      // I: DEUDA CAP
-        op.setDeudaTotal(getCellDecimal(row.getCell(9)));    // J: DEUDA TOTAL
-        op.setBusquedaBienes(getCellString(row.getCell(10))); // K: BUSQUEDA DE BIENES
-        op.setTipoProceso(getCellString(row.getCell(13)));   // N: TIPO PROCESO
-        op.setTipoJuzgado(getCellString(row.getCell(14)));   // O: TIPO JUZGADO
-        op.setDistritoJudicial(getCellString(row.getCell(15))); // P: DISTRITO JUDICIAL
-        op.setNumeroJuzgado(getCellString(row.getCell(16))); // Q: N° JUZGADO
-        op.setNumeroExpediente(getCellString(row.getCell(17))); // R: N° EXPEDIENTE
-        op.setTieneIncidente(getCellBoolean(row.getCell(18)));  // S: ¿TIENE INCIDENTE?
-        op.setMontoDemandado(getCellDecimal(row.getCell(19)));   // T: MONTO DEMANDADO
-        op.setSecretarioLegal(getCellString(row.getCell(20)));   // U: SECRETARIO LEGAL
-        op.setCodigoExpedienteCautelar(getCellString(row.getCell(21))); // V: CÓD. EXPEDIENTE CAUTELAR
-        op.setDetalleBienEmbargado(getCellString(row.getCell(22))); // W: DETALLE BIEN EMBARGADO
-        op.setNumeroPartida(getCellString(row.getCell(23)));    // X: N° PARTIDA
-        op.setTipoBienEmbargado(getCellString(row.getCell(24))); // Y: TIPO BIEN EMBARGADO
-        op.setRango(getCellString(row.getCell(25)));            // Z: RANGO
-        op.setDetalleAcreedores(getCellString(row.getCell(26))); // AA: DETALLE ACREEDORES
-        op.setTipoPreferente(getCellString(row.getCell(27)));   // AB: TIPO PREFERENTE
-        op.setMontoMedidaCautelar(getCellDecimal(row.getCell(28)));  // AC: MONTO MEDIDA CAUTELAR
-        op.setMonedaMc(getCellString(row.getCell(29)));         // AD: MONEDA MC
-        op.setMedidaCautelarEjecutada(getCellString(row.getCell(30))); // AE: M. CAUTELAR EJECUTADA
-        op.setFechaInscripcionEmbargo(getCellDate(row.getCell(31)));  // AF: F. INSCRIPCIÓN EMBARGO
-        op.setFechaPresentacionTituloRrpp(getCellDate(row.getCell(32))); // AG: F. PRESENTACIÓN TÍTULO RRPP
-        op.setAsientoInscripcion(getCellString(row.getCell(33))); // AH: ASIENTO INSCRIPCIÓN
-        op.setFechaPresentacionMc(getCellDate(row.getCell(34)));  // AI: F. PRESENTACIÓN MC
-        op.setFechaInadmisible(getCellDate(row.getCell(35)));     // AJ: F. INADMISIBLE
-        op.setFechaAdmision(getCellDate(row.getCell(36)));        // AK: F. ADMISION
-        op.setComentario(getCellString(row.getCell(37)));         // AL: COMENTARIO
-        op.setFechaPresentacion(getCellDate(row.getCell(38)));    // AM: F. PRESENTACIÓN
-        op.setFechaInadmisible2(getCellDate(row.getCell(39)));    // AN: F. INADMISIBLE 2
-        op.setFechaAdmision2(getCellDate(row.getCell(40)));       // AO: F. ADMISION 2
-        op.setAudienciaTipo(getCellString(row.getCell(41)));      // AP: TIPO AUDIENCIA
-        op.setFechaAutoFinal(getCellDate(row.getCell(42)));       // AQ: F. AUTO FINAL
-        op.setFechaEjecutoriada(getCellDate(row.getCell(43)));    // AR: EJECUTORIADA
-        op.setFechaNombramientoPeritos(getCellDate(row.getCell(44))); // AS: F. NOMBRAMIENTO PERITOS
-        op.setFechaNombramientoMartillero(getCellDate(row.getCell(45))); // AT: F. NOMBRAMIENTO MARTILLERO
-        op.setFechaRemate1(getCellDate(row.getCell(46)));         // AU: F. REMATE 1
-        op.setFechaRemate2(getCellDate(row.getCell(47)));         // AV: F. REMATE 2
-        op.setFechaRemate3(getCellDate(row.getCell(48)));         // AW: F. REMATE 3
-        op.setFechaProximoActoProcesal(getCellDate(row.getCell(49))); // AX: F. PRÓXIMO ACTO PROCESAL
-        op.setComentarioProcesal(getCellString(row.getCell(50)));  // AY: COMENTARIO PROCESAL
+        op.setAbogadoNombre(getCellString(row.getCell(1)));   // B: ABOGADO
+        op.setTransferido(getCellString(row.getCell(7)));    // H: TRANS.
+        op.setObservaciones(getCellString(row.getCell(8)));   // I: OBSERVACION
+        op.setSituacion(getCellString(row.getCell(9)));       // J: SITUACION
+        op.setMoneda(getCellString(row.getCell(11)));         // L: MONEDA
+        op.setBusquedaBienes(getCellString(row.getCell(12))); // M: BUSQUEDA DE BIENES
+        op.setDeudaCap(getCellDecimal(row.getCell(13)));      // N: DEUDA CAP
+        op.setDeudaTotal(getCellDecimal(row.getCell(14)));     // O: DEUDA TOTAL
+        op.setTipoProceso(getCellString(row.getCell(15)));     // P: TIPO PROCESO
+        op.setTipoJuzgado(getCellString(row.getCell(16)));    // Q: TIPO JUZGADO
+        op.setDistritoJudicial(getCellString(row.getCell(17))); // R: DISTRITO JUDICIAL
+        op.setNumeroJuzgado(getCellString(row.getCell(18)));   // S: N° JUZGADO
+        op.setNumeroExpediente(getCellString(row.getCell(19))); // T: N° EXPEDIENTE
+        op.setTieneIncidente(getCellBoolean(row.getCell(20)));  // U: INCIDENTE SI/NO
+        op.setMontoDemandado(getCellDecimal(row.getCell(21)));  // V: MONTO DDO.
+        op.setSecretarioLegal(getCellString(row.getCell(22)));  // W: SECRETARIO LEGAL
+        op.setCodigoExpedienteCautelar(getCellString(row.getCell(23))); // X: CÓDIGO EXP. CAUTELAR
+        op.setDetalleBienEmbargado(getCellString(row.getCell(24))); // Y: DETALLE BIEN EMBARGADO
+        op.setNumeroPartida(getCellString(row.getCell(25)));    // Z: N° PARTIDA
+        op.setTipoBienEmbargado(getCellString(row.getCell(26))); // [: TIPO BIEN EMBARGADO
+        op.setRango(getCellString(row.getCell(27)));            // \: RANGO
+        op.setDetalleAcreedores(getCellString(row.getCell(28))); // ]: DETALLE ACREEDORES
+        op.setTipoPreferente(getCellString(row.getCell(29)));   // ^: TIPO PREFERENTE
+        op.setMontoMedidaCautelar(getCellDecimal(row.getCell(30))); // _: MONTO MC
+        op.setMonedaMc(getCellString(row.getCell(31)));         // `: MONEDA MC
+        op.setMedidaCautelarEjecutada(getCellString(row.getCell(32))); // a: MC EJECUTADA
+        op.setFechaInscripcionEmbargo(getCellDate(row.getCell(33)));  // b: F. INSCRIP. EMBARGO
+        op.setFechaPresentacionTituloRrpp(getCellDate(row.getCell(34))); // c: F. PRESENTACIÓN TÍTULO RRPP
+        op.setAsientoInscripcion(getCellString(row.getCell(35)));  // d: ASIENTO INSCRIPCIÓN
+        op.setFechaPresentacionMc(getCellDate(row.getCell(36)));   // e: F. PRESENTACIÓN MC
+        op.setFechaInadmisible(getCellDate(row.getCell(37)));       // f: F. INADMISIBLE
+        op.setFechaAdmision(getCellDate(row.getCell(38)));          // g: F. ADMISION
+        op.setComentario(getCellString(row.getCell(39)));            // h: COMENTARIO
+        op.setFechaPresentacion(getCellDate(row.getCell(40)));       // i: F. PRESENTACIÓN
+        op.setFechaInadmisible2(getCellDate(row.getCell(41)));       // j: F. INADMISIBLE 2
+        op.setFechaAdmision2(getCellDate(row.getCell(42)));         // k: F. ADMISION 2
+        op.setAudienciaTipo(getCellString(row.getCell(43)));         // l: AUDIENCIA TIPO
+        op.setFechaAutoFinal(getCellDate(row.getCell(44)));          // m: F. AUTO FINAL
+        op.setFechaEjecutoriada(getCellDate(row.getCell(45)));       // n: F. EJECUTORIADA
+        op.setFechaNombramientoPeritos(getCellDate(row.getCell(46))); // o: F. NOMBRAMIENTO PERITOS
+        op.setFechaNombramientoMartillero(getCellDate(row.getCell(47))); // p: F. NOMBRAMIENTO MARTILLERO
+        op.setFechaRemate1(getCellDate(row.getCell(48)));            // q: F. REMATE 1
+        op.setFechaRemate2(getCellDate(row.getCell(49)));            // r: F. REMATE 2
+        op.setFechaRemate3(getCellDate(row.getCell(50)));            // s: F. REMATE 3
+        op.setFechaProximoActoProcesal(getCellDate(row.getCell(51))); // t: OBSERVACION/ACTOS PROCESALES
+        op.setComentarioProcesal(getCellString(row.getCell(52)));    // u: COMENTARIO
     }
 
     private void validarEncabezados(Row headerRow) {
-        // Validación flexible: vérifier que las columnas clave existan
-        // No validamos orden exacto porque el Excel puede tener columnas adicionales
-        String nombre = getCellString(headerRow.getCell(1));
-        String dni = getCellString(headerRow.getCell(2));
+        // Headers reales en fila 2 (índice 1): F=NOMBRE, G=DNI, D=CUENTA, E=OPERACIÓN
+        String nombre = getCellString(headerRow.getCell(5));
+        String dni = getCellString(headerRow.getCell(6));
         String cuenta = getCellString(headerRow.getCell(3));
         String operacion = getCellString(headerRow.getCell(4));
 
@@ -253,10 +262,10 @@ public class CarteraService {
     }
 
     private boolean isRowVacia(Row row) {
-        // Una fila se considera vacía si no tiene NRO (col A), ni cuenta (col D), ni nombre (col B)
+        // Una fila se considera vacía si no tiene NRO (col A), ni cuenta (col D), ni nombre (col F)
         String nro = getCellString(row.getCell(0));
         String cuenta = getCellString(row.getCell(3));
-        String nombre = getCellString(row.getCell(1));
+        String nombre = getCellString(row.getCell(5));
         return nro.isEmpty() && cuenta.isEmpty() && nombre.isEmpty();
     }
 
