@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Editar Operación - ' + ${operacion.cuenta}">Editar Operación</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Sistema de Cobranza</a>
+            <div class="navbar-nav">
+                <a class="nav-link" th:href="@{/dashboard}">Inicio</a>
+                <a class="nav-link" th:href="@{/operaciones}">Operaciones</a>
+                <a class="nav-link" th:href="@{/clientes}">Clientes</a>
+            </div>
+            <form th:action="@{/logout}" method="post" class="d-inline">
+                <button type="submit" class="btn btn-light btn-sm">Cerrar Sesión</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 th:text="'Editar Operación: ' + ${operacion.cuenta} + ' / ' + ${operacion.numeroOperacion}">Editar Operación</h2>
+            <div>
+                <a th:href="@{/operaciones/{id}(id=${operacion.id})}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </div>
+
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
+        <form th:action="@{/operaciones/guardar}" th:object="${operacion}" method="post">
+            <input type="hidden" th:field="*{id}" />
+            <input type="hidden" th:field="*{cuenta}" />
+            <input type="hidden" th:field="*{numeroOperacion}" />
+            <input type="hidden" th:field="*{clienteId}" />
+            <input type="hidden" th:field="*{clienteNombre}" />
+            <input type="hidden" th:field="*{clienteDni}" />
+            <input type="hidden" th:field="*{agenciaId}" />
+            <input type="hidden" th:field="*{agenciaNombre}" />
+
+            <!-- Datos Generales -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Datos Generales</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label for="abogadoNombre" class="form-label">Abogado</label>
+                            <input type="text" class="form-control" id="abogadoNombre" th:field="*{abogadoNombre}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="situacion" class="form-label">Situación</label>
+                            <input type="text" class="form-control" id="situacion" th:field="*{situacion}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="transferido" class="form-label">Transferido</label>
+                            <select class="form-select" id="transferido" th:field="*{transferido}">
+                                <option value="">--</option>
+                                <option value="SI">Sí</option>
+                                <option value="NO">No</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="moneda" class="form-label">Moneda</label>
+                            <input type="text" class="form-control" id="moneda" th:field="*{moneda}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="busquedaBienes" class="form-label">Búsqueda de Bienes</label>
+                            <select class="form-select" id="busquedaBienes" th:field="*{busquedaBienes}">
+                                <option value="">--</option>
+                                <option value="POSITIVO">Positivo</option>
+                                <option value="NEGATIVO">Negativo</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="tipoProceso" class="form-label">Tipo Proceso</label>
+                            <input type="text" class="form-control" id="tipoProceso" th:field="*{tipoProceso}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="tipoJuzgado" class="form-label">Tipo Juzgado</label>
+                            <input type="text" class="form-control" id="tipoJuzgado" th:field="*{tipoJuzgado}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Información Financiera -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Información Financiera</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label for="deudaCap" class="form-label">Deuda Capital</label>
+                            <input type="number" step="0.01" class="form-control" id="deudaCap" th:field="*{deudaCap}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="deudaTotal" class="form-label">Deuda Total</label>
+                            <input type="number" step="0.01" class="form-control" id="deudaTotal" th:field="*{deudaTotal}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="montoDemandado" class="form-label">Monto Demandado</label>
+                            <input type="number" step="0.01" class="form-control" id="montoDemandado" th:field="*{montoDemandado}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="observaciones" class="form-label">Observaciones</label>
+                            <input type="text" class="form-control" id="observaciones" th:field="*{observaciones}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Datos Judiciales -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Datos Judiciales</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="distritoJudicial" class="form-label">Distrito Judicial</label>
+                            <input type="text" class="form-control" id="distritoJudicial" th:field="*{distritoJudicial}">
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label for="numeroJuzgado" class="form-label">N° Juzgado</label>
+                            <input type="text" class="form-control" id="numeroJuzgado" th:field="*{numeroJuzgado}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="numeroExpediente" class="form-label">N° Expediente</label>
+                            <input type="text" class="form-control" id="numeroExpediente" th:field="*{numeroExpediente}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="secretarioLegal" class="form-label">Secretario Legal</label>
+                            <input type="text" class="form-control" id="secretarioLegal" th:field="*{secretarioLegal}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label for="codigoExpedienteCautelar" class="form-label">Cód. Exp. Cautelar</label>
+                            <input type="text" class="form-control" id="codigoExpedienteCautelar" th:field="*{codigoExpedienteCautelar}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="tipoBienEmbargado" class="form-label">Tipo Bien Embargado</label>
+                            <select class="form-select" id="tipoBienEmbargado" th:field="*{tipoBienEmbargado}">
+                                <option value="">--</option>
+                                <option value="INMUEBLE">Inmueble</option>
+                                <option value="VEHICULO">Vehículo</option>
+                                <option value="NINGUNO">Ninguno</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="detalleBienEmbargado" class="form-label">Detalle Bien Embargado</label>
+                            <input type="text" class="form-control" id="detalleBienEmbargado" th:field="*{detalleBienEmbargado}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="numeroPartida" class="form-label">N° Partida</label>
+                            <input type="text" class="form-control" id="numeroPartida" th:field="*{numeroPartida}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label for="rango" class="form-label">Rango</label>
+                            <select class="form-select" id="rango" th:field="*{rango}">
+                                <option value="">--</option>
+                                <option value="PRIMER">Primer</option>
+                                <option value="SEGUNDO">Segundo</option>
+                                <option value="TERCERO">Tercero</option>
+                                <option value="NINGUNO">Ninguno</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="detalleAcreedores" class="form-label">Detalle Acreedores</label>
+                            <input type="text" class="form-control" id="detalleAcreedores" th:field="*{detalleAcreedores}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="tipoPreferente" class="form-label">Tipo Preferente</label>
+                            <input type="text" class="form-control" id="tipoPreferente" th:field="*{tipoPreferente}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="audienciaTipo" class="form-label">Audiencia Tipo</label>
+                            <input type="text" class="form-control" id="audienciaTipo" th:field="*{audienciaTipo}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Medida Cautelar -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Medida Cautelar</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label for="montoMedidaCautelar" class="form-label">Monto MC</label>
+                            <input type="number" step="0.01" class="form-control" id="montoMedidaCautelar" th:field="*{montoMedidaCautelar}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="monedaMc" class="form-label">Moneda MC</label>
+                            <input type="text" class="form-control" id="monedaMc" th:field="*{monedaMc}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="medidaCautelarEjecutada" class="form-label">MC Ejecutada</label>
+                            <select class="form-select" id="medidaCautelarEjecutada" th:field="*{medidaCautelarEjecutada}">
+                                <option value="">--</option>
+                                <option value="SI">Sí</option>
+                                <option value="NO">No</option>
+                                <option value="NINGUNO">Ninguno</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="asientoInscripcion" class="form-label">Asiento Inscripción</label>
+                            <input type="text" class="form-control" id="asientoInscripcion" th:field="*{asientoInscripcion}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label for="fechaInscripcionEmbargo" class="form-label">F. Inscrip. Embargo</label>
+                            <input type="date" class="form-control" id="fechaInscripcionEmbargo" th:field="*{fechaInscripcionEmbargo}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="fechaPresentacionTituloRrpp" class="form-label">F. Pres. Título RRPP</label>
+                            <input type="date" class="form-control" id="fechaPresentacionTituloRrpp" th:field="*{fechaPresentacionTituloRrpp}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="fechaPresentacionMc" class="form-label">F. Presentación MC</label>
+                            <input type="date" class="form-control" id="fechaPresentacionMc" th:field="*{fechaPresentacionMc}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="comentario" class="form-label">Comentario</label>
+                            <input type="text" class="form-control" id="comentario" th:field="*{comentario}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admisión e Inadmisión -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Admisión e Inadmisión</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label for="fechaInadmisible" class="form-label">F. Inadmisible</label>
+                            <input type="date" class="form-control" id="fechaInadmisible" th:field="*{fechaInadmisible}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="fechaAdmision" class="form-label">F. Admisión</label>
+                            <input type="date" class="form-control" id="fechaAdmision" th:field="*{fechaAdmision}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="fechaPresentacion" class="form-label">F. Presentación</label>
+                            <input type="date" class="form-control" id="fechaPresentacion" th:field="*{fechaPresentacion}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="fechaInadmisible2" class="form-label">F. Inadmisible 2</label>
+                            <input type="date" class="form-control" id="fechaInadmisible2" th:field="*{fechaInadmisible2}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label for="fechaAdmision2" class="form-label">F. Admisión 2</label>
+                            <input type="date" class="form-control" id="fechaAdmision2" th:field="*{fechaAdmision2}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resoluciones y Ejecutoria -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Resoluciones y Ejecutoria</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label for="fechaAutoFinal" class="form-label">F. Auto Final</label>
+                            <input type="date" class="form-control" id="fechaAutoFinal" th:field="*{fechaAutoFinal}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="fechaEjecutoriada" class="form-label">F. Ejecutoriada</label>
+                            <input type="date" class="form-control" id="fechaEjecutoriada" th:field="*{fechaEjecutoriada}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="fechaNombramientoPeritos" class="form-label">F. Nombramiento Peritos</label>
+                            <input type="date" class="form-control" id="fechaNombramientoPeritos" th:field="*{fechaNombramientoPeritos}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="fechaNombramientoMartillero" class="form-label">F. Nombramiento Martillero</label>
+                            <input type="date" class="form-control" id="fechaNombramientoMartillero" th:field="*{fechaNombramientoMartillero}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Remates -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Remates</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label for="fechaRemate1" class="form-label">F. Remate 1°</label>
+                            <input type="date" class="form-control" id="fechaRemate1" th:field="*{fechaRemate1}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="fechaRemate2" class="form-label">F. Remate 2°</label>
+                            <input type="date" class="form-control" id="fechaRemate2" th:field="*{fechaRemate2}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="fechaRemate3" class="form-label">F. Remate 3°</label>
+                            <input type="date" class="form-control" id="fechaRemate3" th:field="*{fechaRemate3}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="fechaProximoActoProcesal" class="form-label">F. Próx. Acto Procesal</label>
+                            <input type="date" class="form-control" id="fechaProximoActoProcesal" th:field="*{fechaProximoActoProcesal}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="comentarioProcesal" class="form-label">Comentario Procesal</label>
+                            <textarea class="form-control" id="comentarioProcesal" th:field="*{comentarioProcesal}" rows="2"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            <a th:href="@{/operaciones/{id}(id=${operacion.id})}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

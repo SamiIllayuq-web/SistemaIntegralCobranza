@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -53,18 +54,37 @@ public class OperacionController {
 
     @GetMapping("/{id}")
     public String detalle(@PathVariable Long id, Model model) {
-        List<OperacionDTO> operaciones = operacionService.listarPaginado(
-                PageRequest.of(0, 1000)).getContent();
-        OperacionDTO operacion = operaciones.stream()
-                .filter(o -> o.getId().equals(id))
-                .findFirst()
-                .orElse(null);
-
+        OperacionDTO operacion = operacionService.buscarPorId(id);
         if (operacion == null) {
             return "redirect:/operaciones";
         }
         model.addAttribute("operacion", operacion);
         return "operacion/detalle";
+    }
+
+    @GetMapping("/editar/{id}")
+    public String editarForm(@PathVariable Long id, Model model) {
+        OperacionDTO operacion = operacionService.buscarPorId(id);
+        if (operacion == null) {
+            return "redirect:/operaciones";
+        }
+        model.addAttribute("operacion", operacion);
+        return "operacion/editar";
+    }
+
+    @PostMapping("/guardar")
+    public String guardar(@ModelAttribute OperacionDTO dto,
+                          RedirectAttributes redirectAttrs) {
+        try {
+            if (dto.getId() != null) {
+                operacionService.actualizar(dto.getId(), dto);
+                redirectAttrs.addFlashAttribute("success", "Operación actualizada correctamente");
+            }
+            return "redirect:/operaciones";
+        } catch (Exception e) {
+            redirectAttrs.addFlashAttribute("error", "Error al guardar: " + e.getMessage());
+            return "redirect:/operaciones/editar/" + dto.getId();
+        }
     }
 
     public record Filtros(String agencia, String situacion, String expediente, String dni, String cuenta) {}

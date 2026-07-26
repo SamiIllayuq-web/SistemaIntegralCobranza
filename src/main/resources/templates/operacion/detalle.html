@@ -25,7 +25,10 @@
     <div class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 th:text="${operacion.cuenta + ' / ' + operacion.numeroOperacion}">Operación</h2>
-            <a th:href="@{/operaciones}" class="btn btn-secondary">Volver</a>
+            <div>
+                <a th:href="@{/operaciones/editar/{id}(id=${operacion.id})}" class="btn btn-warning">Editar</a>
+                <a th:href="@{/operaciones}" class="btn btn-secondary">Volver</a>
+            </div>
         </div>
 
         <!-- Cliente y Operación -->
