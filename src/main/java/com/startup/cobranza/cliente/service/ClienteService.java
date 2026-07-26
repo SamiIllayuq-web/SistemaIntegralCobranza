@@ -2,6 +2,7 @@ package com.startup.cobranza.cliente.service;
 
 import com.startup.cobranza.agencia.entity.Agencia;
 import com.startup.cobranza.agencia.repository.AgenciaRepository;
+import com.startup.cobranza.cartera.repository.OperacionRepository;
 import com.startup.cobranza.cliente.dto.ClienteBusquedaDTO;
 import com.startup.cobranza.cliente.dto.ClienteDTO;
 import com.startup.cobranza.cliente.dto.ClienteFormDTO;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,6 +26,7 @@ import java.util.stream.Collectors;
 public class ClienteService {
 
     private final ClienteRepository clienteRepository;
+    private final OperacionRepository operacionRepository;
     private final EmpresaRepository empresaRepository;
     private final AgenciaRepository agenciaRepository;
     private final ClienteMapper clienteMapper;
@@ -46,9 +50,34 @@ public class ClienteService {
     }
 
     public List<ClienteDTO> buscar(ClienteBusquedaDTO busqueda) {
+        // Si hay filtro por cuenta u operación, buscar operaciones primero
+        Set<Long> clienteIdsFiltrados = null;
+        if (busqueda.getNumeroCuenta() != null && !busqueda.getNumeroCuenta().isBlank()) {
+            Set<Long> ids = operacionRepository
+                    .findByNumeroCuentaContaining(busqueda.getNumeroCuenta())
+                    .stream().map(o -> o.getCliente().getId()).collect(Collectors.toSet());
+            if (ids.isEmpty()) return List.of();
+            clienteIdsFiltrados = ids;
+        }
+        if (busqueda.getNumeroOperacion() != null && !busqueda.getNumeroOperacion().isBlank()) {
+            Set<Long> idsPorOperacion = operacionRepository
+                    .findByNumeroOperacionContaining(busqueda.getNumeroOperacion())
+                    .stream().map(o -> o.getCliente().getId()).collect(Collectors.toSet());
+            if (clienteIdsFiltrados == null) {
+                clienteIdsFiltrados = idsPorOperacion;
+            } else {
+                clienteIdsFiltrados.retainAll(idsPorOperacion);
+                if (clienteIdsFiltrados.isEmpty()) return List.of();
+            }
+        }
+
+        final Set<Long> finalIds = clienteIdsFiltrados;
         return clienteRepository.findAll().stream()
                 .map(clienteMapper::toDTO)
-                .filter(c -> matchesBusqueda(c, busqueda))
+                .filter(c -> {
+                    if (finalIds != null && !finalIds.contains(c.getId())) return false;
+                    return matchesBusqueda(c, busqueda);
+                })
                 .collect(Collectors.toList());
     }
 

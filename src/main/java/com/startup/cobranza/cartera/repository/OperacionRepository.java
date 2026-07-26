@@ -26,4 +26,8 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
     List<Operacion> findBySituacion(@Param("situacion") String situacion);
 
     boolean existsByCuentaAndNumeroOperacion(String cuenta, String numeroOperacion);
+
+    List<Operacion> findByNumeroCuentaContaining(String numeroCuenta);
+
+    List<Operacion> findByNumeroOperacionContaining(String numeroOperacion);
 }
