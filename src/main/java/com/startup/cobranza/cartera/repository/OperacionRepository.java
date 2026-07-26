@@ -27,7 +27,7 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
 
     boolean existsByCuentaAndNumeroOperacion(String cuenta, String numeroOperacion);
 
-    List<Operacion> findByNumeroCuentaContaining(String numeroCuenta);
+    List<Operacion> findByCuentaContaining(String cuenta);
 
     List<Operacion> findByNumeroOperacionContaining(String numeroOperacion);
 }

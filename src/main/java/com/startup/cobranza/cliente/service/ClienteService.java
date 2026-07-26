@@ -54,7 +54,7 @@ public class ClienteService {
         Set<Long> clienteIdsFiltrados = null;
         if (busqueda.getNumeroCuenta() != null && !busqueda.getNumeroCuenta().isBlank()) {
             Set<Long> ids = operacionRepository
-                    .findByNumeroCuentaContaining(busqueda.getNumeroCuenta())
+                    .findByCuentaContaining(busqueda.getNumeroCuenta())
                     .stream().map(o -> o.getCliente().getId()).collect(Collectors.toSet());
             if (ids.isEmpty()) return List.of();
             clienteIdsFiltrados = ids;
