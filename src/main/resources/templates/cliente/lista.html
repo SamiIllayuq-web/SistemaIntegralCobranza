@@ -80,11 +80,6 @@
                     <th>Nombre</th>
                     <th>DNI</th>
                     <th>Empresa</th>
-                    <th>N° Cuenta</th>
-                    <th>N° Operación</th>
-                    <th>Deuda Capital</th>
-                    <th>Deuda Total</th>
-                    <th>Estado</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -93,18 +88,13 @@
                     <td th:text="${cliente.nombreCompleto}"></td>
                     <td th:text="${cliente.dni}"></td>
                     <td th:text="${cliente.empresaNombre}"></td>
-                    <td th:text="${cliente.numeroCuenta}"></td>
-                    <td th:text="${cliente.numeroOperacion}"></td>
-                    <td th:text="${'S/ ' + #numbers.formatDecimal(cliente.deudaCapital, 1, 2)}"></td>
-                    <td th:text="${'S/ ' + #numbers.formatDecimal(cliente.deudaTotal, 1, 2)}"></td>
-                    <td th:text="${cliente.estadoGestion}"></td>
                     <td>
                         <a th:href="@{/clientes/{id}(id=${cliente.id})}" class="btn btn-sm btn-primary">Ver</a>
                         <a th:href="@{/clientes/editar/{id}(id=${cliente.id})}" class="btn btn-sm btn-warning" sec:authorize="hasRole('ADMIN')">Editar</a>
                     </td>
                 </tr>
                 <tr th:if="${#lists.isEmpty(clientes)}">
-                    <td colspan="9" class="text-center">No hay clientes registrados</td>
+                    <td colspan="4" class="text-center">No hay clientes registrados</td>
                 </tr>
             </tbody>
         </table>
