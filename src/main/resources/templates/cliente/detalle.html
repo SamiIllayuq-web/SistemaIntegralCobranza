@@ -57,51 +57,23 @@
                                 <td th:text="${cliente.empresaNombre}"></td>
                             </tr>
                             <tr>
-                                <th>Agencia:</th>
-                                <td th:text="${cliente.agenciaNombre ?: '-'}"></td>
-                            </tr>
-                            <tr>
-                                <th>N° Cuenta:</th>
-                                <td th:text="${cliente.numeroCuenta}"></td>
-                            </tr>
-                            <tr>
-                                <th>N° Operación:</th>
-                                <td th:text="${cliente.numeroOperacion}"></td>
-                            </tr>
-                            <tr>
-                                <th>Estado Gestión:</th>
-                                <td th:text="${cliente.estadoGestion}"></td>
-                            </tr>
-                            <tr>
                                 <th>Fecha Creación:</th>
                                 <td th:text="${cliente.fechaCreacion}"></td>
+                            </tr>
+                            <tr>
+                                <th>Estado:</th>
+                                <td>
+                                    <span th:class="${'badge ' + (cliente.activo ? 'bg-success' : 'bg-secondary')}"
+                                          th:text="${cliente.activo ? 'Activo' : 'Inactivo'}"></span>
+                                </td>
                             </tr>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- Información Financiera -->
+            <!-- Información de Contacto -->
             <div class="col-md-6">
-                <div class="card mb-4">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">Información Financiera</h5>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-borderless">
-                            <tr>
-                                <th width="40%">Deuda Capital:</th>
-                                <td th:text="${'S/ ' + #numbers.formatDecimal(cliente.deudaCapital, 1, 2)}"></td>
-                            </tr>
-                            <tr>
-                                <th>Deuda Total:</th>
-                                <td th:text="${'S/ ' + #numbers.formatDecimal(cliente.deudaTotal, 1, 2)}"></td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Información de Contacto -->
                 <div class="card mb-4">
                     <div class="card-header bg-primary text-white">
                         <h5 class="mb-0">Información de Contacto</h5>
@@ -110,7 +82,7 @@
                         <table class="table table-borderless">
                             <tr>
                                 <th width="40%">Teléfono 1:</th>
-                                <td th:text="${cliente.telefono}"></td>
+                                <td th:text="${cliente.telefono ?: '-'}"></td>
                             </tr>
                             <tr>
                                 <th>Teléfono 2:</th>
@@ -127,16 +99,6 @@
                         </table>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Observaciones -->
-        <div class="card mb-4" th:if="${cliente.observaciones != null and !cliente.observaciones.isEmpty()}">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Observaciones</h5>
-            </div>
-            <div class="card-body">
-                <p th:text="${cliente.observaciones}"></p>
             </div>
         </div>
 
