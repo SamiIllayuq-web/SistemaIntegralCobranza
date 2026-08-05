@@ -1,13 +1,7 @@
-
 # Domain Docs
 
+Documentación del dominio del proyecto. Ver:
 
-Documentación del dominio del proyecto. Acá va el vocabulario
-
-compartido, los conceptos clave, y las reglas de negocio que
-
-la IA debe respetar.
-
-
-Ver glossary.md para los términos principales.
-
+- **`SPEC.md`** — spec completa de v1 (modelo de datos, funcionalidades, decisiones de diseño).
+- **`glossary.md`** — vocabulario del dominio.
+- **`tickets/001-grilling-disenos-decisiones.md`** — decisiones de diseño validadas (grilling P1-P20).

@@ -1,37 +1,32 @@
-# Kanban — Cartera de Cobranza
+# Kanban — SistemaIntegralCobranza
 
-## Needs Triage
+## Checkpoint
+- `tickets/CHECKPOINT-2026-07-26.md` — estado completo, mapa de columnas Excel
+
+## Done ✅
+- Fix typo OperacionRepository (maxMora→maxMonto)
+- Endpoint /operaciones/editar/{id} + /operaciones/guardar (OperacionController reescrito)
+- OperacionService.obtenerEntityPorId + actualizar con observacionActos
+- OperacionMapper.toFormDTO + toEntityFromForm con comentario
+- OperacionFormDTO: observacionActos + comentario
+- Operacion.java: campo comentario (TEXT)
+- CarteraService: detalleGarantia, observacionActos (col 52=AZ), comentario (col 53=BA)
+- Perfil JSON: observacionActos (52), comentario (53), detalleBien (25)
+- operacion/formulario.html: campo comentario
+- cliente/formulario.html: limpiado (solo campos ClienteFormDTO)
+- **Bienes Embargados editables en formulario.html** (sección completa con tabla editable)
+  - OperacionFormDTO: List<BienEmbargadoDTO> bienesEmbargados
+  - OperacionMapper.toFormDTO: mapea bienes
+  - OperacionService.actualizar(): syncea bienes con clear() + orphanRemoval
+  - OperacionService: inyectado BienEmbargadoRepository
+  - Template: tabla con inputs para 7 campos, + agregar, × eliminar (JS)
+- **Quitado filtro/columna Agencia de cartera/registros.html**
+
+## In Progress
 - _(vacío)_
 
 ## Blocked
 - _(vacío)_
 
-## In Progress
-- `001-grilling-disenos-decisiones.md` — sesión de preguntas, 3/4 respondidas
-
-## Ready for Review
+## Needs Triage
 - _(vacío)_
-
-## Done
-- _(vacío)_
-
----
-
-## Convenciones
-
-Cada ticket es un archivo `tickets/NNN-nombre.md` con este frontmatter:
-
-```yaml
----
-id: 1
-title: Crear el endpoint para listar clientes
-status: needs-triage
-type: afk
-priority: high
-dependencies: []
-created: 2026-07-23
----
-
-# Descripción del ticket
-...
-```

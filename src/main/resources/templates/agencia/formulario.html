@@ -13,7 +13,7 @@
             <a class="navbar-brand" href="#">Sistema de Cobranza</a>
             <div class="navbar-nav">
                 <a class="nav-link" th:href="@{/dashboard}">Inicio</a>
-                <a class="nav-link" th:href="@{/agencias}">Agencias</a>
+                <a class="nav-link" th:href="@{/cartera/registros}">Registros</a>
             </div>
             <form th:action="@{/logout}" method="post" class="d-inline">
                 <button type="submit" class="btn btn-light btn-sm">Cerrar Sesión</button>
@@ -57,7 +57,7 @@
                 <input type="text" class="form-control" id="direccion" th:field="*{direccion}">
             </div>
             <button type="submit" class="btn btn-primary">Guardar</button>
-            <a th:href="@{/agencias}" class="btn btn-secondary">Cancelar</a>
+            <a th:href="@{/cartera/registros}" class="btn btn-secondary">Cancelar</a>
         </form>
     </div>
 

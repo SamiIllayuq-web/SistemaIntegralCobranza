@@ -15,7 +15,7 @@
             <div class="navbar-nav">
                 <a class="nav-link" th:href="@{/dashboard}">Inicio</a>
                 <a class="nav-link" th:href="@{/empresas}">Empresas</a>
-                <a class="nav-link" th:href="@{/agencias}">Agencias</a>
+                <a class="nav-link" th:href="@{/cartera/registros}">Registros</a>
                 <a class="nav-link" th:href="@{/usuarios}">Usuarios</a>
                 <a class="nav-link active" th:href="@{/clientes}">Clientes</a>
                 <a class="nav-link" th:href="@{/cartera/importar}">Cartera</a>
@@ -27,87 +27,227 @@
     </nav>
 
     <div class="container mt-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <!-- Page-level flash messages -->
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" th:text="${success}">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" th:text="${error}">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
             <h2>Clientes</h2>
             <div>
-                <a th:href="@{/clientes/nuevo}" class="btn btn-success" sec:authorize="hasRole('ADMIN')">Nuevo Cliente</a>
-                <a th:href="@{/cartera/importar}" class="btn btn-info" sec:authorize="hasRole('ADMIN')">Importar Cartera</a>
+                <a th:href="@{/clientes/nuevo}" class="btn btn-success btn-sm" sec:authorize="hasRole('ADMIN')">Nuevo Cliente</a>
+                <a th:href="@{/cartera/importar}" class="btn btn-info btn-sm" sec:authorize="hasRole('ADMIN')">Importar Cartera</a>
             </div>
         </div>
 
-        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
-        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
-
-        <!-- Filtros de búsqueda -->
-        <div class="card mb-4">
-            <div class="card-body">
-                <h5 class="card-title">Búsqueda</h5>
-                <form th:action="@{/clientes}" method="get" class="row g-3">
+        <!-- Panel de filtros -->
+        <div class="card mb-3">
+            <div class="card-header py-2">
+                <span class="fw-bold">Filtros</span>
+            </div>
+            <div class="card-body py-3">
+                <form th:action="@{/clientes}" method="get" class="row g-2 align-items-end">
+                    <!-- Búsqueda textual -->
                     <div class="col-md-2">
-                        <label for="nombre" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre" th:value="${busqueda.nombre}" placeholder="Nombre del cliente">
+                        <label for="nombre" class="form-label small mb-1">Nombre</label>
+                        <input type="text" class="form-control form-control-sm" id="nombre" name="nombre"
+                               th:value="${filtros.nombre}" placeholder="Nombre del cliente">
                     </div>
-                    <div class="col-md-2">
-                        <label for="dni" class="form-label">DNI</label>
-                        <input type="text" class="form-control" id="dni" name="dni" th:value="${busqueda.dni}" placeholder="DNI">
+                    <div class="col-md-1">
+                        <label for="dni" class="form-label small mb-1">DNI</label>
+                        <input type="text" class="form-control form-control-sm" id="dni" name="dni"
+                               th:value="${filtros.dni}" placeholder="DNI">
                     </div>
+                    <!-- Filtros operativos -->
                     <div class="col-md-2">
-                        <label for="numeroCuenta" class="form-label">N° Cuenta</label>
-                        <input type="text" class="form-control" id="numeroCuenta" name="numeroCuenta" th:value="${busqueda.numeroCuenta}" placeholder="N° Cuenta">
-                    </div>
-                    <div class="col-md-2">
-                        <label for="numeroOperacion" class="form-label">N° Operación</label>
-                        <input type="text" class="form-control" id="numeroOperacion" name="numeroOperacion" th:value="${busqueda.numeroOperacion}" placeholder="N° Operación">
-                    </div>
-                    <div class="col-md-2">
-                        <label for="empresaId" class="form-label">Empresa</label>
-                        <select class="form-select" id="empresaId" name="empresaId">
+                        <label for="empresaId" class="form-label small mb-1">Empresa</label>
+                        <select class="form-select form-select-sm" id="empresaId" name="empresaId">
                             <option value="">Todas</option>
-                            <option th:each="emp : ${empresas}" th:value="${emp.id}" th:text="${emp.nombre}" th:selected="${busqueda.empresaId == emp.id}"></option>
+                            <option th:each="emp : ${empresas}"
+                                    th:value="${emp.id}"
+                                    th:text="${emp.nombre}"
+                                    th:selected="${filtros.empresaId == emp.id}"></option>
                         </select>
                     </div>
-                    <div class="col-md-2 d-flex align-items-end">
-                        <button type="submit" class="btn btn-primary w-100">Buscar</button>
+                    <div class="col-md-1">
+                        <label for="estado" class="form-label small mb-1">Estado</label>
+                        <select class="form-select form-select-sm" id="estado" name="estado">
+                            <option value="">Todos</option>
+                            <option value="VIGENTE" th:selected="${filtros.estado == 'VIGENTE'}">Vigente</option>
+                            <option value="VENCIDA" th:selected="${filtros.estado == 'VENCIDA'}">Vencida</option>
+                            <option value="PRESCRITA" th:selected="${filtros.estado == 'PRESCRITA'}">Prescrita</option>
+                            <option value="PAGADA" th:selected="${filtros.estado == 'PAGADA'}">Pagada</option>
+                        </select>
+                    </div>
+                    <div class="col-md-1">
+                        <label for="etapa" class="form-label small mb-1">Etapa</label>
+                        <select class="form-select form-select-sm" id="etapa" name="etapa">
+                            <option value="">Todas</option>
+                            <option value="EXTRAJUDICIAL" th:selected="${filtros.etapa == 'EXTRAJUDICIAL'}">Extrajudicial</option>
+                            <option value="JUDICIAL" th:selected="${filtros.etapa == 'JUDICIAL'}">Judicial</option>
+                        </select>
+                    </div>
+                    <!-- Rango de mora -->
+                    <div class="col-md-1">
+                        <label for="minMora" class="form-label small mb-1">Mín. Mora</label>
+                        <input type="number" class="form-control form-control-sm" id="minMora" name="minMora"
+                               th:value="${filtros.minMora}" placeholder="0">
+                    </div>
+                    <div class="col-md-1">
+                        <label for="maxMora" class="form-label small mb-1">Máx. Mora</label>
+                        <input type="number" class="form-control form-control-sm" id="maxMora" name="maxMora"
+                               th:value="${filtros.maxMora}" placeholder="9999">
+                    </div>
+                    <!-- Rango de monto -->
+                    <div class="col-md-1">
+                        <label for="minMonto" class="form-label small mb-1">Mín. Monto</label>
+                        <input type="number" step="0.01" class="form-control form-control-sm" id="minMonto" name="minMonto"
+                               th:value="${filtros.minMonto}" placeholder="0">
+                    </div>
+                    <div class="col-md-1">
+                        <label for="maxMonto" class="form-label small mb-1">Máx. Monto</label>
+                        <input type="number" step="0.01" class="form-control form-control-sm" id="maxMonto" name="maxMonto"
+                               th:value="${filtros.maxMonto}" placeholder="999999">
+                    </div>
+                    <!-- Acciones -->
+                    <div class="col-md-1 d-flex gap-1">
+                        <button type="submit" class="btn btn-primary btn-sm w-100">Filtrar</button>
+                    </div>
+                    <div class="col-md-1">
+                        <a th:href="@{/clientes}" class="btn btn-outline-secondary btn-sm w-100">Limpiar</a>
                     </div>
                 </form>
             </div>
         </div>
 
-        <table class="table table-striped table-hover">
-            <thead>
+        <!-- Resumen de resultados -->
+        <div class="small text-muted mb-2" th:if="${pagina.totalElements > 0}">
+            Mostrando <span th:text="${pagina.number * pagina.size + 1}">1</span>
+            – <span th:text="${pagina.number * pagina.size + pagina.numberOfElements}">50</span>
+            de <strong th:text="${pagina.totalElements}">0</strong> clientes
+        </div>
+
+        <!-- Tabla principal -->
+        <div class="table-responsive">
+        <table class="table table-striped table-hover table-sm">
+            <thead class="table-light">
                 <tr>
-                    <th>Nombre</th>
                     <th>DNI</th>
-                    <th>Empresa</th>
-                    <th>N° Cuenta</th>
-                    <th>N° Operación</th>
-                    <th>Deuda Capital</th>
-                    <th>Deuda Total</th>
+                    <th>Nombre</th>
+                    <th>Empresas</th>
                     <th>Estado</th>
+                    <th>Etapa</th>
+                    <th class="text-end">Monto Total (S/)</th>
+                    <th>Registros</th>
+                    <th class="text-center">Ops.</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="cliente : ${clientes}">
-                    <td th:text="${cliente.nombreCompleto}"></td>
-                    <td th:text="${cliente.dni}"></td>
-                    <td th:text="${cliente.empresaNombre}"></td>
-                    <td th:text="${cliente.numeroCuenta}"></td>
-                    <td th:text="${cliente.numeroOperacion}"></td>
-                    <td th:text="${'S/ ' + #numbers.formatDecimal(cliente.deudaCapital, 1, 2)}"></td>
-                    <td th:text="${'S/ ' + #numbers.formatDecimal(cliente.deudaTotal, 1, 2)}"></td>
-                    <td th:text="${cliente.estadoGestion}"></td>
+                <tr th:each="c : ${pagina.content}">
                     <td>
-                        <a th:href="@{/clientes/{id}(id=${cliente.id})}" class="btn btn-sm btn-primary">Ver</a>
-                        <a th:href="@{/clientes/editar/{id}(id=${cliente.id})}" class="btn btn-sm btn-warning" sec:authorize="hasRole('ADMIN')">Editar</a>
+                        <span th:if="${c.dni != null}" th:text="${c.dni}" class="font-monospace"></span>
+                        <span th:if="${c.dni == null}" class="text-muted">—</span>
+                    </td>
+                    <td th:text="${c.nombreCompleto}"></td>
+                    <!-- Empresas: lista separada por comas -->
+                    <td>
+                        <span th:if="${#lists.isEmpty(c.empresas)}" class="text-muted">—</span>
+                        <span th:if="${not #lists.isEmpty(c.empresas)}"
+                              th:text="${#strings.listJoin(c.empresas, ', ')}"></span>
+                    </td>
+                    <!-- Estado badge -->
+                    <td>
+                        <span th:if="${c.estado == 'VIGENTE'}" class="badge bg-success" th:text="${c.estado}">Vigente</span>
+                        <span th:if="${c.estado == 'VENCIDA'}" class="badge bg-warning text-dark" th:text="${c.estado}">Vencida</span>
+                        <span th:if="${c.estado == 'PRESCRITA'}" class="badge bg-secondary" th:text="${c.estado}">Prescrita</span>
+                        <span th:if="${c.estado == 'PAGADA'}" class="badge bg-info text-dark" th:text="${c.estado}">Pagada</span>
+                        <span th:if="${c.estado == null}" class="text-muted">—</span>
+                    </td>
+                    <!-- Etapa badge -->
+                    <td>
+                        <span th:if="${c.etapa == 'JUDICIAL'}" class="badge bg-danger" th:text="${c.etapa}">Judicial</span>
+                        <span th:if="${c.etapa == 'EXTRAJUDICIAL'}" class="badge bg-primary" th:text="${c.etapa}">Extrajudicial</span>
+                        <span th:if="${c.etapa == null}" class="text-muted">—</span>
+                    </td>
+                    <!-- Monto total -->
+                    <td class="text-end font-monospace">
+                        <span th:if="${c.montoTotal != null}"
+                              th:text="${#numbers.formatDecimal(c.montoTotal, 1, 2)}">0.00</span>
+                        <span th:if="${c.montoTotal == null}">0.00</span>
+                    </td>
+                    <!-- Agencias -->
+                    <td>
+                        <span th:if="${#lists.isEmpty(c.agencias)}" class="text-muted">—</span>
+                        <span th:if="${not #lists.isEmpty(c.agencias)}"
+                              th:text="${#strings.listJoin(c.agencias, ', ')}"></span>
+                    </td>
+                    <!-- Total operaciones -->
+                    <td class="text-center">
+                        <span th:text="${c.totalOperaciones}">0</span>
+                    </td>
+                    <!-- Acciones -->
+                    <td>
+                        <a th:href="@{/clientes/{id}(id=${c.id})}"
+                           class="btn btn-sm btn-outline-primary">Ver</a>
+                        <a th:href="@{/clientes/editar/{id}(id=${c.id})}"
+                           class="btn btn-sm btn-outline-warning"
+                           sec:authorize="hasRole('ADMIN')">Editar</a>
                     </td>
                 </tr>
-                <tr th:if="${#lists.isEmpty(clientes)}">
-                    <td colspan="9" class="text-center">No hay clientes registrados</td>
+                <!-- Empty state -->
+                <tr th:if="${#lists.isEmpty(pagina.content)}">
+                    <td colspan="9" class="text-center text-muted py-4">
+                        No se encontraron clientes con los filtros aplicados.
+                    </td>
                 </tr>
             </tbody>
         </table>
-    </div>
+        </div>
+
+        <!-- Paginación -->
+        <div th:if="${pagina.totalPages > 1}" class="d-flex justify-content-center">
+            <nav>
+                <ul class="pagination pagination-sm mb-0">
+                    <!-- Anterior -->
+                    <li class="page-item" th:classappend="${pagina.first ? 'disabled' : ''}">
+                        <a class="page-link"
+                           th:href="@{/clientes(page=${pagina.number - 1}, size=${pagina.size},
+                                    nombre=${filtros.nombre}, dni=${filtros.dni},
+                                    empresaId=${filtros.empresaId}, estado=${filtros.estado}, etapa=${filtros.etapa},
+                                    minMora=${filtros.minMora}, maxMora=${filtros.maxMora},
+                                    minMonto=${filtros.minMonto}, maxMonto=${filtros.maxMonto})}">«</a>
+                    </li>
+                    <!-- Números de página -->
+                    <li class="page-item"
+                        th:each="i : ${#numbers.sequence(T(java.lang.Math).max(0, pagina.number - 2), T(java.lang.Math).min(pagina.number + 2, pagina.totalPages - 1))}"
+                        th:classappend="${i == pagina.number ? 'active' : ''}">
+                        <a class="page-link"
+                           th:text="${i + 1}"
+                           th:href="@{/clientes(page=${i}, size=${pagina.size},
+                                    nombre=${filtros.nombre}, dni=${filtros.dni},
+                                    empresaId=${filtros.empresaId}, estado=${filtros.estado}, etapa=${filtros.etapa},
+                                    minMora=${filtros.minMora}, maxMora=${filtros.maxMora},
+                                    minMonto=${filtros.minMonto}, maxMonto=${filtros.maxMonto})}">1</a>
+                    </li>
+                    <!-- Siguiente -->
+                    <li class="page-item" th:classappend="${pagina.last ? 'disabled' : ''}">
+                        <a class="page-link"
+                           th:href="@{/clientes(page=${pagina.number + 1}, size=${pagina.size},
+                                    nombre=${filtros.nombre}, dni=${filtros.dni},
+                                    empresaId=${filtros.empresaId}, estado=${filtros.estado}, etapa=${filtros.etapa},
+                                    minMora=${filtros.minMora}, maxMora=${filtros.maxMora},
+                                    minMonto=${filtros.minMonto}, maxMonto=${filtros.maxMonto})}">»</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+    </div><!-- /container -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

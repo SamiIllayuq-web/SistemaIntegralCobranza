@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Operación ' + ${operacion.numeroOperacion}">Detalle de Operación</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Sistema de Cobranza</a>
+            <div class="navbar-nav">
+                <a class="nav-link" th:href="@{/dashboard}">Inicio</a>
+                <a class="nav-link" th:href="@{/empresas}">Empresas</a>
+                <a class="nav-link" th:href="@{/cartera/registros}">Registros</a>
+                <a class="nav-link" th:href="@{/usuarios}">Usuarios</a>
+                <a class="nav-link" th:href="@{/clientes}">Clientes</a>
+                <a class="nav-link" th:href="@{/cartera/importar}">Cartera</a>
+            </div>
+            <form th:action="@{/logout}" method="post" class="d-inline">
+                <button type="submit" class="btn btn-light btn-sm">Cerrar Sesión</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/}">Inicio</a></li>
+                <li class="breadcrumb-item"><a th:href="${breadcrumbParentUrl}" th:text="${breadcrumbParent}">Operaciones</a></li>
+                <li class="breadcrumb-item active" th:text="${breadcrumbCurrent}"></li>
+            </ol>
+        </nav>
+
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 th:text="'Operación ' + ${operacion.numeroOperacion}">Operación</h2>
+            <div>
+                <a th:href="@{/clientes/{id}(id=${operacion.clienteId})}" class="btn btn-secondary btn-sm">« Cliente</a>
+                <a th:href="@{/operaciones/editar/{id}(id=${operacion.id})}"
+                   class="btn btn-warning btn-sm"
+                   sec:authorize="hasRole('ADMIN')">Editar</a>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <!-- Columna izquierda: datos de la operación -->
+            <div class="col-md-6">
+                <div class="card mb-3">
+                    <div class="card-header bg-primary text-white">
+                        <h6 class="mb-0">Datos de la Operación</h6>
+                    </div>
+                    <div class="card-body py-2">
+                        <table class="table table-sm table-borderless mb-0">
+                            <tr><th class="text-muted" style="width:140px">Cliente</th><td><a th:href="@{/clientes/{id}(id=${operacion.clienteId})}" th:text="${operacion.clienteNombre}">-</a></td></tr>
+                            <tr><th class="text-muted">DNI</th><td th:text="${operacion.clienteDni}">-</td></tr>
+                            <tr><th class="text-muted">Empresa</th><td th:text="${operacion.empresaNombre}">-</td></tr>
+                            <tr><th class="text-muted">Agencia</th><td th:text="${operacion.agenciaNombre}">-</td></tr>
+                            <tr><th class="text-muted">Cuenta</th><td th:text="${operacion.cuenta}">-</td></tr>
+                            <tr><th class="text-muted">N° Operación</th><td th:text="${operacion.numeroOperacion}">-</td></tr>
+                            <tr><th class="text-muted">Moneda</th><td th:text="${operacion.moneda}">-</td></tr>
+                            <tr><th class="text-muted">Monto Capital</th><td th:text="${operacion.montoCapital}">-</td></tr>
+                            <tr><th class="text-muted">Monto Total</th><td th:text="${operacion.montoTotal}">-</td></tr>
+                            <tr><th class="text-muted">Días Mora</th><td th:text="${operacion.diasMora}">-</td></tr>
+                            <tr><th class="text-muted">Tipo Crédito</th><td th:text="${operacion.tipoCredito}">-</td></tr>
+                            <tr><th class="text-muted">Situación</th><td th:text="${operacion.situacion}">-</td></tr>
+                            <tr><th class="text-muted">Estado</th><td th:text="${operacion.estado}">-</td></tr>
+                            <tr><th class="text-muted">Etapa</th><td th:text="${operacion.etapa}">-</td></tr>
+                            <tr><th class="text-muted">Rango</th><td th:text="${operacion.rango}">-</td></tr>
+                            <tr><th class="text-muted">Analista</th><td th:text="${operacion.analista}">-</td></tr>
+                            <tr><th class="text-muted">Analista Senior</th><td th:text="${operacion.analistaSenior}">-</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna derecha: expediente judicial -->
+            <div class="col-md-6">
+                <div class="card mb-3">
+                    <div class="card-header bg-dark text-white">
+                        <h6 class="mb-0">Datos del Expediente</h6>
+                    </div>
+                    <div class="card-body py-2">
+                        <table class="table table-sm table-borderless mb-0">
+                            <tr><th class="text-muted" style="width:140px">N° Expediente</th><td th:text="${operacion.numeroExpediente}">-</td></tr>
+                            <tr><th class="text-muted">Tipo Proceso</th><td th:text="${operacion.tipoProceso}">-</td></tr>
+                            <tr><th class="text-muted">Tipo Juzgado</th><td th:text="${operacion.tipoJuzgado}">-</td></tr>
+                            <tr><th class="text-muted">Distrito Judicial</th><td th:text="${operacion.distritoJudicial}">-</td></tr>
+                            <tr><th class="text-muted">N° Juzgado</th><td th:text="${operacion.numeroJuzgado}">-</td></tr>
+                            <tr><th class="text-muted">Trans.</th><td th:text="${operacion.trans}">-</td></tr>
+                            <tr><th class="text-muted">Búsqueda Bienes</th><td th:text="${operacion.busquedaBienes}">-</td></tr>
+                            <tr><th class="text-muted">Monto Demandado</th><td th:text="${operacion.montoDemandado}">-</td></tr>
+                            <tr><th class="text-muted">Escribano Legal</th><td th:text="${operacion.escribanoLegal}">-</td></tr>
+                            <tr><th class="text-muted">Cód. Exp. Cautelar</th><td th:text="${operacion.codigoExpCautelar}">-</td></tr>
+                            <tr><th class="text-muted">Incidente</th><td th:text="${operacion.incidente}">-</td></tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Fechas procesales -->
+                <div class="card mb-3">
+                    <div class="card-header bg-info text-white">
+                        <h6 class="mb-0">Fechas Procesales</h6>
+                    </div>
+                    <div class="card-body py-2">
+                        <table class="table table-sm table-borderless mb-0">
+                            <tr><th class="text-muted" style="width:180px">Presentación</th><td th:text="${#temporals.format(operacion.fechaPresentacion, 'dd/MM/yyyy')}">-</td></tr>
+                            <tr><th class="text-muted">Inadmisible Principal</th><td th:text="${#temporals.format(operacion.fechaInadmisiblePrincipal, 'dd/MM/yyyy')}">-</td></tr>
+                            <tr><th class="text-muted">Admisión Principal</th><td th:text="${#temporals.format(operacion.fechaAdmisionPrincipal, 'dd/MM/yyyy')}">-</td></tr>
+                            <tr><th class="text-muted">Audiencia Única</th><td th:text="${#temporals.format(operacion.fechaAudienciaUnica, 'dd/MM/yyyy')}">-</td></tr>
+                            <tr><th class="text-muted">Auto Final</th><td th:text="${#temporals.format(operacion.fechaAutoFinal, 'dd/MM/yyyy')}">-</td></tr>
+                            <tr><th class="text-muted">Consentimiento</th><td th:text="${#temporals.format(operacion.fechaConsentimiento, 'dd/MM/yyyy')}">-</td></tr>
+                            <tr><th class="text-muted">Ejecutoriada</th><td th:text="${#temporals.format(operacion.fechaEjecutoriada, 'dd/MM/yyyy')}">-</td></tr>
+                            <tr><th class="text-muted">Ingreso Ejecución</th><td th:text="${#temporals.format(operacion.fechaIngresoEjecucion, 'dd/MM/yyyy')}">-</td></tr>
+                            <tr><th class="text-muted">Tasación</th><td th:text="${#temporals.format(operacion.fechaTasacion, 'dd/MM/yyyy')}">-</td></tr>
+                            <tr><th class="text-muted">Nombramiento Martillero</th><td th:text="${#temporals.format(operacion.fechaNombramientoMartillero, 'dd/MM/yyyy')}">-</td></tr>
+                            <tr><th class="text-muted">Remate 1°</th><td th:text="${#temporals.format(operacion.fechaRemate1, 'dd/MM/yyyy')}">-</td></tr>
+                            <tr><th class="text-muted">Remate 2°</th><td th:text="${#temporals.format(operacion.fechaRemate2, 'dd/MM/yyyy')}">-</td></tr>
+                            <tr><th class="text-muted">Remate 3°</th><td th:text="${#temporals.format(operacion.fechaRemate3, 'dd/MM/yyyy')}">-</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /row -->
+
+        <!-- Bienes embargados -->
+        <div class="card mb-3" th:if="${operacion.bienEmbargados != null and !operacion.bienEmbargados.isEmpty()}">
+            <div class="card-header bg-warning text-dark">
+                <h6 class="mb-0">Bienes Embargados</h6>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-sm table-striped mb-0">
+                    <thead><tr>
+                        <th>Detalle Bien/Garantía</th><th>Partida Registral</th><th>Tipo Bien</th><th>Dirección</th><th>Distrito</th><th>Garantía Inscrita</th><th>Monto MC</th>
+                    </tr></thead>
+                    <tbody>
+                    <tr th:each="bien : ${operacion.bienEmbargados}">
+                        <td th:text="${bien.detalleGarantia}">-</td>
+                        <td th:text="${bien.partidaRegistral}">-</td>
+                        <td th:text="${bien.tipoBien}">-</td>
+                        <td th:text="${bien.direccion}">-</td>
+                        <td th:text="${bien.distrito}">-</td>
+                        <td th:text="${bien.garantiaInscrita}">-</td>
+                        <td th:text="${bien.montoMc}">-</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div><!-- /container -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

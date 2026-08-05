@@ -1,5 +1,6 @@
 package com.startup.cobranza.cliente.controller;
 
+import com.startup.cobranza.cliente.dto.ClienteBandejaDTO;
 import com.startup.cobranza.cliente.dto.ClienteBusquedaDTO;
 import com.startup.cobranza.cliente.dto.ClienteDTO;
 import com.startup.cobranza.cliente.dto.ClienteFormDTO;
@@ -9,56 +10,93 @@ import com.startup.cobranza.empresa.dto.EmpresaDTO;
 import com.startup.cobranza.empresa.service.EmpresaService;
 import com.startup.cobranza.gestion.dto.GestionDTO;
 import com.startup.cobranza.gestion.service.GestionService;
+import com.startup.cobranza.operacion.dto.OperacionDTO;
+import com.startup.cobranza.operacion.service.OperacionService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
 @RequestMapping("/clientes")
-@RequiredArgsConstructor
 public class ClienteController {
+
+    private static final int PAGE_SIZE = 50;
 
     private final ClienteService clienteService;
     private final EmpresaService empresaService;
     private final GestionService gestionService;
+    private final OperacionService operacionService;
 
-    @GetMapping
-    public String listar(@ModelAttribute ClienteBusquedaDTO busqueda, Model model) {
-        List<ClienteDTO> clientes;
-        if (hasBusqueda(busqueda)) {
-            clientes = clienteService.buscar(busqueda);
-        } else {
-            clientes = clienteService.listarActivos();
-        }
-        List<EmpresaDTO> empresas = empresaService.listarActivas();
-        model.addAttribute("clientes", clientes);
-        model.addAttribute("empresas", empresas);
-        model.addAttribute("busqueda", busqueda);
-        return "cliente/lista";
+    public ClienteController(ClienteService clienteService,
+                              EmpresaService empresaService,
+                              GestionService gestionService,
+                              OperacionService operacionService) {
+        this.clienteService = clienteService;
+        this.empresaService = empresaService;
+        this.gestionService = gestionService;
+        this.operacionService = operacionService;
     }
 
-    private boolean hasBusqueda(ClienteBusquedaDTO busqueda) {
-        return (busqueda.getNombre() != null && !busqueda.getNombre().isBlank())
-                || (busqueda.getDni() != null && !busqueda.getDni().isBlank())
-                || (busqueda.getNumeroCuenta() != null && !busqueda.getNumeroCuenta().isBlank())
-                || (busqueda.getNumeroOperacion() != null && !busqueda.getNumeroOperacion().isBlank())
-                || busqueda.getEmpresaId() != null
-                || busqueda.getAgenciaId() != null;
+    @GetMapping
+    public String listar(@RequestParam(defaultValue = "0") int page,
+                          @RequestParam(defaultValue = "50") int size,
+                          @RequestParam(required = false) String nombre,
+                          @RequestParam(required = false) String dni,
+                          @RequestParam(required = false) Long empresaId,
+                          @RequestParam(required = false) String estado,
+                          @RequestParam(required = false) String etapa,
+                          @RequestParam(required = false) Integer minMora,
+                          @RequestParam(required = false) Integer maxMora,
+                          @RequestParam(required = false) BigDecimal minMonto,
+                          @RequestParam(required = false) BigDecimal maxMonto,
+                          Model model) {
+
+        size = Math.min(size, 200); // cap para evitar queries enormes
+
+        ClienteBusquedaDTO filtros = ClienteBusquedaDTO.builder()
+                .nombre(nombre)
+                .dni(dni)
+                .empresaId(empresaId)
+                .estado(estado)
+                .etapa(etapa)
+                .minMora(minMora)
+                .maxMora(maxMora)
+                .minMonto(minMonto)
+                .maxMonto(maxMonto)
+                .build();
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by("nombreCompleto").ascending());
+        Page<ClienteBandejaDTO> pagina = clienteService.listarBandeja(filtros, pageable);
+
+        List<EmpresaDTO> empresas = empresaService.listarActivas();
+
+        model.addAttribute("pagina", pagina);
+        model.addAttribute("filtros", filtros);
+        model.addAttribute("empresas", empresas);
+        return "cliente/lista";
     }
 
     @GetMapping("/{id}")
     public String detalle(@PathVariable Long id, Model model, RedirectAttributes redirectAttrs) {
         try {
             ClienteDTO cliente = clienteService.obtenerPorId(id);
+            List<OperacionDTO> operaciones = operacionService.listarPorCliente(id);
             List<GestionDTO> gestiones = gestionService.listarPorCliente(id);
             model.addAttribute("cliente", cliente);
+            model.addAttribute("operaciones", operaciones);
             model.addAttribute("gestiones", gestiones);
             return "cliente/detalle";
         } catch (ClienteException e) {
@@ -107,8 +145,9 @@ public class ClienteController {
         }
 
         try {
+            String usuario = getCurrentUsername();
             if (clienteId != null) {
-                clienteService.actualizar(clienteId, form);
+                clienteService.actualizar(clienteId, form, usuario);
                 redirectAttrs.addFlashAttribute("success", "Cliente actualizado correctamente");
             } else {
                 clienteService.crear(form);
@@ -121,6 +160,14 @@ public class ClienteController {
             model.addAttribute("clienteId", clienteId);
             return "cliente/formulario";
         }
+    }
+
+    private String getCurrentUsername() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated()) {
+            return auth.getName();
+        }
+        return "sistema";
     }
 
     @PostMapping("/eliminar/{id}")
@@ -139,18 +186,11 @@ public class ClienteController {
         return ClienteFormDTO.builder()
                 .nombreCompleto(dto.getNombreCompleto())
                 .dni(dto.getDni())
-                .numeroCuenta(dto.getNumeroCuenta())
-                .numeroOperacion(dto.getNumeroOperacion())
-                .deudaCapital(dto.getDeudaCapital())
-                .deudaTotal(dto.getDeudaTotal())
                 .telefono(dto.getTelefono())
                 .telefono2(dto.getTelefono2())
                 .telefono3(dto.getTelefono3())
                 .direccion(dto.getDireccion())
-                .estadoGestion(dto.getEstadoGestion())
-                .observaciones(dto.getObservaciones())
-                .empresaId(dto.getEmpresaId())
-                .agenciaId(dto.getAgenciaId())
+                .email(dto.getEmail())
                 .build();
     }
 }

@@ -11,4 +11,6 @@ public interface BienEmbargadoRepository extends JpaRepository<BienEmbargado, Lo
     List<BienEmbargado> findByExpedienteId(Long expedienteId);
 
     List<BienEmbargado> findByExpedienteIdIn(List<Long> expedienteIds);
+
+    List<BienEmbargado> findByOperacionId(Long operacionId);
 }

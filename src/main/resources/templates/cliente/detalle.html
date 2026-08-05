@@ -15,7 +15,7 @@
             <div class="navbar-nav">
                 <a class="nav-link" th:href="@{/dashboard}">Inicio</a>
                 <a class="nav-link" th:href="@{/empresas}">Empresas</a>
-                <a class="nav-link" th:href="@{/agencias}">Agencias</a>
+                <a class="nav-link" th:href="@{/cartera/registros}">Registros</a>
                 <a class="nav-link" th:href="@{/usuarios}">Usuarios</a>
                 <a class="nav-link active" th:href="@{/clientes}">Clientes</a>
                 <a class="nav-link" th:href="@{/cartera/importar}">Cartera</a>
@@ -27,267 +27,189 @@
     </nav>
 
     <div class="container mt-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 th:text="${cliente.nombreCompleto}">Detalle del Cliente</h2>
+
+        <!-- Flash messages -->
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" th:text="${success}">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" th:text="${error}">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 th:text="${cliente.nombreCompleto}">Nombre del Cliente</h2>
             <div>
-                <a th:href="@{/clientes}" class="btn btn-secondary">Volver</a>
-                <a th:href="@{/clientes/editar/{id}(id=${cliente.id})}" class="btn btn-warning" sec:authorize="hasRole('ADMIN')">Editar</a>
+                <a th:href="@{/clientes}" class="btn btn-secondary btn-sm">« Volver</a>
+                <a th:href="@{/clientes/editar/{id}(id=${cliente.id})}"
+                   class="btn btn-warning btn-sm"
+                   sec:authorize="hasRole('ADMIN')">Editar</a>
             </div>
         </div>
 
         <div class="row">
-            <!-- Información General -->
-            <div class="col-md-6">
-                <div class="card mb-4">
+
+            <!-- Columna izquierda: datos del cliente -->
+            <div class="col-md-4">
+                <div class="card mb-3">
                     <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">Información General</h5>
+                        <h6 class="mb-0">Datos del Cliente</h6>
                     </div>
-                    <div class="card-body">
-                        <table class="table table-borderless">
+                    <div class="card-body py-2">
+                        <table class="table table-sm table-borderless mb-0">
                             <tr>
-                                <th width="40%">Nombre:</th>
-                                <td th:text="${cliente.nombreCompleto}"></td>
+                                <th class="text-muted small">DNI</th>
+                                <td th:text="${cliente.dni}">—</td>
                             </tr>
                             <tr>
-                                <th>DNI:</th>
-                                <td th:text="${cliente.dni}"></td>
+                                <th class="text-muted small">Nombre</th>
+                                <td th:text="${cliente.nombreCompleto}">—</td>
                             </tr>
                             <tr>
-                                <th>Empresa:</th>
-                                <td th:text="${cliente.empresaNombre}"></td>
+                                <th class="text-muted small">Teléfono 1</th>
+                                <td th:text="${cliente.telefono}">—</td>
                             </tr>
                             <tr>
-                                <th>Agencia:</th>
-                                <td th:text="${cliente.agenciaNombre ?: '-'}"></td>
+                                <th class="text-muted small">Teléfono 2</th>
+                                <td th:text="${cliente.telefono2 != null ? cliente.telefono2 : '-'}">—</td>
                             </tr>
                             <tr>
-                                <th>N° Cuenta:</th>
-                                <td th:text="${cliente.numeroCuenta}"></td>
+                                <th class="text-muted small">Teléfono 3</th>
+                                <td th:text="${cliente.telefono3 != null ? cliente.telefono3 : '-'}">—</td>
                             </tr>
                             <tr>
-                                <th>N° Operación:</th>
-                                <td th:text="${cliente.numeroOperacion}"></td>
+                                <th class="text-muted small">Email</th>
+                                <td th:text="${cliente.email != null ? cliente.email : '-'}">—</td>
                             </tr>
                             <tr>
-                                <th>Estado Gestión:</th>
-                                <td th:text="${cliente.estadoGestion}"></td>
+                                <th class="text-muted small">Dirección</th>
+                                <td th:text="${cliente.direccion != null ? cliente.direccion : '-'}">—</td>
                             </tr>
                             <tr>
-                                <th>Fecha Creación:</th>
-                                <td th:text="${cliente.fechaCreacion}"></td>
+                                <th class="text-muted small">Creado</th>
+                                <td th:text="${cliente.fechaCreacion != null ? #temporals.format(cliente.fechaCreacion, 'yyyy-MM-dd') : '-'}">—</td>
                             </tr>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- Información Financiera -->
-            <div class="col-md-6">
-                <div class="card mb-4">
+            <!-- Columna derecha: operaciones -->
+            <div class="col-md-8">
+                <div class="card mb-3">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">Operaciones</h6>
+                        <span class="badge bg-light text-dark" th:text="${operaciones.size()} + ' operación(es)'">0</span>
+                    </div>
+                    <div class="card-body p-0">
+                        <div th:if="${#lists.isEmpty(operaciones)}" class="p-3 text-muted text-center">
+                            No hay operaciones registradas.
+                        </div>
+
+                        <div th:if="${!#lists.isEmpty(operaciones)}" class="table-responsive">
+                            <table class="table table-sm table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Empresa</th>
+                                        <th>Cuenta</th>
+                                        <th>N° Oper.</th>
+                                        <th class="text-end">Monto Total</th>
+                                        <th class="text-center">Días Mora</th>
+                                        <th>Estado</th>
+                                        <th>Etapa</th>
+                                        <th>Bien Emb.</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="op : ${operaciones}">
+                                        <td th:text="${op.empresaNombre}">—</td>
+                                        <td class="font-monospace small" th:text="${op.cuenta}">—</td>
+                                        <td class="font-monospace small" th:text="${op.numeroOperacion}">—</td>
+                                        <td class="text-end font-monospace">
+                                            <span th:if="${op.montoTotal != null}"
+                                                  th:text="${'S/ ' + #numbers.formatDecimal(op.montoTotal, 1, 2)}">0.00</span>
+                                            <span th:if="${op.montoTotal == null}">—</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span th:if="${op.diasMora != null}" th:text="${op.diasMora}">0</span>
+                                            <span th:if="${op.diasMora == null}">—</span>
+                                        </td>
+                                        <!-- Estado -->
+                                        <td>
+                                            <span th:if="${op.estado == 'VIGENTE'}" class="badge bg-success" th:text="${op.estado}">Vigente</span>
+                                            <span th:if="${op.estado == 'VENCIDA'}" class="badge bg-warning text-dark" th:text="${op.estado}">Vencida</span>
+                                            <span th:if="${op.estado == 'PRESCRITA'}" class="badge bg-secondary" th:text="${op.estado}">Prescrita</span>
+                                            <span th:if="${op.estado == 'PAGADA'}" class="badge bg-info text-dark" th:text="${op.estado}">Pagada</span>
+                                            <span th:if="${op.estado == null}">—</span>
+                                        </td>
+                                        <!-- Etapa -->
+                                        <td>
+                                            <span th:if="${op.etapa == 'JUDICIAL'}" class="badge bg-danger" th:text="${op.etapa}">Judicial</span>
+                                            <span th:if="${op.etapa == 'EXTRAJUDICIAL'}" class="badge bg-primary" th:text="${op.etapa}">Extrajudicial</span>
+                                            <span th:if="${op.etapa == null}">—</span>
+                                        </td>
+                                        <!-- Bien embargado -->
+                                        <td>
+                                            <span th:if="${op.bienEmbargados != null and !#lists.isEmpty(op.bienEmbargados)}"
+                                                  class="badge bg-success"
+                                                  title="Tiene bien embargado">Sí</span>
+                                            <span th:if="${op.bienEmbargados == null or #lists.isEmpty(op.bienEmbargados)}"
+                                                  class="text-muted">—</span>
+                                        </td>
+                                        <!-- Link a operación -->
+                                        <td>
+                                            <a th:href="@{/operaciones/{id}(id=${op.id})}"
+                                               class="btn btn-outline-primary btn-sm">Ver</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div><!-- /card-body -->
+                </div><!-- /operaciones card -->
+
+                <!-- Sección de Gestiones (solo vista, registro via ticket 10) -->
+                <div class="card mb-3">
                     <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">Información Financiera</h5>
+                        <h6 class="mb-0">Historial de Gestiones</h6>
                     </div>
-                    <div class="card-body">
-                        <table class="table table-borderless">
-                            <tr>
-                                <th width="40%">Deuda Capital:</th>
-                                <td th:text="${'S/ ' + #numbers.formatDecimal(cliente.deudaCapital, 1, 2)}"></td>
-                            </tr>
-                            <tr>
-                                <th>Deuda Total:</th>
-                                <td th:text="${'S/ ' + #numbers.formatDecimal(cliente.deudaTotal, 1, 2)}"></td>
-                            </tr>
-                        </table>
+                    <div class="card-body py-2">
+                        <div th:if="${#lists.isEmpty(gestiones)}" class="text-muted text-center small py-2">
+                            No hay gestiones registradas.
+                        </div>
+                        <div th:if="${!#lists.isEmpty(gestiones)}">
+                            <table class="table table-sm table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Tipo</th>
+                                        <th>Observaciones</th>
+                                        <th>Monto Compromiso</th>
+                                        <th>Fecha Compromiso</th>
+                                        <th>Usuario</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="g : ${gestiones}">
+                                        <td th:text="${g.fechaGestion != null ? #temporals.format(g.fechaGestion, 'yyyy-MM-dd HH:mm') : '-'}"></td>
+                                        <td th:text="${g.tipoLabel}">—</td>
+                                        <td th:text="${g.observaciones != null ? g.observaciones : '-'}">—</td>
+                                        <td th:text="${g.montoCompromiso != null ? 'S/ ' + #numbers.formatDecimal(g.montoCompromiso, 1, 2) : '-'}">—</td>
+                                        <td th:text="${g.fechaCompromiso != null ? #temporals.format(g.fechaCompromiso, 'yyyy-MM-dd') : '-'}">—</td>
+                                        <td th:text="${g.usuarioRegistra}">—</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Información de Contacto -->
-                <div class="card mb-4">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">Información de Contacto</h5>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-borderless">
-                            <tr>
-                                <th width="40%">Teléfono 1:</th>
-                                <td th:text="${cliente.telefono}"></td>
-                            </tr>
-                            <tr>
-                                <th>Teléfono 2:</th>
-                                <td th:text="${cliente.telefono2 ?: '-'}"></td>
-                            </tr>
-                            <tr>
-                                <th>Teléfono 3:</th>
-                                <td th:text="${cliente.telefono3 ?: '-'}"></td>
-                            </tr>
-                            <tr>
-                                <th>Dirección:</th>
-                                <td th:text="${cliente.direccion ?: '-'}"></td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+            </div><!-- /col-md-8 -->
+        </div><!-- /row -->
 
-        <!-- Observaciones -->
-        <div class="card mb-4" th:if="${cliente.observaciones != null and !cliente.observaciones.isEmpty()}">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Observaciones</h5>
-            </div>
-            <div class="card-body">
-                <p th:text="${cliente.observaciones}"></p>
-            </div>
-        </div>
-
-        <!-- Sección de Gestiones -->
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Registrar Gestión</h5>
-            </div>
-            <div class="card-body">
-                <form id="gestionForm">
-                    <input type="hidden" name="clienteId" th:value="${cliente.id}">
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label for="tipo" class="form-label">Tipo de Gestión *</label>
-                            <select class="form-select" id="tipo" name="tipo" required>
-                                <option value="">Seleccione...</option>
-                                <option value="LLAMADA">Llamada</option>
-                                <option value="VISITA">Visita</option>
-                                <option value="OBSERVACION">Observación</option>
-                                <option value="COMPROMISO_PAGO">Compromiso de Pago</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="fechaGestion" class="form-label">Fecha y Hora</label>
-                            <input type="datetime-local" class="form-control" id="fechaGestion" name="fechaGestion">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="observaciones" class="form-label">Observaciones</label>
-                            <textarea class="form-control" id="observaciones" name="observaciones" rows="1"></textarea>
-                        </div>
-                    </div>
-                    <div class="row" id="compromisoFields" style="display:none;">
-                        <div class="col-md-6 mb-3">
-                            <label for="montoCompromiso" class="form-label">Monto Compromiso (S/) *</label>
-                            <input type="number" class="form-control" id="montoCompromiso" name="montoCompromiso" step="0.01" min="0">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="fechaCompromiso" class="form-label">Fecha Compromiso *</label>
-                            <input type="date" class="form-control" id="fechaCompromiso" name="fechaCompromiso">
-                        </div>
-                    </div>
-                    <div id="gestionError" class="alert alert-danger" style="display:none;"></div>
-                    <div id="gestionSuccess" class="alert alert-success" style="display:none;"></div>
-                    <button type="submit" class="btn btn-primary">Registrar Gestión</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- Historial de Gestiones -->
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Historial de Gestiones</h5>
-            </div>
-            <div class="card-body">
-                <div th:if="${#lists.isEmpty(gestiones)}">
-                    <p class="text-muted">No hay gestiones registradas para este cliente.</p>
-                </div>
-                <div th:if="${!#lists.isEmpty(gestiones)}">
-                    <table class="table table-striped table-hover">
-                        <thead>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Tipo</th>
-                                <th>Observaciones</th>
-                                <th>Monto Compromiso</th>
-                                <th>Fecha Compromiso</th>
-                                <th>Usuario</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="g : ${gestiones}">
-                                <td th:text="${#temporals.format(g.fechaGestion, 'yyyy-MM-dd HH:mm')}"></td>
-                                <td>
-                                    <span th:class="${'badge bg-' + 
-                                        (g.tipo.name() == 'LLAMADA' ? 'info' : 
-                                         g.tipo.name() == 'VISITA' ? 'secondary' : 
-                                         g.tipo.name() == 'OBSERVACION' ? 'warning' : 'success')}"
-                                          th:text="${g.tipoLabel}"></span>
-                                </td>
-                                <td th:text="${g.observaciones ?: '-'}"></td>
-                                <td th:text="${g.montoCompromiso != null ? 'S/ ' + #numbers.formatDecimal(g.montoCompromiso, 1, 2) : '-'}"></td>
-                                <td th:text="${g.fechaCompromiso != null ? #temporals.format(g.fechaCompromiso, 'yyyy-MM-dd') : '-'}"></td>
-                                <td th:text="${g.usuarioRegistra}"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
+    </div><!-- /container -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script th:inline="javascript">
-        // Mostrar/ocultar campos de compromiso según tipo
-        document.getElementById('tipo').addEventListener('change', function() {
-            var fields = document.getElementById('compromisoFields');
-            if (this.value === 'COMPROMISO_PAGO') {
-                fields.style.display = 'flex';
-            } else {
-                fields.style.display = 'none';
-            }
-        });
-
-        // Envío del formulario
-        document.getElementById('gestionForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            var tipo = document.getElementById('tipo').value;
-            var clienteId = /*[[${cliente.id}]]*/;
-            var fechaGestion = document.getElementById('fechaGestion').value;
-            var observaciones = document.getElementById('observaciones').value;
-            var montoCompromiso = document.getElementById('montoCompromiso').value;
-            var fechaCompromiso = document.getElementById('fechaCompromiso').value;
-
-            var body = {
-                tipo: tipo,
-                observaciones: observaciones
-            };
-
-            if (fechaGestion) body.fechaGestion = fechaGestion;
-            if (montoCompromiso) body.montoCompromiso = parseFloat(montoCompromiso);
-            if (fechaCompromiso) body.fechaCompromiso = fechaCompromiso;
-
-            fetch('/clientes/' + clienteId + '/gestiones/guardar', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(body)
-            })
-            .then(function(response) {
-                if (response.ok) {
-                    document.getElementById('gestionSuccess').textContent = 'Gestión registrada correctamente';
-                    document.getElementById('gestionSuccess').style.display = 'block';
-                    document.getElementById('gestionError').style.display = 'none';
-                    document.getElementById('gestionForm').reset();
-                    document.getElementById('compromisoFields').style.display = 'none';
-                    setTimeout(function() { location.reload(); }, 1000);
-                } else {
-                    return response.json().then(function(data) {
-                        document.getElementById('gestionError').textContent = data.error || 'Error al registrar';
-                        document.getElementById('gestionError').style.display = 'block';
-                        document.getElementById('gestionSuccess').style.display = 'none';
-                    });
-                }
-            })
-            .catch(function(err) {
-                document.getElementById('gestionError').textContent = 'Error de conexión';
-                document.getElementById('gestionError').style.display = 'block';
-            });
-        });
-    </script>
 </body>
 </html>

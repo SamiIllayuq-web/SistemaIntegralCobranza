@@ -8,10 +8,13 @@ import com.startup.cobranza.empresa.entity.Empresa;
 import com.startup.cobranza.empresa.repository.EmpresaRepository;
 import com.startup.cobranza.expediente.entity.*;
 import com.startup.cobranza.expediente.repository.*;
+import com.startup.cobranza.operacion.entity.Operacion;
+import com.startup.cobranza.operacion.repository.OperacionRepository;
 import com.startup.cobranza.usuario.entity.Usuario;
 import com.startup.cobranza.usuario.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -31,8 +34,9 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class ExpedienteService {
+
+    private static final Logger log = LoggerFactory.getLogger(ExpedienteService.class);
 
     private final ExpedienteRepository expedienteRepository;
     private final ExpedienteClienteRepository expedienteClienteRepository;
@@ -43,6 +47,7 @@ public class ExpedienteService {
     private final AgenciaRepository agenciaRepository;
     private final UsuarioRepository usuarioRepository;
     private final ClienteRepository clienteRepository;
+    private final OperacionRepository operacionRepository;
 
     @Transactional
     public ResultadoImportacion importarExcelAvanceProcesal(
@@ -211,7 +216,7 @@ public class ExpedienteService {
                     .distritoJudicial(rd.distritoJudicial)
                     .numeroJuzgado(rd.numeroJuzgado)
                     .expedienteCautelarCodigo(rd.codigoCautelar)
-                    .incidente(rd.incidente)
+                    .incidente(rd.incidente != null && rd.incidente.equalsIgnoreCase("SI"))
                     .montoDemandado(rd.montoDemandado)
                     .especialistaLegal(rd.especialistaLegal)
                     .observacion(rd.observacion)
@@ -227,7 +232,7 @@ public class ExpedienteService {
             expediente.setDistritoJudicial(rd.distritoJudicial);
             expediente.setNumeroJuzgado(rd.numeroJuzgado);
             expediente.setExpedienteCautelarCodigo(rd.codigoCautelar);
-            expediente.setIncidente(rd.incidente);
+            expediente.setIncidente(rd.incidente != null && rd.incidente.equalsIgnoreCase("SI"));
             expediente.setMontoDemandado(rd.montoDemandado);
             expediente.setEspecialistaLegal(rd.especialistaLegal);
             expediente.setObservacion(rd.observacion);
@@ -256,45 +261,61 @@ public class ExpedienteService {
                 clienteExistente.setObservacion(rd.observacion);
                 expedienteClienteRepository.save(clienteExistente);
             } else {
-                // buscar o crear Cliente
+                // buscar o crear Cliente por DNI
                 Cliente cliente = null;
                 if (rd.dni != null && !rd.dni.isEmpty()) {
-                    log.info("IMPORT: buscando cliente dni=[{}] cuenta=[{}] operacion=[{}]", rd.dni, rd.cuenta, rd.operacion);
-                    List<Cliente> encontrados = clienteRepository.findByDni(rd.dni);
-                    log.info("IMPORT: encontrados {} con dni=[{}]", encontrados.size(), rd.dni);
-                    for (Cliente c : encontrados) {
-                        log.info("IMPORT: comparando c.cuenta=[{}] c.operacion=[{}]", c.getNumeroCuenta(), c.getNumeroOperacion());
-                        if (eq(c.getNumeroCuenta(), rd.cuenta) && eq(c.getNumeroOperacion(), rd.operacion)) {
-                            cliente = c;
-                            // actualizar datos del cliente con datos frescos del Excel
-                            cliente.setNombreCompleto(rd.nombreCliente);
-                            cliente.setDeudaCapital(rd.deudaCap);
-                            cliente.setDeudaTotal(rd.deudaTotal);
-                            cliente.setObservaciones(rd.observacion);
-                            if (agencia != null) cliente.setAgencia(agencia);
-                            cliente = clienteRepository.save(cliente);
-                            log.info("IMPORT: Cliente actualizado id={}", cliente.getId());
-                            break;
-                        }
+                    log.info("IMPORT: buscando cliente dni=[{}]", rd.dni);
+                    cliente = clienteRepository.findByDni(rd.dni).orElse(null);
+                    if (cliente != null) {
+                        log.info("IMPORT: Cliente encontrado id={}", cliente.getId());
                     }
                 }
                 if (cliente == null) {
-                    log.info("IMPORT: creando Cliente nombre={} dni={} cuenta={} operacion={}", rd.nombreCliente, rd.dni, rd.cuenta, rd.operacion);
+                    log.info("IMPORT: creando Cliente nombre={} dni={}", rd.nombreCliente, rd.dni);
                     cliente = Cliente.builder()
-                            .empresa(empresa)
-                            .agencia(agencia)
                             .nombreCompleto(rd.nombreCliente)
                             .dni(rd.dni)
-                            .numeroCuenta(rd.cuenta)
-                            .numeroOperacion(rd.operacion)
-                            .deudaCapital(rd.deudaCap)
-                            .deudaTotal(rd.deudaTotal)
-                            .observaciones(rd.observacion)
                             .activo(true)
                             .build();
                     cliente = clienteRepository.save(cliente);
                     log.info("IMPORT: Cliente guardado id={}", cliente.getId());
                 }
+
+                // Buscar o crear Operacion para asociar con datos de la fila
+                Operacion operacion = null;
+                if (rd.dni != null && !rd.dni.isEmpty() && rd.cuenta != null && rd.operacion != null) {
+                    log.info("IMPORT: buscando operacion empresaId={} cuenta=[{}] operacion=[{}]",
+                            empresa.getId(), rd.cuenta, rd.operacion);
+                    operacion = operacionRepository
+                            .findByEmpresaIdAndCuentaAndNumeroOperacion(empresa.getId(), rd.cuenta, rd.operacion)
+                            .orElse(null);
+                    if (operacion != null) {
+                        log.info("IMPORT: Operacion encontrada id={}", operacion.getId());
+                        operacion.setMontoCapital(rd.deudaCap);
+                        operacion.setMontoTotal(rd.deudaTotal);
+                        operacion.setObservacion(rd.observacion);
+                        if (agencia != null) operacion.setAgencia(agencia);
+                        operacion = operacionRepository.save(operacion);
+                        log.info("IMPORT: Operacion actualizada id={}", operacion.getId());
+                    }
+                }
+                if (operacion == null) {
+                    log.info("IMPORT: creando Operacion cuenta={} operacion={}", rd.cuenta, rd.operacion);
+                    operacion = Operacion.builder()
+                            .cliente(cliente)
+                            .empresa(empresa)
+                            .agencia(agencia)
+                            .cuenta(rd.cuenta)
+                            .numeroOperacion(rd.operacion)
+                            .montoCapital(rd.deudaCap)
+                            .montoTotal(rd.deudaTotal)
+                            .observacion(rd.observacion)
+                            .activo(true)
+                            .build();
+                    operacion = operacionRepository.save(operacion);
+                    log.info("IMPORT: Operacion guardada id={}", operacion.getId());
+                }
+
                 ExpedienteCliente ec = ExpedienteCliente.builder()
                         .expediente(expediente)
                         .cliente(cliente)

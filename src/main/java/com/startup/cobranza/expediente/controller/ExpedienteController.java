@@ -112,7 +112,7 @@ public class ExpedienteController {
         form.setTipoJuzgado(exp.getTipoJuzgado());
         form.setDistritoJudicial(exp.getDistritoJudicial());
         form.setNumeroJuzgado(exp.getNumeroJuzgado());
-        form.setIncidente(exp.getIncidente());
+        form.setIncidente(exp.getIncidente() != null ? exp.getIncidente().toString() : null);
         form.setMontoDemandado(exp.getMontoDemandado());
         form.setEspecialistaLegal(exp.getEspecialistaLegal());
         form.setEtapaProcesal(exp.getEtapaProcesal());
@@ -153,7 +153,8 @@ public class ExpedienteController {
             exp.setTipoJuzgado(form.getTipoJuzgado());
             exp.setDistritoJudicial(form.getDistritoJudicial());
             exp.setNumeroJuzgado(form.getNumeroJuzgado());
-            exp.setIncidente(form.getIncidente());
+            String inc = form.getIncidente();
+            exp.setIncidente(inc != null && (inc.equalsIgnoreCase("true") || inc.equals("1") || inc.equalsIgnoreCase("si") || inc.equalsIgnoreCase("sí") || inc.equalsIgnoreCase("x")));
             exp.setMontoDemandado(form.getMontoDemandado());
             exp.setEspecialistaLegal(form.getEspecialistaLegal());
             exp.setEtapaProcesal(form.getEtapaProcesal());

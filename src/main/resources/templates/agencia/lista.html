@@ -14,7 +14,7 @@
             <div class="navbar-nav">
                 <a class="nav-link" th:href="@{/dashboard}">Inicio</a>
                 <a class="nav-link" th:href="@{/empresas}">Empresas</a>
-                <a class="nav-link" th:href="@{/agencias}">Agencias</a>
+                <a class="nav-link" th:href="@{/cartera/registros}">Registros</a>
                 <a class="nav-link" th:href="@{/usuarios}">Usuarios</a>
             </div>
             <form th:action="@{/logout}" method="post" class="d-inline">
@@ -25,7 +25,7 @@
 
     <div class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2>Agencias</h2>
+            <h2>Registros</h2>
             <a th:href="@{/agencias/nuevo}" class="btn btn-success">Nueva Agencia</a>
         </div>
 

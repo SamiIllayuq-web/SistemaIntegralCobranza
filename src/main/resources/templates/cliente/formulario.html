@@ -46,8 +46,8 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="empresaId" class="form-label">Empresa *</label>
-                            <select class="form-select" id="empresaId" th:field="*{empresaId}" required>
+                            <label for="empresaId" class="form-label">Empresa</label>
+                            <select class="form-select" id="empresaId" th:field="*{empresaId}">
                                 <option value="">Seleccione una empresa</option>
                                 <option th:each="emp : ${empresas}" th:value="${emp.id}" th:text="${emp.nombre}"></option>
                             </select>
@@ -55,30 +55,6 @@
                         <div class="col-md-6 mb-3">
                             <label for="agenciaId" class="form-label">Agencia</label>
                             <input type="number" class="form-control" id="agenciaId" th:field="*{agenciaId}" placeholder="ID de agencia">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="numeroCuenta" class="form-label">N° Cuenta</label>
-                            <input type="text" class="form-control" id="numeroCuenta" th:field="*{numeroCuenta}">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="numeroOperacion" class="form-label">N° Operación</label>
-                            <input type="text" class="form-control" id="numeroOperacion" th:field="*{numeroOperacion}">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label for="deudaCapital" class="form-label">Deuda Capital</label>
-                            <input type="number" step="0.01" class="form-control" id="deudaCapital" th:field="*{deudaCapital}">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="deudaTotal" class="form-label">Deuda Total</label>
-                            <input type="number" step="0.01" class="form-control" id="deudaTotal" th:field="*{deudaTotal}">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="estadoGestion" class="form-label">Estado Gestión</label>
-                            <input type="text" class="form-control" id="estadoGestion" th:field="*{estadoGestion}" placeholder="Ej: Sin Gestionar">
                         </div>
                     </div>
                 </div>
@@ -104,18 +80,13 @@
                         </div>
                     </div>
                     <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" th:field="*{email}">
+                    </div>
+                    <div class="mb-3">
                         <label for="direccion" class="form-label">Dirección</label>
                         <input type="text" class="form-control" id="direccion" th:field="*{direccion}">
                     </div>
-                </div>
-            </div>
-
-            <div class="card mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Observaciones</h5>
-                </div>
-                <div class="card-body">
-                    <textarea class="form-control" id="observaciones" th:field="*{observaciones}" rows="3"></textarea>
                 </div>
             </div>
 

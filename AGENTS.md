@@ -15,13 +15,13 @@ Domain docs live in `docs/domain/` (glossary + README) + `docs/adr/`. See `docs/
 
 ## Stack
 
-- Java 17 + Spring Boot 3.x
+- Java 21 + Spring Boot 3 + Thymeleaf + PostgreSQL
 - Build: Maven
-- Base de datos: H2 (local) / PostgreSQL (producción, configurado en perfil)
+- Base de datos: PostgreSQL (Supabase Cloud)
 - Tests: JUnit 5 + Mockito
 - Excel: Apache POI
-- Ubicación del código: src/main/java/com/estudio/cartera/
-- Ubicación de los tests: src/test/java/com/estudio/cartera/
+- Ubicación del código: `src/main/java/com/startup/cobranza/`
+- Ubicación del proyecto: `/mnt/d/dev/gato/SistemaIntegralCobranza/`
 
 ## Reglas de runtime — LEER ANTES DE CUALQUIER TAREA
 
