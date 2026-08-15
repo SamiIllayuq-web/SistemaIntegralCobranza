@@ -11,6 +11,7 @@ public class ClienteBandejaDTO {
     private List<String> empresas;
     private List<String> agencias;
     private String estado;
+    private String estadoCartera;
     private String etapa;
     private BigDecimal montoTotal;
     private BigDecimal montoCapital;
@@ -47,6 +48,8 @@ public class ClienteBandejaDTO {
     public void setAgencias(List<String> agencias) { this.agencias = agencias; }
     public String getEstado() { return estado; }
     public void setEstado(String estado) { this.estado = estado; }
+    public String getEstadoCartera() { return estadoCartera; }
+    public void setEstadoCartera(String estadoCartera) { this.estadoCartera = estadoCartera; }
     public String getEtapa() { return etapa; }
     public void setEtapa(String etapa) { this.etapa = etapa; }
     public BigDecimal getMontoTotal() { return montoTotal; }
@@ -65,6 +68,7 @@ public class ClienteBandejaDTO {
         private List<String> empresas;
         private List<String> agencias;
         private String estado;
+        private String estadoCartera;
         private String etapa;
         private BigDecimal montoTotal = BigDecimal.ZERO;
         private BigDecimal montoCapital = BigDecimal.ZERO;
@@ -76,6 +80,7 @@ public class ClienteBandejaDTO {
         public Builder empresas(List<String> v) { empresas = v; return this; }
         public Builder agencias(List<String> v) { agencias = v; return this; }
         public Builder estado(String v) { estado = v; return this; }
+        public Builder estadoCartera(String v) { estadoCartera = v; return this; }
         public Builder etapa(String v) { etapa = v; return this; }
         public Builder montoTotal(BigDecimal v) { montoTotal = v; return this; }
         public Builder montoCapital(BigDecimal v) { montoCapital = v; return this; }

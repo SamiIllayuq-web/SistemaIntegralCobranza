@@ -73,14 +73,15 @@
                                     th:selected="${filtros.empresaId == emp.id}"></option>
                         </select>
                     </div>
-                    <div class="col-md-1">
-                        <label for="estado" class="form-label small mb-1">Estado</label>
-                        <select class="form-select form-select-sm" id="estado" name="estado">
+                    <div class="col-md-2">
+                        <label for="estadoCartera" class="form-label small mb-1">Estado Cartera</label>
+                        <select class="form-select form-select-sm" id="estadoCartera" name="estadoCartera">
                             <option value="">Todos</option>
-                            <option value="VIGENTE" th:selected="${filtros.estado == 'VIGENTE'}">Vigente</option>
-                            <option value="VENCIDA" th:selected="${filtros.estado == 'VENCIDA'}">Vencida</option>
-                            <option value="PRESCRITA" th:selected="${filtros.estado == 'PRESCRITA'}">Prescrita</option>
-                            <option value="PAGADA" th:selected="${filtros.estado == 'PAGADA'}">Pagada</option>
+                            <option value="ACTIVO" th:selected="${filtros.estadoCartera == 'ACTIVO'}">Activo</option>
+                            <option value="CANCELADA" th:selected="${filtros.estadoCartera == 'CANCELADA'}">Cancelada</option>
+                            <option value="DESASIGNADA" th:selected="${filtros.estadoCartera == 'DESASIGNADA'}">Desasignada</option>
+                            <option value="VENDIDA" th:selected="${filtros.estadoCartera == 'VENDIDA'}">Vendida</option>
+                            <option value="DEVUELTA" th:selected="${filtros.estadoCartera == 'DEVUELTA'}">Devuelta</option>
                         </select>
                     </div>
                     <div class="col-md-1">
@@ -139,7 +140,7 @@
                     <th>DNI</th>
                     <th>Nombre</th>
                     <th>Empresas</th>
-                    <th>Estado</th>
+                    <th>Estado Cartera</th>
                     <th>Etapa</th>
                     <th class="text-end">Monto Total (S/)</th>
                     <th>Registros</th>
@@ -160,13 +161,14 @@
                         <span th:if="${not #lists.isEmpty(c.empresas)}"
                               th:text="${#strings.listJoin(c.empresas, ', ')}"></span>
                     </td>
-                    <!-- Estado badge -->
+                    <!-- Estado Cartera badge -->
                     <td>
-                        <span th:if="${c.estado == 'VIGENTE'}" class="badge bg-success" th:text="${c.estado}">Vigente</span>
-                        <span th:if="${c.estado == 'VENCIDA'}" class="badge bg-warning text-dark" th:text="${c.estado}">Vencida</span>
-                        <span th:if="${c.estado == 'PRESCRITA'}" class="badge bg-secondary" th:text="${c.estado}">Prescrita</span>
-                        <span th:if="${c.estado == 'PAGADA'}" class="badge bg-info text-dark" th:text="${c.estado}">Pagada</span>
-                        <span th:if="${c.estado == null}" class="text-muted">—</span>
+                        <span th:if="${c.estadoCartera == 'ACTIVO'}" class="badge bg-success" th:text="${c.estadoCartera}">Activo</span>
+                        <span th:if="${c.estadoCartera == 'CANCELADA'}" class="badge bg-secondary" th:text="${c.estadoCartera}">Cancelada</span>
+                        <span th:if="${c.estadoCartera == 'DESASIGNADA'}" class="badge bg-warning text-dark" th:text="${c.estadoCartera}">Desasignada</span>
+                        <span th:if="${c.estadoCartera == 'VENDIDA'}" class="badge bg-info text-dark" th:text="${c.estadoCartera}">Vendida</span>
+                        <span th:if="${c.estadoCartera == 'DEVUELTA'}" class="badge bg-danger" th:text="${c.estadoCartera}">Devuelta</span>
+                        <span th:if="${c.estadoCartera == null}" class="text-muted">—</span>
                     </td>
                     <!-- Etapa badge -->
                     <td>

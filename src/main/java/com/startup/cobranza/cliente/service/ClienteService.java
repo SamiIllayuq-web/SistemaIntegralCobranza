@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 public class ClienteService {
 
     private static final List<String> ESTADO_PRIORIDAD = List.of("VIGENTE", "VENCIDA", "PRESCRITA", "PAGADA");
+    private static final List<String> ESTADO_CARTERA_PRIORIDAD = List.of("ACTIVO", "CANCELADA", "DESASIGNADA", "VENDIDA", "DEVUELTA");
     private static final List<String> ETAPA_PRIORIDAD = List.of("JUDICIAL", "EXTRAJUDICIAL");
 
     private final ClienteRepository clienteRepository;
@@ -195,6 +196,7 @@ public class ClienteService {
         BigDecimal montoTotal = BigDecimal.ZERO;
         BigDecimal montoCapital = BigDecimal.ZERO;
         String peorEstado = null;
+        String peorEstadoCartera = null;
         String peorEtapa = null;
 
         for (Operacion op : ops) {
@@ -205,6 +207,7 @@ public class ClienteService {
             if (op.getMontoTotal() != null) montoTotal = montoTotal.add(op.getMontoTotal());
             if (op.getMontoCapital() != null) montoCapital = montoCapital.add(op.getMontoCapital());
             if (op.getEstado() != null) peorEstado = priorize(peorEstado, op.getEstado(), ESTADO_PRIORIDAD);
+            if (op.getEstadoCartera() != null) peorEstadoCartera = priorize(peorEstadoCartera, op.getEstadoCartera(), ESTADO_CARTERA_PRIORIDAD);
             if (op.getEtapa() != null) peorEtapa = priorize(peorEtapa, op.getEtapa(), ETAPA_PRIORIDAD);
         }
 
@@ -215,6 +218,7 @@ public class ClienteService {
                 .empresas(List.copyOf(empresas))
                 .agencias(List.copyOf(agencias))
                 .estado(peorEstado)
+                .estadoCartera(peorEstadoCartera)
                 .etapa(peorEtapa)
                 .montoTotal(montoTotal)
                 .montoCapital(montoCapital)
