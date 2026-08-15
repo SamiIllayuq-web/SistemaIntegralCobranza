@@ -19,6 +19,7 @@
     "referencia":      16,
     "telefono":        17,
     "dni":             18,
+    "moneda":         19,
     "montoCapital":    20,
     "montoTotal":      21,
     "tipoCredito":     28,
@@ -26,9 +27,8 @@
     "montoAprobado":   38,
     "fechaAceptacionDemanda":  51,
     "fechaEnvioJudicial":      52,
-    "fechaAsignacionAbogado":  53,
-    "fechaCastigo":    54,
-    "tipoFondo":      130
+    "fechaAsignacionAbogado":  54,
+    "fechaCastigo":    55
   },
   "numberFormat": "#,##0.00",
   "dateFormat": "yyyy-MM-dd HH:mm:ss"
