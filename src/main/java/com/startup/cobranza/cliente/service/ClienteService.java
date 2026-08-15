@@ -13,7 +13,9 @@ import com.startup.cobranza.operacion.entity.Operacion;
 import com.startup.cobranza.operacion.repository.OperacionRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -98,11 +100,18 @@ public class ClienteService {
     }
 
     private Page<ClienteBandejaDTO> listarBandejaSimple(Pageable pageable) {
-        Page<Cliente> clientesPage = clienteRepository.findByActivoTrue(pageable);
+        // El sort del pageable puede venir con "cliente.nombreCompleto" (del controller)
+        // pero ClienteRepository.findByActivoTrue opera sobre Cliente, que tiene nombreCompleto directo.
+        // Creamos un pageable limpio con sort correcto.
+        Pageable cleanPageable = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by("nombreCompleto").ascending());
+        Page<Cliente> clientesPage = clienteRepository.findByActivoTrue(cleanPageable);
         List<ClienteBandejaDTO> dtos = clientesPage.getContent().stream()
                 .map(this::toBandejaDTO)
                 .toList();
-        return new PageImpl<>(dtos, pageable, clientesPage.getTotalElements());
+        return new PageImpl<>(dtos, cleanPageable, clientesPage.getTotalElements());
     }
 
     private Page<ClienteBandejaDTO> listarBandejaConFiltros(ClienteBusquedaDTO filtros, Pageable pageable) {
