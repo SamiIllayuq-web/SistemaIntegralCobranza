@@ -57,6 +57,7 @@ public class ClienteController {
                           @RequestParam(required = false) String dni,
                           @RequestParam(required = false) Long empresaId,
                           @RequestParam(required = false) String estado,
+                          @RequestParam(required = false) String estadoCartera,
                           @RequestParam(required = false) String etapa,
                           @RequestParam(required = false) Integer minMora,
                           @RequestParam(required = false) Integer maxMora,
@@ -71,6 +72,7 @@ public class ClienteController {
                 .dni(dni)
                 .empresaId(empresaId)
                 .estado(estado)
+                .estadoCartera(estadoCartera)
                 .etapa(etapa)
                 .minMora(minMora)
                 .maxMora(maxMora)
@@ -78,7 +80,7 @@ public class ClienteController {
                 .maxMonto(maxMonto)
                 .build();
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by("nombreCompleto").ascending());
+        Pageable pageable = PageRequest.of(page, size, Sort.by("cliente.nombreCompleto").ascending());
         Page<ClienteBandejaDTO> pagina = clienteService.listarBandeja(filtros, pageable);
 
         List<EmpresaDTO> empresas = empresaService.listarActivas();
