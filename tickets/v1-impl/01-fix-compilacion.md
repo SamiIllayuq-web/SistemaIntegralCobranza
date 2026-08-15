@@ -4,7 +4,9 @@
 
 **Blocked by:** Ninguno — puede empezar inmediatamente.
 
-**Status:** ready-for-agent
+**Status:** done
+
+**Resolved:** 2026-08-14 (compilación OK — fix real hecho en ticket 003-compilacion-lombok 2026-07-25)
 
 - [ ] `mvn compile` pasa sin errores
 - [ ] Los errores de Lombok están resueltos (annotation processor configurado correctamente)

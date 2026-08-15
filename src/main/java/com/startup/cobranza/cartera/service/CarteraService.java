@@ -95,20 +95,8 @@ public class CarteraService {
             throw new CarteraException("Solo se permiten archivos Excel (.xlsx)");
         }
 
-        // Detectar perfil según nombre del archivo
-        if (nombreOriginal.toLowerCase().contains("avance") || nombreOriginal.toLowerCase().contains("procesal")) {
-            cargarPerfil(PERFIL_EXCEL_AVANCE);
-        } else {
-            cargarPerfil(PERFIL_CAJA_AREQUIPA);
-        }
-
         Empresa empresa = empresaRepository.findById(empresaId)
                 .orElseThrow(() -> new CarteraException("Empresa no encontrada: " + empresaId));
-
-        // sheetName puede estar en el perfil; si no, default a "Hoja2"
-        String sheetName = perfilJson.has("sheetName") ? perfilJson.get("sheetName").asText() : "Hoja2";
-        int headerRowIdx = perfilJson.has("headerRow") ? perfilJson.get("headerRow").asInt() - 1 : 0;
-        boolean skipRowsWithoutDni = perfilJson.has("skipRowsWithoutDni") && perfilJson.get("skipRowsWithoutDni").asBoolean();
 
         int total = 0;
         int creados = 0;
@@ -119,35 +107,56 @@ public class CarteraService {
         try (InputStream is = archivo.getInputStream();
              Workbook workbook = new XSSFWorkbook(is)) {
 
-            Sheet sheet = workbook.getSheet(sheetName);
-            if (sheet == null) {
-                // fallback: buscar por índice 0
-                sheet = workbook.getSheetAt(0);
-            }
+            // Las 3 hojas de complete.xls:
+            // Hoja 0 = CARTERA SELVA CENTRAL → estadoCartera ACTIVO
+            // Hoja 1 = CARTERA C. CREDITO CANCELADO → estadoCartera CANCELADA
+            // Hoja 2 = CARPETAS DEVUELTAS. → estadoCartera DEVUELTA
+            String[] sheetNames = {
+                "CARTERA SELVA CENTRAL",
+                "CARTERA C. CREDITO CANCELADO",
+                "CARPETAS DEVUELTAS."
+            };
+            String[] estadoDefaults = { "ACTIVO", "CANCELADA", "DEVUELTA" };
 
-            Row headerRow = sheet.getRow(headerRowIdx);
-            if (headerRow == null) {
-                throw new CarteraException("No se encontró la fila de encabezado en la posición " + (headerRowIdx + 1));
-            }
+            for (int s = 0; s < sheetNames.length; s++) {
+                Sheet sheet = workbook.getSheet(sheetNames[s]);
+                if (sheet == null) continue;
 
-            JsonNode columns = perfilJson.get("columns");
+                // Detectar perfil según nombre de hoja
+                if (sheetNames[s].toLowerCase().contains("avance") || sheetNames[s].toLowerCase().contains("procesal")) {
+                    cargarPerfil(PERFIL_EXCEL_AVANCE);
+                } else {
+                    cargarPerfil(PERFIL_CAJA_AREQUIPA);
+                }
 
-            int lastRowNum = sheet.getLastRowNum();
-            for (int i = headerRowIdx + 1; i <= lastRowNum; i++) {
-                Row row = sheet.getRow(i);
-                if (row == null || isRowEmpty(row, columns)) continue;
+                JsonNode columns = perfilJson.get("columns");
+                int headerRowIdx = perfilJson.has("headerRow") ? perfilJson.get("headerRow").asInt() - 1 : 0;
+                boolean skipRowsWithoutDni = perfilJson.has("skipRowsWithoutDni") && perfilJson.get("skipRowsWithoutDni").asBoolean();
+                String estadoCarteraDefault = estadoDefaults[s];
 
-                total++;
-                try {
-                    ParseResult result = parseRow(row, columns, empresa, skipRowsWithoutDni);
-                    if (result.esNuevo) {
-                        creados++;
-                    } else {
-                        actualizados++;
+                Row headerRow = sheet.getRow(headerRowIdx);
+                if (headerRow == null) {
+                    listaErrores.add("Hoja '" + sheetNames[s] + "': no se encontró fila de encabezado en posición " + (headerRowIdx + 1));
+                    continue;
+                }
+
+                int lastRowNum = sheet.getLastRowNum();
+                for (int i = headerRowIdx + 1; i <= lastRowNum; i++) {
+                    Row row = sheet.getRow(i);
+                    if (row == null || isRowEmpty(row, columns)) continue;
+
+                    total++;
+                    try {
+                        ParseResult result = parseRow(row, columns, empresa, skipRowsWithoutDni, estadoCarteraDefault);
+                        if (result.esNuevo) {
+                            creados++;
+                        } else {
+                            actualizados++;
+                        }
+                    } catch (Exception e) {
+                        errores++;
+                        listaErrores.add("Hoja '" + sheetNames[s] + "' fila " + (i + 1) + ": " + e.getMessage());
                     }
-                } catch (Exception e) {
-                    errores++;
-                    listaErrores.add("Fila " + (i + 1) + ": " + e.getMessage());
                 }
             }
 
@@ -175,7 +184,8 @@ public class CarteraService {
 
     private record ParseResult(Cliente cliente, Operacion operacion, boolean esNuevo) {}
 
-    private ParseResult parseRow(Row row, JsonNode columns, Empresa empresa, boolean skipRowsWithoutDni) {
+    private ParseResult parseRow(Row row, JsonNode columns, Empresa empresa,
+                                 boolean skipRowsWithoutDni, String estadoCarteraDefault) {
         // 1) Leer campos crudos del Excel según el perfil
         String dni = normalizarDni(getCellString(row, columns, "dni"));
         String nombreCompleto = getCellString(row, columns, "nombreCompleto");
@@ -190,6 +200,7 @@ public class CarteraService {
         String etapa = getCellString(row, columns, "etapa");
         String situacion = getCellString(row, columns, "situacion");
         Integer diasMora = getCellInteger(row, columns, "diasMora");
+        String observacion = getCellString(row, columns, "observacion");
 
         // Campos judiciales
         String numeroExpediente = getCellString(row, columns, "numeroExpediente");
@@ -204,7 +215,17 @@ public class CarteraService {
         String codigoExpCautelar = getCellString(row, columns, "codigoExpCautelar");
         Boolean incidente = getCellBoolean(row, columns, "incidente");
 
-        // 2) Validar campos obligatorios
+        // 5 campos nuevos (solo hojas 2 y 3)
+        LocalDate fechaDesembolso = getCellLocalDate(row, columns, "fechaDesembolso");
+        BigDecimal importeDesembolso = getCellBigDecimal(row, columns, "importeDesembolso");
+        String etapaProcesalTexto = getCellString(row, columns, "etapaProcesal");
+        String actoPendiente = getCellString(row, columns, "actoPendiente");
+        LocalDate fechaUltimoEstadoProceso = getCellLocalDate(row, columns, "fechaUltimoEstadoProceso");
+
+        // 2) Detectar estadoCartera desde OBSERVACION (override del default de la hoja)
+        String estadoCartera = detectarEstadoCartera(estadoCarteraDefault, observacion);
+
+        // 3) Validar campos obligatorios
         if (dni == null || dni.isEmpty()) {
             if (skipRowsWithoutDni) {
                 throw new IllegalArgumentException("DNI vacío — saltando fila");
@@ -218,7 +239,7 @@ public class CarteraService {
             throw new IllegalArgumentException("Número de operación vacío");
         }
 
-        // 3) Find-or-create Cliente por DNI
+        // 4) Find-or-create Cliente por DNI
         Cliente cliente = clienteRepository.findByDni(dni).orElse(null);
         boolean clienteNuevo = false;
         if (cliente == null) {
@@ -230,14 +251,13 @@ public class CarteraService {
             cliente = clienteRepository.save(cliente);
             clienteNuevo = true;
         } else {
-            // Actualizar datos personales si cambiaron
             if (nombreCompleto != null && !nombreCompleto.isBlank()) {
                 cliente.setNombreCompleto(nombreCompleto);
             }
             clienteRepository.save(cliente);
         }
 
-        // 4) Find-or-create Agencia por nombre + empresa
+        // 5) Find-or-create Agencia por nombre + empresa
         Agencia agencia = null;
         if (agenciaNombre != null && !agenciaNombre.isBlank()) {
             agencia = agenciaRepository.findByEmpresaIdAndActivoTrue(empresa.getId()).stream()
@@ -254,7 +274,7 @@ public class CarteraService {
             }
         }
 
-        // 5) Upsert Operacion por (empresa_id, cuenta, numero_operacion)
+        // 6) Upsert Operacion por (empresa_id, cuenta, numero_operacion)
         Operacion operacion = operacionRepository
                 .findByEmpresaIdAndCuentaAndNumeroOperacion(empresa.getId(), cuenta.trim(), numeroOperacion.trim())
                 .orElse(null);
@@ -302,6 +322,12 @@ public class CarteraService {
                     .fechaRemate3(getCellLocalDate(row, columns, "fechaRemate3"))
                     .observacionActos(getCellString(row, columns, "observacionActos"))
                     .comentario(getCellString(row, columns, "comentario"))
+                    .estadoCartera(estadoCartera)
+                    .fechaDesembolso(fechaDesembolso)
+                    .importeDesembolso(importeDesembolso)
+                    .etapaProcesalTexto(etapaProcesalTexto)
+                    .actoPendiente(actoPendiente)
+                    .fechaUltimoEstadoProceso(fechaUltimoEstadoProceso)
                     .activo(true)
                     .build();
             operacionNueva = true;
@@ -344,10 +370,16 @@ public class CarteraService {
             operacion.setFechaRemate3(getCellLocalDate(row, columns, "fechaRemate3"));
             operacion.setObservacionActos(getCellString(row, columns, "observacionActos"));
             operacion.setComentario(getCellString(row, columns, "comentario"));
+            operacion.setEstadoCartera(estadoCartera);
+            operacion.setFechaDesembolso(fechaDesembolso);
+            operacion.setImporteDesembolso(importeDesembolso);
+            operacion.setEtapaProcesalTexto(etapaProcesalTexto);
+            operacion.setActoPendiente(actoPendiente);
+            operacion.setFechaUltimoEstadoProceso(fechaUltimoEstadoProceso);
         }
         operacion = operacionRepository.save(operacion);
 
-        // 6) BienEmbargado — solo si hay partida registral
+        // 7) BienEmbargado — solo si hay partida registral
         String partidaRegistral = getCellString(row, columns, "numeroFichaRegistral");
         if (partidaRegistral != null && !partidaRegistral.isBlank()) {
             BienEmbargado bien = BienEmbargado.builder()
@@ -380,6 +412,29 @@ public class CarteraService {
         return new ParseResult(cliente, operacion, clienteNuevo || operacionNueva);
     }
 
+    /**
+     * Detecta el estado de cartera desde la columna OBSERVACION.
+     * Override del estado default de la hoja (CANCELADA para hoja 2, DEVUELTA para hoja 3).
+     */
+    private String detectarEstadoCartera(String estadoDefault, String observacion) {
+        if (observacion == null || observacion.isBlank()) {
+            return estadoDefault;
+        }
+        String upper = observacion.toUpperCase();
+        if (upper.contains("CANCELADO") || upper.contains("CANCELO")) {
+            return "CANCELADA";
+        }
+        if (upper.contains("CARTERA VENDIDA") || upper.contains("VENDIDA")) {
+            return "VENDIDA";
+        }
+        if (upper.contains("DESASIGNADA")) {
+            return "DESASIGNADA";
+        }
+        if (upper.contains("DEVUELTA")) {
+            return "DEVUELTA";
+        }
+        return estadoDefault;
+    }
     // ---- helpers de lectura de celdas ----
 
     private String getCellString(Row row, JsonNode columns, String field) {

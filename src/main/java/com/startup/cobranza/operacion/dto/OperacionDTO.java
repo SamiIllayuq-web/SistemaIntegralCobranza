@@ -63,6 +63,12 @@ public class OperacionDTO {
     private LocalDate fechaRemate3;
     private String observacionActos;
     private String comentario;
+    private String estadoCartera;
+    private LocalDate fechaDesembolso;
+    private BigDecimal importeDesembolso;
+    private String etapaProcesalTexto;
+    private String actoPendiente;
+    private LocalDate fechaUltimoEstadoProceso;
 
     public OperacionDTO() {}
 
@@ -218,6 +224,18 @@ public class OperacionDTO {
     public void setObservacionActos(String observacionActos) { this.observacionActos = observacionActos; }
     public String getComentario() { return comentario; }
     public void setComentario(String comentario) { this.comentario = comentario; }
+    public String getEstadoCartera() { return estadoCartera; }
+    public void setEstadoCartera(String estadoCartera) { this.estadoCartera = estadoCartera; }
+    public LocalDate getFechaDesembolso() { return fechaDesembolso; }
+    public void setFechaDesembolso(LocalDate fechaDesembolso) { this.fechaDesembolso = fechaDesembolso; }
+    public BigDecimal getImporteDesembolso() { return importeDesembolso; }
+    public void setImporteDesembolso(BigDecimal importeDesembolso) { this.importeDesembolso = importeDesembolso; }
+    public String getEtapaProcesalTexto() { return etapaProcesalTexto; }
+    public void setEtapaProcesalTexto(String etapaProcesalTexto) { this.etapaProcesalTexto = etapaProcesalTexto; }
+    public String getActoPendiente() { return actoPendiente; }
+    public void setActoPendiente(String actoPendiente) { this.actoPendiente = actoPendiente; }
+    public LocalDate getFechaUltimoEstadoProceso() { return fechaUltimoEstadoProceso; }
+    public void setFechaUltimoEstadoProceso(LocalDate fechaUltimoEstadoProceso) { this.fechaUltimoEstadoProceso = fechaUltimoEstadoProceso; }
 
     public static Builder builder() { return new Builder(); }
 
@@ -275,6 +293,12 @@ public class OperacionDTO {
         private LocalDate fechaRemate3;
         private String observacionActos;
         private String comentario;
+        private String estadoCartera;
+        private LocalDate fechaDesembolso;
+        private BigDecimal importeDesembolso;
+        private String etapaProcesalTexto;
+        private String actoPendiente;
+        private LocalDate fechaUltimoEstadoProceso;
 
         public Builder id(Long v) { id = v; return this; }
         public Builder clienteId(Long v) { clienteId = v; return this; }
@@ -329,6 +353,12 @@ public class OperacionDTO {
         public Builder fechaRemate3(LocalDate v) { fechaRemate3 = v; return this; }
         public Builder observacionActos(String v) { observacionActos = v; return this; }
         public Builder comentario(String v) { comentario = v; return this; }
+        public Builder estadoCartera(String v) { estadoCartera = v; return this; }
+        public Builder fechaDesembolso(LocalDate v) { fechaDesembolso = v; return this; }
+        public Builder importeDesembolso(BigDecimal v) { importeDesembolso = v; return this; }
+        public Builder etapaProcesalTexto(String v) { etapaProcesalTexto = v; return this; }
+        public Builder actoPendiente(String v) { actoPendiente = v; return this; }
+        public Builder fechaUltimoEstadoProceso(LocalDate v) { fechaUltimoEstadoProceso = v; return this; }
 
         public OperacionDTO build() {
             OperacionDTO dto = new OperacionDTO(id, clienteId, clienteNombre, clienteDni, empresaId, empresaNombre,
@@ -358,6 +388,12 @@ public class OperacionDTO {
             dto.setFechaRemate3(fechaRemate3);
             dto.setObservacionActos(observacionActos);
             dto.setComentario(comentario);
+            dto.setEstadoCartera(estadoCartera);
+            dto.setFechaDesembolso(fechaDesembolso);
+            dto.setImporteDesembolso(importeDesembolso);
+            dto.setEtapaProcesalTexto(etapaProcesalTexto);
+            dto.setActoPendiente(actoPendiente);
+            dto.setFechaUltimoEstadoProceso(fechaUltimoEstadoProceso);
             return dto;
         }
     }

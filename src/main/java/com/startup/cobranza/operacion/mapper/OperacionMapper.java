@@ -63,6 +63,12 @@ public class OperacionMapper {
                 .fechaRemate3(entity.getFechaRemate3())
                 .observacionActos(entity.getObservacionActos())
                 .comentario(entity.getComentario())
+                .estadoCartera(entity.getEstadoCartera())
+                .fechaDesembolso(entity.getFechaDesembolso())
+                .importeDesembolso(entity.getImporteDesembolso())
+                .etapaProcesalTexto(entity.getEtapaProcesalTexto())
+                .actoPendiente(entity.getActoPendiente())
+                .fechaUltimoEstadoProceso(entity.getFechaUltimoEstadoProceso())
                 .build();
 
         if (entity.getCliente() != null) {
@@ -144,7 +150,14 @@ public class OperacionMapper {
                 .distritoJudicial(dto.getDistritoJudicial())
                 .numeroJuzgado(dto.getNumeroJuzgado())
                 .abogado(abogado)
-                .activo(dto.getActivo())
+                .observacionActos(dto.getObservacionActos())
+                .comentario(dto.getComentario())
+                .estadoCartera(dto.getEstadoCartera())
+                .fechaDesembolso(dto.getFechaDesembolso())
+                .importeDesembolso(dto.getImporteDesembolso())
+                .etapaProcesalTexto(dto.getEtapaProcesalTexto())
+                .actoPendiente(dto.getActoPendiente())
+                .fechaUltimoEstadoProceso(dto.getFechaUltimoEstadoProceso())
                 .build();
     }
 
@@ -177,6 +190,12 @@ public class OperacionMapper {
                 .abogadoId(entity.getAbogado() != null ? entity.getAbogado().getId() : null)
                 .observacionActos(entity.getObservacionActos())
                 .comentario(entity.getComentario())
+                .estadoCartera(entity.getEstadoCartera())
+                .fechaDesembolso(entity.getFechaDesembolso() != null ? entity.getFechaDesembolso().toString() : null)
+                .importeDesembolso(entity.getImporteDesembolso() != null ? entity.getImporteDesembolso().toString() : null)
+                .etapaProcesalTexto(entity.getEtapaProcesalTexto())
+                .actoPendiente(entity.getActoPendiente())
+                .fechaUltimoEstadoProceso(entity.getFechaUltimoEstadoProceso() != null ? entity.getFechaUltimoEstadoProceso().toString() : null)
                 .bienesEmbargados(entity.getBienesEmbargados() != null
                         ? entity.getBienesEmbargados().stream().map(this::toBienEmbargadoDTO).toList()
                         : null)
@@ -212,6 +231,15 @@ public class OperacionMapper {
                 .abogado(abogado)
                 .observacionActos(form.getObservacionActos())
                 .comentario(form.getComentario())
+                .estadoCartera(form.getEstadoCartera())
+                .fechaDesembolso(form.getFechaDesembolso() != null && !form.getFechaDesembolso().isEmpty()
+                        ? java.time.LocalDate.parse(form.getFechaDesembolso()) : null)
+                .importeDesembolso(form.getImporteDesembolso() != null && !form.getImporteDesembolso().isEmpty()
+                        ? new java.math.BigDecimal(form.getImporteDesembolso()) : null)
+                .etapaProcesalTexto(form.getEtapaProcesalTexto())
+                .actoPendiente(form.getActoPendiente())
+                .fechaUltimoEstadoProceso(form.getFechaUltimoEstadoProceso() != null && !form.getFechaUltimoEstadoProceso().isEmpty()
+                        ? java.time.LocalDate.parse(form.getFechaUltimoEstadoProceso()) : null)
                 .build();
     }
 }

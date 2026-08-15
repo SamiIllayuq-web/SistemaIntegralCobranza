@@ -164,6 +164,29 @@ public class Operacion {
     @Column(name = "comentario", columnDefinition = "TEXT")
     private String comentario;
 
+    // ─── Estado de cartera (5 estados) ─────────────────────────────────
+    @Column(name = "estado_cartera")
+    private String estadoCartera;
+
+    // ─── Datos del desembolso ──────────────────────────────────────────
+    @Column(name = "fecha_desembolso")
+    private LocalDate fechaDesembolso;
+
+    @Column(name = "importe_desembolso", precision = 15, scale = 2)
+    private BigDecimal importeDesembolso;
+
+    // ─── Etapa procesal (texto libre para nuevos valores) ─────────────
+    @Column(name = "etapa_procesal_texto")
+    private String etapaProcesalTexto;
+
+    // ─── Acto pendiente ───────────────────────────────────────────────
+    @Column(name = "acto_pendiente", columnDefinition = "TEXT")
+    private String actoPendiente;
+
+    // ─── Fecha último estado proceso ──────────────────────────────────
+    @Column(name = "fecha_ultimo_estado_proceso")
+    private LocalDate fechaUltimoEstadoProceso;
+
     @OneToMany(mappedBy = "operacion", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BienEmbargado> bienesEmbargados = new ArrayList<>();
 
@@ -185,8 +208,21 @@ public class Operacion {
                      String etapa, String observacion, String rango, String analista,
                      String analistaSenior, String numeroExpediente, String tipoProceso,
                      String tipoJuzgado, String distritoJudicial, String numeroJuzgado,
-                     Usuario abogado, List<BienEmbargado> bienesEmbargados, Boolean activo, LocalDateTime fechaCreacion,
-                     LocalDateTime fechaActualizacion) {
+                     Usuario abogado, Boolean trans, Boolean busquedaBienes,
+                     BigDecimal montoDemandado, String escribanoLegal,
+                     String codigoExpCautelar, Boolean incidente,
+                     LocalDate fechaPresentacion, LocalDate fechaInadmisiblePrincipal,
+                     LocalDate fechaAdmisionPrincipal, LocalDate fechaAudienciaUnica,
+                     LocalDate fechaAutoFinal, LocalDate fechaConsentimiento,
+                     LocalDate fechaEjecutoriada, LocalDate fechaIngresoEjecucion,
+                     LocalDate fechaTasacion, LocalDate fechaNombramientoMartillero,
+                     LocalDate fechaRemate1, LocalDate fechaRemate2, LocalDate fechaRemate3,
+                     String observacionActos, String comentario,
+                     String estadoCartera, LocalDate fechaDesembolso,
+                     BigDecimal importeDesembolso, String etapaProcesalTexto,
+                     String actoPendiente, LocalDate fechaUltimoEstadoProceso,
+                     List<BienEmbargado> bienesEmbargados, Boolean activo,
+                     LocalDateTime fechaCreacion, LocalDateTime fechaActualizacion) {
         this.id = id;
         this.cliente = cliente;
         this.empresa = empresa;
@@ -211,6 +247,33 @@ public class Operacion {
         this.distritoJudicial = distritoJudicial;
         this.numeroJuzgado = numeroJuzgado;
         this.abogado = abogado;
+        this.trans = trans;
+        this.busquedaBienes = busquedaBienes;
+        this.montoDemandado = montoDemandado;
+        this.escribanoLegal = escribanoLegal;
+        this.codigoExpCautelar = codigoExpCautelar;
+        this.incidente = incidente;
+        this.fechaPresentacion = fechaPresentacion;
+        this.fechaInadmisiblePrincipal = fechaInadmisiblePrincipal;
+        this.fechaAdmisionPrincipal = fechaAdmisionPrincipal;
+        this.fechaAudienciaUnica = fechaAudienciaUnica;
+        this.fechaAutoFinal = fechaAutoFinal;
+        this.fechaConsentimiento = fechaConsentimiento;
+        this.fechaEjecutoriada = fechaEjecutoriada;
+        this.fechaIngresoEjecucion = fechaIngresoEjecucion;
+        this.fechaTasacion = fechaTasacion;
+        this.fechaNombramientoMartillero = fechaNombramientoMartillero;
+        this.fechaRemate1 = fechaRemate1;
+        this.fechaRemate2 = fechaRemate2;
+        this.fechaRemate3 = fechaRemate3;
+        this.observacionActos = observacionActos;
+        this.comentario = comentario;
+        this.estadoCartera = estadoCartera;
+        this.fechaDesembolso = fechaDesembolso;
+        this.importeDesembolso = importeDesembolso;
+        this.etapaProcesalTexto = etapaProcesalTexto;
+        this.actoPendiente = actoPendiente;
+        this.fechaUltimoEstadoProceso = fechaUltimoEstadoProceso;
         this.bienesEmbargados = bienesEmbargados;
         this.activo = activo;
         this.fechaCreacion = fechaCreacion;
@@ -315,6 +378,18 @@ public class Operacion {
     public void setObservacionActos(String observacionActos) { this.observacionActos = observacionActos; }
     public String getComentario() { return comentario; }
     public void setComentario(String comentario) { this.comentario = comentario; }
+    public String getEstadoCartera() { return estadoCartera; }
+    public void setEstadoCartera(String estadoCartera) { this.estadoCartera = estadoCartera; }
+    public LocalDate getFechaDesembolso() { return fechaDesembolso; }
+    public void setFechaDesembolso(LocalDate fechaDesembolso) { this.fechaDesembolso = fechaDesembolso; }
+    public BigDecimal getImporteDesembolso() { return importeDesembolso; }
+    public void setImporteDesembolso(BigDecimal importeDesembolso) { this.importeDesembolso = importeDesembolso; }
+    public String getEtapaProcesalTexto() { return etapaProcesalTexto; }
+    public void setEtapaProcesalTexto(String etapaProcesalTexto) { this.etapaProcesalTexto = etapaProcesalTexto; }
+    public String getActoPendiente() { return actoPendiente; }
+    public void setActoPendiente(String actoPendiente) { this.actoPendiente = actoPendiente; }
+    public LocalDate getFechaUltimoEstadoProceso() { return fechaUltimoEstadoProceso; }
+    public void setFechaUltimoEstadoProceso(LocalDate fechaUltimoEstadoProceso) { this.fechaUltimoEstadoProceso = fechaUltimoEstadoProceso; }
 
     public static Builder builder() { return new Builder(); }
 
@@ -398,6 +473,12 @@ public class Operacion {
         private LocalDate fechaRemate3;
         private String observacionActos;
         private String comentario;
+        private String estadoCartera;
+        private LocalDate fechaDesembolso;
+        private BigDecimal importeDesembolso;
+        private String etapaProcesalTexto;
+        private String actoPendiente;
+        private LocalDate fechaUltimoEstadoProceso;
 
         public Builder trans(Boolean v) { trans = v; return this; }
         public Builder busquedaBienes(Boolean v) { busquedaBienes = v; return this; }
@@ -420,6 +501,12 @@ public class Operacion {
         public Builder fechaRemate3(LocalDate v) { fechaRemate3 = v; return this; }
         public Builder observacionActos(String v) { observacionActos = v; return this; }
         public Builder comentario(String v) { comentario = v; return this; }
+        public Builder estadoCartera(String v) { estadoCartera = v; return this; }
+        public Builder fechaDesembolso(LocalDate v) { fechaDesembolso = v; return this; }
+        public Builder importeDesembolso(BigDecimal v) { importeDesembolso = v; return this; }
+        public Builder etapaProcesalTexto(String v) { etapaProcesalTexto = v; return this; }
+        public Builder actoPendiente(String v) { actoPendiente = v; return this; }
+        public Builder fechaUltimoEstadoProceso(LocalDate v) { fechaUltimoEstadoProceso = v; return this; }
 
         public Operacion build() {
             Operacion o = new Operacion();
@@ -470,6 +557,12 @@ public class Operacion {
             o.setFechaRemate3(fechaRemate3);
             o.setObservacionActos(observacionActos);
             o.setComentario(comentario);
+            o.setEstadoCartera(estadoCartera);
+            o.setFechaDesembolso(fechaDesembolso);
+            o.setImporteDesembolso(importeDesembolso);
+            o.setEtapaProcesalTexto(etapaProcesalTexto);
+            o.setActoPendiente(actoPendiente);
+            o.setFechaUltimoEstadoProceso(fechaUltimoEstadoProceso);
             return o;
         }
     }

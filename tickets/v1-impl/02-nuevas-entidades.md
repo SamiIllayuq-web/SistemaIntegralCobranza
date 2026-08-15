@@ -4,7 +4,9 @@
 
 **Blocked by:** 01 (fix de compilación)
 
-**Status:** ready-for-agent
+**Status:** done
+
+**Resolved:** 2026-08-14 (entidades ya existen en código — verificadas: Cliente, Operacion, BienEmbargado, Agencia, Empresa, AuditoriaEvento con repositorios)
 
 - [ ] Entidad `Cliente` en nuevo paquete: id, dni (único), nombre_completo, telefono, telefono2, telefono3, direccion, email, activo, created_at, updated_at, deleted_at
 - [ ] Entidad `Operacion`: id, cliente_id, empresa_id, agencia_id, cuenta, numero_operacion (unique index juntos), monto_capital, monto_total, dias_mora, moneda, tipo_credito, situacion, estado, etapa, observacion, rango, analista, analista_senior, numero_expediente, tipo_proceso, tipo_juzgado, distrito_judicial, numero_juzgado, activo, created_at, updated_at

@@ -31,6 +31,12 @@ public class OperacionFormDTO {
     private Long abogadoId;
     private String observacionActos;
     private String comentario;
+    private String estadoCartera;
+    private String fechaDesembolso;
+    private String importeDesembolso;
+    private String etapaProcesalTexto;
+    private String actoPendiente;
+    private String fechaUltimoEstadoProceso;
     private List<BienEmbargadoDTO> bienesEmbargados;
 
     public OperacionFormDTO() {}
@@ -123,6 +129,18 @@ public class OperacionFormDTO {
     public void setObservacionActos(String observacionActos) { this.observacionActos = observacionActos; }
     public String getComentario() { return comentario; }
     public void setComentario(String comentario) { this.comentario = comentario; }
+    public String getEstadoCartera() { return estadoCartera; }
+    public void setEstadoCartera(String estadoCartera) { this.estadoCartera = estadoCartera; }
+    public String getFechaDesembolso() { return fechaDesembolso; }
+    public void setFechaDesembolso(String fechaDesembolso) { this.fechaDesembolso = fechaDesembolso; }
+    public String getImporteDesembolso() { return importeDesembolso; }
+    public void setImporteDesembolso(String importeDesembolso) { this.importeDesembolso = importeDesembolso; }
+    public String getEtapaProcesalTexto() { return etapaProcesalTexto; }
+    public void setEtapaProcesalTexto(String etapaProcesalTexto) { this.etapaProcesalTexto = etapaProcesalTexto; }
+    public String getActoPendiente() { return actoPendiente; }
+    public void setActoPendiente(String actoPendiente) { this.actoPendiente = actoPendiente; }
+    public String getFechaUltimoEstadoProceso() { return fechaUltimoEstadoProceso; }
+    public void setFechaUltimoEstadoProceso(String fechaUltimoEstadoProceso) { this.fechaUltimoEstadoProceso = fechaUltimoEstadoProceso; }
     public List<BienEmbargadoDTO> getBienesEmbargados() { return bienesEmbargados; }
     public void setBienesEmbargados(List<BienEmbargadoDTO> bienesEmbargados) { this.bienesEmbargados = bienesEmbargados; }
 
@@ -155,6 +173,12 @@ public class OperacionFormDTO {
         private Long abogadoId;
         private String observacionActos;
         private String comentario;
+        private String estadoCartera;
+        private String fechaDesembolso;
+        private String importeDesembolso;
+        private String etapaProcesalTexto;
+        private String actoPendiente;
+        private String fechaUltimoEstadoProceso;
         private List<BienEmbargadoDTO> bienesEmbargados;
 
         public Builder id(Long v) { id = v; return this; }
@@ -183,6 +207,12 @@ public class OperacionFormDTO {
         public Builder abogadoId(Long v) { abogadoId = v; return this; }
         public Builder observacionActos(String v) { observacionActos = v; return this; }
         public Builder comentario(String v) { comentario = v; return this; }
+        public Builder estadoCartera(String v) { estadoCartera = v; return this; }
+        public Builder fechaDesembolso(String v) { fechaDesembolso = v; return this; }
+        public Builder importeDesembolso(String v) { importeDesembolso = v; return this; }
+        public Builder etapaProcesalTexto(String v) { etapaProcesalTexto = v; return this; }
+        public Builder actoPendiente(String v) { actoPendiente = v; return this; }
+        public Builder fechaUltimoEstadoProceso(String v) { fechaUltimoEstadoProceso = v; return this; }
         public Builder bienesEmbargados(List<BienEmbargadoDTO> v) { bienesEmbargados = v; return this; }
 
         public OperacionFormDTO build() {
