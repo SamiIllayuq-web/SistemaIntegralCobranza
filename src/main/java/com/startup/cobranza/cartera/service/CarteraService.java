@@ -108,38 +108,36 @@ public class CarteraService {
         try (InputStream is = archivo.getInputStream();
              Workbook workbook = new XSSFWorkbook(is)) {
 
-            // Las 3 hojas de complete.xls:
-            // Hoja 0 = CARTERA SELVA CENTRAL → estadoCartera ACTIVO
-            // Hoja 1 = CARTERA C. CREDITO CANCELADO → estadoCartera CANCELADA
-            // Hoja 2 = CARPETAS DEVUELTAS. → estadoCartera DEVUELTA
-            String[] sheetNames = {
-                "CARTERA SELVA CENTRAL",
-                "CARTERA C. CREDITO CANCELADO",
-                "CARPETAS DEVUELTAS."
-            };
-            String[] estadoDefaults = { "ACTIVO", "CANCELADA", "DEVUELTA" };
-
-            for (int s = 0; s < sheetNames.length; s++) {
-                Sheet sheet = workbook.getSheet(sheetNames[s]);
+            // Iterar sobre las hojas reales del archivo Excel
+            for (int s = 0; s < workbook.getNumberOfSheets(); s++) {
+                Sheet sheet = workbook.getSheetAt(s);
+                String hojaNombre = sheet.getSheetName();
                 if (sheet == null) continue;
 
-                // Detectar perfil según nombre de hoja
-                if (sheetNames[s].toLowerCase().contains("avance") || sheetNames[s].toLowerCase().contains("procesal")) {
-                    cargarPerfil(PERFIL_EXCEL_AVANCE);
-                } else if (sheetNames[s].equalsIgnoreCase("Inventario")) {
-                    cargarPerfil(PERFIL_INVENTARIO_JUNIO);
+                // Determinar perfil y estado según nombre de hoja
+                String perfilPath;
+                String estadoCarteraDefault;
+
+                if (hojaNombre.equalsIgnoreCase("Inventario")) {
+                    perfilPath = PERFIL_INVENTARIO_JUNIO;
+                    estadoCarteraDefault = "ACTIVO";
+                } else if (hojaNombre.toLowerCase().contains("avance") || hojaNombre.toLowerCase().contains("procesal")) {
+                    perfilPath = PERFIL_EXCEL_AVANCE;
+                    estadoCarteraDefault = "ACTIVO";
                 } else {
-                    cargarPerfil(PERFIL_CAJA_AREQUIPA);
+                    // Para otras hojas未知, usar perfil default
+                    perfilPath = PERFIL_CAJA_AREQUIPA;
+                    estadoCarteraDefault = "ACTIVO";
                 }
 
+                cargarPerfil(perfilPath);
                 JsonNode columns = perfilJson.get("columns");
-                int headerRowIdx = perfilJson.has("headerRow") ? perfilJson.get("headerRow").asInt() - 1 : 0;
+                int headerRowIdx = perfilJson.has("headerRow") ? perfilJson.get("headerRow").asInt() : 0;
                 boolean skipRowsWithoutDni = perfilJson.has("skipRowsWithoutDni") && perfilJson.get("skipRowsWithoutDni").asBoolean();
-                String estadoCarteraDefault = estadoDefaults[s];
 
                 Row headerRow = sheet.getRow(headerRowIdx);
                 if (headerRow == null) {
-                    listaErrores.add("Hoja '" + sheetNames[s] + "': no se encontró fila de encabezado en posición " + (headerRowIdx + 1));
+                    listaErrores.add("Hoja '" + hojaNombre + "': no se encontró fila de encabezado en posición " + (headerRowIdx + 1));
                     continue;
                 }
 
@@ -158,7 +156,7 @@ public class CarteraService {
                         }
                     } catch (Exception e) {
                         errores++;
-                        listaErrores.add("Hoja '" + sheetNames[s] + "' fila " + (i + 1) + ": " + e.getMessage());
+                        listaErrores.add("Hoja '" + hojaNombre + "' fila " + (i + 1) + ": " + e.getMessage());
                     }
                 }
             }

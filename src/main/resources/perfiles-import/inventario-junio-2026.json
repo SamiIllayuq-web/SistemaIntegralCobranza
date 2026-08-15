@@ -6,7 +6,6 @@
   "sheetName": "Inventario",
   "skipRowsWithoutDni": true,
   "columns": {
-    "zona":              5,
     "agencia":           6,
     "analista":          7,
     "cuenta":            9,
