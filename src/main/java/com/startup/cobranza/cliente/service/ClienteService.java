@@ -109,6 +109,7 @@ public class ClienteService {
         Page<Long> clienteIdsPage = operacionRepository.findClienteIdsConFiltros(
                 filtros.getEmpresaId(),
                 filtros.getEstado(),
+                filtros.getEstadoCartera(),
                 filtros.getEtapa(),
                 filtros.getMinMora(),
                 filtros.getMaxMora(),
@@ -178,6 +179,7 @@ public class ClienteService {
                 cliente.getId(),
                 filtros.getEmpresaId(),
                 filtros.getEstado(),
+                filtros.getEstadoCartera(),
                 filtros.getEtapa(),
                 filtros.getMinMora(),
                 filtros.getMaxMora(),
