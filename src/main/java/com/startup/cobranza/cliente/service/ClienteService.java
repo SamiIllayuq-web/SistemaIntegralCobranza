@@ -115,7 +115,8 @@ public class ClienteService {
     }
 
     private Page<ClienteBandejaDTO> listarBandejaConFiltros(ClienteBusquedaDTO filtros, Pageable pageable) {
-        // 1) Obtener los clienteIds con los filtros aplicados
+        // Sin sort en el pageable porque el ORDER BY de DISTINCT debe estar en el SELECT (PostgreSQL)
+        Pageable unsortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
         Page<Long> clienteIdsPage = operacionRepository.findClienteIdsConFiltros(
                 filtros.getEmpresaId(),
                 filtros.getEstado(),
@@ -125,7 +126,7 @@ public class ClienteService {
                 filtros.getMaxMora(),
                 filtros.getMinMonto(),
                 filtros.getMaxMonto(),
-                pageable
+                unsortedPageable
         );
 
         // Si hay búsqueda por nombre o DNI, filtrar adicionalmente
