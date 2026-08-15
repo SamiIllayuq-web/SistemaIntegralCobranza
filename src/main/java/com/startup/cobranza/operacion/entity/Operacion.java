@@ -164,6 +164,33 @@ public class Operacion {
     @Column(name = "comentario", columnDefinition = "TEXT")
     private String comentario;
 
+    // ─── Ubicación geográfica ─────────────────────────────────────────
+    @Column(name = "zona")
+    private String zona;
+
+    @Column(name = "departamento")
+    private String departamento;
+
+    @Column(name = "provincia")
+    private String provincia;
+
+    @Column(name = "distrito")
+    private String distrito;
+
+    // ─── Datos de contacto del deudor ─────────────────────────────────
+    @Column(name = "direccion", columnDefinition = "TEXT")
+    private String direccion;
+
+    @Column(name = "referencia", columnDefinition = "TEXT")
+    private String referencia;
+
+    @Column(name = "telefono")
+    private String telefono;
+
+    // ─── Monto aprobado ───────────────────────────────────────────────
+    @Column(name = "monto_aprobado", precision = 15, scale = 2)
+    private BigDecimal montoAprobado;
+
     // ─── Estado de cartera (5 estados) ─────────────────────────────────
     @Column(name = "estado_cartera")
     private String estadoCartera;
@@ -186,6 +213,23 @@ public class Operacion {
     // ─── Fecha último estado proceso ──────────────────────────────────
     @Column(name = "fecha_ultimo_estado_proceso")
     private LocalDate fechaUltimoEstadoProceso;
+
+    // ─── Fechas judiciales ─────────────────────────────────────────────
+    @Column(name = "fecha_aceptacion_demanda")
+    private LocalDate fechaAceptacionDemanda;
+
+    @Column(name = "fecha_envio_judicial")
+    private LocalDate fechaEnvioJudicial;
+
+    @Column(name = "fecha_asignacion_abogado")
+    private LocalDate fechaAsignacionAbogado;
+
+    @Column(name = "fecha_castigo")
+    private LocalDate fechaCastigo;
+
+    // ─── Tipo fondo ────────────────────────────────────────────────────
+    @Column(name = "tipo_fondo")
+    private String tipoFondo;
 
     @OneToMany(mappedBy = "operacion", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BienEmbargado> bienesEmbargados = new ArrayList<>();
@@ -390,6 +434,32 @@ public class Operacion {
     public void setActoPendiente(String actoPendiente) { this.actoPendiente = actoPendiente; }
     public LocalDate getFechaUltimoEstadoProceso() { return fechaUltimoEstadoProceso; }
     public void setFechaUltimoEstadoProceso(LocalDate fechaUltimoEstadoProceso) { this.fechaUltimoEstadoProceso = fechaUltimoEstadoProceso; }
+    public String getZona() { return zona; }
+    public void setZona(String zona) { this.zona = zona; }
+    public String getDepartamento() { return departamento; }
+    public void setDepartamento(String departamento) { this.departamento = departamento; }
+    public String getProvincia() { return provincia; }
+    public void setProvincia(String provincia) { this.provincia = provincia; }
+    public String getDistrito() { return distrito; }
+    public void setDistrito(String distrito) { this.distrito = distrito; }
+    public String getDireccion() { return direccion; }
+    public void setDireccion(String direccion) { this.direccion = direccion; }
+    public String getReferencia() { return referencia; }
+    public void setReferencia(String referencia) { this.referencia = referencia; }
+    public String getTelefono() { return telefono; }
+    public void setTelefono(String telefono) { this.telefono = telefono; }
+    public BigDecimal getMontoAprobado() { return montoAprobado; }
+    public void setMontoAprobado(BigDecimal montoAprobado) { this.montoAprobado = montoAprobado; }
+    public LocalDate getFechaAceptacionDemanda() { return fechaAceptacionDemanda; }
+    public void setFechaAceptacionDemanda(LocalDate fechaAceptacionDemanda) { this.fechaAceptacionDemanda = fechaAceptacionDemanda; }
+    public LocalDate getFechaEnvioJudicial() { return fechaEnvioJudicial; }
+    public void setFechaEnvioJudicial(LocalDate fechaEnvioJudicial) { this.fechaEnvioJudicial = fechaEnvioJudicial; }
+    public LocalDate getFechaAsignacionAbogado() { return fechaAsignacionAbogado; }
+    public void setFechaAsignacionAbogado(LocalDate fechaAsignacionAbogado) { this.fechaAsignacionAbogado = fechaAsignacionAbogado; }
+    public LocalDate getFechaCastigo() { return fechaCastigo; }
+    public void setFechaCastigo(LocalDate fechaCastigo) { this.fechaCastigo = fechaCastigo; }
+    public String getTipoFondo() { return tipoFondo; }
+    public void setTipoFondo(String tipoFondo) { this.tipoFondo = tipoFondo; }
 
     public static Builder builder() { return new Builder(); }
 
@@ -479,6 +549,19 @@ public class Operacion {
         private String etapaProcesalTexto;
         private String actoPendiente;
         private LocalDate fechaUltimoEstadoProceso;
+        private String zona;
+        private String departamento;
+        private String provincia;
+        private String distrito;
+        private String direccion;
+        private String referencia;
+        private String telefono;
+        private BigDecimal montoAprobado;
+        private LocalDate fechaAceptacionDemanda;
+        private LocalDate fechaEnvioJudicial;
+        private LocalDate fechaAsignacionAbogado;
+        private LocalDate fechaCastigo;
+        private String tipoFondo;
 
         public Builder trans(Boolean v) { trans = v; return this; }
         public Builder busquedaBienes(Boolean v) { busquedaBienes = v; return this; }
@@ -507,6 +590,19 @@ public class Operacion {
         public Builder etapaProcesalTexto(String v) { etapaProcesalTexto = v; return this; }
         public Builder actoPendiente(String v) { actoPendiente = v; return this; }
         public Builder fechaUltimoEstadoProceso(LocalDate v) { fechaUltimoEstadoProceso = v; return this; }
+        public Builder zona(String v) { zona = v; return this; }
+        public Builder departamento(String v) { departamento = v; return this; }
+        public Builder provincia(String v) { provincia = v; return this; }
+        public Builder distrito(String v) { distrito = v; return this; }
+        public Builder direccion(String v) { direccion = v; return this; }
+        public Builder referencia(String v) { referencia = v; return this; }
+        public Builder telefono(String v) { telefono = v; return this; }
+        public Builder montoAprobado(BigDecimal v) { montoAprobado = v; return this; }
+        public Builder fechaAceptacionDemanda(LocalDate v) { fechaAceptacionDemanda = v; return this; }
+        public Builder fechaEnvioJudicial(LocalDate v) { fechaEnvioJudicial = v; return this; }
+        public Builder fechaAsignacionAbogado(LocalDate v) { fechaAsignacionAbogado = v; return this; }
+        public Builder fechaCastigo(LocalDate v) { fechaCastigo = v; return this; }
+        public Builder tipoFondo(String v) { tipoFondo = v; return this; }
 
         public Operacion build() {
             Operacion o = new Operacion();
@@ -563,6 +659,19 @@ public class Operacion {
             o.setEtapaProcesalTexto(etapaProcesalTexto);
             o.setActoPendiente(actoPendiente);
             o.setFechaUltimoEstadoProceso(fechaUltimoEstadoProceso);
+            o.setZona(zona);
+            o.setDepartamento(departamento);
+            o.setProvincia(provincia);
+            o.setDistrito(distrito);
+            o.setDireccion(direccion);
+            o.setReferencia(referencia);
+            o.setTelefono(telefono);
+            o.setMontoAprobado(montoAprobado);
+            o.setFechaAceptacionDemanda(fechaAceptacionDemanda);
+            o.setFechaEnvioJudicial(fechaEnvioJudicial);
+            o.setFechaAsignacionAbogado(fechaAsignacionAbogado);
+            o.setFechaCastigo(fechaCastigo);
+            o.setTipoFondo(tipoFondo);
             return o;
         }
     }

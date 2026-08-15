@@ -48,6 +48,7 @@ public class CarteraService {
     private String perfilActual;
     private static final String PERFIL_CAJA_AREQUIPA = "perfiles-import/caja-arequipa-cartera.json";
     private static final String PERFIL_EXCEL_AVANCE = "perfiles-import/excel-avance-procesal-arequipa.json";
+    private static final String PERFIL_INVENTARIO_JUNIO = "perfiles-import/inventario-junio-2026.json";
 
     public CarteraService(ImportacionRepository importacionRepository,
                           ClienteRepository clienteRepository,
@@ -125,6 +126,8 @@ public class CarteraService {
                 // Detectar perfil según nombre de hoja
                 if (sheetNames[s].toLowerCase().contains("avance") || sheetNames[s].toLowerCase().contains("procesal")) {
                     cargarPerfil(PERFIL_EXCEL_AVANCE);
+                } else if (sheetNames[s].equalsIgnoreCase("Inventario")) {
+                    cargarPerfil(PERFIL_INVENTARIO_JUNIO);
                 } else {
                     cargarPerfil(PERFIL_CAJA_AREQUIPA);
                 }
@@ -328,6 +331,19 @@ public class CarteraService {
                     .etapaProcesalTexto(etapaProcesalTexto)
                     .actoPendiente(actoPendiente)
                     .fechaUltimoEstadoProceso(fechaUltimoEstadoProceso)
+                    .zona(getCellString(row, columns, "zona"))
+                    .departamento(getCellString(row, columns, "departamento"))
+                    .provincia(getCellString(row, columns, "provincia"))
+                    .distrito(getCellString(row, columns, "distrito"))
+                    .direccion(getCellString(row, columns, "direccion"))
+                    .referencia(getCellString(row, columns, "referencia"))
+                    .telefono(getCellString(row, columns, "telefono"))
+                    .montoAprobado(getCellBigDecimal(row, columns, "montoAprobado"))
+                    .fechaAceptacionDemanda(getCellLocalDate(row, columns, "fechaAceptacionDemanda"))
+                    .fechaEnvioJudicial(getCellLocalDate(row, columns, "fechaEnvioJudicial"))
+                    .fechaAsignacionAbogado(getCellLocalDate(row, columns, "fechaAsignacionAbogado"))
+                    .fechaCastigo(getCellLocalDate(row, columns, "fechaCastigo"))
+                    .tipoFondo(getCellString(row, columns, "tipoFondo"))
                     .activo(true)
                     .build();
             operacionNueva = true;
@@ -376,6 +392,19 @@ public class CarteraService {
             operacion.setEtapaProcesalTexto(etapaProcesalTexto);
             operacion.setActoPendiente(actoPendiente);
             operacion.setFechaUltimoEstadoProceso(fechaUltimoEstadoProceso);
+            operacion.setZona(getCellString(row, columns, "zona"));
+            operacion.setDepartamento(getCellString(row, columns, "departamento"));
+            operacion.setProvincia(getCellString(row, columns, "provincia"));
+            operacion.setDistrito(getCellString(row, columns, "distrito"));
+            operacion.setDireccion(getCellString(row, columns, "direccion"));
+            operacion.setReferencia(getCellString(row, columns, "referencia"));
+            operacion.setTelefono(getCellString(row, columns, "telefono"));
+            operacion.setMontoAprobado(getCellBigDecimal(row, columns, "montoAprobado"));
+            operacion.setFechaAceptacionDemanda(getCellLocalDate(row, columns, "fechaAceptacionDemanda"));
+            operacion.setFechaEnvioJudicial(getCellLocalDate(row, columns, "fechaEnvioJudicial"));
+            operacion.setFechaAsignacionAbogado(getCellLocalDate(row, columns, "fechaAsignacionAbogado"));
+            operacion.setFechaCastigo(getCellLocalDate(row, columns, "fechaCastigo"));
+            operacion.setTipoFondo(getCellString(row, columns, "tipoFondo"));
         }
         operacion = operacionRepository.save(operacion);
 

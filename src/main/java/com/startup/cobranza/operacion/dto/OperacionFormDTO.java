@@ -37,6 +37,19 @@ public class OperacionFormDTO {
     private String etapaProcesalTexto;
     private String actoPendiente;
     private String fechaUltimoEstadoProceso;
+    private String zona;
+    private String departamento;
+    private String provincia;
+    private String distrito;
+    private String direccion;
+    private String referencia;
+    private String telefono;
+    private String montoAprobado;
+    private String fechaAceptacionDemanda;
+    private String fechaEnvioJudicial;
+    private String fechaAsignacionAbogado;
+    private String fechaCastigo;
+    private String tipoFondo;
     private List<BienEmbargadoDTO> bienesEmbargados;
 
     public OperacionFormDTO() {}
@@ -141,6 +154,32 @@ public class OperacionFormDTO {
     public void setActoPendiente(String actoPendiente) { this.actoPendiente = actoPendiente; }
     public String getFechaUltimoEstadoProceso() { return fechaUltimoEstadoProceso; }
     public void setFechaUltimoEstadoProceso(String fechaUltimoEstadoProceso) { this.fechaUltimoEstadoProceso = fechaUltimoEstadoProceso; }
+    public String getZona() { return zona; }
+    public void setZona(String zona) { this.zona = zona; }
+    public String getDepartamento() { return departamento; }
+    public void setDepartamento(String departamento) { this.departamento = departamento; }
+    public String getProvincia() { return provincia; }
+    public void setProvincia(String provincia) { this.provincia = provincia; }
+    public String getDistrito() { return distrito; }
+    public void setDistrito(String distrito) { this.distrito = distrito; }
+    public String getDireccion() { return direccion; }
+    public void setDireccion(String direccion) { this.direccion = direccion; }
+    public String getReferencia() { return referencia; }
+    public void setReferencia(String referencia) { this.referencia = referencia; }
+    public String getTelefono() { return telefono; }
+    public void setTelefono(String telefono) { this.telefono = telefono; }
+    public String getMontoAprobado() { return montoAprobado; }
+    public void setMontoAprobado(String montoAprobado) { this.montoAprobado = montoAprobado; }
+    public String getFechaAceptacionDemanda() { return fechaAceptacionDemanda; }
+    public void setFechaAceptacionDemanda(String fechaAceptacionDemanda) { this.fechaAceptacionDemanda = fechaAceptacionDemanda; }
+    public String getFechaEnvioJudicial() { return fechaEnvioJudicial; }
+    public void setFechaEnvioJudicial(String fechaEnvioJudicial) { this.fechaEnvioJudicial = fechaEnvioJudicial; }
+    public String getFechaAsignacionAbogado() { return fechaAsignacionAbogado; }
+    public void setFechaAsignacionAbogado(String fechaAsignacionAbogado) { this.fechaAsignacionAbogado = fechaAsignacionAbogado; }
+    public String getFechaCastigo() { return fechaCastigo; }
+    public void setFechaCastigo(String fechaCastigo) { this.fechaCastigo = fechaCastigo; }
+    public String getTipoFondo() { return tipoFondo; }
+    public void setTipoFondo(String tipoFondo) { this.tipoFondo = tipoFondo; }
     public List<BienEmbargadoDTO> getBienesEmbargados() { return bienesEmbargados; }
     public void setBienesEmbargados(List<BienEmbargadoDTO> bienesEmbargados) { this.bienesEmbargados = bienesEmbargados; }
 
@@ -179,6 +218,19 @@ public class OperacionFormDTO {
         private String etapaProcesalTexto;
         private String actoPendiente;
         private String fechaUltimoEstadoProceso;
+        private String zona;
+        private String departamento;
+        private String provincia;
+        private String distrito;
+        private String direccion;
+        private String referencia;
+        private String telefono;
+        private String montoAprobado;
+        private String fechaAceptacionDemanda;
+        private String fechaEnvioJudicial;
+        private String fechaAsignacionAbogado;
+        private String fechaCastigo;
+        private String tipoFondo;
         private List<BienEmbargadoDTO> bienesEmbargados;
 
         public Builder id(Long v) { id = v; return this; }
@@ -213,13 +265,47 @@ public class OperacionFormDTO {
         public Builder etapaProcesalTexto(String v) { etapaProcesalTexto = v; return this; }
         public Builder actoPendiente(String v) { actoPendiente = v; return this; }
         public Builder fechaUltimoEstadoProceso(String v) { fechaUltimoEstadoProceso = v; return this; }
+        public Builder zona(String v) { zona = v; return this; }
+        public Builder departamento(String v) { departamento = v; return this; }
+        public Builder provincia(String v) { provincia = v; return this; }
+        public Builder distrito(String v) { distrito = v; return this; }
+        public Builder direccion(String v) { direccion = v; return this; }
+        public Builder referencia(String v) { referencia = v; return this; }
+        public Builder telefono(String v) { telefono = v; return this; }
+        public Builder montoAprobado(String v) { montoAprobado = v; return this; }
+        public Builder fechaAceptacionDemanda(String v) { fechaAceptacionDemanda = v; return this; }
+        public Builder fechaEnvioJudicial(String v) { fechaEnvioJudicial = v; return this; }
+        public Builder fechaAsignacionAbogado(String v) { fechaAsignacionAbogado = v; return this; }
+        public Builder fechaCastigo(String v) { fechaCastigo = v; return this; }
+        public Builder tipoFondo(String v) { tipoFondo = v; return this; }
         public Builder bienesEmbargados(List<BienEmbargadoDTO> v) { bienesEmbargados = v; return this; }
 
         public OperacionFormDTO build() {
-            return new OperacionFormDTO(id, clienteId, empresaId, agenciaId, cuenta, numeroOperacion,
+            OperacionFormDTO dto = new OperacionFormDTO(id, clienteId, empresaId, agenciaId, cuenta, numeroOperacion,
                     montoCapital, montoTotal, diasMora, moneda, tipoCredito, situacion, estado, etapa,
                     observacion, rango, analista, analistaSenior, numeroExpediente, tipoProceso,
                     tipoJuzgado, distritoJudicial, numeroJuzgado, abogadoId, observacionActos, comentario);
+            dto.setEstadoCartera(estadoCartera);
+            dto.setFechaDesembolso(fechaDesembolso);
+            dto.setImporteDesembolso(importeDesembolso);
+            dto.setEtapaProcesalTexto(etapaProcesalTexto);
+            dto.setActoPendiente(actoPendiente);
+            dto.setFechaUltimoEstadoProceso(fechaUltimoEstadoProceso);
+            dto.setZona(zona);
+            dto.setDepartamento(departamento);
+            dto.setProvincia(provincia);
+            dto.setDistrito(distrito);
+            dto.setDireccion(direccion);
+            dto.setReferencia(referencia);
+            dto.setTelefono(telefono);
+            dto.setMontoAprobado(montoAprobado);
+            dto.setFechaAceptacionDemanda(fechaAceptacionDemanda);
+            dto.setFechaEnvioJudicial(fechaEnvioJudicial);
+            dto.setFechaAsignacionAbogado(fechaAsignacionAbogado);
+            dto.setFechaCastigo(fechaCastigo);
+            dto.setTipoFondo(tipoFondo);
+            dto.setBienesEmbargados(bienesEmbargados);
+            return dto;
         }
     }
 }

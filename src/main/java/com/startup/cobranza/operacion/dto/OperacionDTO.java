@@ -69,6 +69,19 @@ public class OperacionDTO {
     private String etapaProcesalTexto;
     private String actoPendiente;
     private LocalDate fechaUltimoEstadoProceso;
+    private String zona;
+    private String departamento;
+    private String provincia;
+    private String distrito;
+    private String direccion;
+    private String referencia;
+    private String telefono;
+    private BigDecimal montoAprobado;
+    private LocalDate fechaAceptacionDemanda;
+    private LocalDate fechaEnvioJudicial;
+    private LocalDate fechaAsignacionAbogado;
+    private LocalDate fechaCastigo;
+    private String tipoFondo;
 
     public OperacionDTO() {}
 
@@ -236,6 +249,32 @@ public class OperacionDTO {
     public void setActoPendiente(String actoPendiente) { this.actoPendiente = actoPendiente; }
     public LocalDate getFechaUltimoEstadoProceso() { return fechaUltimoEstadoProceso; }
     public void setFechaUltimoEstadoProceso(LocalDate fechaUltimoEstadoProceso) { this.fechaUltimoEstadoProceso = fechaUltimoEstadoProceso; }
+    public String getZona() { return zona; }
+    public void setZona(String zona) { this.zona = zona; }
+    public String getDepartamento() { return departamento; }
+    public void setDepartamento(String departamento) { this.departamento = departamento; }
+    public String getProvincia() { return provincia; }
+    public void setProvincia(String provincia) { this.provincia = provincia; }
+    public String getDistrito() { return distrito; }
+    public void setDistrito(String distrito) { this.distrito = distrito; }
+    public String getDireccion() { return direccion; }
+    public void setDireccion(String direccion) { this.direccion = direccion; }
+    public String getReferencia() { return referencia; }
+    public void setReferencia(String referencia) { this.referencia = referencia; }
+    public String getTelefono() { return telefono; }
+    public void setTelefono(String telefono) { this.telefono = telefono; }
+    public BigDecimal getMontoAprobado() { return montoAprobado; }
+    public void setMontoAprobado(BigDecimal montoAprobado) { this.montoAprobado = montoAprobado; }
+    public LocalDate getFechaAceptacionDemanda() { return fechaAceptacionDemanda; }
+    public void setFechaAceptacionDemanda(LocalDate fechaAceptacionDemanda) { this.fechaAceptacionDemanda = fechaAceptacionDemanda; }
+    public LocalDate getFechaEnvioJudicial() { return fechaEnvioJudicial; }
+    public void setFechaEnvioJudicial(LocalDate fechaEnvioJudicial) { this.fechaEnvioJudicial = fechaEnvioJudicial; }
+    public LocalDate getFechaAsignacionAbogado() { return fechaAsignacionAbogado; }
+    public void setFechaAsignacionAbogado(LocalDate fechaAsignacionAbogado) { this.fechaAsignacionAbogado = fechaAsignacionAbogado; }
+    public LocalDate getFechaCastigo() { return fechaCastigo; }
+    public void setFechaCastigo(LocalDate fechaCastigo) { this.fechaCastigo = fechaCastigo; }
+    public String getTipoFondo() { return tipoFondo; }
+    public void setTipoFondo(String tipoFondo) { this.tipoFondo = tipoFondo; }
 
     public static Builder builder() { return new Builder(); }
 
@@ -299,6 +338,19 @@ public class OperacionDTO {
         private String etapaProcesalTexto;
         private String actoPendiente;
         private LocalDate fechaUltimoEstadoProceso;
+        private String zona;
+        private String departamento;
+        private String provincia;
+        private String distrito;
+        private String direccion;
+        private String referencia;
+        private String telefono;
+        private BigDecimal montoAprobado;
+        private LocalDate fechaAceptacionDemanda;
+        private LocalDate fechaEnvioJudicial;
+        private LocalDate fechaAsignacionAbogado;
+        private LocalDate fechaCastigo;
+        private String tipoFondo;
 
         public Builder id(Long v) { id = v; return this; }
         public Builder clienteId(Long v) { clienteId = v; return this; }
@@ -359,6 +411,19 @@ public class OperacionDTO {
         public Builder etapaProcesalTexto(String v) { etapaProcesalTexto = v; return this; }
         public Builder actoPendiente(String v) { actoPendiente = v; return this; }
         public Builder fechaUltimoEstadoProceso(LocalDate v) { fechaUltimoEstadoProceso = v; return this; }
+        public Builder zona(String v) { zona = v; return this; }
+        public Builder departamento(String v) { departamento = v; return this; }
+        public Builder provincia(String v) { provincia = v; return this; }
+        public Builder distrito(String v) { distrito = v; return this; }
+        public Builder direccion(String v) { direccion = v; return this; }
+        public Builder referencia(String v) { referencia = v; return this; }
+        public Builder telefono(String v) { telefono = v; return this; }
+        public Builder montoAprobado(BigDecimal v) { montoAprobado = v; return this; }
+        public Builder fechaAceptacionDemanda(LocalDate v) { fechaAceptacionDemanda = v; return this; }
+        public Builder fechaEnvioJudicial(LocalDate v) { fechaEnvioJudicial = v; return this; }
+        public Builder fechaAsignacionAbogado(LocalDate v) { fechaAsignacionAbogado = v; return this; }
+        public Builder fechaCastigo(LocalDate v) { fechaCastigo = v; return this; }
+        public Builder tipoFondo(String v) { tipoFondo = v; return this; }
 
         public OperacionDTO build() {
             OperacionDTO dto = new OperacionDTO(id, clienteId, clienteNombre, clienteDni, empresaId, empresaNombre,
@@ -394,6 +459,19 @@ public class OperacionDTO {
             dto.setEtapaProcesalTexto(etapaProcesalTexto);
             dto.setActoPendiente(actoPendiente);
             dto.setFechaUltimoEstadoProceso(fechaUltimoEstadoProceso);
+            dto.setZona(zona);
+            dto.setDepartamento(departamento);
+            dto.setProvincia(provincia);
+            dto.setDistrito(distrito);
+            dto.setDireccion(direccion);
+            dto.setReferencia(referencia);
+            dto.setTelefono(telefono);
+            dto.setMontoAprobado(montoAprobado);
+            dto.setFechaAceptacionDemanda(fechaAceptacionDemanda);
+            dto.setFechaEnvioJudicial(fechaEnvioJudicial);
+            dto.setFechaAsignacionAbogado(fechaAsignacionAbogado);
+            dto.setFechaCastigo(fechaCastigo);
+            dto.setTipoFondo(tipoFondo);
             return dto;
         }
     }
