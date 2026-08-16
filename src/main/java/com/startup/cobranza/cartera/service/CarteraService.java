@@ -32,6 +32,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class CarteraService {
@@ -124,8 +125,15 @@ public class CarteraService {
                 } else if (hojaNombre.toLowerCase().contains("avance") || hojaNombre.toLowerCase().contains("procesal")) {
                     perfilPath = PERFIL_EXCEL_AVANCE;
                     estadoCarteraDefault = "ACTIVO";
+                } else if (hojaNombre.toLowerCase().contains("cancelado") || hojaNombre.toLowerCase().contains("cancelada")) {
+                    // Hoja 2: CARTERA C. CREDITO CANCELADO
+                    perfilPath = PERFIL_CAJA_AREQUIPA;
+                    estadoCarteraDefault = "CANCELADA";
+                } else if (hojaNombre.toLowerCase().contains("devuelta")) {
+                    // Hoja 3: CARPETAS DEVUELTAS.
+                    perfilPath = PERFIL_CAJA_AREQUIPA;
+                    estadoCarteraDefault = "DEVUELTA";
                 } else {
-                    // Para otras hojas未知, usar perfil default
                     perfilPath = PERFIL_CAJA_AREQUIPA;
                     estadoCarteraDefault = "ACTIVO";
                 }
@@ -141,14 +149,18 @@ public class CarteraService {
                     continue;
                 }
 
+                // PASO 1: Escanear col B en busca de section headers (CARTERA DESASIGNADA, CARTERA VENDIDA)
                 int lastRowNum = sheet.getLastRowNum();
+                Map<Integer, String> seccionesEstado = escanearSeccionesColB(sheet, headerRowIdx, lastRowNum, estadoCarteraDefault);
+
+                // PASO 2: Procesar filas con el mapa de secciones
                 for (int i = headerRowIdx + 1; i <= lastRowNum; i++) {
                     Row row = sheet.getRow(i);
                     if (row == null || isRowEmpty(row, columns)) continue;
 
                     total++;
                     try {
-                        ParseResult result = parseRow(row, columns, empresa, skipRowsWithoutDni, estadoCarteraDefault);
+                        ParseResult result = parseRow(row, columns, empresa, skipRowsWithoutDni, estadoCarteraDefault, seccionesEstado, i);
                         if (result.esNuevo) {
                             creados++;
                         } else {
@@ -186,7 +198,8 @@ public class CarteraService {
     private record ParseResult(Cliente cliente, Operacion operacion, boolean esNuevo) {}
 
     private ParseResult parseRow(Row row, JsonNode columns, Empresa empresa,
-                                 boolean skipRowsWithoutDni, String estadoCarteraDefault) {
+                                 boolean skipRowsWithoutDni, String estadoCarteraDefault,
+                                 Map<Integer, String> seccionesEstado, int rowIndex) {
         // 1) Leer campos crudos del Excel según el perfil
         String dni = normalizarDni(getCellString(row, columns, "dni"));
         String nombreCompleto = getCellString(row, columns, "nombreCompleto");
@@ -223,8 +236,11 @@ public class CarteraService {
         String actoPendiente = getCellString(row, columns, "actoPendiente");
         LocalDate fechaUltimoEstadoProceso = getCellLocalDate(row, columns, "fechaUltimoEstadoProceso");
 
-        // 2) Detectar estadoCartera desde OBSERVACION (override del default de la hoja)
-        String estadoCartera = detectarEstadoCartera(estadoCarteraDefault, observacion);
+        // 2) Determinar estadoCartera: mapa de secciones tiene prioridad, luego OBSERVACION, luego default de hoja
+        String estadoCartera = seccionesEstado.getOrDefault(rowIndex, null);
+        if (estadoCartera == null) {
+            estadoCartera = detectarEstadoCartera(estadoCarteraDefault, observacion);
+        }
 
         // 3) Validar campos obligatorios
         if (dni == null || dni.isEmpty()) {
@@ -437,6 +453,64 @@ public class CarteraService {
         }
 
         return new ParseResult(cliente, operacion, clienteNuevo || operacionNueva);
+    }
+
+    /**
+     * Escanea la columna B de la hoja para detectar section headers
+     * que marcan cambios de estado de cartera.
+     * Ejemplo: "CARTERA DESASIGNADA" en col B = DESASIGNADA para esa fila en adelante.
+     *
+     * Retorna un Map de rowIndex -> estado para cada fila de datos.
+     */
+    private Map<Integer, String> escanearSeccionesColB(Sheet sheet, int headerRowIdx, int lastRowNum, String estadoCarteraDefault) {
+        Map<Integer, String> filasEstado = new java.util.LinkedHashMap<>();
+
+        // Primer paso: detectar las filas donde cambian los section headers
+        Map<Integer, String> sectionHeaders = new java.util.LinkedHashMap<>();
+        for (int i = headerRowIdx + 1; i <= lastRowNum; i++) {
+            Row row = sheet.getRow(i);
+            if (row == null) continue;
+            Cell cellB = row.getCell(1); // Columna B (0-indexed = 1)
+            if (cellB == null) continue;
+            String valor = cellToString(cellB);
+            if (valor == null || valor.isBlank()) continue;
+            String upper = valor.toUpperCase().trim();
+            String estado = null;
+            if (upper.startsWith("CARTERA DESASIGNADA")) {
+                estado = "DESASIGNADA";
+            } else if (upper.startsWith("CARTERA VENDIDA")) {
+                estado = "VENDIDA";
+            } else if (upper.startsWith("CARTERA CANCELADA")) {
+                estado = "CANCELADA";
+            }
+            if (estado != null) {
+                sectionHeaders.put(i, estado);
+            }
+        }
+
+        // Segundo paso: asignar estado a cada fila de datos
+        String estadoActual = estadoCarteraDefault; // default de la hoja (CANCELADA o DEVUELTA)
+        List<Integer> sectionRowIndices = new java.util.ArrayList<>(sectionHeaders.keySet());
+        int sectionIdx = 0;
+
+        for (int i = headerRowIdx + 1; i <= lastRowNum; i++) {
+            // Si esta fila es un section header, actualizar el estado activo
+            if (sectionHeaders.containsKey(i)) {
+                estadoActual = sectionHeaders.get(i);
+                sectionIdx++;
+            } else {
+                // Si no hay section header en esta fila, verificar si cruzamos uno
+                while (sectionIdx < sectionRowIndices.size() && i > sectionRowIndices.get(sectionIdx)) {
+                    sectionIdx++;
+                    if (sectionIdx < sectionRowIndices.size()) {
+                        estadoActual = sectionHeaders.get(sectionRowIndices.get(sectionIdx));
+                    }
+                }
+            }
+            filasEstado.put(i, estadoActual);
+        }
+
+        return filasEstado;
     }
 
     /**
