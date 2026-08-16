@@ -149,39 +149,45 @@ public class CarteraService {
                     continue;
                 }
 
-                // PASO 1: Escanear col B en busca de section headers (CARTERA DESASIGNADA, CARTERA VENDIDA)
+                // PASOS 1 y 2: Procesar filas — la deteccion de section headers
+                // va ANTES de isRowEmpty para que el estado se actualice incluso
+                // cuando la fila del header no tiene datos (DNI vacio).
+                // Logica: ni bien se encuentra un section header, el estado cambia
+                // para esa fila y todas las siguientes hasta el proximo header.
                 int lastRowNum = sheet.getLastRowNum();
-                Map<Integer, String> seccionesEstado = escanearSeccionesColB(sheet, headerRowIdx, lastRowNum, estadoCarteraDefault);
-
-                // PASO 2: Procesar filas con el mapa de secciones
                 for (int i = headerRowIdx + 1; i <= lastRowNum; i++) {
                     Row row = sheet.getRow(i);
                     if (row == null) continue;
 
-                    // Si la fila está vacía en columnas de datos pero tiene section header en col B,
-                    // es un header de sección: actualizar estado y saltar (no tiene datos)
-                    if (isRowEmpty(row, columns)) {
-                        // Actualizar estado desde col B (para que las filas siguientes lo hereden)
-                        Cell cellB = row.getCell(1);
-                        if (cellB != null) {
-                            String val = cellToString(cellB);
-                            if (val != null && !val.isBlank()) {
-                                String upper = val.toUpperCase().trim();
-                                if (upper.startsWith("CARTERA DESASIGNADA")) {
-                                    estadoCarteraDefault = "DESASIGNADA";
-                                } else if (upper.startsWith("CARTERA VENDIDA")) {
-                                    estadoCarteraDefault = "VENDIDA";
-                                } else if (upper.startsWith("CARTERA CANCELADA")) {
-                                    estadoCarteraDefault = "CANCELADA";
-                                }
+                    // Primero: detectar si es un section header en col B (ej. CARTERA VENDIDA)
+                    // — esto se hace antes de isRowEmpty para que el estado se actualice
+                    // aunque la fila del header no tenga DNI ni datos.
+                    Cell cellB = row.getCell(1);
+                    if (cellB != null) {
+                        String val = cellToString(cellB);
+                        if (val != null && !val.isBlank()) {
+                            String upper = val.toUpperCase().trim();
+                            if (upper.startsWith("CARTERA DESASIGNADA")) {
+                                estadoCarteraDefault = "DESASIGNADA";
+                            } else if (upper.startsWith("CARTERA VENDIDA")) {
+                                estadoCarteraDefault = "VENDIDA";
+                            } else if (upper.startsWith("CARTERA CANCELADA")) {
+                                estadoCarteraDefault = "CANCELADA";
+                            } else if (upper.startsWith("CARTERA CANCELADO")) {
+                                estadoCarteraDefault = "CANCELADA";
                             }
                         }
+                    }
+
+                    // Segundo: si no hay datos en las columnas clave, saltar.
+                    // El estado ya se actualizo arriba si era un section header.
+                    if (isRowEmpty(row, columns)) {
                         continue;
                     }
 
                     total++;
                     try {
-                        ParseResult result = parseRow(row, columns, empresa, skipRowsWithoutDni, estadoCarteraDefault, seccionesEstado, i);
+                        ParseResult result = parseRow(row, columns, empresa, skipRowsWithoutDni, estadoCarteraDefault, i);
                         if (result.esNuevo) {
                             creados++;
                         } else {
@@ -220,7 +226,7 @@ public class CarteraService {
 
     private ParseResult parseRow(Row row, JsonNode columns, Empresa empresa,
                                  boolean skipRowsWithoutDni, String estadoCarteraDefault,
-                                 Map<Integer, String> seccionesEstado, int rowIndex) {
+                                 int rowIndex) {
         // 1) Leer campos crudos del Excel según el perfil
         String dni = normalizarDni(getCellString(row, columns, "dni"));
         String nombreCompleto = getCellString(row, columns, "nombreCompleto");
@@ -258,15 +264,9 @@ public class CarteraService {
         LocalDate fechaUltimoEstadoProceso = getCellLocalDate(row, columns, "fechaUltimoEstadoProceso");
 
         // 2) Determinar estadoCartera: el main loop ya actualiza estadoCarteraDefault
-        // cuando detecta section headers en col B. Aqui solo se permite override
-        // via texto en OBSERVACION si no hubo section header.
+        // ni bien detecta un section header en col B. Aqui se usa directo.
+        // Sin override desde OBSERVACION — el estado lo fija el section header.
         String estadoCartera = estadoCarteraDefault;
-        String override = detectarEstadoCartera(estadoCarteraDefault, observacion);
-        if (!override.equals(estadoCarteraDefault)) {
-            // Solo pisa si OBSERVACION dice algo diferente (ej. una fila CANCELADA
-            // dentro de la seccion DESASIGNADA)
-            estadoCartera = override;
-        }
 
         // 3) Validar campos obligatorios
         if (dni == null || dni.isEmpty()) {
