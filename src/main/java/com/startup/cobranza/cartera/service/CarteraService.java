@@ -156,7 +156,28 @@ public class CarteraService {
                 // PASO 2: Procesar filas con el mapa de secciones
                 for (int i = headerRowIdx + 1; i <= lastRowNum; i++) {
                     Row row = sheet.getRow(i);
-                    if (row == null || isRowEmpty(row, columns)) continue;
+                    if (row == null) continue;
+
+                    // Si la fila está vacía en columnas de datos pero tiene section header en col B,
+                    // es un header de sección: actualizar estado y saltar (no tiene datos)
+                    if (isRowEmpty(row, columns)) {
+                        // Actualizar estado desde col B (para que las filas siguientes lo hereden)
+                        Cell cellB = row.getCell(1);
+                        if (cellB != null) {
+                            String val = cellToString(cellB);
+                            if (val != null && !val.isBlank()) {
+                                String upper = val.toUpperCase().trim();
+                                if (upper.startsWith("CARTERA DESASIGNADA")) {
+                                    estadoCarteraDefault = "DESASIGNADA";
+                                } else if (upper.startsWith("CARTERA VENDIDA")) {
+                                    estadoCarteraDefault = "VENDIDA";
+                                } else if (upper.startsWith("CARTERA CANCELADA")) {
+                                    estadoCarteraDefault = "CANCELADA";
+                                }
+                            }
+                        }
+                        continue;
+                    }
 
                     total++;
                     try {
@@ -236,10 +257,15 @@ public class CarteraService {
         String actoPendiente = getCellString(row, columns, "actoPendiente");
         LocalDate fechaUltimoEstadoProceso = getCellLocalDate(row, columns, "fechaUltimoEstadoProceso");
 
-        // 2) Determinar estadoCartera: mapa de secciones tiene prioridad, luego OBSERVACION, luego default de hoja
-        String estadoCartera = seccionesEstado.getOrDefault(rowIndex, null);
-        if (estadoCartera == null) {
-            estadoCartera = detectarEstadoCartera(estadoCarteraDefault, observacion);
+        // 2) Determinar estadoCartera: el main loop ya actualiza estadoCarteraDefault
+        // cuando detecta section headers en col B. Aqui solo se permite override
+        // via texto en OBSERVACION si no hubo section header.
+        String estadoCartera = estadoCarteraDefault;
+        String override = detectarEstadoCartera(estadoCarteraDefault, observacion);
+        if (!override.equals(estadoCarteraDefault)) {
+            // Solo pisa si OBSERVACION dice algo diferente (ej. una fila CANCELADA
+            // dentro de la seccion DESASIGNADA)
+            estadoCartera = override;
         }
 
         // 3) Validar campos obligatorios
