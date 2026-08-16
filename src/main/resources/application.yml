@@ -7,6 +7,19 @@ spring:
     username: ${DB_USER:postgres}
     password: ${DB_PASSWORD:raticulacion}
     driver-class-name: org.postgresql.Driver
+    hikari:
+      # Prueba conexiones cada 5 min para evitar que Supabase las cierre por inactividad
+      keepaliveTime: 300000
+      # Timeout de conexion (30 seg)
+      connectionTimeout: 30000
+      # Max lifetime de conexion (30 min — menor que el idle timeout de Supabase)
+      maxLifetime: 1800000
+      # Minimo de conexiones en el pool
+      minimumIdle: 2
+      # Maximo de conexiones
+      maximumPoolSize: 10
+      # Validar conexion al pedirla del pool
+      connectionTestQuery: SELECT 1
 
   jpa:
     hibernate:
