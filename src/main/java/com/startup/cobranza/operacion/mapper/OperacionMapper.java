@@ -3,7 +3,7 @@ package com.startup.cobranza.operacion.mapper;
 import com.startup.cobranza.cliente.entity.Cliente;
 import com.startup.cobranza.empresa.entity.Empresa;
 import com.startup.cobranza.agencia.entity.Agencia;
-import com.startup.cobranza.expediente.entity.BienEmbargado;
+import com.startup.cobranza.operacion.entity.BienEmbargado;
 import com.startup.cobranza.operacion.dto.BienEmbargadoDTO;
 import com.startup.cobranza.operacion.dto.OperacionDTO;
 import com.startup.cobranza.operacion.dto.OperacionFormDTO;

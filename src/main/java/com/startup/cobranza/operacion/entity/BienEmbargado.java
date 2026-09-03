@@ -1,6 +1,5 @@
-package com.startup.cobranza.expediente.entity;
+package com.startup.cobranza.operacion.entity;
 
-import com.startup.cobranza.operacion.entity.Operacion;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -12,10 +11,6 @@ public class BienEmbargado {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "expediente_id", nullable = true)
-    private Expediente expediente;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "operacion_id")
@@ -91,8 +86,6 @@ public class BienEmbargado {
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-    public Expediente getExpediente() { return expediente; }
-    public void setExpediente(Expediente expediente) { this.expediente = expediente; }
     public Operacion getOperacion() { return operacion; }
     public void setOperacion(Operacion operacion) { this.operacion = operacion; }
     public String getTipoBien() { return tipoBien; }
@@ -144,7 +137,6 @@ public class BienEmbargado {
 
     public static class Builder {
         private Long id;
-        private Expediente expediente;
         private Operacion operacion;
         private String tipoBien;
         private String partidaRegistral;
@@ -170,7 +162,6 @@ public class BienEmbargado {
         private String rango;
 
         public Builder id(Long v) { id = v; return this; }
-        public Builder expediente(Expediente v) { expediente = v; return this; }
         public Builder operacion(Operacion v) { operacion = v; return this; }
         public Builder tipoBien(String v) { tipoBien = v; return this; }
         public Builder partidaRegistral(String v) { partidaRegistral = v; return this; }
@@ -198,7 +189,6 @@ public class BienEmbargado {
         public BienEmbargado build() {
             BienEmbargado e = new BienEmbargado();
             e.setId(id);
-            e.setExpediente(expediente);
             e.setOperacion(operacion);
             e.setTipoBien(tipoBien);
             e.setPartidaRegistral(partidaRegistral);

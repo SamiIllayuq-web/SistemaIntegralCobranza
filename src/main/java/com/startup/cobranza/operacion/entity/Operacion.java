@@ -2,7 +2,7 @@ package com.startup.cobranza.operacion.entity;
 
 import com.startup.cobranza.agencia.entity.Agencia;
 import com.startup.cobranza.empresa.entity.Empresa;
-import com.startup.cobranza.expediente.entity.BienEmbargado;
+import com.startup.cobranza.operacion.entity.BienEmbargado;
 import com.startup.cobranza.usuario.entity.Usuario;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
