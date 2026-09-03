@@ -88,4 +88,31 @@ public class CarteraController {
         model.addAttribute("empresas", empresaService.listarActivas());
         return "cartera/registros";
     }
+
+    /**
+     * Vista de Expedientes — same entidad Operacion, solo filtra
+     * por numeroExpediente informado y muestra columnas judiciales.
+     */
+    @GetMapping("/expedientes")
+    public String expedientes(
+            @RequestParam(value = "empresaId", required = false) Long empresaId,
+            @RequestParam(value = "situacion", required = false) String situacion,
+            @RequestParam(value = "busqueda", required = false) String busqueda,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "50") int size,
+            Model model) {
+
+        PageRequest pageable = PageRequest.of(page, size,
+                Sort.by("numeroExpediente").ascending()
+                    .and(Sort.by("cliente.nombreCompleto").ascending()));
+        Page<OperacionDTO> pagina = operacionService.listarExpedientes(
+                empresaId, situacion, busqueda, pageable);
+
+        model.addAttribute("pagina", pagina);
+        model.addAttribute("empresaId", empresaId);
+        model.addAttribute("situacion", situacion);
+        model.addAttribute("busqueda", busqueda);
+        model.addAttribute("empresas", empresaService.listarActivas());
+        return "cartera/expedientes";
+    }
 }

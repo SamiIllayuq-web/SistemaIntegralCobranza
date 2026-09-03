@@ -180,4 +180,32 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
     );
 
     long countByEmpresaIdAndActivoTrue(Long empresaId);
+
+    /**
+     * Lista de operaciones CON numeroExpediente informado — usado para la vista "Expedientes"
+     * que muestra operaciones judiciales agrupadas por expediente.
+     */
+    @Query("""
+        SELECT o FROM Operacion o
+        JOIN FETCH o.cliente
+        JOIN FETCH o.empresa
+        LEFT JOIN FETCH o.agencia
+        WHERE o.activo = true
+          AND o.numeroExpediente IS NOT NULL
+          AND o.numeroExpediente <> ''
+          AND (:empresaId IS NULL OR o.empresa.id = :empresaId)
+          AND (:situacion IS NULL OR o.situacion = :situacion)
+          AND (:busqueda IS NULL OR
+              LOWER(o.numeroExpediente) LIKE LOWER(CONCAT('%', :busqueda, '%'))
+              OR LOWER(o.cliente.nombreCompleto) LIKE LOWER(CONCAT('%', :busqueda, '%'))
+              OR o.cliente.dni = :busqueda
+          )
+        ORDER BY o.numeroExpediente ASC, o.cliente.nombreCompleto ASC
+        """)
+    Page<Operacion> findExpedientes(
+            @Param("empresaId") Long empresaId,
+            @Param("situacion") String situacion,
+            @Param("busqueda") String busqueda,
+            Pageable pageable
+    );
 }

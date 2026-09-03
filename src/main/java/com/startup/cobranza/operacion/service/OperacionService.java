@@ -187,4 +187,14 @@ public class OperacionService {
                 empresaId, agenciaId, estado, etapa, busqueda, pageable)
                 .map(operacionMapper::toDTO);
     }
+
+    /**
+     * Lista de operaciones con numeroExpediente — la vista "Expedientes"
+     * lee de la misma entidad Operacion, solo filtra y ordena diferente.
+     */
+    public Page<OperacionDTO> listarExpedientes(Long empresaId, String situacion,
+                                                 String busqueda, Pageable pageable) {
+        return operacionRepository.findExpedientes(empresaId, situacion, busqueda, pageable)
+                .map(operacionMapper::toDTO);
+    }
 }

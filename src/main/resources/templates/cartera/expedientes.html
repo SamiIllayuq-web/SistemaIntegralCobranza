@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expedientes - Sistema Integral de Cobranza</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<th:block th:replace="~{layout :: sidebar}"></th:block>
+
+<div class="main-content">
+    <div class="topbar">
+        <div class="breadcrumb-nav">
+            <a th:href="@{/dashboard}">Inicio</a>
+            <span class="breadcrumb-sep">/</span>
+            <a th:href="@{/cartera/importar}">Cartera</a>
+            <span class="breadcrumb-sep">/</span>
+            <span style="color: var(--color-text);">Expedientes</span>
+        </div>
+        <div class="topbar-actions">
+            <span class="text-small text-muted" th:text="${#temporals.format(#temporals.createNow(), 'dd MMM yyyy')}">18 Jul 2026</span>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <!-- Page Header -->
+        <div class="page-header animate-in">
+            <div>
+                <h1 class="page-title">Expedientes</h1>
+                <p class="page-subtitle">Operaciones con número de expediente judicial</p>
+            </div>
+            <div class="page-actions">
+                <a th:href="@{/cartera/importar}" class="btn btn-secondary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+                    Importar
+                </a>
+                <a th:href="@{/cartera/registros}" class="btn btn-ghost">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                    Ver cartera
+                </a>
+            </div>
+        </div>
+
+        <!-- Alert -->
+        <div th:if="${success}" class="alert alert-success animate-in">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <span th:text="${success}"></span>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters-bar animate-in stagger-1">
+            <form th:action="@{/cartera/expedientes}" method="get">
+                <div class="filters-grid">
+                    <div>
+                        <label class="form-label">Empresa</label>
+                        <select class="form-select" name="empresaId">
+                            <option value="">Todas</option>
+                            <option th:each="emp : ${empresas}" th:value="${emp.id}" th:text="${emp.nombre}" th:selected="${empresaId != null and empresaId == emp.id}"></option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label">Situación</label>
+                        <select class="form-select" name="situacion">
+                            <option value="">Todas</option>
+                            <option value="Judicial" th:selected="${situacion == 'Judicial'}">Judicial</option>
+                            <option value="Castigada" th:selected="${situacion == 'Castigada'}">Castigada</option>
+                            <option value="En Tramite" th:selected="${situacion == 'En Tramite'}">En Tramite</option>
+                            <option value="Finalizada" th:selected="${situacion == 'Finalizada'}">Finalizada</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label">Búsqueda</label>
+                        <input type="text" class="form-control" name="busqueda" th:value="${busqueda}" placeholder="N° Expediente, cliente, DNI...">
+                    </div>
+                    <div style="display: flex; gap: .5rem; align-items: flex-end;">
+                        <button type="submit" class="btn btn-primary" style="flex: 1;">Buscar</button>
+                        <a th:href="@{/cartera/expedientes}" class="btn btn-ghost">Limpiar</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Table -->
+        <div class="card animate-in stagger-2">
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>N° Expediente</th>
+                            <th>Cliente</th>
+                            <th>DNI</th>
+                            <th>Empresa</th>
+                            <th>Tipo Proceso</th>
+                            <th>Distrito Judicial</th>
+                            <th>Situación</th>
+                            <th>Etapa</th>
+                            <th>Abogado</th>
+                            <th>Monto Total</th>
+                            <th class="col-actions">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="op : ${pagina.content}">
+                            <td>
+                                <a th:href="@{/operaciones/{id}(id=${op.id})}"
+                                   style="font-weight: 600; color: var(--color-primary);"
+                                   th:text="${op.numeroExpediente}">-</a>
+                            </td>
+                            <td>
+                                <a th:href="@{/clientes/{id}(id=${op.clienteId})}"
+                                   th:text="${op.clienteNombre}">-</a>
+                            </td>
+                            <td th:text="${op.clienteDni}">-</td>
+                            <td th:text="${op.empresaNombre}">-</td>
+                            <td th:text="${op.tipoProceso}">-</td>
+                            <td th:text="${op.distritoJudicial}">-</td>
+                            <td>
+                                <span class="badge badge-judicial" th:if="${op.situacion == 'Judicial'}" th:text="${op.situacion}"></span>
+                                <span class="badge badge-castigada" th:if="${op.situacion == 'Castigada'}" th:text="${op.situacion}"></span>
+                                <span class="badge badge-finalizada" th:if="${op.situacion == 'Finalizada'}" th:text="${op.situacion}"></span>
+                                <span class="badge badge-en-tramite" th:if="${op.situacion == 'En Tramite'}" th:text="${op.situacion}"></span>
+                                <span class="badge badge-default" th:if="${op.situacion != 'Judicial' and op.situacion != 'Castigada' and op.situacion != 'Finalizada' and op.situacion != 'En Tramite'}" th:text="${op.situacion}">-</span>
+                            </td>
+                            <td th:text="${op.etapa}">-</td>
+                            <td th:text="${op.abogadoNombre}">-</td>
+                            <td th:text="${op.moneda} + ' ' + ${#numbers.formatDecimal(op.montoTotal, 1, 'COMMA', 2, 'POINT')}">-</td>
+                            <td class="col-actions">
+                                <a th:href="@{/operaciones/{id}(id=${op.id})}" class="btn-icon" title="Ver operación">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </a>
+                                <a th:href="@{/clientes/{id}(id=${op.clienteId})}" class="btn-icon" title="Ver cliente">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr th:if="${pagina.content.isEmpty()}">
+                            <td colspan="11">
+                                <div class="empty-state">
+                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                    <h3>Sin expedientes</h3>
+                                    <p>No hay operaciones con número de expediente para los filtros seleccionados.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="card-footer" th:if="${pagina.totalPages > 1}" style="display: flex; justify-content: center; padding: .75rem;">
+                <div class="pagination">
+                    <a class="pagination-btn"
+                       th:href="@{/cartera/expedientes(page=${pagina.number - 1}, empresaId=${empresaId}, situacion=${situacion}, busqueda=${busqueda})}"
+                       th:classappend="${pagina.number == 0 ? 'disabled' : ''}">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                    </a>
+
+                    <a class="pagination-btn"
+                       th:each="i : ${#numbers.sequence(0, pagina.totalPages - 1)}"
+                       th:href="@{/cartera/expedientes(page=${i}, empresaId=${empresaId}, situacion=${situacion}, busqueda=${busqueda})}"
+                       th:text="${i + 1}"
+                       th:classappend="${i == pagina.number ? 'active' : ''}"></a>
+
+                    <a class="pagination-btn"
+                       th:href="@{/cartera/expedientes(page=${pagina.number + 1}, empresaId=${empresaId}, situacion=${situacion}, busqueda=${busqueda})}"
+                       th:classappend="${pagina.number == pagina.totalPages - 1 ? 'disabled' : ''}">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
