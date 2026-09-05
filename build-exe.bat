@@ -1,10 +1,7 @@
 @echo off
-:: build-exe.bat — Genera el instalador .exe con jpackage
+:: build-exe.bat — Genera el .exe portable con jpackage
 :: Requiere: JDK 21+ con jpackage en PATH
-::            Maven 3.9+
-::
-:: Uso: run in Windows CMD
-::   build-exe.bat
+:: Uso: build-exe.bat
 
 echo =============================================
 echo  Build .exe — Sistema Integral de Cobranza
@@ -21,42 +18,30 @@ if %errorlevel% neq 0 (
 :: Verificar jpackage
 where jpackage >nul 2>&1
 if %errorlevel% neq 0 (
-    echo [ERROR] jpackage no encontrado.
-    echo Asegurate de tener JDK 21+ con jpackage en PATH.
+    echo [ERROR] jpackage no encontrado. Asegurate de tener JDK 21+.
     exit /b 1
 )
 
-:: Verificar Maven
-where mvn >nul 2>&1
+:: Compilar JAR si no existe o esta desactualizado
+echo [*] Compilando proyecto...
+call mvnw.cmd package -DskipTests -q
 if %errorlevel% neq 0 (
-    echo [ERROR] Maven no encontrado.
+    echo [ERROR] Error en compilacion.
+    pause
     exit /b 1
 )
+echo [OK] Proyecto compilado.
 
-:: Carpeta de salida
+:: Limpiar build anterior
 set OUTPUT_DIR=dist
-if not exist "%OUTPUT_DIR%" mkdir "%OUTPUT_DIR%"
-
-:: Carpeta de recursos (icono, scripts)
-set RESOURCES_DIR=installer-resources
-if not exist "%RESOURCES_DIR%" mkdir "%RESOURCES_DIR%"
-
-:: Compilar JAR si no existe
-if not exist "target\cobranza-1.0.0.jar" (
-    echo.
-    echo [*] Compilando proyecto...
-    call mvnw.cmd package -DskipTests -q
-    if %errorlevel% neq 0 (
-        echo [ERROR] Error en compilacion.
-        exit /b 1
-    )
-)
+if exist "%OUTPUT_DIR%\SistemaCobranza" rmdir /S /Q "%OUTPUT_DIR%\SistemaCobranza"
 
 echo.
-echo [*] Generando instalador .exe con jpackage...
+echo [*] Generando .exe con jpackage...
 echo.
 
-:: jpackage — genera un Windows Application Package (.exe installer)
+:: jpackage genera app-image: carpeta portable con exe + JRE + JAR
+:: El Launcher (Main-Class) carga .env automaticamente al arrancar
 jpackage ^
     --type app-image ^
     --input target ^
@@ -69,19 +54,37 @@ jpackage ^
     --dest "%OUTPUT_DIR%" ^
     --win-console
 
-:: --win-console: abre una consola para ver logs de Spring Boot
-
-if %errorlevel% equ 0 (
-    echo.
-    echo [OK] Build exitoso.
-    echo.
-    echo Ejecutable en: %OUTPUT_DIR%\SistemaCobranza\SistemaCobranza.exe
-    echo.
-    echo Para crear instalador MSI:
-    echo   jpackage --type msi --win-msi ... (mismos parametros)
-) else (
+if %errorlevel% neq 0 (
     echo.
     echo [ERROR] jpackage fallo.
+    pause
+    exit /b 1
 )
 
+:: Copiar .env.supabase como .env dentro del exe
+if exist ".env.supabase" (
+    copy /Y ".env.supabase" "%OUTPUT_DIR%\SistemaCobranza\.env" >nul 2>&1
+    echo [OK] .env (Supabase) embebido en el exe.
+) else (
+    echo [AVISO] .env.supabase no encontrado. El exe no podra conectar a Supabase.
+)
+
+echo.
+echo =============================================
+echo  Build exitoso!
+echo =============================================
+echo.
+echo Carpeta: %OUTPUT_DIR%\SistemaCobranza\
+echo.
+echo Contiene:
+echo   - SistemaCobranza.exe  (doble click para abrir)
+echo   - .env                  (credenciales Supabase embebidas)
+echo   - JRE incluido          (no necesita Java instalado)
+echo.
+echo Para crear acceso directo en el escritorio:
+echo   1. Abre la carpeta dist\SistemaCobranza
+echo   2. Clic derecho en SistemaCobranza.exe
+echo   3. "Crear acceso directo"
+echo   4. Mueve el acceso directo al escritorio
+echo.
 pause

@@ -124,6 +124,7 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <mainClass>com.startup.cobranza.Launcher</mainClass>
                     <jvmArguments>-Djava.net.preferIPv4Stack=true</jvmArguments>
                 </configuration>
             </plugin>
