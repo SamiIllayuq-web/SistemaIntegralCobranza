@@ -57,7 +57,7 @@ echo [OK] Variables cargadas.
 echo.
 echo Iniciando aplicacion en modo ONLINE...
 echo.
-call mvn spring-boot:run
+call mvnw.cmd spring-boot:run
 goto :menu
 
 :offline
@@ -88,13 +88,13 @@ echo DB_USER: !DB_USER!
 echo.
 echo Iniciando aplicacion en modo OFFLINE...
 echo.
-call mvn spring-boot:run
+call mvnw.cmd spring-boot:run
 goto :menu
 
 :compile
 cls
 echo Compilando...
-call mvn compile -q
+call mvnw.cmd compile -q
 if errorlevel 1 (
     echo [ERROR] Error en compilacion.
 ) else (

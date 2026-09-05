@@ -45,7 +45,7 @@ if not exist "%RESOURCES_DIR%" mkdir "%RESOURCES_DIR%"
 if not exist "target\cobranza-1.0.0.jar" (
     echo.
     echo [*] Compilando proyecto...
-    call mvn package -DskipTests -q
+    call mvnw.cmd package -DskipTests -q
     if %errorlevel% neq 0 (
         echo [ERROR] Error en compilacion.
         exit /b 1
