@@ -67,11 +67,9 @@ jpackage ^
     --main-jar "target/cobranza-1.0.0.jar" ^
     --dest "%OUTPUT_DIR%" ^
     --win-console ^
-    --resource-dir "%RESOURCES_DIR%" ^
-    --install-dir "SistemaCobranza"
+    --resource-dir "%RESOURCES_DIR%"
 
 :: --win-console: abre una consola para ver logs de Spring Boot
-:: --install-dir: donde se instala dentro de Program Files
 
 if %errorlevel% equ 0 (
     echo.
