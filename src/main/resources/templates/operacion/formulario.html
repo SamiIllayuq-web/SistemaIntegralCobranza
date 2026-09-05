@@ -1,289 +1,390 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${operacionId != null ? 'Editar Operación' : 'Nueva Operación'}">Operación</title>
+    <title th:text="${operacionId != null ? 'Editar Operación' : 'Nueva Operación'}">Operación — Sistema Integral de Cobranza</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Sistema de Cobranza</a>
-            <div class="navbar-nav">
-                <a class="nav-link" th:href="@{/dashboard}">Inicio</a>
-                <a class="nav-link" th:href="@{/clientes}">Clientes</a>
-            </div>
-            <form th:action="@{/logout}" method="post" class="d-inline">
-                <button type="submit" class="btn btn-light btn-sm">Cerrar Sesión</button>
-            </form>
+
+<th:block th:replace="~{layout :: sidebar}"></th:block>
+
+<div class="main-content">
+    <div class="topbar">
+        <div class="breadcrumb-nav">
+            <a th:href="@{/dashboard}">Inicio</a>
+            <span class="breadcrumb-sep">/</span>
+            <span style="color: var(--color-text);" th:text="${operacionId != null ? 'Editar' : 'Nueva'}">Operación</span>
         </div>
-    </nav>
+        <div class="topbar-actions">
+            <span class="text-small text-muted"
+                  th:text="${#temporals.format(#temporals.createNow(), 'dd MMM yyyy')}">Hoy</span>
+        </div>
+    </div>
 
-    <div class="container mt-4">
-        <h2 th:text="${operacionId != null ? 'Editar Operación' : 'Nueva Operación'}"></h2>
+    <div class="page-content">
 
-        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+        <div class="page-header animate-in">
+            <div>
+                <h1 class="page-title" th:text="${operacionId != null ? 'Editar Operación' : 'Nueva Operación'}">Operación</h1>
+                <p class="page-subtitle">Datos de la operación y expediente judicial</p>
+            </div>
+        </div>
+
+        <div th:if="${error}" class="alert alert-danger animate-in" th:text="${error}"></div>
 
         <form th:action="@{/operaciones/guardar}" th:object="${operacionForm}" method="post">
             <input type="hidden" name="id" th:value="${operacionId}" />
 
-            <div class="card mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Datos de la Operación</h5>
-                </div>
+            <!-- Sección: Datos de la Operación -->
+            <div class="card animate-in stagger-1">
+                <div class="card-header">Datos de la Operación</div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="empresaId" class="form-label">Empresa</label>
-                            <select class="form-select" id="empresaId" th:field="*{empresaId}">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div>
+                            <label class="form-label">Empresa</label>
+                            <select class="form-select" th:field="*{empresaId}">
                                 <option value="">Seleccione empresa</option>
                                 <option th:each="emp : ${empresas}" th:value="${emp.id}" th:text="${emp.nombre}"></option>
                             </select>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="agenciaId" class="form-label">Agencia</label>
-                            <input type="number" class="form-control" id="agenciaId" th:field="*{agenciaId}">
+                        <div>
+                            <label class="form-label">Agencia</label>
+                            <input type="number" class="form-control" th:field="*{agenciaId}">
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="cuenta" class="form-label">N° Cuenta</label>
-                            <input type="text" class="form-control" id="cuenta" th:field="*{cuenta}">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
+                        <div>
+                            <label class="form-label">N° Cuenta</label>
+                            <input type="text" class="form-control" th:field="*{cuenta}">
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="numeroOperacion" class="form-label">N° Operación</label>
-                            <input type="text" class="form-control" id="numeroOperacion" th:field="*{numeroOperacion}">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label for="montoCapital" class="form-label">Monto Capital</label>
-                            <input type="number" step="0.01" class="form-control" id="montoCapital" th:field="*{montoCapital}">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="montoTotal" class="form-label">Monto Total</label>
-                            <input type="number" step="0.01" class="form-control" id="montoTotal" th:field="*{montoTotal}">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="diasMora" class="form-label">Días Mora</label>
-                            <input type="number" class="form-control" id="diasMora" th:field="*{diasMora}">
+                        <div>
+                            <label class="form-label">N° Operación</label>
+                            <input type="text" class="form-control" th:field="*{numeroOperacion}">
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label for="moneda" class="form-label">Moneda</label>
-                            <input type="text" class="form-control" id="moneda" th:field="*{moneda}">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 16px;">
+                        <div>
+                            <label class="form-label">Monto Capital</label>
+                            <input type="number" step="0.01" class="form-control" th:field="*{montoCapital}">
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="tipoCredito" class="form-label">Tipo Crédito</label>
-                            <input type="text" class="form-control" id="tipoCredito" th:field="*{tipoCredito}">
+                        <div>
+                            <label class="form-label">Monto Total</label>
+                            <input type="number" step="0.01" class="form-control" th:field="*{montoTotal}">
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="situacion" class="form-label">Situación</label>
-                            <input type="text" class="form-control" id="situacion" th:field="*{situacion}">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label for="estado" class="form-label">Estado</label>
-                            <input type="text" class="form-control" id="estado" th:field="*{estado}">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="etapa" class="form-label">Etapa</label>
-                            <input type="text" class="form-control" id="etapa" th:field="*{etapa}">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="rango" class="form-label">Rango</label>
-                            <input type="text" class="form-control" id="rango" th:field="*{rango}">
+                        <div>
+                            <label class="form-label">Días Mora</label>
+                            <input type="number" class="form-control" th:field="*{diasMora}">
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="analista" class="form-label">Analista</label>
-                            <input type="text" class="form-control" id="analista" th:field="*{analista}">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 16px;">
+                        <div>
+                            <label class="form-label">Moneda</label>
+                            <input type="text" class="form-control" th:field="*{moneda}">
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="analistaSenior" class="form-label">Analista Senior</label>
-                            <input type="text" class="form-control" id="analistaSenior" th:field="*{analistaSenior}">
+                        <div>
+                            <label class="form-label">Tipo Crédito</label>
+                            <input type="text" class="form-control" th:field="*{tipoCredito}">
+                        </div>
+                        <div>
+                            <label class="form-label">Situación</label>
+                            <input type="text" class="form-control" th:field="*{situacion}">
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="observacion" class="form-label">Observación</label>
-                        <textarea class="form-control" id="observacion" th:field="*{observacion}" rows="2"></textarea>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 16px;">
+                        <div>
+                            <label class="form-label">Estado</label>
+                            <input type="text" class="form-control" th:field="*{estado}">
+                        </div>
+                        <div>
+                            <label class="form-label">Etapa</label>
+                            <input type="text" class="form-control" th:field="*{etapa}">
+                        </div>
+                        <div>
+                            <label class="form-label">Rango</label>
+                            <input type="text" class="form-control" th:field="*{rango}">
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
+                        <div>
+                            <label class="form-label">Analista</label>
+                            <input type="text" class="form-control" th:field="*{analista}">
+                        </div>
+                        <div>
+                            <label class="form-label">Analista Senior</label>
+                            <input type="text" class="form-control" th:field="*{analistaSenior}">
+                        </div>
+                    </div>
+                    <div style="margin-top: 16px;">
+                        <label class="form-label">Observación</label>
+                        <textarea class="form-control" th:field="*{observacion}" rows="2"></textarea>
                     </div>
                 </div>
             </div>
 
-            <div class="card mb-4">
-                <div class="card-header bg-dark text-white">
-                    <h5 class="mb-0">Datos del Expediente Judicial</h5>
-                </div>
+            <!-- Sección: Expediente Judicial -->
+            <div class="card animate-in stagger-2" style="margin-top: 16px;">
+                <div class="card-header">Datos del Expediente Judicial</div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="numeroExpediente" class="form-label">N° Expediente</label>
-                            <input type="text" class="form-control" id="numeroExpediente" th:field="*{numeroExpediente}">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div>
+                            <label class="form-label">N° Expediente</label>
+                            <input type="text" class="form-control" th:field="*{numeroExpediente}">
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="tipoProceso" class="form-label">Tipo Proceso</label>
-                            <input type="text" class="form-control" id="tipoProceso" th:field="*{tipoProceso}">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label for="tipoJuzgado" class="form-label">Tipo Juzgado</label>
-                            <input type="text" class="form-control" id="tipoJuzgado" th:field="*{tipoJuzgado}">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="distritoJudicial" class="form-label">Distrito Judicial</label>
-                            <input type="text" class="form-control" id="distritoJudicial" th:field="*{distritoJudicial}">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="numeroJuzgado" class="form-label">N° Juzgado</label>
-                            <input type="text" class="form-control" id="numeroJuzgado" th:field="*{numeroJuzgado}">
+                        <div>
+                            <label class="form-label">Tipo Proceso</label>
+                            <input type="text" class="form-control" th:field="*{tipoProceso}">
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="observacionActos" class="form-label">Observación Actos</label>
-                        <textarea class="form-control" id="observacionActos" th:field="*{observacionActos}" rows="2"></textarea>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 16px;">
+                        <div>
+                            <label class="form-label">Tipo Juzgado</label>
+                            <input type="text" class="form-control" th:field="*{tipoJuzgado}">
+                        </div>
+                        <div>
+                            <label class="form-label">Distrito Judicial</label>
+                            <input type="text" class="form-control" th:field="*{distritoJudicial}">
+                        </div>
+                        <div>
+                            <label class="form-label">N° Juzgado</label>
+                            <input type="text" class="form-control" th:field="*{numeroJuzgado}">
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="comentario" class="form-label">Comentario</label>
-                        <textarea class="form-control" id="comentario" th:field="*{comentario}" rows="2"></textarea>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 16px;">
+                        <div>
+                            <label class="form-label">Trans.</label>
+                            <input type="text" class="form-control" th:field="*{trans}">
+                        </div>
+                        <div>
+                            <label class="form-label">Búsqueda Bienes</label>
+                            <input type="text" class="form-control" th:field="*{busquedaBienes}">
+                        </div>
+                        <div>
+                            <label class="form-label">Monto Demandado</label>
+                            <input type="number" step="0.01" class="form-control" th:field="*{montoDemandado}">
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 16px;">
+                        <div>
+                            <label class="form-label">Escribano Legal</label>
+                            <input type="text" class="form-control" th:field="*{escribanoLegal}">
+                        </div>
+                        <div>
+                            <label class="form-label">Cód. Exp. Cautelar</label>
+                            <input type="text" class="form-control" th:field="*{codigoExpCautelar}">
+                        </div>
+                        <div>
+                            <label class="form-label">Incidente</label>
+                            <input type="text" class="form-control" th:field="*{incidente}">
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
+                        <div>
+                            <label class="form-label">Observación Actos</label>
+                            <textarea class="form-control" th:field="*{observacionActos}" rows="2"></textarea>
+                        </div>
+                        <div>
+                            <label class="form-label">Comentario</label>
+                            <textarea class="form-control" th:field="*{comentario}" rows="2"></textarea>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary">Guardar</button>
-            <a th:if="${operacionId != null}" th:href="@{/operaciones/{id}(id=${operacionId})}" class="btn btn-secondary">Cancelar</a>
-            <a th:unless="${operacionId != null}" th:href="@{/dashboard}" class="btn btn-secondary">Cancelar</a>
+            <!-- Sección: Fechas Procesales (colapsable) -->
+            <div class="card animate-in stagger-3" style="margin-top: 16px;">
+                <div class="card-header" style="cursor: pointer;"
+                     onclick="this.parentElement.querySelector('.fechas-body').classList.toggle('hidden')">
+                    Fechas Procesales
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                         style="margin-left: 8px; transition: transform .2s;">
+                        <polyline points="6 9 12 15 18 9"/>
+                    </svg>
+                </div>
+                <div class="card-body fechas-body">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+                        <div>
+                            <label class="form-label">Fecha Presentación</label>
+                            <input type="date" class="form-control" th:field="*{fechaPresentacion}">
+                        </div>
+                        <div>
+                            <label class="form-label">Fecha Admisión Principal</label>
+                            <input type="date" class="form-control" th:field="*{fechaAdmisionPrincipal}">
+                        </div>
+                        <div>
+                            <label class="form-label">Fecha Inadmisible Principal</label>
+                            <input type="date" class="form-control" th:field="*{fechaInadmisiblePrincipal}">
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 16px;">
+                        <div>
+                            <label class="form-label">Fecha Ejecutoriada</label>
+                            <input type="date" class="form-control" th:field="*{fechaEjecutoriada}">
+                        </div>
+                        <div>
+                            <label class="form-label">Fecha Ingreso Ejecución</label>
+                            <input type="date" class="form-control" th:field="*{fechaIngresoEjecucion}">
+                        </div>
+                        <div>
+                            <label class="form-label">Fecha Audiencia Única</label>
+                            <input type="date" class="form-control" th:field="*{fechaAudienciaUnica}">
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 16px;">
+                        <div>
+                            <label class="form-label">Fecha Auto Final</label>
+                            <input type="date" class="form-control" th:field="*{fechaAutoFinal}">
+                        </div>
+                        <div>
+                            <label class="form-label">Fecha Consentimiento</label>
+                            <input type="date" class="form-control" th:field="*{fechaConsentimiento}">
+                        </div>
+                        <div>
+                            <label class="form-label">Fecha Tasación</label>
+                            <input type="date" class="form-control" th:field="*{fechaTasacion}">
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 16px;">
+                        <div>
+                            <label class="form-label">Fecha Nombramiento Martillero</label>
+                            <input type="date" class="form-control" th:field="*{fechaNombramientoMartillero}">
+                        </div>
+                        <div>
+                            <label class="form-label">Fecha Remate 1°</label>
+                            <input type="date" class="form-control" th:field="*{fechaRemate1}">
+                        </div>
+                        <div>
+                            <label class="form-label">Fecha Remate 2°</label>
+                            <input type="date" class="form-control" th:field="*{fechaRemate2}">
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
+                        <div>
+                            <label class="form-label">Fecha Remate 3°</label>
+                            <input type="date" class="form-control" th:field="*{fechaRemate3}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bienes Embargados -->
+            <div class="card animate-in stagger-4" style="margin-top: 16px;" th:if="${operacionId != null}">
+                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                    Bienes Embargados
+                    <button type="button" class="btn btn-ghost btn-sm" onclick="agregarBien()">+ Agregar Bien</button>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-wrapper">
+                        <table class="data-table" id="bienesTable">
+                            <thead>
+                                <tr>
+                                    <th>Detalle Bien/Garantía</th>
+                                    <th>N° Partida</th>
+                                    <th>Tipo Bien</th>
+                                    <th>Dirección</th>
+                                    <th>Distrito</th>
+                                    <th>Garantía Inscrita</th>
+                                    <th>Monto MC</th>
+                                    <th class="col-actions"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="bienesBody">
+                                <tr th:if="${operacionForm.bienesEmbargados != null}"
+                                    th:each="bien, stat : ${operacionForm.bienesEmbargados}"
+                                    th:data-index="${stat.index}">
+                                    <input type="hidden" th:name="'bienesEmbargados[' + ${stat.index} + '].id'" th:value="${bien.id}"/>
+                                    <td><input type="text" class="form-control form-control-sm"
+                                               th:name="'bienesEmbargados[' + ${stat.index} + '].detalleGarantia'"
+                                               th:value="${bien.detalleGarantia}"/></td>
+                                    <td><input type="text" class="form-control form-control-sm"
+                                               th:name="'bienesEmbargados[' + ${stat.index} + '].partidaRegistral'"
+                                               th:value="${bien.partidaRegistral}"/></td>
+                                    <td><input type="text" class="form-control form-control-sm"
+                                               th:name="'bienesEmbargados[' + ${stat.index} + '].tipoBien'"
+                                               th:value="${bien.tipoBien}"/></td>
+                                    <td><input type="text" class="form-control form-control-sm"
+                                               th:name="'bienesEmbargados[' + ${stat.index} + '].direccion'"
+                                               th:value="${bien.direccion}"/></td>
+                                    <td><input type="text" class="form-control form-control-sm"
+                                               th:name="'bienesEmbargados[' + ${stat.index} + '].distrito'"
+                                               th:value="${bien.distrito}"/></td>
+                                    <td><input type="text" class="form-control form-control-sm"
+                                               th:name="'bienesEmbargados[' + ${stat.index} + '].garantiaInscrita'"
+                                               th:value="${bien.garantiaInscrita}"/></td>
+                                    <td><input type="text" class="form-control form-control-sm"
+                                               th:name="'bienesEmbargados[' + ${stat.index} + '].montoMc'"
+                                               th:value="${bien.montoMc}"/></td>
+                                    <td>
+                                        <button type="button" class="btn-icon btn-icon-danger" onclick="eliminarBien(this)">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div th:if="${operacionForm.bienesEmbargados == null or operacionForm.bienesEmbargados.isEmpty()}"
+                         class="text-center text-muted" style="padding: 24px;">
+                        Sin bienes embargados registrados
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; display: flex; gap: 8px;">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <a th:if="${operacionId != null}" th:href="@{/operaciones/{id}(id=${operacionId})}" class="btn btn-ghost">Cancelar</a>
+                <a th:unless="${operacionId != null}" th:href="@{/dashboard}" class="btn btn-ghost">Cancelar</a>
+            </div>
         </form>
+    </div>
+</div>
 
-        <!-- Bienes Embargados -->
-        <div class="card mb-4" th:if="${operacionId != null}">
-            <div class="card-header bg-warning text-dark">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Bienes Embargados</h5>
-                    <button type="button" class="btn btn-sm btn-outline-dark" onclick="agregarBien()">+ Agregar Bien</button>
-                </div>
-            </div>
-            <div class="card-body p-0">
-                <table class="table table-sm table-striped mb-0" id="bienesTable">
-                    <thead>
-                        <tr>
-                            <th>Detalle Bien/Garantía</th>
-                            <th>N° Partida</th>
-                            <th>Tipo Bien</th>
-                            <th>Dirección</th>
-                            <th>Distrito</th>
-                            <th>Garantía Inscrita</th>
-                            <th>Monto MC</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="bienesBody">
-                        <tr th:if="${operacionForm.bienesEmbargados != null}"
-                            th:each="bien, stat : ${operacionForm.bienesEmbargados}"
-                            th:data-index="${stat.index}">
-                            <input type="hidden" th:name="'bienesEmbargados[' + ${stat.index} + '].id'"
-                                   th:value="${bien.id}"/>
-                            <td><input type="text" class="form-control form-control-sm"
-                                       th:name="'bienesEmbargados[' + ${stat.index} + '].detalleGarantia'"
-                                       th:value="${bien.detalleGarantia}"/></td>
-                            <td><input type="text" class="form-control form-control-sm"
-                                       th:name="'bienesEmbargados[' + ${stat.index} + '].partidaRegistral'"
-                                       th:value="${bien.partidaRegistral}"/></td>
-                            <td><input type="text" class="form-control form-control-sm"
-                                       th:name="'bienesEmbargados[' + ${stat.index} + '].tipoBien'"
-                                       th:value="${bien.tipoBien}"/></td>
-                            <td><input type="text" class="form-control form-control-sm"
-                                       th:name="'bienesEmbargados[' + ${stat.index} + '].direccion'"
-                                       th:value="${bien.direccion}"/></td>
-                            <td><input type="text" class="form-control form-control-sm"
-                                       th:name="'bienesEmbargados[' + ${stat.index} + '].distrito'"
-                                       th:value="${bien.distrito}"/></td>
-                            <td><input type="text" class="form-control form-control-sm"
-                                       th:name="'bienesEmbargados[' + ${stat.index} + '].garantiaInscrita'"
-                                       th:value="${bien.garantiaInscrita}"/></td>
-                            <td><input type="text" class="form-control form-control-sm"
-                                       th:name="'bienesEmbargados[' + ${stat.index} + '].montoMc'"
-                                       th:value="${bien.montoMc}"/></td>
-                            <td>
-                                <button type="button" class="btn btn-outline-danger btn-sm py-0 px-1"
-                                        onclick="eliminarBien(this)">×</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div th:if="${operacionForm.bienesEmbargados == null or operacionForm.bienesEmbargados.isEmpty()}"
-                     class="text-center text-muted py-3 small">
-                    Sin bienes embargados registrados
-                </div>
-            </div>
-        </div>
-    </div><!-- /container -->
+<template id="bienRowTemplate">
+    <tr>
+        <input type="hidden" name="bienesEmbargados[__INDEX__].id" value=""/>
+        <td><input type="text" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].detalleGarantia" value=""/></td>
+        <td><input type="text" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].partidaRegistral" value=""/></td>
+        <td><input type="text" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].tipoBien" value=""/></td>
+        <td><input type="text" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].direccion" value=""/></td>
+        <td><input type="text" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].distrito" value=""/></td>
+        <td><input type="text" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].garantiaInscrita" value=""/></td>
+        <td><input type="text" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].montoMc" value=""/></td>
+        <td>
+            <button type="button" class="btn-icon btn-icon-danger" onclick="eliminarBien(this)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+        </td>
+    </tr>
+</template>
 
-    <template id="bienRowTemplate">
-        <tr>
-            <input type="hidden" name="bienesEmbargados[__INDEX__].id" value=""/>
-            <td><input type="text" class="form-control form-control-sm"
-                       name="bienesEmbargados[__INDEX__].detalleGarantia" value=""/></td>
-            <td><input type="text" class="form-control form-control-sm"
-                       name="bienesEmbargados[__INDEX__].partidaRegistral" value=""/></td>
-            <td><input type="text" class="form-control form-control-sm"
-                       name="bienesEmbargados[__INDEX__].tipoBien" value=""/></td>
-            <td><input type="text" class="form-control form-control-sm"
-                       name="bienesEmbargados[__INDEX__].direccion" value=""/></td>
-            <td><input type="text" class="form-control form-control-sm"
-                       name="bienesEmbargados[__INDEX__].distrito" value=""/></td>
-            <td><input type="text" class="form-control form-control-sm"
-                       name="bienesEmbargados[__INDEX__].garantiaInscrita" value=""/></td>
-            <td><input type="text" class="form-control form-control-sm"
-                       name="bienesEmbargados[__INDEX__].montoMc" value=""/></td>
-            <td>
-                <button type="button" class="btn btn-outline-danger btn-sm py-0 px-1"
-                        onclick="eliminarBien(this)">×</button>
-            </td>
-        </tr>
-    </template>
+<script>
+let bienIndex = [[${operacionForm.bienesEmbargados != null ? operacionForm.bienesEmbargados.size() : 0}]];
 
-    <script>
-    let bienIndex = [[${operacionForm.bienesEmbargados != null ? operacionForm.bienesEmbargados.size() : 0}]];
+function agregarBien() {
+    const tbody = document.getElementById('bienesBody');
+    const table = document.getElementById('bienesTable');
+    // Ocultar mensaje vacío si existe
+    const emptyMsg = table.parentElement.querySelector('.text-center.text-muted');
+    if (emptyMsg) emptyMsg.remove();
+    table.style.display = '';
+    const html = document.getElementById('bienRowTemplate').innerHTML.replace(/__INDEX__/g, bienIndex);
+    tbody.insertAdjacentHTML('beforeend', html);
+    bienIndex++;
+}
 
-    function agregarBien() {
-        const table = document.querySelector('#bienesBody');
-        // Mostrar tabla si estaba vacía
-        const theTable = table.parentElement.querySelector('.table');
-        if (theTable) theTable.style.display = '';
-        const emptyMsg = table.parentElement.querySelector('.text-center.text-muted');
-        if (emptyMsg) emptyMsg.remove();
-        const html = document.getElementById('bienRowTemplate').innerHTML
-            .replace(/__INDEX__/g, bienIndex);
-        table.insertAdjacentHTML('beforeend', html);
-        bienIndex++;
-    }
+function eliminarBien(btn) {
+    const row = btn.closest('tr');
+    row.remove();
+}
+</script>
 
-    function eliminarBien(btn) {
-        const row = btn.closest('tr');
-        row.remove();
-        // Si no quedan filas visibles y hay mensaje vacío, mostrarlo
-        const tbody = document.getElementById('bienesBody');
-        if (tbody.querySelectorAll('tr').length === 0) {
-            const emptyDiv = document.createElement('div');
-            emptyDiv.className = 'text-center text-muted py-3 small';
-            emptyDiv.textContent = 'Sin bienes embargados registrados';
-            tbody.parentElement.querySelector('.table').style.display = 'none';
-            const msg = tbody.parentElement.querySelector('.text-center.text-muted');
-            if (!msg) {
-                const div = document.createElement('div');
-                div.className = 'text-center text-muted py-3 small';
-                div.textContent = 'Sin bienes embargados registrados';
-                tbody.parentElement.appendChild(div);
-            }
-        }
-    }
-    </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -1,100 +1,100 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${clienteId != null ? 'Editar Cliente' : 'Nuevo Cliente'}">Cliente</title>
+    <title th:text="${clienteId != null ? 'Editar Cliente' : 'Nuevo Cliente'}">Cliente — Sistema Integral de Cobranza</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Sistema de Cobranza</a>
-            <div class="navbar-nav">
-                <a class="nav-link" th:href="@{/dashboard}">Inicio</a>
-                <a class="nav-link" th:href="@{/clientes}">Clientes</a>
-            </div>
-            <form th:action="@{/logout}" method="post" class="d-inline">
-                <button type="submit" class="btn btn-light btn-sm">Cerrar Sesión</button>
-            </form>
+
+<th:block th:replace="~{layout :: sidebar}"></th:block>
+
+<div class="main-content">
+    <div class="topbar">
+        <div class="breadcrumb-nav">
+            <a th:href="@{/dashboard}">Inicio</a>
+            <span class="breadcrumb-sep">/</span>
+            <a th:href="@{/clientes}">Clientes</a>
+            <span class="breadcrumb-sep">/</span>
+            <span style="color: var(--color-text);" th:text="${clienteId != null ? 'Editar' : 'Nuevo'}">Formulario</span>
         </div>
-    </nav>
+        <div class="topbar-actions">
+            <span class="text-small text-muted"
+                  th:text="${#temporals.format(#temporals.createNow(), 'dd MMM yyyy')}">Hoy</span>
+        </div>
+    </div>
 
-    <div class="container mt-4">
-        <h2 th:text="${clienteId != null ? 'Editar Cliente' : 'Nuevo Cliente'}"></h2>
+    <div class="page-content">
 
-        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+        <div class="page-header animate-in">
+            <div>
+                <h1 class="page-title" th:text="${clienteId != null ? 'Editar Cliente' : 'Nuevo Cliente'}">Cliente</h1>
+                <p class="page-subtitle" th:text="${clienteId != null ? 'Modificar datos del cliente' : 'Registrar un nuevo cliente'}"></p>
+            </div>
+        </div>
+
+        <div th:if="${error}" class="alert alert-danger animate-in" th:text="${error}"></div>
 
         <form th:action="@{/clientes/guardar}" th:object="${clienteForm}" method="post">
             <input type="hidden" name="clienteId" th:value="${clienteId}" />
 
-            <div class="card mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Información General</h5>
-                </div>
+            <div class="card animate-in stagger-1">
+                <div class="card-header">Información General</div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="nombreCompleto" class="form-label">Nombre Completo *</label>
-                            <input type="text" class="form-control" id="nombreCompleto" th:field="*{nombreCompleto}" required>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div>
+                            <label class="form-label">Nombre Completo *</label>
+                            <input type="text" class="form-control" th:field="*{nombreCompleto}" required>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="dni" class="form-label">DNI</label>
-                            <input type="text" class="form-control" id="dni" th:field="*{dni}">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="empresaId" class="form-label">Empresa</label>
-                            <select class="form-select" id="empresaId" th:field="*{empresaId}">
-                                <option value="">Seleccione una empresa</option>
-                                <option th:each="emp : ${empresas}" th:value="${emp.id}" th:text="${emp.nombre}"></option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="agenciaId" class="form-label">Agencia</label>
-                            <input type="number" class="form-control" id="agenciaId" th:field="*{agenciaId}" placeholder="ID de agencia">
+                        <div>
+                            <label class="form-label">DNI</label>
+                            <input type="text" class="form-control" th:field="*{dni}">
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="card mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Información de Contacto</h5>
-                </div>
+            <div class="card animate-in stagger-2" style="margin-top: 16px;">
+                <div class="card-header">Información de Contacto</div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label for="telefono" class="form-label">Teléfono 1</label>
-                            <input type="text" class="form-control" id="telefono" th:field="*{telefono}">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+                        <div>
+                            <label class="form-label">Teléfono 1</label>
+                            <input type="text" class="form-control" th:field="*{telefono}">
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="telefono2" class="form-label">Teléfono 2</label>
-                            <input type="text" class="form-control" id="telefono2" th:field="*{telefono2}">
+                        <div>
+                            <label class="form-label">Teléfono 2</label>
+                            <input type="text" class="form-control" th:field="*{telefono2}">
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="telefono3" class="form-label">Teléfono 3</label>
-                            <input type="text" class="form-control" id="telefono3" th:field="*{telefono3}">
+                        <div>
+                            <label class="form-label">Teléfono 3</label>
+                            <input type="text" class="form-control" th:field="*{telefono3}">
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" th:field="*{email}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="direccion" class="form-label">Dirección</label>
-                        <input type="text" class="form-control" id="direccion" th:field="*{direccion}">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
+                        <div>
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" th:field="*{email}">
+                        </div>
+                        <div>
+                            <label class="form-label">Dirección</label>
+                            <input type="text" class="form-control" th:field="*{direccion}">
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary">Guardar</button>
-            <a th:href="@{/clientes}" class="btn btn-secondary">Cancelar</a>
+            <div style="margin-top: 20px; display: flex; gap: 8px;">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <a th:href="@{/clientes}" class="btn btn-ghost">Cancelar</a>
+            </div>
         </form>
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

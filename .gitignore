@@ -32,3 +32,4 @@ Thumbs.db
 # Credenciales
 credenciales
 load-env.fish
+.env.supabase

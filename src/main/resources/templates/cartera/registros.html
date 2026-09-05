@@ -4,46 +4,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registros de Cartera</title>
+    <title>Registros de Cartera — Sistema Integral de Cobranza</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Sistema de Cobranza</a>
-            <div class="navbar-nav">
-                <a class="nav-link" th:href="@{/dashboard}">Inicio</a>
-                <a class="nav-link" th:href="@{/empresas}">Empresas</a>
-                <a class="nav-link" th:href="@{/usuarios}">Usuarios</a>
-                <a class="nav-link" th:href="@{/clientes}">Clientes</a>
-                <a class="nav-link" th:href="@{/cartera/importar}">Cartera</a>
-                <a class="nav-link active" th:href="@{/cartera/registros}">Registros</a>
-            </div>
-            <form th:action="@{/logout}" method="post" class="d-inline">
-                <button type="submit" class="btn btn-light btn-sm">Cerrar Sesión</button>
-            </form>
+
+<th:block th:replace="~{layout :: sidebar}"></th:block>
+
+<div class="main-content">
+    <div class="topbar">
+        <div class="breadcrumb-nav">
+            <a th:href="@{/dashboard}">Inicio</a>
+            <span class="breadcrumb-sep">/</span>
+            <span style="color: var(--color-text);">Registros</span>
         </div>
-    </nav>
+        <div class="topbar-actions">
+            <span class="text-small text-muted"
+                  th:text="${#temporals.format(#temporals.createNow(), 'dd MMM yyyy')}">Hoy</span>
+        </div>
+    </div>
 
-    <div class="container mt-4">
+    <div class="page-content">
 
-        <!-- Header -->
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2>Registros de Cartera</h2>
+        <!-- Page header -->
+        <div class="page-header animate-in">
             <div>
-                <a th:href="@{/cartera/importar}" class="btn btn-primary btn-sm">Importar</a>
-                <a th:href="@{/cartera/historial}" class="btn btn-info btn-sm">Historial</a>
+                <h1 class="page-title">Registros de Cartera</h1>
+                <p class="page-subtitle">Operaciones de todas las empresas</p>
+            </div>
+            <div class="page-actions">
+                <a th:href="@{/cartera/importar}" class="btn btn-primary btn-sm">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/>
+                    </svg>
+                    Importar
+                </a>
+                <a th:href="@{/cartera/historial}" class="btn btn-ghost btn-sm">Historial</a>
             </div>
         </div>
 
-        <!-- Filtros -->
-        <form method="get" class="card mb-3">
-            <div class="card-body py-2">
-                <div class="row g-2 align-items-end">
-                    <div class="col-md-2">
-                        <label class="form-label mb-0 small text-muted">Empresa</label>
-                        <select name="empresaId" id="filtroEmpresa" class="form-select form-select-sm">
+        <!-- Success/error alerts -->
+        <div th:if="${success}" class="alert alert-success animate-in">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            <span th:text="${success}"></span>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters-bar animate-in stagger-1">
+            <form th:action="@{/cartera/registros}" method="get">
+                <div class="filters-grid">
+                    <div>
+                        <label class="form-label">Empresa</label>
+                        <select name="empresaId" class="form-select">
                             <option value="">Todas</option>
                             <option th:each="e : ${empresas}"
                                     th:value="${e.id}"
@@ -51,157 +67,170 @@
                                     th:selected="${empresaId != null and empresaId == e.id}">Empresa</option>
                         </select>
                     </div>
-                    <div class="col-md-2">
-                        <label class="form-label mb-0 small text-muted">Estado</label>
-                        <select name="estado" class="form-select form-select-sm">
+                    <div>
+                        <label class="form-label">Estado</label>
+                        <select name="estado" class="form-select">
                             <option value="">Todos</option>
                             <option value="DEMANDA" th:selected="${estado == 'DEMANDA'}">Demanda</option>
                             <option value="EJECUCION" th:selected="${estado == 'EJECUCION'}">Ejecución</option>
                             <option value="COBRANZA" th:selected="${estado == 'COBRANZA'}">Cobranza</option>
                         </select>
                     </div>
-                    <div class="col-md-2">
-                        <label class="form-label mb-0 small text-muted">Etapa</label>
-                        <select name="etapa" class="form-select form-select-sm">
+                    <div>
+                        <label class="form-label">Etapa</label>
+                        <select name="etapa" class="form-select">
                             <option value="">Todas</option>
                             <option value="EXTRAJUDICIAL" th:selected="${etapa == 'EXTRAJUDICIAL'}">Extrajudicial</option>
                             <option value="JUDICIAL" th:selected="${etapa == 'JUDICIAL'}">Judicial</option>
                             <option value="COACTIVA" th:selected="${etapa == 'COACTIVA'}">Coactiva</option>
                         </select>
                     </div>
-                    <div class="col-md-3">
-                        <label class="form-label mb-0 small text-muted">Búsqueda (DNI, nombre, exp., op.)</label>
-                        <input type="text" name="busqueda" class="form-control form-control-sm"
-                               th:value="${busqueda}" placeholder="Buscar...">
+                    <div>
+                        <label class="form-label">Búsqueda</label>
+                        <input type="text" name="busqueda" class="form-control"
+                               th:value="${busqueda}" placeholder="DNI, nombre, exp., op...">
                     </div>
-                    <div class="col-md-1 d-grid">
-                        <button type="submit" class="btn btn-primary btn-sm">Filtrar</button>
+                    <div style="display: flex; gap: .5rem; align-items: flex-end;">
+                        <button type="submit" class="btn btn-primary" style="flex:1;">Filtrar</button>
+                        <a th:href="@{/cartera/registros}" class="btn btn-ghost">Limpiar</a>
                     </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
 
-        <!-- Info de resultados -->
-        <div class="d-flex justify-content-between align-items-center mb-2">
-            <span class="small text-muted">
-                Mostrando <span th:text="${pagina.numberOfElements}">0</span> de
-                <span th:text="${pagina.totalElements}">0</span> registros
-                (página <span th:text="${pagina.number + 1}">1</span> de <span th:text="${pagina.totalPages}">1</span>)
+        <!-- Results info -->
+        <div class="d-flex justify-content-between align-items-center mb-2" style="margin-bottom: 8px;">
+            <span class="text-small text-muted">
+                Mostrando <strong th:text="${pagina.numberOfElements}">0</strong> de
+                <strong th:text="${pagina.totalElements}">0</strong> registros
+                (pág. <strong th:text="${pagina.number + 1}">1</strong> de <strong th:text="${pagina.totalPages}">1</strong>)
             </span>
         </div>
 
-        <!-- Tabla -->
-        <div class="table-responsive" style="font-size:0.82rem;">
-            <table class="table table-sm table-striped table-hover border">
-                <thead class="table-light">
-                    <tr>
-                        <th>DNI</th>
-                        <th>Cliente</th>
-                        <th>Empresa</th>
-                        <th>Cuenta</th>
-                        <th>N° Operación</th>
-                        <th>Moneda</th>
-                        <th>Monto Capital</th>
-                        <th>Monto Total</th>
-                        <th>Días Mora</th>
-                        <th>Tipo Crédito</th>
-                        <th>Situación</th>
-                        <th>Estado</th>
-                        <th>Etapa</th>
-                        <th>N° Expediente</th>
-                        <th>Tipo Proceso</th>
-                        <th>Distrito Judicial</th>
-                        <th>Trans.</th>
-                        <th>Bienes</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="op : ${pagina.content}">
-                        <td th:text="${op.clienteDni}">-</td>
-                        <td>
-                            <a th:href="@{/clientes/{id}(id=${op.clienteId})}"
-                               th:text="${op.clienteNombre}">-</a>
-                        </td>
-                        <td th:text="${op.empresaNombre}">-</td>
-                        <td th:text="${op.cuenta}">-</td>
-                        <td>
-                            <a th:href="@{/operaciones/{id}(id=${op.id})}"
-                               th:text="${op.numeroOperacion}">-</a>
-                        </td>
-                        <td th:text="${op.moneda}">-</td>
-                        <td th:text="${op.montoCapital}">-</td>
-                        <td th:text="${op.montoTotal}">-</td>
-                        <td th:text="${op.diasMora}">-</td>
-                        <td th:text="${op.tipoCredito}">-</td>
-                        <td th:text="${op.situacion}">-</td>
-                        <td th:text="${op.estado}">-</td>
-                        <td th:text="${op.etapa}">-</td>
-                        <td th:text="${op.numeroExpediente}">-</td>
-                        <td th:text="${op.tipoProceso}">-</td>
-                        <td th:text="${op.distritoJudicial}">-</td>
-                        <td>
-                            <span th:if="${op.trans == true}" class="badge bg-success">Sí</span>
-                            <span th:if="${op.trans == false}" class="badge bg-secondary">No</span>
-                            <span th:if="${op.trans == null}">-</span>
-                        </td>
-                        <td>
-                            <span th:if="${op.busquedaBienes == true}" class="badge bg-success">Sí</span>
-                            <span th:if="${op.busquedaBienes == false}" class="badge bg-secondary">No</span>
-                            <span th:if="${op.busquedaBienes == null}">-</span>
-                        </td>
-                        <td>
-                            <a th:href="@{/operaciones/{id}(id=${op.id})}"
-                               class="btn btn-outline-primary btn-sm py-0 px-1">Ver</a>
-                            <a th:href="@{/clientes/{id}(id=${op.clienteId})}"
-                               class="btn btn-outline-secondary btn-sm py-0 px-1">Cliente</a>
-                        </td>
-                    </tr>
-                    <tr th:if="${pagina.content.isEmpty()}">
-                        <td colspan="19" class="text-center text-muted py-3">No hay registros para los filtros seleccionados</td>
-                    </tr>
-                </tbody>
-            </table>
+        <!-- Table -->
+        <div class="card animate-in stagger-2">
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>DNI</th>
+                            <th>Cliente</th>
+                            <th>Empresa</th>
+                            <th>Cuenta</th>
+                            <th>N° Operación</th>
+                            <th>Moneda</th>
+                            <th>Monto Capital</th>
+                            <th>Monto Total</th>
+                            <th>Días Mora</th>
+                            <th>Tipo Crédito</th>
+                            <th>Situación</th>
+                            <th>Estado</th>
+                            <th>Etapa</th>
+                            <th>N° Expediente</th>
+                            <th>Tipo Proceso</th>
+                            <th>Distrito Judicial</th>
+                            <th>Trans.</th>
+                            <th>Bienes</th>
+                            <th class="col-actions">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="op : ${pagina.content}">
+                            <td th:text="${op.clienteDni}">-</td>
+                            <td>
+                                <a th:href="@{/clientes/{id}(id=${op.clienteId})}"
+                                   th:text="${op.clienteNombre}">-</a>
+                            </td>
+                            <td th:text="${op.empresaNombre}">-</td>
+                            <td th:text="${op.cuenta}">-</td>
+                            <td>
+                                <a th:href="@{/operaciones/{id}(id=${op.id})}"
+                                   th:text="${op.numeroOperacion}">-</a>
+                            </td>
+                            <td th:text="${op.moneda}">-</td>
+                            <td th:text="${op.montoCapital}">-</td>
+                            <td th:text="${op.montoTotal}">-</td>
+                            <td th:text="${op.diasMora}">-</td>
+                            <td th:text="${op.tipoCredito}">-</td>
+                            <td th:text="${op.situacion}">-</td>
+                            <td th:text="${op.estado}">-</td>
+                            <td th:text="${op.etapa}">-</td>
+                            <td th:text="${op.numeroExpediente}">-</td>
+                            <td th:text="${op.tipoProceso}">-</td>
+                            <td th:text="${op.distritoJudicial}">-</td>
+                            <td>
+                                <span th:if="${op.trans == true}" class="badge badge-success">Sí</span>
+                                <span th:if="${op.trans == false}" class="badge badge-default">No</span>
+                                <span th:if="${op.trans == null}">-</span>
+                            </td>
+                            <td>
+                                <span th:if="${op.busquedaBienes == true}" class="badge badge-success">Sí</span>
+                                <span th:if="${op.busquedaBienes == false}" class="badge badge-default">No</span>
+                                <span th:if="${op.busquedaBienes == null}">-</span>
+                            </td>
+                            <td class="col-actions">
+                                <a th:href="@{/operaciones/{id}(id=${op.id})}"
+                                   class="btn-icon" title="Ver">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                    </svg>
+                                </a>
+                                <a th:href="@{/clientes/{id}(id=${op.clienteId})}"
+                                   class="btn-icon" title="Cliente">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                        <circle cx="12" cy="7" r="4"/>
+                                    </svg>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr th:if="${pagina.content.isEmpty()}">
+                            <td colspan="19" class="text-center text-muted" style="padding: 40px;">
+                                No hay registros para los filtros seleccionados
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="card-footer" th:if="${pagina.totalPages > 1}"
+                 style="display: flex; justify-content: center; padding: .75rem;">
+                <div class="pagination">
+                    <a class="pagination-btn"
+                       th:href="@{/cartera/registros(empresaId=${empresaId}, estado=${estado}, etapa=${etapa}, busqueda=${busqueda}, page=0, size=${pagina.size})}"
+                       th:classappend="${pagina.first} ? 'disabled' : ''">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                    </a>
+                    <a class="pagination-btn"
+                       th:href="@{/cartera/registros(empresaId=${empresaId}, estado=${estado}, etapa=${etapa}, busqueda=${busqueda}, page=${pagina.number - 1}, size=${pagina.size})}"
+                       th:classappend="${pagina.first} ? 'disabled' : ''">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                        ‹
+                    </a>
+                    <a class="pagination-btn"
+                       th:each="i : ${#numbers.sequence(T(java.lang.Math).max(0, pagina.number - 2), T(java.lang.Math).min(pagina.totalPages - 1, pagina.number + 2))}"
+                       th:href="@{/cartera/registros(empresaId=${empresaId}, estado=${estado}, etapa=${etapa}, busqueda=${busqueda}, page=${i}, size=${pagina.size})}"
+                       th:text="${i + 1}"
+                       th:classappend="${i == pagina.number} ? 'active' : ''"></a>
+                    <a class="pagination-btn"
+                       th:href="@{/cartera/registros(empresaId=${empresaId}, estado=${estado}, etapa=${etapa}, busqueda=${busqueda}, page=${pagina.number + 1}, size=${pagina.size})}"
+                       th:classappend="${pagina.last} ? 'disabled' : ''">
+                        ›
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                    </a>
+                    <a class="pagination-btn"
+                       th:href="@{/cartera/registros(empresaId=${empresaId}, estado=${estado}, etapa=${etapa}, busqueda=${busqueda}, page=${pagina.totalPages - 1}, size=${pagina.size})}"
+                       th:classappend="${pagina.last} ? 'disabled' : ''">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                    </a>
+                </div>
+            </div>
         </div>
+    </div>
+</div>
 
-        <!-- Paginación -->
-        <nav th:if="${pagina.totalPages > 1}">
-            <ul class="pagination pagination-sm justify-content-center">
-                <li class="page-item" th:classappend="${pagina.first ? 'disabled' : ''}">
-                    <a class="page-link" th:href="@{/cartera/registros(
-                        empresaId=${empresaId}, estado=${estado},
-                        etapa=${etapa}, busqueda=${busqueda}, page=0, size=${pagina.size})}">«</a>
-                </li>
-                <li class="page-item" th:classappend="${pagina.first ? 'disabled' : ''}">
-                    <a class="page-link" th:href="@{/cartera/registros(
-                        empresaId=${empresaId}, estado=${estado},
-                        etapa=${etapa}, busqueda=${busqueda}, page=${pagina.number - 1}, size=${pagina.size})}">‹</a>
-                </li>
-                <li class="page-item"
-                    th:each="i : ${#numbers.sequence(T(java.lang.Math).max(0, pagina.number - 2), T(java.lang.Math).min(pagina.totalPages - 1, pagina.number + 2))}"
-                    th:classappend="${i == pagina.number ? 'active' : ''}">
-                    <a class="page-link"
-                       th:href="@{/cartera/registros(
-                        empresaId=${empresaId}, estado=${estado},
-                        etapa=${etapa}, busqueda=${busqueda}, page=${i}, size=${pagina.size})}"
-                       th:text="${i + 1}">1</a>
-                </li>
-                <li class="page-item" th:classappend="${pagina.last ? 'disabled' : ''}">
-                    <a class="page-link" th:href="@{/cartera/registros(
-                        empresaId=${empresaId}, estado=${estado},
-                        etapa=${etapa}, busqueda=${busqueda}, page=${pagina.number + 1}, size=${pagina.size})}">›</a>
-                </li>
-                <li class="page-item" th:classappend="${pagina.last ? 'disabled' : ''}">
-                    <a class="page-link" th:href="@{/cartera/registros(
-                        empresaId=${empresaId}, estado=${estado},
-                        etapa=${etapa}, busqueda=${busqueda}, page=${pagina.totalPages - 1}, size=${pagina.size})}">»</a>
-                </li>
-            </ul>
-        </nav>
-
-    </div><!-- /container -->
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

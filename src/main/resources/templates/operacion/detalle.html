@@ -4,157 +4,276 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="'Operación ' + ${operacion.numeroOperacion}">Detalle de Operación</title>
+    <title th:text="'Operación ' + ${operacion.numeroOperacion}">Detalle — Sistema Integral de Cobranza</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Sistema de Cobranza</a>
-            <div class="navbar-nav">
-                <a class="nav-link" th:href="@{/dashboard}">Inicio</a>
-                <a class="nav-link" th:href="@{/empresas}">Empresas</a>
-                <a class="nav-link" th:href="@{/cartera/registros}">Registros</a>
-                <a class="nav-link" th:href="@{/usuarios}">Usuarios</a>
-                <a class="nav-link" th:href="@{/clientes}">Clientes</a>
-                <a class="nav-link" th:href="@{/cartera/importar}">Cartera</a>
-            </div>
-            <form th:action="@{/logout}" method="post" class="d-inline">
-                <button type="submit" class="btn btn-light btn-sm">Cerrar Sesión</button>
-            </form>
+
+<th:block th:replace="~{layout :: sidebar}"></th:block>
+
+<div class="main-content">
+    <div class="topbar">
+        <div class="breadcrumb-nav">
+            <a th:href="@{/dashboard}">Inicio</a>
+            <span class="breadcrumb-sep">/</span>
+            <a th:href="${breadcrumbParentUrl}" th:text="${breadcrumbParent}">Operaciones</a>
+            <span class="breadcrumb-sep">/</span>
+            <span style="color: var(--color-text);" th:text="${breadcrumbCurrent}">Operación</span>
         </div>
-    </nav>
+        <div class="topbar-actions">
+            <span class="text-small text-muted"
+                  th:text="${#temporals.format(#temporals.createNow(), 'dd MMM yyyy')}">Hoy</span>
+        </div>
+    </div>
 
-    <div class="container mt-4">
+    <div class="page-content">
 
-        <!-- Breadcrumb -->
-        <nav aria-label="breadcrumb" class="mb-3">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/}">Inicio</a></li>
-                <li class="breadcrumb-item"><a th:href="${breadcrumbParentUrl}" th:text="${breadcrumbParent}">Operaciones</a></li>
-                <li class="breadcrumb-item active" th:text="${breadcrumbCurrent}"></li>
-            </ol>
-        </nav>
-
-        <!-- Header -->
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2 th:text="'Operación ' + ${operacion.numeroOperacion}">Operación</h2>
+        <div class="page-header animate-in">
             <div>
-                <a th:href="@{/clientes/{id}(id=${operacion.clienteId})}" class="btn btn-secondary btn-sm">« Cliente</a>
+                <h1 class="page-title">Operación <span th:text="${operacion.numeroOperacion}">-</span></h1>
+                <p class="page-subtitle" th:text="${operacion.clienteNombre}">Cliente</p>
+            </div>
+            <div class="page-actions">
+                <a th:href="@{/clientes/{id}(id=${operacion.clienteId})}" class="btn btn-ghost btn-sm">« Cliente</a>
                 <a th:href="@{/operaciones/editar/{id}(id=${operacion.id})}"
                    class="btn btn-warning btn-sm"
                    sec:authorize="hasRole('ADMIN')">Editar</a>
             </div>
         </div>
 
-        <div class="row">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
 
-            <!-- Columna izquierda: datos de la operación -->
-            <div class="col-md-6">
-                <div class="card mb-3">
-                    <div class="card-header bg-primary text-white">
-                        <h6 class="mb-0">Datos de la Operación</h6>
-                    </div>
-                    <div class="card-body py-2">
-                        <table class="table table-sm table-borderless mb-0">
-                            <tr><th class="text-muted" style="width:140px">Cliente</th><td><a th:href="@{/clientes/{id}(id=${operacion.clienteId})}" th:text="${operacion.clienteNombre}">-</a></td></tr>
-                            <tr><th class="text-muted">DNI</th><td th:text="${operacion.clienteDni}">-</td></tr>
-                            <tr><th class="text-muted">Empresa</th><td th:text="${operacion.empresaNombre}">-</td></tr>
-                            <tr><th class="text-muted">Agencia</th><td th:text="${operacion.agenciaNombre}">-</td></tr>
-                            <tr><th class="text-muted">Cuenta</th><td th:text="${operacion.cuenta}">-</td></tr>
-                            <tr><th class="text-muted">N° Operación</th><td th:text="${operacion.numeroOperacion}">-</td></tr>
-                            <tr><th class="text-muted">Moneda</th><td th:text="${operacion.moneda}">-</td></tr>
-                            <tr><th class="text-muted">Monto Capital</th><td th:text="${operacion.montoCapital}">-</td></tr>
-                            <tr><th class="text-muted">Monto Total</th><td th:text="${operacion.montoTotal}">-</td></tr>
-                            <tr><th class="text-muted">Días Mora</th><td th:text="${operacion.diasMora}">-</td></tr>
-                            <tr><th class="text-muted">Tipo Crédito</th><td th:text="${operacion.tipoCredito}">-</td></tr>
-                            <tr><th class="text-muted">Situación</th><td th:text="${operacion.situacion}">-</td></tr>
-                            <tr><th class="text-muted">Estado</th><td th:text="${operacion.estado}">-</td></tr>
-                            <tr><th class="text-muted">Etapa</th><td th:text="${operacion.etapa}">-</td></tr>
-                            <tr><th class="text-muted">Rango</th><td th:text="${operacion.rango}">-</td></tr>
-                            <tr><th class="text-muted">Analista</th><td th:text="${operacion.analista}">-</td></tr>
-                            <tr><th class="text-muted">Analista Senior</th><td th:text="${operacion.analistaSenior}">-</td></tr>
-                        </table>
+            <!-- Datos de la operación -->
+            <div class="card animate-in stagger-1">
+                <div class="card-header">Datos de la Operación</div>
+                <div class="card-body">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Cliente</span>
+                            <a th:href="@{/clientes/{id}(id=${operacion.clienteId})}"
+                               class="info-value" th:text="${operacion.clienteNombre}">-</a>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">DNI</span>
+                            <span class="info-value" th:text="${operacion.clienteDni}">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Empresa</span>
+                            <span class="info-value" th:text="${operacion.empresaNombre}">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Agencia</span>
+                            <span class="info-value" th:text="${operacion.agenciaNombre}">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Cuenta</span>
+                            <span class="info-value font-mono" th:text="${operacion.cuenta}">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">N° Operación</span>
+                            <span class="info-value font-mono" th:text="${operacion.numeroOperacion}">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Moneda</span>
+                            <span class="info-value" th:text="${operacion.moneda}">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Monto Capital</span>
+                            <span class="info-value" th:text="${operacion.montoCapital}">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Monto Total</span>
+                            <span class="info-value" th:text="${operacion.montoTotal}">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Días Mora</span>
+                            <span class="info-value" th:text="${operacion.diasMora}">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Tipo Crédito</span>
+                            <span class="info-value" th:text="${operacion.tipoCredito}">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Situación</span>
+                            <span class="info-value" th:text="${operacion.situacion}">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Estado</span>
+                            <span class="info-value" th:text="${operacion.estado}">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Etapa</span>
+                            <span class="info-value" th:text="${operacion.etapa}">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Rango</span>
+                            <span class="info-value" th:text="${operacion.rango}">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Analista</span>
+                            <span class="info-value" th:text="${operacion.analista}">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Analista Senior</span>
+                            <span class="info-value" th:text="${operacion.analistaSenior}">-</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Columna derecha: expediente judicial -->
-            <div class="col-md-6">
-                <div class="card mb-3">
-                    <div class="card-header bg-dark text-white">
-                        <h6 class="mb-0">Datos del Expediente</h6>
-                    </div>
-                    <div class="card-body py-2">
-                        <table class="table table-sm table-borderless mb-0">
-                            <tr><th class="text-muted" style="width:140px">N° Expediente</th><td th:text="${operacion.numeroExpediente}">-</td></tr>
-                            <tr><th class="text-muted">Tipo Proceso</th><td th:text="${operacion.tipoProceso}">-</td></tr>
-                            <tr><th class="text-muted">Tipo Juzgado</th><td th:text="${operacion.tipoJuzgado}">-</td></tr>
-                            <tr><th class="text-muted">Distrito Judicial</th><td th:text="${operacion.distritoJudicial}">-</td></tr>
-                            <tr><th class="text-muted">N° Juzgado</th><td th:text="${operacion.numeroJuzgado}">-</td></tr>
-                            <tr><th class="text-muted">Trans.</th><td th:text="${operacion.trans}">-</td></tr>
-                            <tr><th class="text-muted">Búsqueda Bienes</th><td th:text="${operacion.busquedaBienes}">-</td></tr>
-                            <tr><th class="text-muted">Monto Demandado</th><td th:text="${operacion.montoDemandado}">-</td></tr>
-                            <tr><th class="text-muted">Escribano Legal</th><td th:text="${operacion.escribanoLegal}">-</td></tr>
-                            <tr><th class="text-muted">Cód. Exp. Cautelar</th><td th:text="${operacion.codigoExpCautelar}">-</td></tr>
-                            <tr><th class="text-muted">Incidente</th><td th:text="${operacion.incidente}">-</td></tr>
-                        </table>
+            <!-- Expediente judicial -->
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+                <div class="card animate-in stagger-2">
+                    <div class="card-header">Datos del Expediente</div>
+                    <div class="card-body">
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label">N° Expediente</span>
+                                <span class="info-value font-mono" th:text="${operacion.numeroExpediente}">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Tipo Proceso</span>
+                                <span class="info-value" th:text="${operacion.tipoProceso}">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Tipo Juzgado</span>
+                                <span class="info-value" th:text="${operacion.tipoJuzgado}">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Distrito Judicial</span>
+                                <span class="info-value" th:text="${operacion.distritoJudicial}">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">N° Juzgado</span>
+                                <span class="info-value" th:text="${operacion.numeroJuzgado}">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Trans.</span>
+                                <span class="info-value" th:text="${operacion.trans}">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Búsqueda Bienes</span>
+                                <span class="info-value" th:text="${operacion.busquedaBienes}">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Monto Demandado</span>
+                                <span class="info-value" th:text="${operacion.montoDemandado}">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Escribano Legal</span>
+                                <span class="info-value" th:text="${operacion.escribanoLegal}">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Cód. Exp. Cautelar</span>
+                                <span class="info-value" th:text="${operacion.codigoExpCautelar}">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Incidente</span>
+                                <span class="info-value" th:text="${operacion.incidente}">-</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Fechas procesales -->
-                <div class="card mb-3">
-                    <div class="card-header bg-info text-white">
-                        <h6 class="mb-0">Fechas Procesales</h6>
-                    </div>
-                    <div class="card-body py-2">
-                        <table class="table table-sm table-borderless mb-0">
-                            <tr><th class="text-muted" style="width:180px">Presentación</th><td th:text="${#temporals.format(operacion.fechaPresentacion, 'dd/MM/yyyy')}">-</td></tr>
-                            <tr><th class="text-muted">Inadmisible Principal</th><td th:text="${#temporals.format(operacion.fechaInadmisiblePrincipal, 'dd/MM/yyyy')}">-</td></tr>
-                            <tr><th class="text-muted">Admisión Principal</th><td th:text="${#temporals.format(operacion.fechaAdmisionPrincipal, 'dd/MM/yyyy')}">-</td></tr>
-                            <tr><th class="text-muted">Audiencia Única</th><td th:text="${#temporals.format(operacion.fechaAudienciaUnica, 'dd/MM/yyyy')}">-</td></tr>
-                            <tr><th class="text-muted">Auto Final</th><td th:text="${#temporals.format(operacion.fechaAutoFinal, 'dd/MM/yyyy')}">-</td></tr>
-                            <tr><th class="text-muted">Consentimiento</th><td th:text="${#temporals.format(operacion.fechaConsentimiento, 'dd/MM/yyyy')}">-</td></tr>
-                            <tr><th class="text-muted">Ejecutoriada</th><td th:text="${#temporals.format(operacion.fechaEjecutoriada, 'dd/MM/yyyy')}">-</td></tr>
-                            <tr><th class="text-muted">Ingreso Ejecución</th><td th:text="${#temporals.format(operacion.fechaIngresoEjecucion, 'dd/MM/yyyy')}">-</td></tr>
-                            <tr><th class="text-muted">Tasación</th><td th:text="${#temporals.format(operacion.fechaTasacion, 'dd/MM/yyyy')}">-</td></tr>
-                            <tr><th class="text-muted">Nombramiento Martillero</th><td th:text="${#temporals.format(operacion.fechaNombramientoMartillero, 'dd/MM/yyyy')}">-</td></tr>
-                            <tr><th class="text-muted">Remate 1°</th><td th:text="${#temporals.format(operacion.fechaRemate1, 'dd/MM/yyyy')}">-</td></tr>
-                            <tr><th class="text-muted">Remate 2°</th><td th:text="${#temporals.format(operacion.fechaRemate2, 'dd/MM/yyyy')}">-</td></tr>
-                            <tr><th class="text-muted">Remate 3°</th><td th:text="${#temporals.format(operacion.fechaRemate3, 'dd/MM/yyyy')}">-</td></tr>
-                        </table>
+                <div class="card animate-in stagger-3">
+                    <div class="card-header">Fechas Procesales</div>
+                    <div class="card-body">
+                        <div class="info-grid" style="font-size: 13px;">
+                            <div class="info-item">
+                                <span class="info-label">Presentación</span>
+                                <span class="info-value" th:text="${#temporals.format(operacion.fechaPresentacion, 'dd/MM/yyyy')}">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Inadmisible Principal</span>
+                                <span class="info-value" th:text="${#temporals.format(operacion.fechaInadmisiblePrincipal, 'dd/MM/yyyy')}">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Admisión Principal</span>
+                                <span class="info-value" th:text="${#temporals.format(operacion.fechaAdmisionPrincipal, 'dd/MM/yyyy')}">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Audiencia Única</span>
+                                <span class="info-value" th:text="${#temporals.format(operacion.fechaAudienciaUnica, 'dd/MM/yyyy')}">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Auto Final</span>
+                                <span class="info-value" th:text="${#temporals.format(operacion.fechaAutoFinal, 'dd/MM/yyyy')}">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Consentimiento</span>
+                                <span class="info-value" th:text="${#temporals.format(operacion.fechaConsentimiento, 'dd/MM/yyyy')}">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Ejecutoriada</span>
+                                <span class="info-value" th:text="${#temporals.format(operacion.fechaEjecutoriada, 'dd/MM/yyyy')}">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Ingreso Ejecución</span>
+                                <span class="info-value" th:text="${#temporals.format(operacion.fechaIngresoEjecucion, 'dd/MM/yyyy')}">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Tasación</span>
+                                <span class="info-value" th:text="${#temporals.format(operacion.fechaTasacion, 'dd/MM/yyyy')}">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Nombramiento Mart.</span>
+                                <span class="info-value" th:text="${#temporals.format(operacion.fechaNombramientoMartillero, 'dd/MM/yyyy')}">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Remate 1°</span>
+                                <span class="info-value" th:text="${#temporals.format(operacion.fechaRemate1, 'dd/MM/yyyy')}">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Remate 2°</span>
+                                <span class="info-value" th:text="${#temporals.format(operacion.fechaRemate2, 'dd/MM/yyyy')}">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Remate 3°</span>
+                                <span class="info-value" th:text="${#temporals.format(operacion.fechaRemate3, 'dd/MM/yyyy')}">-</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div><!-- /row -->
+        </div>
 
         <!-- Bienes embargados -->
-        <div class="card mb-3" th:if="${operacion.bienEmbargados != null and !operacion.bienEmbargados.isEmpty()}">
-            <div class="card-header bg-warning text-dark">
-                <h6 class="mb-0">Bienes Embargados</h6>
-            </div>
-            <div class="card-body p-0">
-                <table class="table table-sm table-striped mb-0">
-                    <thead><tr>
-                        <th>Detalle Bien/Garantía</th><th>Partida Registral</th><th>Tipo Bien</th><th>Dirección</th><th>Distrito</th><th>Garantía Inscrita</th><th>Monto MC</th>
-                    </tr></thead>
+        <div class="card animate-in" style="margin-top: 16px;"
+             th:if="${operacion.bienEmbargados != null and !operacion.bienEmbargados.isEmpty()}">
+            <div class="card-header">Bienes Embargados</div>
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Detalle Bien/Garantía</th>
+                            <th>N° Partida</th>
+                            <th>Tipo Bien</th>
+                            <th>Dirección</th>
+                            <th>Distrito</th>
+                            <th>Garantía Inscrita</th>
+                            <th>Monto MC</th>
+                        </tr>
+                    </thead>
                     <tbody>
-                    <tr th:each="bien : ${operacion.bienEmbargados}">
-                        <td th:text="${bien.detalleGarantia}">-</td>
-                        <td th:text="${bien.partidaRegistral}">-</td>
-                        <td th:text="${bien.tipoBien}">-</td>
-                        <td th:text="${bien.direccion}">-</td>
-                        <td th:text="${bien.distrito}">-</td>
-                        <td th:text="${bien.garantiaInscrita}">-</td>
-                        <td th:text="${bien.montoMc}">-</td>
-                    </tr>
+                        <tr th:each="bien : ${operacion.bienEmbargados}">
+                            <td th:text="${bien.detalleGarantia}">-</td>
+                            <td th:text="${bien.partidaRegistral}">-</td>
+                            <td th:text="${bien.tipoBien}">-</td>
+                            <td th:text="${bien.direccion}">-</td>
+                            <td th:text="${bien.distrito}">-</td>
+                            <td th:text="${bien.garantiaInscrita}">-</td>
+                            <td th:text="${bien.montoMc}">-</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-    </div><!-- /container -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
