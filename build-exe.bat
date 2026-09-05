@@ -1,10 +1,10 @@
 @echo off
-:: build-exe.bat — Genera el .exe portable con jpackage
+:: build-exe.bat - Genera el .exe portable con jpackage
 :: Requiere: JDK 21+ con jpackage en PATH
 :: Uso: build-exe.bat
 
 echo =============================================
-echo  Build .exe — Sistema Integral de Cobranza
+echo  Build .exe - Sistema Integral de Cobranza
 echo =============================================
 echo.
 
@@ -22,7 +22,7 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-:: Compilar JAR si no existe o esta desactualizado
+:: Compilar JAR
 echo [*] Compilando proyecto...
 call mvnw.cmd package -DskipTests -q
 if %errorlevel% neq 0 (
@@ -65,7 +65,7 @@ if %errorlevel% neq 0 (
 :: Asi el Launcher lo encuentra sin caminar hacia arriba
 if exist ".env.supabase" (
     copy /Y ".env.supabase" "%OUTPUT_DIR%\SistemaCobranza\app\.env" >nul 2>&1
-    echo [OK] .env (Supabase) embebido en app\.
+    echo [OK] .env (Supabase) embebido en app.
 ) else (
     echo [AVISO] .env.supabase no encontrado. El exe no podra conectar a Supabase.
 )
@@ -85,7 +85,7 @@ echo.
 echo Para crear acceso directo en el escritorio:
 echo   1. Abre la carpeta dist\SistemaCobranza
 echo   2. Clic derecho en SistemaCobranza.exe
-echo   3. "Crear acceso directo"
+echo   3. Crear acceso directo
 echo   4. Mueve el acceso directo al escritorio
 echo.
 pause
