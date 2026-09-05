@@ -65,7 +65,7 @@ if %errorlevel% neq 0 (
 :: Asi el Launcher lo encuentra sin caminar hacia arriba
 if exist ".env.supabase" (
     copy /Y ".env.supabase" "%OUTPUT_DIR%\SistemaCobranza\app\.env" >nul 2>&1
-    echo [OK] .env (Supabase) embebido en app.
+    echo [OK] .env (Supabase) incluido en app.
 ) else (
     echo [AVISO] .env.supabase no encontrado. El exe no podra conectar a Supabase.
 )
@@ -79,7 +79,7 @@ echo Carpeta: %OUTPUT_DIR%\SistemaCobranza\
 echo.
 echo Contiene:
 echo   - SistemaCobranza.exe  (doble click para abrir)
-echo   - .env                  (credenciales Supabase embebidas)
+echo   - .env                  (credenciales Supabase incluidas)
 echo   - JRE incluido          (no necesita Java instalado)
 echo.
 echo Para crear acceso directo en el escritorio:
