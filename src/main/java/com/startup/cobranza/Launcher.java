@@ -46,46 +46,79 @@ public class Launcher {
     private static File getJarDir() {
         try {
             java.net.URL codeSource = Launcher.class.getProtectionDomain().getCodeSource().getLocation();
-            String path = codeSource.getPath();
+            String protocol = codeSource.getProtocol();
 
-            // Spring Boot fat JAR: "jar:file:/path/app.jar!/BOOT-INF/classes!/com/..."
-            if (path.contains("!/")) {
-                int jarEnd = path.indexOf("!/");
-                path = path.substring(5, jarEnd); // quitar "file:"
+            // Solo procesar si es un JAR (protocolo "jar") o un archivo "file"
+            if (!"jar".equals(protocol) && !"file".equals(protocol)) {
+                return null;
             }
 
-            try {
-                path = java.net.URLDecoder.decode(path, "UTF-8");
-            } catch (Exception ignored) {}
+            String path = codeSource.getPath();
+            if (path == null || path.isEmpty()) {
+                return null;
+            }
 
-            File jarFile = new File(path);
-            return jarFile.getParentFile();
+            String jarPath = path;
+
+            // Si es un URL de JAR (jar:file:/path/to/app.jar!/BOOT-INF/classes!/com/...)
+            // el primer !/ marca el fin del path del JAR
+            if ("jar".equals(protocol)) {
+                int jarEnd = path.indexOf("!/");
+                if (jarEnd > 0) {
+                    jarPath = path.substring(0, jarEnd); // todo antes de !
+                    // Quitar "file:" si esta al inicio
+                    if (jarPath.startsWith("file:")) {
+                        jarPath = jarPath.substring(5);
+                    }
+                }
+            }
+
+            // Decodificar URL-encoded characters (espacios, %20, etc.)
+            try {
+                jarPath = new java.net.URI(jarPath).getPath();
+            } catch (Exception ignored) {
+                try {
+                    jarPath = java.net.URLDecoder.decode(jarPath, "UTF-8");
+                } catch (Exception ignored2) {}
+            }
+
+            File jarFile = new File(jarPath);
+            File jarDir = jarFile.isAbsolute() ? jarFile.getParentFile() : jarFile;
+
+            // Normalizar para Windows (remover leading / si es una ruta absoluta de Windows como /D:/...)
+            if (jarDir != null && jarDir.getPath().startsWith("/")) {
+                String normalized = jarDir.getPath();
+                if (normalized.matches("^/[A-Za-z]:/.*")) {
+                    normalized = normalized.substring(1); // quitar / inicial de /D:/...
+                }
+                jarDir = new File(normalized);
+            }
+
+            return jarDir;
         } catch (Exception e) {
+            System.err.println("[Launcher] getJarDir exception: " + e.getClass().getName() + " " + e.getMessage());
             return null;
         }
     }
 
     /**
      * Busca .env desde el directorio del JAR hacia arriba en el filesystem.
-     * No depende de user.dir.
      */
     private static File findEnvFile() {
         File jarDir = getJarDir();
-        if (jarDir == null) {
-            // Fallback: user.dir
-            return new File(System.getProperty("user.dir"), ".env");
-        }
-
-        // Buscar desde el dir del JAR hacia arriba
-        File current = jarDir;
-        while (current != null) {
-            File env = new File(current, ".env");
-            if (env.exists()) {
-                return env;
+        if (jarDir != null) {
+            // Buscar desde el dir del JAR hacia arriba
+            File current = jarDir;
+            while (current != null) {
+                File env = new File(current, ".env");
+                if (env.exists()) {
+                    return env;
+                }
+                current = current.getParentFile();
             }
-            current = current.getParentFile();
         }
 
-        return null;
+        // Fallback: user.dir
+        return new File(System.getProperty("user.dir"), ".env");
     }
 }
