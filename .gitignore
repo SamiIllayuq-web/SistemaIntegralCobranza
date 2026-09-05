@@ -5,8 +5,6 @@ application-local.yml
 
 # Build
 target/
-mvnw
-mvnw.cmd
 
 # IDE
 .idea/
