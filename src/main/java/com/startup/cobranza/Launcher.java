@@ -6,15 +6,18 @@ import java.util.*;
 
 /**
  * Launcher que carga .env y levanta Spring Boot.
- * Debe ser la clase principal en el JAR (Main-Class en MANIFEST).
  */
 public class Launcher {
 
     public static void main(String[] args) throws Exception {
+        System.out.println("[Launcher] user.dir = " + System.getProperty("user.dir"));
+        System.out.println("[Launcher] java.class.path = " + System.getProperty("java.class.path"));
+        System.out.println("[Launcher] sun.java.command = " + System.getProperty("sun.java.command"));
+
         File envFile = findEnvFile();
 
         if (envFile != null && envFile.exists()) {
-            System.out.println("[Launcher] Cargando variables desde: " + envFile.getAbsolutePath());
+            System.out.println("[Launcher] .env encontrado en: " + envFile.getAbsolutePath());
             Properties env = new Properties();
             try (InputStream is = new FileInputStream(envFile)) {
                 env.load(is);
@@ -23,70 +26,87 @@ public class Launcher {
                 String value = env.getProperty(key);
                 if (System.getProperty(key) == null && System.getenv(key) == null) {
                     System.setProperty(key, value);
-                    System.out.println("  " + key + "=" + value);
+                    System.out.println("  " + key + "=" + mask(key, value));
                 }
             }
             System.out.println("[Launcher] Variables cargadas.\n");
         } else {
             System.err.println("[Launcher] ADVERTENCIA: .env no encontrado.");
+            System.err.println("[Launcher] user.dir = " + System.getProperty("user.dir"));
             System.err.println("[Launcher] La aplicacion usara configuracion por defecto.\n");
         }
 
         CobranzaApplication.main(args);
     }
 
-    /**
-     * Busca .env buscando hacia arriba desde el directorio del JAR o del directorio de trabajo.
-     */
+    private static String mask(String key, String value) {
+        if (key.toLowerCase().contains("password") ||
+            key.toLowerCase().contains("secret") ||
+            key.toLowerCase().contains("token") ||
+            key.toLowerCase().contains("key") && value.length() > 4) {
+            return value.substring(0, 3) + "***";
+        }
+        return value;
+    }
+
     private static File findEnvFile() {
-        // Intentar primero en el directorio de trabajo (para desarrollo y jpackage)
+        // 1. Intentar en user.dir (directorio de trabajo)
         File workingDir = new File(System.getProperty("user.dir"));
+        System.out.println("[Launcher] Buscando .env en user.dir: " + workingDir);
         File envInWorkDir = new File(workingDir, ".env");
         if (envInWorkDir.exists()) {
+            System.out.println("[Launcher]   -> ENCONTRADO en user.dir");
             return envInWorkDir;
         }
+        System.out.println("[Launcher]   -> NO existe en user.dir");
 
-        // Intentar en el directorio del JAR (jpackage embeibe .env alla)
+        // 2. Intentar en directorio del JAR
         try {
             java.net.URL codeSource = Launcher.class.getProtectionDomain().getCodeSource().getLocation();
+            System.out.println("[Launcher] codeSource = " + codeSource);
             String protocol = codeSource.getProtocol();
+            System.out.println("[Launcher] codeSource protocol = " + protocol);
+            System.out.println("[Launcher] codeSource path = " + codeSource.getPath());
 
             if ("file".equals(protocol)) {
-                // Ejecucion desde directorio de clases (desarrollo) o desde JAR
                 String path = codeSource.getPath();
 
+                // Spring Boot fat JAR: "jar:file:/path/to/app.jar!/BOOT-INF/classes!/com/..."
                 if (path.contains("!/")) {
-                    // Dentro de un JAR anidado (Spring Boot fat JAR): extraer el path del JAR externo
                     int jarEnd = path.indexOf("!/");
-                    path = path.substring(5, jarEnd); //去掉 "file:" prefix y "!/"
+                    path = path.substring(5, jarEnd); // quitar "file:"
                 }
 
                 try {
-                    // Decode URL-encoded characters (espacios, etc.)
                     path = java.net.URLDecoder.decode(path, "UTF-8");
                 } catch (Exception ignored) {}
 
                 File jarFile = new File(path);
                 File jarDir = jarFile.getParentFile();
+                System.out.println("[Launcher] JAR dir = " + jarDir);
+
                 if (jarDir != null) {
                     File envInJarDir = new File(jarDir, ".env");
+                    System.out.println("[Launcher]   buscando .env en JAR dir: " + envInJarDir);
                     if (envInJarDir.exists()) {
+                        System.out.println("[Launcher]   -> ENCONTRADO en JAR dir");
                         return envInJarDir;
                     }
-                }
 
-                // Buscar hacia arriba en el filesystem por si el .env esta en un parent
-                File parent = jarDir;
-                while (parent != null) {
-                    File envUp = new File(parent, ".env");
-                    if (envUp.exists()) {
-                        return envUp;
+                    // Buscar hacia arriba
+                    File parent = jarDir;
+                    while (parent != null) {
+                        File envUp = new File(parent, ".env");
+                        if (envUp.exists()) {
+                            System.out.println("[Launcher]   -> ENCONTRADO en parent: " + parent);
+                            return envUp;
+                        }
+                        parent = parent.getParentFile();
                     }
-                    parent = parent.getParentFile();
                 }
             }
         } catch (Exception e) {
-            System.err.println("[Launcher] No se pudo detectar directorio del JAR: " + e.getMessage());
+            System.err.println("[Launcher] Error detectando dir del JAR: " + e.getMessage());
         }
 
         return null;
