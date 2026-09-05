@@ -49,8 +49,12 @@ if %errorlevel% neq 0 (
 
 :: Copiar .env.supabase como .env DENTRO de app/ (junto al JAR)
 if exist ".env.supabase" (
-    copy /Y ".env.supabase" "%OUTPUT_DIR%\SistemaCobranza\app\.env" >nul 2>&1
-    echo [OK] .env (Supabase) listo en app.
+    copy /Y ".env.supabase" "%OUTPUT_DIR%\SistemaCobranza\app\.env" >nul
+    if %errorlevel% neq 0 (
+        echo [ERROR] No se pudo copiar .env
+    ) else (
+        echo [OK] .env - Supabase - listo en app.
+    )
 ) else (
     echo [AVISO] .env.supabase no encontrado.
 )
