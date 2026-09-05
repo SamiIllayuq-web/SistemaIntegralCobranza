@@ -61,10 +61,11 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-:: Copiar .env.supabase como .env dentro del exe
+:: Copiar .env.supabase como .env DENTRO de app/ (junto al JAR)
+:: Asi el Launcher lo encuentra sin caminar hacia arriba
 if exist ".env.supabase" (
-    copy /Y ".env.supabase" "%OUTPUT_DIR%\SistemaCobranza\.env" >nul 2>&1
-    echo [OK] .env (Supabase) embebido en el exe.
+    copy /Y ".env.supabase" "%OUTPUT_DIR%\SistemaCobranza\app\.env" >nul 2>&1
+    echo [OK] .env (Supabase) embebido en app\.
 ) else (
     echo [AVISO] .env.supabase no encontrado. El exe no podra conectar a Supabase.
 )
