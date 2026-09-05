@@ -1,7 +1,6 @@
 @echo off
 :: build-exe.bat - Genera el .exe portable con jpackage
 :: Requiere: JDK 21+ con jpackage en PATH
-:: Uso: build-exe.bat
 
 echo =============================================
 echo  Build .exe - Sistema Integral de Cobranza
@@ -38,21 +37,8 @@ if exist "%OUTPUT_DIR%\SistemaCobranza" rmdir /S /Q "%OUTPUT_DIR%\SistemaCobranz
 
 echo.
 echo [*] Generando .exe con jpackage...
-echo.
 
-:: jpackage genera app-image: carpeta portable con exe + JRE + JAR
-:: El Launcher (Main-Class) carga .env automaticamente al arrancar
-jpackage ^
-    --type app-image ^
-    --input target ^
-    --main-jar cobranza-1.0.0.jar ^
-    --name "SistemaCobranza" ^
-    --app-version "1.0.0" ^
-    --vendor "Sistema Integral Cobranza" ^
-    --description "Sistema Integral de Cobranza" ^
-    --java-options "-Djava.net.preferIPv4Stack=true" ^
-    --dest "%OUTPUT_DIR%" ^
-    --win-console
+jpackage --type app-image --input target --main-jar cobranza-1.0.0.jar --name SistemaCobranza --app-version 1.0.0 --vendor "Sistema Integral Cobranza" --description "Sistema Integral de Cobranza" --java-options "-Djava.net.preferIPv4Stack=true" --dest "%OUTPUT_DIR%" --win-console
 
 if %errorlevel% neq 0 (
     echo.
@@ -62,12 +48,11 @@ if %errorlevel% neq 0 (
 )
 
 :: Copiar .env.supabase como .env DENTRO de app/ (junto al JAR)
-:: Asi el Launcher lo encuentra sin caminar hacia arriba
 if exist ".env.supabase" (
     copy /Y ".env.supabase" "%OUTPUT_DIR%\SistemaCobranza\app\.env" >nul 2>&1
-    echo [OK] .env (Supabase) incluido en app.
+    echo [OK] .env (Supabase) listo en app.
 ) else (
-    echo [AVISO] .env.supabase no encontrado. El exe no podra conectar a Supabase.
+    echo [AVISO] .env.supabase no encontrado.
 )
 
 echo.
@@ -79,7 +64,7 @@ echo Carpeta: %OUTPUT_DIR%\SistemaCobranza\
 echo.
 echo Contiene:
 echo   - SistemaCobranza.exe  (doble click para abrir)
-echo   - .env                  (credenciales Supabase incluidas)
+echo   - .env                  (credenciales Supabase)
 echo   - JRE incluido          (no necesita Java instalado)
 echo.
 echo Para crear acceso directo en el escritorio:
