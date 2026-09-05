@@ -59,15 +59,15 @@ echo.
 :: jpackage — genera un Windows Application Package (.exe installer)
 jpackage ^
     --type app-image ^
+    --input target ^
+    --main-jar cobranza-1.0.0.jar ^
     --name "SistemaCobranza" ^
     --app-version "1.0.0" ^
     --vendor "Sistema Integral Cobranza" ^
     --description "Sistema Integral de Cobranza" ^
     --java-options "-Djava.net.preferIPv4Stack=true" ^
-    --main-jar "target/cobranza-1.0.0.jar" ^
     --dest "%OUTPUT_DIR%" ^
-    --win-console ^
-    --resource-dir "%RESOURCES_DIR%"
+    --win-console
 
 :: --win-console: abre una consola para ver logs de Spring Boot
 
