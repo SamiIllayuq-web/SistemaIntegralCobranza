@@ -21,8 +21,7 @@
             <span style="color: var(--color-text);" th:text="${agenciaId != null ? 'Editar' : 'Nueva'}">Agencia</span>
         </div>
         <div class="topbar-actions">
-            <span class="text-small text-muted"
-                  th:text="${#temporals.format(#temporals.createNow(), 'dd MMM yyyy')}">Hoy</span>
+<span class="text-small text-muted js-today">Hoy</span>
         </div>
     </div>
 
