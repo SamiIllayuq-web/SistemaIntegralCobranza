@@ -102,7 +102,6 @@ REPORTES_MC          ← registro de reportes generados
 |---|---|---|
 | id | BIGSERIAL | PK |
 | cliente_id | BIGINT | FK → clientes, no nulo |
-| empresa_id | BIGINT | FK → empresas, no nulo |
 | agencia_id | BIGINT | FK → agencias |
 | cuenta | VARCHAR | no nulo |
 | numero_operacion | VARCHAR | no nulo |
@@ -168,7 +167,7 @@ REPORTES_MC          ← registro de reportes generados
 | fecha_creacion | TIMESTAMP | |
 | fecha_actualizacion | TIMESTAMP | |
 
-**Unique constraint:** `(empresa_id, cuenta, numero_operacion)`
+**Unique constraint:** `(cuenta, numero_operacion)`
 
 **Qué es:** Cada fila del Excel importado = una operación. Es la tabla más importante del sistema.
 **Para qué existe:** Registra la deuda, los datos del cliente, y TODOS los datos judiciales. La vista "Expedientes" filtra operaciones que tienen `numero_expediente` informado.

@@ -49,7 +49,6 @@ CREATE TABLE IF NOT EXISTS clientes (
 CREATE TABLE IF NOT EXISTS operaciones (
     id              bigserial PRIMARY KEY,
     cliente_id      bigint NOT NULL,
-    empresa_id      bigint NOT NULL,
     agencia_id      bigint,
     abogado_id      bigint,
     cuenta          varchar(255) NOT NULL,
@@ -139,14 +138,13 @@ CREATE TABLE IF NOT EXISTS operaciones (
     fecha_actualizacion timestamp,
 
     CONSTRAINT fk_operacion_cliente FOREIGN KEY (cliente_id) REFERENCES clientes(id),
-    CONSTRAINT fk_operacion_empresa  FOREIGN KEY (empresa_id)  REFERENCES empresas(id),
     CONSTRAINT fk_operacion_agencia  FOREIGN KEY (agencia_id)  REFERENCES agencias(id),
     CONSTRAINT fk_operacion_abogado  FOREIGN KEY (abogado_id)  REFERENCES usuarios(id)
 );
 
--- Unique constraint: no duplicados por empresa+cuenta+numeroOperacion
-CREATE UNIQUE INDEX IF NOT EXISTS uk_operacion_empresa_cuenta_operacion
-    ON operaciones(empresa_id, cuenta, numero_operacion);
+-- Unique constraint: no duplicados por cuenta+numeroOperacion
+CREATE UNIQUE INDEX IF NOT EXISTS uk_operacion_cuenta_operacion
+    ON operaciones(cuenta, numero_operacion);
 
 -- ── bienes_embargados ──────────────────────────────────────
 CREATE TABLE IF NOT EXISTS bienes_embargados (
