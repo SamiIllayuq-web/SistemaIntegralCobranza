@@ -46,25 +46,10 @@
             <div class="card-header">Cargar archivo Excel</div>
             <div class="card-body">
                 <form th:action="@{/cartera/importar}" method="post" enctype="multipart/form-data">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                        <div>
-                            <label class="form-label">Empresa *</label>
-                            <select class="form-select" name="empresaId" required>
-                                <option value="">Seleccione una empresa</option>
-                                <option th:each="empresa : ${empresas}"
-                                        th:value="${empresa.id}"
-                                        th:text="${empresa.nombre}"></option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="form-label">Agencia (opcional)</label>
-                            <input type="number" class="form-control" name="agenciaId" placeholder="ID de agencia">
-                            <small class="text-muted">Si los datos del Excel incluyen agencia, puede omitirse</small>
-                        </div>
-                    </div>
                     <div style="margin-top: 16px;">
                         <label class="form-label">Archivo Excel *</label>
                         <input type="file" class="form-control" name="archivo" accept=".xlsx,.xls" required>
+                        <small class="text-muted">La agencia se extrae automáticamente de la columna "agencia" del Excel</small>
                     </div>
                     <input type="hidden" name="usuario" th:value="${usuarioNombre}">
                     <div style="margin-top: 20px;">

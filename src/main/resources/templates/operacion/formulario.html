@@ -44,15 +44,11 @@
                 <div class="card-body">
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                         <div>
-                            <label class="form-label">Empresa</label>
-                            <select class="form-select" th:field="*{empresaId}">
-                                <option value="">Seleccione empresa</option>
-                                <option th:each="emp : ${empresas}" th:value="${emp.id}" th:text="${emp.nombre}"></option>
-                            </select>
-                        </div>
-                        <div>
                             <label class="form-label">Agencia</label>
-                            <input type="number" class="form-control" th:field="*{agenciaId}">
+                            <select class="form-select" th:field="*{agenciaId}">
+                                <option value="">Seleccione agencia</option>
+                                <option th:each="a : ${agencias}" th:value="${a.id}" th:text="${a.nombre}"></option>
+                            </select>
                         </div>
                     </div>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">

@@ -50,7 +50,6 @@
                         <tr>
                             <th>Fecha</th>
                             <th>Archivo</th>
-                            <th>Empresa</th>
                             <th>Agencia</th>
                             <th>Total</th>
                             <th>Exitosos</th>
@@ -63,7 +62,6 @@
                         <tr th:each="imp : ${importaciones}">
                             <td th:text="${imp.fechaImportacion}">-</td>
                             <td th:text="${imp.nombreArchivo}">-</td>
-                            <td th:text="${imp.empresaNombre}">-</td>
                             <td th:text="${imp.agenciaNombre ?: '-'}">-</td>
                             <td th:text="${imp.totalRegistros}">-</td>
                             <td>
@@ -76,7 +74,7 @@
                             <td th:text="${imp.usuarioImporta}">-</td>
                         </tr>
                         <tr th:if="${#lists.isEmpty(importaciones)}">
-                            <td colspan="9">
+                            <td colspan="8">
                                 <div class="empty-state">
                                     <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                         <circle cx="12" cy="12" r="10"/>

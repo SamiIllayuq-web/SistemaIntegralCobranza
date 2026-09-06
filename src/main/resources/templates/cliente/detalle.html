@@ -102,7 +102,7 @@
                         <table class="data-table">
                             <thead>
                                 <tr>
-                                    <th>Empresa</th>
+                                    <th>Agencia</th>
                                     <th>Cuenta</th>
                                     <th>N° Oper.</th>
                                     <th class="text-end">Monto Total</th>
@@ -115,7 +115,7 @@
                             </thead>
                             <tbody>
                                 <tr th:each="op : ${operaciones}">
-                                    <td th:text="${op.empresaNombre}">-</td>
+                                    <td th:text="${op.agenciaNombre}">-</td>
                                     <td th:text="${op.cuenta}">-</td>
                                     <td th:text="${op.numeroOperacion}">-</td>
                                     <td class="text-end">

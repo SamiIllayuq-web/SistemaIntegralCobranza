@@ -52,15 +52,6 @@
                     </div>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
                         <div>
-                            <label class="form-label">Empresa *</label>
-                            <select class="form-select" th:field="*{empresaId}" required>
-                                <option value="">Seleccione una empresa</option>
-                                <option th:each="empresa : ${empresas}"
-                                        th:value="${empresa.id}"
-                                        th:text="${empresa.nombre}"></option>
-                            </select>
-                        </div>
-                        <div>
                             <label class="form-label">Teléfono</label>
                             <input type="text" class="form-control" th:field="*{telefono}">
                         </div>

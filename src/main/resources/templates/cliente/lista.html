@@ -58,14 +58,6 @@
                         <input type="text" name="dni" class="form-control" th:value="${filtros.dni}" placeholder="DNI">
                     </div>
                     <div>
-                        <label class="form-label">Empresa</label>
-                        <select name="empresaId" class="form-select">
-                            <option value="">Todas</option>
-                            <option th:each="emp : ${empresas}" th:value="${emp.id}"
-                                    th:text="${emp.nombre}" th:selected="${filtros.empresaId == emp.id}"></option>
-                        </select>
-                    </div>
-                    <div>
                         <label class="form-label">Estado Cartera</label>
                         <select name="estadoCartera" class="form-select">
                             <option value="">Todos</option>
@@ -117,7 +109,6 @@
                         <tr>
                             <th>DNI</th>
                             <th>Nombre</th>
-                            <th>Empresas</th>
                             <th>Estado Cartera</th>
                             <th>Etapa</th>
                             <th class="text-end">Monto Total</th>
@@ -133,11 +124,6 @@
                                 <span th:if="${c.dni == null}" class="text-muted">—</span>
                             </td>
                             <td th:text="${c.nombreCompleto}">-</td>
-                            <td>
-                                <span th:if="${#lists.isEmpty(c.empresas)}" class="text-muted">—</span>
-                                <span th:if="${not #lists.isEmpty(c.empresas)}"
-                                      th:text="${#strings.listJoin(c.empresas, ', ')}"></span>
-                            </td>
                             <td>
                                 <span th:if="${c.estadoCartera == 'ACTIVO'}" class="badge badge-success" th:text="${c.estadoCartera}">Activo</span>
                                 <span th:if="${c.estadoCartera == 'CANCELADA'}" class="badge badge-default" th:text="${c.estadoCartera}">Cancelada</span>
@@ -202,15 +188,15 @@
                  style="display: flex; justify-content: center; padding: .75rem;">
                 <div class="pagination">
                     <a class="pagination-btn"
-                       th:href="@{/clientes(page=${pagina.number - 1}, size=${pagina.size}, nombre=${filtros.nombre}, dni=${filtros.dni}, empresaId=${filtros.empresaId}, estadoCartera=${filtros.estadoCartera}, etapa=${filtros.etapa}, minMora=${filtros.minMora}, maxMora=${filtros.maxMora})}"
+                       th:href="@{/clientes(page=${pagina.number - 1}, size=${pagina.size}, nombre=${filtros.nombre}, dni=${filtros.dni}, estadoCartera=${filtros.estadoCartera}, etapa=${filtros.etapa}, minMora=${filtros.minMora}, maxMora=${filtros.maxMora})}"
                        th:classappend="${pagina.first} ? 'disabled' : ''">‹</a>
                     <a class="pagination-btn"
                        th:each="i : ${#numbers.sequence(T(java.lang.Math).max(0, pagina.number - 2), T(java.lang.Math).min(pagina.number + 2, pagina.totalPages - 1))}"
-                       th:href="@{/clientes(page=${i}, size=${pagina.size}, nombre=${filtros.nombre}, dni=${filtros.dni}, empresaId=${filtros.empresaId}, estadoCartera=${filtros.estadoCartera}, etapa=${filtros.etapa}, minMora=${filtros.minMora}, maxMora=${filtros.maxMora})}"
+                       th:href="@{/clientes(page=${i}, size=${pagina.size}, nombre=${filtros.nombre}, dni=${filtros.dni}, estadoCartera=${filtros.estadoCartera}, etapa=${filtros.etapa}, minMora=${filtros.minMora}, maxMora=${filtros.maxMora})}"
                        th:text="${i + 1}"
                        th:classappend="${i == pagina.number} ? 'active' : ''"></a>
                     <a class="pagination-btn"
-                       th:href="@{/clientes(page=${pagina.number + 1}, size=${pagina.size}, nombre=${filtros.nombre}, dni=${filtros.dni}, empresaId=${filtros.empresaId}, estadoCartera=${filtros.estadoCartera}, etapa=${filtros.etapa}, minMora=${filtros.minMora}, maxMora=${filtros.maxMora})}"
+                       th:href="@{/clientes(page=${pagina.number + 1}, size=${pagina.size}, nombre=${filtros.nombre}, dni=${filtros.dni}, estadoCartera=${filtros.estadoCartera}, etapa=${filtros.etapa}, minMora=${filtros.minMora}, maxMora=${filtros.maxMora})}"
                        th:classappend="${pagina.last} ? 'disabled' : ''">›</a>
                 </div>
             </div>

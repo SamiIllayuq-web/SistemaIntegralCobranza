@@ -26,6 +26,34 @@
     --color-sidebar-item-active: #1f62ff;
 }
 
+/* --- Light theme overrides --- */
+body.theme-light {
+    --color-bg: #f7f8f8;
+    --color-surface: #ffffff;
+    --color-surface-2: #f3f4f5;
+    --color-border: #d0d6e0;
+    --color-text: #171717;
+    --color-text-muted: #57606a;
+    --color-primary: #1f62ff;
+    --color-primary-hover: #388bfd;
+    --color-success: #1a7f37;
+    --color-warning: #9a6700;
+    --color-danger: #cf222e;
+    --color-judicial: #8250df;
+    --color-castigada: #c9354c;
+    --color-finalizada: #1a7f37;
+    --color-en-tramite: #9a6700;
+    --color-sidebar-bg: #ffffff;
+    --color-sidebar-item-hover: #e6e8eb;
+    --color-sidebar-item-active: #1f62ff;
+}
+
+/* Theme icons: sol = shown in light mode, luna = shown in dark mode */
+.icon-sol { display: none; }
+.icon-luna { display: block; }
+body.theme-light .icon-sol { display: block; }
+body.theme-light .icon-luna { display: none; }
+
 * {
     box-sizing: border-box;
     margin: 0;

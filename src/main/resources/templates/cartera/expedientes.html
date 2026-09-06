@@ -55,10 +55,10 @@
             <form th:action="@{/cartera/expedientes}" method="get">
                 <div class="filters-grid">
                     <div>
-                        <label class="form-label">Empresa</label>
-                        <select class="form-select" name="empresaId">
+                        <label class="form-label">Agencia</label>
+                        <select class="form-select" name="agenciaId">
                             <option value="">Todas</option>
-                            <option th:each="emp : ${empresas}" th:value="${emp.id}" th:text="${emp.nombre}" th:selected="${empresaId != null and empresaId == emp.id}"></option>
+                            <option th:each="a : ${agencias}" th:value="${a.id}" th:text="${a.nombre}" th:selected="${agenciaId != null and agenciaId == a.id}"></option>
                         </select>
                     </div>
                     <div>
@@ -92,7 +92,7 @@
                             <th>N° Expediente</th>
                             <th>Cliente</th>
                             <th>DNI</th>
-                            <th>Empresa</th>
+                            <th>Agencia</th>
                             <th>Tipo Proceso</th>
                             <th>Distrito Judicial</th>
                             <th>Situación</th>
@@ -114,7 +114,7 @@
                                    th:text="${op.clienteNombre}">-</a>
                             </td>
                             <td th:text="${op.clienteDni}">-</td>
-                            <td th:text="${op.empresaNombre}">-</td>
+                            <td th:text="${op.agenciaNombre}">-</td>
                             <td th:text="${op.tipoProceso}">-</td>
                             <td th:text="${op.distritoJudicial}">-</td>
                             <td>
@@ -153,19 +153,19 @@
             <div class="card-footer" th:if="${pagina.totalPages > 1}" style="display: flex; justify-content: center; padding: .75rem;">
                 <div class="pagination">
                     <a class="pagination-btn"
-                       th:href="@{/cartera/expedientes(page=${pagina.number - 1}, empresaId=${empresaId}, situacion=${situacion}, busqueda=${busqueda})}"
+                       th:href="@{/cartera/expedientes(page=${pagina.number - 1}, agenciaId=${agenciaId}, situacion=${situacion}, busqueda=${busqueda})}"
                        th:classappend="${pagina.number == 0 ? 'disabled' : ''}">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
                     </a>
 
                     <a class="pagination-btn"
                        th:each="i : ${#numbers.sequence(0, pagina.totalPages - 1)}"
-                       th:href="@{/cartera/expedientes(page=${i}, empresaId=${empresaId}, situacion=${situacion}, busqueda=${busqueda})}"
+                       th:href="@{/cartera/expedientes(page=${i}, agenciaId=${agenciaId}, situacion=${situacion}, busqueda=${busqueda})}"
                        th:text="${i + 1}"
                        th:classappend="${i == pagina.number ? 'active' : ''}"></a>
 
                     <a class="pagination-btn"
-                       th:href="@{/cartera/expedientes(page=${pagina.number + 1}, empresaId=${empresaId}, situacion=${situacion}, busqueda=${busqueda})}"
+                       th:href="@{/cartera/expedientes(page=${pagina.number + 1}, agenciaId=${agenciaId}, situacion=${situacion}, busqueda=${busqueda})}"
                        th:classappend="${pagina.number == pagina.totalPages - 1 ? 'disabled' : ''}">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
                     </a>
