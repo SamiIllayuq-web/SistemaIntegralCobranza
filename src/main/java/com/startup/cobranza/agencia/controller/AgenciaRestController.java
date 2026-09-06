@@ -18,10 +18,7 @@ public class AgenciaRestController {
     private final AgenciaRepository agenciaRepository;
 
     @GetMapping
-    public List<Agencia> listarPorEmpresa(@RequestParam(required = false) Long empresaId) {
-        if (empresaId == null) {
-            return agenciaRepository.findByActivoTrue();
-        }
-        return agenciaRepository.findByEmpresaIdAndActivoTrue(empresaId);
+    public List<Agencia> activas() {
+        return agenciaRepository.findByActivoTrue();
     }
 }

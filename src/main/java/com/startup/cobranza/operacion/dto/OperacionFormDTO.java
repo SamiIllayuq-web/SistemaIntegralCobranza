@@ -7,7 +7,6 @@ public class OperacionFormDTO {
 
     private Long id;
     private Long clienteId;
-    private Long empresaId;
     private Long agenciaId;
     private String cuenta;
     private String numeroOperacion;
@@ -54,7 +53,7 @@ public class OperacionFormDTO {
 
     public OperacionFormDTO() {}
 
-    public OperacionFormDTO(Long id, Long clienteId, Long empresaId, Long agenciaId,
+    public OperacionFormDTO(Long id, Long clienteId, Long agenciaId,
                             String cuenta, String numeroOperacion, BigDecimal montoCapital,
                             BigDecimal montoTotal, Integer diasMora, String moneda,
                             String tipoCredito, String situacion, String estado, String etapa,
@@ -64,7 +63,6 @@ public class OperacionFormDTO {
                             String observacionActos, String comentario) {
         this.id = id;
         this.clienteId = clienteId;
-        this.empresaId = empresaId;
         this.agenciaId = agenciaId;
         this.cuenta = cuenta;
         this.numeroOperacion = numeroOperacion;
@@ -94,8 +92,6 @@ public class OperacionFormDTO {
     public void setId(Long id) { this.id = id; }
     public Long getClienteId() { return clienteId; }
     public void setClienteId(Long clienteId) { this.clienteId = clienteId; }
-    public Long getEmpresaId() { return empresaId; }
-    public void setEmpresaId(Long empresaId) { this.empresaId = empresaId; }
     public Long getAgenciaId() { return agenciaId; }
     public void setAgenciaId(Long agenciaId) { this.agenciaId = agenciaId; }
     public String getCuenta() { return cuenta; }
@@ -188,7 +184,6 @@ public class OperacionFormDTO {
     public static class Builder {
         private Long id;
         private Long clienteId;
-        private Long empresaId;
         private Long agenciaId;
         private String cuenta;
         private String numeroOperacion;
@@ -235,7 +230,6 @@ public class OperacionFormDTO {
 
         public Builder id(Long v) { id = v; return this; }
         public Builder clienteId(Long v) { clienteId = v; return this; }
-        public Builder empresaId(Long v) { empresaId = v; return this; }
         public Builder agenciaId(Long v) { agenciaId = v; return this; }
         public Builder cuenta(String v) { cuenta = v; return this; }
         public Builder numeroOperacion(String v) { numeroOperacion = v; return this; }
@@ -281,7 +275,7 @@ public class OperacionFormDTO {
         public Builder bienesEmbargados(List<BienEmbargadoDTO> v) { bienesEmbargados = v; return this; }
 
         public OperacionFormDTO build() {
-            OperacionFormDTO dto = new OperacionFormDTO(id, clienteId, empresaId, agenciaId, cuenta, numeroOperacion,
+            OperacionFormDTO dto = new OperacionFormDTO(id, clienteId, agenciaId, cuenta, numeroOperacion,
                     montoCapital, montoTotal, diasMora, moneda, tipoCredito, situacion, estado, etapa,
                     observacion, rango, analista, analistaSenior, numeroExpediente, tipoProceso,
                     tipoJuzgado, distritoJudicial, numeroJuzgado, abogadoId, observacionActos, comentario);

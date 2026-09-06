@@ -9,22 +9,17 @@ public class AgenciaFormDTO {
     private String nombre;
 
     private String codigo;
-
     private String telefono;
-
     private String direccion;
-
-    private Long empresaId;
 
     public AgenciaFormDTO() {}
 
-    public AgenciaFormDTO(Long id, String nombre, String codigo, String telefono, String direccion, Long empresaId) {
+    public AgenciaFormDTO(Long id, String nombre, String codigo, String telefono, String direccion) {
         this.id = id;
         this.nombre = nombre;
         this.codigo = codigo;
         this.telefono = telefono;
         this.direccion = direccion;
-        this.empresaId = empresaId;
     }
 
     public Long getId() { return id; }
@@ -37,8 +32,6 @@ public class AgenciaFormDTO {
     public void setTelefono(String telefono) { this.telefono = telefono; }
     public String getDireccion() { return direccion; }
     public void setDireccion(String direccion) { this.direccion = direccion; }
-    public Long getEmpresaId() { return empresaId; }
-    public void setEmpresaId(Long empresaId) { this.empresaId = empresaId; }
 
     public static Builder builder() { return new Builder(); }
 
@@ -48,17 +41,15 @@ public class AgenciaFormDTO {
         private String codigo;
         private String telefono;
         private String direccion;
-        private Long empresaId;
 
         public Builder id(Long id) { this.id = id; return this; }
         public Builder nombre(String nombre) { this.nombre = nombre; return this; }
         public Builder codigo(String codigo) { this.codigo = codigo; return this; }
         public Builder telefono(String telefono) { this.telefono = telefono; return this; }
         public Builder direccion(String direccion) { this.direccion = direccion; return this; }
-        public Builder empresaId(Long empresaId) { this.empresaId = empresaId; return this; }
 
         public AgenciaFormDTO build() {
-            return new AgenciaFormDTO(id, nombre, codigo, telefono, direccion, empresaId);
+            return new AgenciaFormDTO(id, nombre, codigo, telefono, direccion);
         }
     }
 }

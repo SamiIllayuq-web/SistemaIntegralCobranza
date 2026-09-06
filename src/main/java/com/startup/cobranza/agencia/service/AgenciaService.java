@@ -6,8 +6,6 @@ import com.startup.cobranza.agencia.entity.Agencia;
 import com.startup.cobranza.agencia.exception.AgenciaException;
 import com.startup.cobranza.agencia.mapper.AgenciaMapper;
 import com.startup.cobranza.agencia.repository.AgenciaRepository;
-import com.startup.cobranza.empresa.entity.Empresa;
-import com.startup.cobranza.empresa.repository.EmpresaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +18,6 @@ import java.util.stream.Collectors;
 public class AgenciaService {
 
     private final AgenciaRepository agenciaRepository;
-    private final EmpresaRepository empresaRepository;
     private final AgenciaMapper agenciaMapper;
 
     public List<AgenciaDTO> listarTodos() {
@@ -35,12 +32,6 @@ public class AgenciaService {
                 .collect(Collectors.toList());
     }
 
-    public List<AgenciaDTO> listarPorEmpresa(Long empresaId) {
-        return agenciaRepository.findByEmpresaIdAndActivoTrue(empresaId).stream()
-                .map(agenciaMapper::toDTO)
-                .collect(Collectors.toList());
-    }
-
     public AgenciaDTO obtenerPorId(Long id) {
         Agencia agencia = agenciaRepository.findById(id)
                 .orElseThrow(() -> new AgenciaException("Agencia no encontrada con id: " + id));
@@ -49,15 +40,12 @@ public class AgenciaService {
 
     @Transactional
     public AgenciaDTO crear(AgenciaFormDTO form) {
-        Empresa empresa = empresaRepository.findById(form.getEmpresaId())
-                .orElseThrow(() -> new AgenciaException("Empresa no encontrada con id: " + form.getEmpresaId()));
-
         if (form.getCodigo() != null && !form.getCodigo().isBlank()
                 && agenciaRepository.existsByCodigo(form.getCodigo())) {
-            throw new AgenciaException("Ya existe una agencia con el código: " + form.getCodigo());
+            throw new AgenciaException("Ya existe una agencia con el codigo: " + form.getCodigo());
         }
 
-        Agencia agencia = agenciaMapper.toEntityFromForm(form, empresa);
+        Agencia agencia = agenciaMapper.toEntityFromForm(form);
         return agenciaMapper.toDTO(agenciaRepository.save(agencia));
     }
 
@@ -66,14 +54,10 @@ public class AgenciaService {
         Agencia agencia = agenciaRepository.findById(id)
                 .orElseThrow(() -> new AgenciaException("Agencia no encontrada con id: " + id));
 
-        Empresa empresa = empresaRepository.findById(form.getEmpresaId())
-                .orElseThrow(() -> new AgenciaException("Empresa no encontrada con id: " + form.getEmpresaId()));
-
         agencia.setNombre(form.getNombre());
         agencia.setCodigo(form.getCodigo());
         agencia.setTelefono(form.getTelefono());
         agencia.setDireccion(form.getDireccion());
-        agencia.setEmpresa(empresa);
 
         return agenciaMapper.toDTO(agenciaRepository.save(agencia));
     }

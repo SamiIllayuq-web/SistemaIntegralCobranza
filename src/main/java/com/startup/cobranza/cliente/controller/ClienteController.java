@@ -6,8 +6,6 @@ import com.startup.cobranza.cliente.dto.ClienteDTO;
 import com.startup.cobranza.cliente.dto.ClienteFormDTO;
 import com.startup.cobranza.cliente.exception.ClienteException;
 import com.startup.cobranza.cliente.service.ClienteService;
-import com.startup.cobranza.empresa.dto.EmpresaDTO;
-import com.startup.cobranza.empresa.service.EmpresaService;
 import com.startup.cobranza.gestion.dto.GestionDTO;
 import com.startup.cobranza.gestion.service.GestionService;
 import com.startup.cobranza.operacion.dto.OperacionDTO;
@@ -36,16 +34,13 @@ public class ClienteController {
     private static final int PAGE_SIZE = 50;
 
     private final ClienteService clienteService;
-    private final EmpresaService empresaService;
     private final GestionService gestionService;
     private final OperacionService operacionService;
 
     public ClienteController(ClienteService clienteService,
-                              EmpresaService empresaService,
                               GestionService gestionService,
                               OperacionService operacionService) {
         this.clienteService = clienteService;
-        this.empresaService = empresaService;
         this.gestionService = gestionService;
         this.operacionService = operacionService;
     }
@@ -55,7 +50,6 @@ public class ClienteController {
                           @RequestParam(defaultValue = "50") int size,
                           @RequestParam(required = false) String nombre,
                           @RequestParam(required = false) String dni,
-                          @RequestParam(required = false) Long empresaId,
                           @RequestParam(required = false) String estado,
                           @RequestParam(required = false) String estadoCartera,
                           @RequestParam(required = false) String etapa,
@@ -70,7 +64,6 @@ public class ClienteController {
         ClienteBusquedaDTO filtros = ClienteBusquedaDTO.builder()
                 .nombre(nombre)
                 .dni(dni)
-                .empresaId(empresaId)
                 .estado(estado)
                 .estadoCartera(estadoCartera)
                 .etapa(etapa)
@@ -83,11 +76,8 @@ public class ClienteController {
         Pageable pageable = PageRequest.of(page, size, Sort.by("cliente.nombreCompleto").ascending());
         Page<ClienteBandejaDTO> pagina = clienteService.listarBandeja(filtros, pageable);
 
-        List<EmpresaDTO> empresas = empresaService.listarActivas();
-
         model.addAttribute("pagina", pagina);
         model.addAttribute("filtros", filtros);
-        model.addAttribute("empresas", empresas);
         return "cliente/lista";
     }
 
@@ -110,9 +100,7 @@ public class ClienteController {
     @GetMapping("/nuevo")
     @PreAuthorize("hasRole('ADMIN')")
     public String nuevoForm(Model model) {
-        List<EmpresaDTO> empresas = empresaService.listarActivas();
         model.addAttribute("clienteForm", new ClienteFormDTO());
-        model.addAttribute("empresas", empresas);
         return "cliente/formulario";
     }
 
@@ -121,10 +109,8 @@ public class ClienteController {
     public String editarForm(@PathVariable Long id, Model model, RedirectAttributes redirectAttrs) {
         try {
             ClienteDTO dto = clienteService.obtenerPorId(id);
-            List<EmpresaDTO> empresas = empresaService.listarActivas();
             ClienteFormDTO form = toForm(dto);
             model.addAttribute("clienteForm", form);
-            model.addAttribute("empresas", empresas);
             model.addAttribute("clienteId", id);
             return "cliente/formulario";
         } catch (ClienteException e) {
@@ -141,7 +127,6 @@ public class ClienteController {
                           RedirectAttributes redirectAttrs,
                           Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("empresas", empresaService.listarActivas());
             model.addAttribute("clienteId", clienteId);
             return "cliente/formulario";
         }
@@ -158,7 +143,6 @@ public class ClienteController {
             return "redirect:/clientes";
         } catch (ClienteException e) {
             model.addAttribute("error", e.getMessage());
-            model.addAttribute("empresas", empresaService.listarActivas());
             model.addAttribute("clienteId", clienteId);
             return "cliente/formulario";
         }

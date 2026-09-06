@@ -21,9 +21,6 @@ public class Agencia {
 
     private String direccion;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "empresa_id", nullable = false)
-    private com.startup.cobranza.empresa.entity.Empresa empresa;
 
     @Column(nullable = false)
     private Boolean activo = true;
@@ -34,13 +31,12 @@ public class Agencia {
     public Agencia() {}
 
     public Agencia(Long id, String nombre, String codigo, String telefono, String direccion,
-                   com.startup.cobranza.empresa.entity.Empresa empresa, Boolean activo, LocalDateTime fechaCreacion) {
+                   Boolean activo, LocalDateTime fechaCreacion) {
         this.id = id;
         this.nombre = nombre;
         this.codigo = codigo;
         this.telefono = telefono;
         this.direccion = direccion;
-        this.empresa = empresa;
         this.activo = activo;
         this.fechaCreacion = fechaCreacion;
     }
@@ -55,8 +51,6 @@ public class Agencia {
     public void setTelefono(String telefono) { this.telefono = telefono; }
     public String getDireccion() { return direccion; }
     public void setDireccion(String direccion) { this.direccion = direccion; }
-    public com.startup.cobranza.empresa.entity.Empresa getEmpresa() { return empresa; }
-    public void setEmpresa(com.startup.cobranza.empresa.entity.Empresa empresa) { this.empresa = empresa; }
     public Boolean getActivo() { return activo; }
     public void setActivo(Boolean activo) { this.activo = activo; }
     public LocalDateTime getFechaCreacion() { return fechaCreacion; }
@@ -70,7 +64,6 @@ public class Agencia {
         private String codigo;
         private String telefono;
         private String direccion;
-        private com.startup.cobranza.empresa.entity.Empresa empresa;
         private Boolean activo;
         private LocalDateTime fechaCreacion;
 
@@ -79,12 +72,11 @@ public class Agencia {
         public Builder codigo(String codigo) { this.codigo = codigo; return this; }
         public Builder telefono(String telefono) { this.telefono = telefono; return this; }
         public Builder direccion(String direccion) { this.direccion = direccion; return this; }
-        public Builder empresa(com.startup.cobranza.empresa.entity.Empresa empresa) { this.empresa = empresa; return this; }
         public Builder activo(Boolean activo) { this.activo = activo; return this; }
         public Builder fechaCreacion(LocalDateTime fechaCreacion) { this.fechaCreacion = fechaCreacion; return this; }
 
         public Agencia build() {
-            return new Agencia(id, nombre, codigo, telefono, direccion, empresa, activo, fechaCreacion);
+            return new Agencia(id, nombre, codigo, telefono, direccion, activo, fechaCreacion);
         }
     }
 

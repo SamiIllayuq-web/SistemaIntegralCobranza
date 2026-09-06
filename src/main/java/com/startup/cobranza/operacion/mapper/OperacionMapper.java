@@ -1,7 +1,6 @@
 package com.startup.cobranza.operacion.mapper;
 
 import com.startup.cobranza.cliente.entity.Cliente;
-import com.startup.cobranza.empresa.entity.Empresa;
 import com.startup.cobranza.agencia.entity.Agencia;
 import com.startup.cobranza.operacion.entity.BienEmbargado;
 import com.startup.cobranza.operacion.dto.BienEmbargadoDTO;
@@ -89,10 +88,6 @@ public class OperacionMapper {
             dto.setClienteNombre(entity.getCliente().getNombreCompleto());
             dto.setClienteDni(entity.getCliente().getDni());
         }
-        if (entity.getEmpresa() != null) {
-            dto.setEmpresaId(entity.getEmpresa().getId());
-            dto.setEmpresaNombre(entity.getEmpresa().getNombre());
-        }
         if (entity.getAgencia() != null) {
             dto.setAgenciaId(entity.getAgencia().getId());
             dto.setAgenciaNombre(entity.getAgencia().getNombre());
@@ -136,12 +131,11 @@ public class OperacionMapper {
                 .build();
     }
 
-    public Operacion toEntity(OperacionDTO dto, Cliente cliente, Empresa empresa, Agencia agencia, Usuario abogado) {
+    public Operacion toEntity(OperacionDTO dto, Cliente cliente, Agencia agencia, Usuario abogado) {
         if (dto == null) return null;
         return Operacion.builder()
                 .id(dto.getId())
                 .cliente(cliente)
-                .empresa(empresa)
                 .agencia(agencia)
                 .cuenta(dto.getCuenta())
                 .numeroOperacion(dto.getNumeroOperacion())
@@ -192,7 +186,6 @@ public class OperacionMapper {
         return OperacionFormDTO.builder()
                 .id(entity.getId())
                 .clienteId(entity.getCliente() != null ? entity.getCliente().getId() : null)
-                .empresaId(entity.getEmpresa() != null ? entity.getEmpresa().getId() : null)
                 .agenciaId(entity.getAgencia() != null ? entity.getAgencia().getId() : null)
                 .cuenta(entity.getCuenta())
                 .numeroOperacion(entity.getNumeroOperacion())
@@ -241,12 +234,11 @@ public class OperacionMapper {
                 .build();
     }
 
-    public Operacion toEntityFromForm(OperacionFormDTO form, Cliente cliente, Empresa empresa, Agencia agencia, Usuario abogado) {
+    public Operacion toEntityFromForm(OperacionFormDTO form, Cliente cliente, Agencia agencia, Usuario abogado) {
         if (form == null) return null;
         return Operacion.builder()
                 .id(form.getId())
                 .cliente(cliente)
-                .empresa(empresa)
                 .agencia(agencia)
                 .cuenta(form.getCuenta())
                 .numeroOperacion(form.getNumeroOperacion())

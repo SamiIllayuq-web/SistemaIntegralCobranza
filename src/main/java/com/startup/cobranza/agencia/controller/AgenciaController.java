@@ -4,10 +4,7 @@ import com.startup.cobranza.agencia.dto.AgenciaDTO;
 import com.startup.cobranza.agencia.dto.AgenciaFormDTO;
 import com.startup.cobranza.agencia.exception.AgenciaException;
 import com.startup.cobranza.agencia.service.AgenciaService;
-import com.startup.cobranza.empresa.dto.EmpresaDTO;
-import com.startup.cobranza.empresa.service.EmpresaService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,11 +16,13 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/agencias")
-@RequiredArgsConstructor
 public class AgenciaController {
 
     private final AgenciaService agenciaService;
-    private final EmpresaService empresaService;
+
+    public AgenciaController(AgenciaService agenciaService) {
+        this.agenciaService = agenciaService;
+    }
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -36,9 +35,7 @@ public class AgenciaController {
     @GetMapping("/nuevo")
     @PreAuthorize("hasRole('ADMIN')")
     public String nuevoForm(Model model) {
-        List<EmpresaDTO> empresas = empresaService.listarActivas();
         model.addAttribute("agenciaForm", new AgenciaFormDTO());
-        model.addAttribute("empresas", empresas);
         return "agencia/formulario";
     }
 
@@ -46,15 +43,12 @@ public class AgenciaController {
     @PreAuthorize("hasRole('ADMIN')")
     public String editarForm(@PathVariable Long id, Model model) {
         AgenciaDTO dto = agenciaService.obtenerPorId(id);
-        List<EmpresaDTO> empresas = empresaService.listarActivas();
         AgenciaFormDTO form = new AgenciaFormDTO();
         form.setNombre(dto.getNombre());
         form.setCodigo(dto.getCodigo());
         form.setTelefono(dto.getTelefono());
         form.setDireccion(dto.getDireccion());
-        form.setEmpresaId(dto.getEmpresaId());
         model.addAttribute("agenciaForm", form);
-        model.addAttribute("empresas", empresas);
         model.addAttribute("agenciaId", id);
         return "agencia/formulario";
     }
@@ -67,7 +61,6 @@ public class AgenciaController {
                           RedirectAttributes redirectAttrs,
                           Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("empresas", empresaService.listarActivas());
             model.addAttribute("agenciaId", agenciaId);
             return "agencia/formulario";
         }
@@ -83,7 +76,6 @@ public class AgenciaController {
             return "redirect:/agencias";
         } catch (AgenciaException e) {
             model.addAttribute("error", e.getMessage());
-            model.addAttribute("empresas", empresaService.listarActivas());
             model.addAttribute("agenciaId", agenciaId);
             return "agencia/formulario";
         }

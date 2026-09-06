@@ -15,12 +15,12 @@ import java.util.Optional;
 @Repository
 public interface OperacionRepository extends JpaRepository<Operacion, Long> {
 
-    Optional<Operacion> findByEmpresaIdAndCuentaAndNumeroOperacion(
-            Long empresaId, String cuenta, String numeroOperacion);
+    Optional<Operacion> findByCuentaAndNumeroOperacion(
+            String cuenta, String numeroOperacion);
 
     List<Operacion> findByClienteId(Long clienteId);
 
-    List<Operacion> findByEmpresaIdAndActivoTrue(Long empresaId);
+    List<Operacion> findByActivoTrue();
 
     List<Operacion> findByClienteIdAndActivoTrue(Long clienteId);
 
@@ -36,14 +36,13 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
 
     /**
      * Busca operaciones activas con filtros. Se usa para la bandeja de clientes
-     * cuando hay filtros activos (empresa, estado, etapa, mora, monto).
+     * cuando hay filtros activos (estado, etapa, mora, monto).
      * Retorna paginado los clienteIds únicos.
      */
     @Query("""
         SELECT DISTINCT o.cliente.id
         FROM Operacion o
         WHERE o.activo = true
-          AND (:empresaId IS NULL OR o.empresa.id = :empresaId)
           AND (:estado IS NULL OR o.estado = :estado)
           AND (:estadoCartera IS NULL OR o.estadoCartera = :estadoCartera)
           AND (:etapa IS NULL OR o.etapa = :etapa)
@@ -53,7 +52,6 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
           AND (:maxMonto IS NULL OR o.montoTotal <= :maxMonto)
         """)
     Page<Long> findClienteIdsConFiltros(
-            @Param("empresaId") Long empresaId,
             @Param("estado") String estado,
             @Param("estadoCartera") String estadoCartera,
             @Param("etapa") String etapa,
@@ -71,7 +69,6 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
         SELECT COUNT(DISTINCT o.cliente.id)
         FROM Operacion o
         WHERE o.activo = true
-          AND (:empresaId IS NULL OR o.empresa.id = :empresaId)
           AND (:estado IS NULL OR o.estado = :estado)
           AND (:estadoCartera IS NULL OR o.estadoCartera = :estadoCartera)
           AND (:etapa IS NULL OR o.etapa = :etapa)
@@ -81,7 +78,6 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
           AND (:maxMonto IS NULL OR o.montoTotal <= :maxMonto)
         """)
     long countClienteIdsConFiltros(
-            @Param("empresaId") Long empresaId,
             @Param("estado") String estado,
             @Param("estadoCartera") String estadoCartera,
             @Param("etapa") String etapa,
@@ -96,11 +92,9 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
      */
     @Query("""
         SELECT o FROM Operacion o
-        JOIN FETCH o.empresa
         LEFT JOIN FETCH o.agencia
         WHERE o.cliente.id = :clienteId
           AND o.activo = true
-          AND (:empresaId IS NULL OR o.empresa.id = :empresaId)
           AND (:estado IS NULL OR o.estado = :estado)
           AND (:estadoCartera IS NULL OR o.estadoCartera = :estadoCartera)
           AND (:etapa IS NULL OR o.etapa = :etapa)
@@ -111,7 +105,6 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
         """)
     List<Operacion> findByClienteIdConFiltros(
             @Param("clienteId") Long clienteId,
-            @Param("empresaId") Long empresaId,
             @Param("estado") String estado,
             @Param("estadoCartera") String estadoCartera,
             @Param("etapa") String etapa,
@@ -128,7 +121,6 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
         SELECT COUNT(o) FROM Operacion o
         WHERE o.cliente.id = :clienteId
           AND o.activo = true
-          AND (:empresaId IS NULL OR o.empresa.id = :empresaId)
           AND (:estado IS NULL OR o.estado = :estado)
           AND (:estadoCartera IS NULL OR o.estadoCartera = :estadoCartera)
           AND (:etapa IS NULL OR o.etapa = :etapa)
@@ -139,7 +131,6 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
         """)
     long countByClienteIdConFiltros(
             @Param("clienteId") Long clienteId,
-            @Param("empresaId") Long empresaId,
             @Param("estado") String estado,
             @Param("estadoCartera") String estadoCartera,
             @Param("etapa") String etapa,
@@ -155,10 +146,8 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
     @Query("""
         SELECT o FROM Operacion o
         JOIN FETCH o.cliente
-        JOIN FETCH o.empresa
         LEFT JOIN FETCH o.agencia
         WHERE o.activo = true
-          AND (:empresaId IS NULL OR o.empresa.id = :empresaId)
           AND (:agenciaId IS NULL OR o.agencia.id = :agenciaId)
           AND (:estado IS NULL OR o.estado = :estado)
           AND (:etapa IS NULL OR o.etapa = :etapa)
@@ -171,7 +160,6 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
         ORDER BY o.cliente.nombreCompleto ASC, o.id ASC
         """)
     Page<Operacion> findCarteraConFiltros(
-            @Param("empresaId") Long empresaId,
             @Param("agenciaId") Long agenciaId,
             @Param("estado") String estado,
             @Param("etapa") String etapa,
@@ -179,7 +167,6 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
             Pageable pageable
     );
 
-    long countByEmpresaIdAndActivoTrue(Long empresaId);
 
     /**
      * Lista de operaciones CON numeroExpediente informado — usado para la vista "Expedientes"
@@ -188,12 +175,10 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
     @Query("""
         SELECT o FROM Operacion o
         JOIN FETCH o.cliente
-        JOIN FETCH o.empresa
         LEFT JOIN FETCH o.agencia
         WHERE o.activo = true
           AND o.numeroExpediente IS NOT NULL
           AND o.numeroExpediente <> ''
-          AND (:empresaId IS NULL OR o.empresa.id = :empresaId)
           AND (:situacion IS NULL OR o.situacion = :situacion)
           AND (:busqueda IS NULL OR
               LOWER(o.numeroExpediente) LIKE LOWER(CONCAT('%', :busqueda, '%'))
@@ -203,7 +188,6 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
         ORDER BY o.numeroExpediente ASC, o.cliente.nombreCompleto ASC
         """)
     Page<Operacion> findExpedientes(
-            @Param("empresaId") Long empresaId,
             @Param("situacion") String situacion,
             @Param("busqueda") String busqueda,
             Pageable pageable

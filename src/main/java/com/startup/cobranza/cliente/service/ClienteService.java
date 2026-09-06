@@ -82,7 +82,7 @@ public class ClienteService {
     /**
      * Bandeja paginada con datos aggregate derivados de las operaciones.
      * Sin filtros activos: usa búsqueda simple por nombre/DNI sobre Cliente.
-     * Con filtros activos (empresa, estado, etapa, mora, monto):
+     * Con filtros activos (estado, etapa, mora, monto):
      *   query sobre Operacion para obtener clienteIds únicos, luego lookup de cada cliente.
      */
     public Page<ClienteBandejaDTO> listarBandeja(ClienteBusquedaDTO filtros, Pageable pageable) {
@@ -118,7 +118,6 @@ public class ClienteService {
         // Sin sort en el pageable porque el ORDER BY de DISTINCT debe estar en el SELECT (PostgreSQL)
         Pageable unsortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
         Page<Long> clienteIdsPage = operacionRepository.findClienteIdsConFiltros(
-                filtros.getEmpresaId(),
                 filtros.getEstado(),
                 filtros.getEstadoCartera(),
                 filtros.getEtapa(),
@@ -188,7 +187,6 @@ public class ClienteService {
     private ClienteBandejaDTO toBandejaDTOConFiltros(Cliente cliente, ClienteBusquedaDTO filtros) {
         List<Operacion> ops = operacionRepository.findByClienteIdConFiltros(
                 cliente.getId(),
-                filtros.getEmpresaId(),
                 filtros.getEstado(),
                 filtros.getEstadoCartera(),
                 filtros.getEtapa(),
@@ -201,7 +199,6 @@ public class ClienteService {
     }
 
     private ClienteBandejaDTO buildBandejaDTO(Cliente cliente, List<Operacion> ops) {
-        Set<String> empresas = new HashSet<>();
         Set<String> agencias = new HashSet<>();
         BigDecimal montoTotal = BigDecimal.ZERO;
         BigDecimal montoCapital = BigDecimal.ZERO;
@@ -210,7 +207,6 @@ public class ClienteService {
         String peorEtapa = null;
 
         for (Operacion op : ops) {
-            if (op.getEmpresa() != null) empresas.add(op.getEmpresa().getNombre());
             if (op.getAgencia() != null && op.getAgencia().getNombre() != null) {
                 agencias.add(op.getAgencia().getNombre());
             }
@@ -225,7 +221,6 @@ public class ClienteService {
                 .id(cliente.getId())
                 .dni(cliente.getDni())
                 .nombreCompleto(cliente.getNombreCompleto())
-                .empresas(List.copyOf(empresas))
                 .agencias(List.copyOf(agencias))
                 .estado(peorEstado)
                 .estadoCartera(peorEstadoCartera)

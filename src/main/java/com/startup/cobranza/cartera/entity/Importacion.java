@@ -23,8 +23,6 @@ public class Importacion {
     @Column(name = "registros_fallidos")
     private Integer registrosFallidos;
 
-    @Column(name = "empresa_id")
-    private Long empresaId;
 
     @Column(name = "agencia_id")
     private Long agenciaId;
@@ -44,14 +42,13 @@ public class Importacion {
     public Importacion() {}
 
     public Importacion(Long id, String nombreArchivo, Integer totalRegistros, Integer registrosExitosos,
-                       Integer registrosFallidos, Long empresaId, Long agenciaId, String estado,
+                       Integer registrosFallidos, Long agenciaId, String estado,
                        String usuarioImporta, LocalDateTime fechaImportacion, String errores) {
         this.id = id;
         this.nombreArchivo = nombreArchivo;
         this.totalRegistros = totalRegistros;
         this.registrosExitosos = registrosExitosos;
         this.registrosFallidos = registrosFallidos;
-        this.empresaId = empresaId;
         this.agenciaId = agenciaId;
         this.estado = estado;
         this.usuarioImporta = usuarioImporta;
@@ -69,8 +66,6 @@ public class Importacion {
     public void setRegistrosExitosos(Integer registrosExitosos) { this.registrosExitosos = registrosExitosos; }
     public Integer getRegistrosFallidos() { return registrosFallidos; }
     public void setRegistrosFallidos(Integer registrosFallidos) { this.registrosFallidos = registrosFallidos; }
-    public Long getEmpresaId() { return empresaId; }
-    public void setEmpresaId(Long empresaId) { this.empresaId = empresaId; }
     public Long getAgenciaId() { return agenciaId; }
     public void setAgenciaId(Long agenciaId) { this.agenciaId = agenciaId; }
     public String getEstado() { return estado; }
@@ -90,7 +85,6 @@ public class Importacion {
         private Integer totalRegistros;
         private Integer registrosExitosos;
         private Integer registrosFallidos;
-        private Long empresaId;
         private Long agenciaId;
         private String estado;
         private String usuarioImporta;
@@ -102,7 +96,6 @@ public class Importacion {
         public Builder totalRegistros(Integer totalRegistros) { this.totalRegistros = totalRegistros; return this; }
         public Builder registrosExitosos(Integer registrosExitosos) { this.registrosExitosos = registrosExitosos; return this; }
         public Builder registrosFallidos(Integer registrosFallidos) { this.registrosFallidos = registrosFallidos; return this; }
-        public Builder empresaId(Long empresaId) { this.empresaId = empresaId; return this; }
         public Builder agenciaId(Long agenciaId) { this.agenciaId = agenciaId; return this; }
         public Builder estado(String estado) { this.estado = estado; return this; }
         public Builder usuarioImporta(String usuarioImporta) { this.usuarioImporta = usuarioImporta; return this; }
@@ -111,7 +104,7 @@ public class Importacion {
 
         public Importacion build() {
             return new Importacion(id, nombreArchivo, totalRegistros, registrosExitosos, registrosFallidos,
-                    empresaId, agenciaId, estado, usuarioImporta, fechaImportacion, errores);
+                    agenciaId, estado, usuarioImporta, fechaImportacion, errores);
         }
     }
 

@@ -14,8 +14,8 @@ public class AgenciaApiController {
 
     private final AgenciaService agenciaService;
 
-    @GetMapping("/por-empresa/{empresaId}")
-    public List<AgenciaDTO> porEmpresa(@PathVariable Long empresaId) {
-        return agenciaService.listarPorEmpresa(empresaId);
+    @GetMapping("/activas")
+    public List<AgenciaDTO> activas() {
+        return agenciaService.listarActivas();
     }
 }

@@ -8,8 +8,6 @@ import com.startup.cobranza.operacion.mapper.OperacionMapper;
 import com.startup.cobranza.operacion.repository.OperacionRepository;
 import com.startup.cobranza.cliente.entity.Cliente;
 import com.startup.cobranza.cliente.repository.ClienteRepository;
-import com.startup.cobranza.empresa.entity.Empresa;
-import com.startup.cobranza.empresa.repository.EmpresaRepository;
 import com.startup.cobranza.agencia.entity.Agencia;
 import com.startup.cobranza.agencia.repository.AgenciaRepository;
 import com.startup.cobranza.usuario.entity.Usuario;
@@ -30,7 +28,6 @@ public class OperacionService {
     private final OperacionRepository operacionRepository;
     private final OperacionMapper operacionMapper;
     private final ClienteRepository clienteRepository;
-    private final EmpresaRepository empresaRepository;
     private final AgenciaRepository agenciaRepository;
     private final UsuarioRepository usuarioRepository;
     private final BienEmbargadoRepository bienEmbargadoRepository;
@@ -38,21 +35,19 @@ public class OperacionService {
     public OperacionService(OperacionRepository operacionRepository,
                             OperacionMapper operacionMapper,
                             ClienteRepository clienteRepository,
-                            EmpresaRepository empresaRepository,
                             AgenciaRepository agenciaRepository,
                             UsuarioRepository usuarioRepository,
                             BienEmbargadoRepository bienEmbargadoRepository) {
         this.operacionRepository = operacionRepository;
         this.operacionMapper = operacionMapper;
         this.clienteRepository = clienteRepository;
-        this.empresaRepository = empresaRepository;
         this.agenciaRepository = agenciaRepository;
         this.usuarioRepository = usuarioRepository;
         this.bienEmbargadoRepository = bienEmbargadoRepository;
     }
 
-    public List<OperacionDTO> listarPorEmpresa(Long empresaId) {
-        return operacionRepository.findByEmpresaIdAndActivoTrue(empresaId).stream()
+    public List<OperacionDTO> listarActivas() {
+        return operacionRepository.findByActivoTrue().stream()
                 .map(operacionMapper::toDTO)
                 .toList();
     }
@@ -65,21 +60,19 @@ public class OperacionService {
 
     public OperacionDTO obtenerPorId(Long id) {
         Operacion op = operacionRepository.findByIdWithBienes(id)
-                .orElseThrow(() -> new OperacionException("Operación no encontrada"));
+                .orElseThrow(() -> new OperacionException("Operacion no encontrada"));
         return operacionMapper.toDTO(op);
     }
 
     public Operacion obtenerEntityPorId(Long id) {
         return operacionRepository.findByIdWithBienes(id)
-                .orElseThrow(() -> new OperacionException("Operación no encontrada"));
+                .orElseThrow(() -> new OperacionException("Operacion no encontrada"));
     }
 
     @Transactional
     public OperacionDTO crear(OperacionFormDTO form) {
         Cliente cliente = clienteRepository.findById(form.getClienteId())
                 .orElseThrow(() -> new OperacionException("Cliente no encontrado"));
-        Empresa empresa = empresaRepository.findById(form.getEmpresaId())
-                .orElseThrow(() -> new OperacionException("Empresa no encontrada"));
         Agencia agencia = form.getAgenciaId() != null
                 ? agenciaRepository.findById(form.getAgenciaId()).orElse(null)
                 : null;
@@ -87,7 +80,7 @@ public class OperacionService {
                 ? usuarioRepository.findById(form.getAbogadoId()).orElse(null)
                 : null;
 
-        Operacion operacion = operacionMapper.toEntityFromForm(form, cliente, empresa, agencia, abogado);
+        Operacion operacion = operacionMapper.toEntityFromForm(form, cliente, agencia, abogado);
         Operacion saved = operacionRepository.save(operacion);
         return operacionMapper.toDTO(saved);
     }
@@ -95,12 +88,10 @@ public class OperacionService {
     @Transactional
     public OperacionDTO actualizar(Long id, OperacionFormDTO form) {
         Operacion existing = operacionRepository.findById(id)
-                .orElseThrow(() -> new OperacionException("Operación no encontrada"));
+                .orElseThrow(() -> new OperacionException("Operacion no encontrada"));
 
         Cliente cliente = clienteRepository.findById(form.getClienteId())
                 .orElseThrow(() -> new OperacionException("Cliente no encontrado"));
-        Empresa empresa = empresaRepository.findById(form.getEmpresaId())
-                .orElseThrow(() -> new OperacionException("Empresa no encontrada"));
         Agencia agencia = form.getAgenciaId() != null
                 ? agenciaRepository.findById(form.getAgenciaId()).orElse(null)
                 : null;
@@ -109,7 +100,6 @@ public class OperacionService {
                 : null;
 
         existing.setCliente(cliente);
-        existing.setEmpresa(empresa);
         existing.setAgencia(agencia);
         existing.setCuenta(form.getCuenta());
         existing.setNumeroOperacion(form.getNumeroOperacion());
@@ -175,16 +165,16 @@ public class OperacionService {
     @Transactional
     public void eliminar(Long id) {
         Operacion op = operacionRepository.findById(id)
-                .orElseThrow(() -> new OperacionException("Operación no encontrada"));
+                .orElseThrow(() -> new OperacionException("Operacion no encontrada"));
         op.setActivo(false);
         operacionRepository.save(op);
     }
 
     public Page<OperacionDTO> listarCarteraConFiltros(
-            Long empresaId, Long agenciaId, String estado, String etapa,
+            Long agenciaId, String estado, String etapa,
             String busqueda, Pageable pageable) {
         return operacionRepository.findCarteraConFiltros(
-                empresaId, agenciaId, estado, etapa, busqueda, pageable)
+                agenciaId, estado, etapa, busqueda, pageable)
                 .map(operacionMapper::toDTO);
     }
 
@@ -192,9 +182,9 @@ public class OperacionService {
      * Lista de operaciones con numeroExpediente — la vista "Expedientes"
      * lee de la misma entidad Operacion, solo filtra y ordena diferente.
      */
-    public Page<OperacionDTO> listarExpedientes(Long empresaId, String situacion,
+    public Page<OperacionDTO> listarExpedientes(String situacion,
                                                  String busqueda, Pageable pageable) {
-        return operacionRepository.findExpedientes(empresaId, situacion, busqueda, pageable)
+        return operacionRepository.findExpedientes(situacion, busqueda, pageable)
                 .map(operacionMapper::toDTO);
     }
 }

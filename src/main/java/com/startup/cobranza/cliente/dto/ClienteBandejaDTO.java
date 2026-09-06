@@ -8,7 +8,6 @@ public class ClienteBandejaDTO {
     private Long id;
     private String dni;
     private String nombreCompleto;
-    private List<String> empresas;
     private List<String> agencias;
     private String estado;
     private String estadoCartera;
@@ -20,14 +19,13 @@ public class ClienteBandejaDTO {
     public ClienteBandejaDTO() {}
 
     public ClienteBandejaDTO(Long id, String dni, String nombreCompleto,
-                             List<String> empresas, List<String> agencias,
+                             List<String> agencias,
                              String estado, String etapa,
                              BigDecimal montoTotal, BigDecimal montoCapital,
                              long totalOperaciones) {
         this.id = id;
         this.dni = dni;
         this.nombreCompleto = nombreCompleto;
-        this.empresas = empresas;
         this.agencias = agencias;
         this.estado = estado;
         this.etapa = etapa;
@@ -42,8 +40,6 @@ public class ClienteBandejaDTO {
     public void setDni(String dni) { this.dni = dni; }
     public String getNombreCompleto() { return nombreCompleto; }
     public void setNombreCompleto(String nombreCompleto) { this.nombreCompleto = nombreCompleto; }
-    public List<String> getEmpresas() { return empresas; }
-    public void setEmpresas(List<String> empresas) { this.empresas = empresas; }
     public List<String> getAgencias() { return agencias; }
     public void setAgencias(List<String> agencias) { this.agencias = agencias; }
     public String getEstado() { return estado; }
@@ -65,8 +61,7 @@ public class ClienteBandejaDTO {
         private Long id;
         private String dni;
         private String nombreCompleto;
-        private List<String> empresas;
-        private List<String> agencias;
+            private List<String> agencias;
         private String estado;
         private String estadoCartera;
         private String etapa;
@@ -77,7 +72,6 @@ public class ClienteBandejaDTO {
         public Builder id(Long v) { id = v; return this; }
         public Builder dni(String v) { dni = v; return this; }
         public Builder nombreCompleto(String v) { nombreCompleto = v; return this; }
-        public Builder empresas(List<String> v) { empresas = v; return this; }
         public Builder agencias(List<String> v) { agencias = v; return this; }
         public Builder estado(String v) { estado = v; return this; }
         public Builder estadoCartera(String v) { estadoCartera = v; return this; }
@@ -87,7 +81,7 @@ public class ClienteBandejaDTO {
         public Builder totalOperaciones(long v) { totalOperaciones = v; return this; }
 
         public ClienteBandejaDTO build() {
-            return new ClienteBandejaDTO(id, dni, nombreCompleto, empresas, agencias,
+            return new ClienteBandejaDTO(id, dni, nombreCompleto, agencias,
                     estado, etapa, montoTotal, montoCapital, totalOperaciones);
         }
     }

@@ -3,8 +3,6 @@ package com.startup.cobranza.cartera.controller;
 import com.startup.cobranza.cartera.dto.ImportacionDTO;
 import com.startup.cobranza.cartera.exception.CarteraException;
 import com.startup.cobranza.cartera.service.CarteraService;
-import com.startup.cobranza.empresa.dto.EmpresaDTO;
-import com.startup.cobranza.empresa.service.EmpresaService;
 import com.startup.cobranza.operacion.dto.OperacionDTO;
 import com.startup.cobranza.operacion.service.OperacionService;
 import lombok.RequiredArgsConstructor;
@@ -27,14 +25,11 @@ import java.util.List;
 public class CarteraController {
 
     private final CarteraService carteraService;
-    private final EmpresaService empresaService;
     private final OperacionService operacionService;
 
     @GetMapping("/importar")
     @PreAuthorize("hasRole('ADMIN')")
     public String importarForm(Model model, HttpServletRequest request) {
-        List<EmpresaDTO> empresas = empresaService.listarActivas();
-        model.addAttribute("empresas", empresas);
         model.addAttribute("usuarioNombre", request.getUserPrincipal().getName());
         return "cartera/importar";
     }
@@ -42,14 +37,13 @@ public class CarteraController {
     @PostMapping("/importar")
     @PreAuthorize("hasRole('ADMIN')")
     public String importar(@RequestParam("archivo") MultipartFile archivo,
-                          @RequestParam("empresaId") Long empresaId,
                           @RequestParam(required = false) Long agenciaId,
                           @RequestParam String usuario,
                           RedirectAttributes redirectAttrs) {
         try {
-            carteraService.importarExcel(archivo, empresaId, agenciaId, usuario);
+            carteraService.importarExcel(archivo, agenciaId, usuario);
             redirectAttrs.addFlashAttribute("success",
-                    "Importación completada. Revise el historial para ver el detalle.");
+                    "Importacion completada. Revise el historial para ver el detalle.");
         } catch (CarteraException e) {
             redirectAttrs.addFlashAttribute("error", e.getMessage());
         }
@@ -66,7 +60,6 @@ public class CarteraController {
 
     @GetMapping("/registros")
     public String registros(
-            @RequestParam(value = "empresaId", required = false) Long empresaId,
             @RequestParam(value = "agenciaId", required = false) Long agenciaId,
             @RequestParam(value = "estado", required = false) String estado,
             @RequestParam(value = "etapa", required = false) String etapa,
@@ -77,25 +70,22 @@ public class CarteraController {
 
         PageRequest pageable = PageRequest.of(page, size, Sort.by("cliente.nombreCompleto").ascending());
         Page<OperacionDTO> pagina = operacionService.listarCarteraConFiltros(
-                empresaId, agenciaId, estado, etapa, busqueda, pageable);
+                agenciaId, estado, etapa, busqueda, pageable);
 
         model.addAttribute("pagina", pagina);
-        model.addAttribute("empresaId", empresaId);
         model.addAttribute("agenciaId", agenciaId);
         model.addAttribute("estado", estado);
         model.addAttribute("etapa", etapa);
         model.addAttribute("busqueda", busqueda);
-        model.addAttribute("empresas", empresaService.listarActivas());
         return "cartera/registros";
     }
 
     /**
-     * Vista de Expedientes — same entidad Operacion, solo filtra
+     * Vista de Expedientes — misma entidad Operacion, solo filtra
      * por numeroExpediente informado y muestra columnas judiciales.
      */
     @GetMapping("/expedientes")
     public String expedientes(
-            @RequestParam(value = "empresaId", required = false) Long empresaId,
             @RequestParam(value = "situacion", required = false) String situacion,
             @RequestParam(value = "busqueda", required = false) String busqueda,
             @RequestParam(value = "page", defaultValue = "0") int page,
@@ -106,13 +96,11 @@ public class CarteraController {
                 Sort.by("numeroExpediente").ascending()
                     .and(Sort.by("cliente.nombreCompleto").ascending()));
         Page<OperacionDTO> pagina = operacionService.listarExpedientes(
-                empresaId, situacion, busqueda, pageable);
+                situacion, busqueda, pageable);
 
         model.addAttribute("pagina", pagina);
-        model.addAttribute("empresaId", empresaId);
         model.addAttribute("situacion", situacion);
         model.addAttribute("busqueda", busqueda);
-        model.addAttribute("empresas", empresaService.listarActivas());
         return "cartera/expedientes";
     }
 }

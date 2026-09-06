@@ -1,7 +1,6 @@
 package com.startup.cobranza.operacion.controller;
 
-import com.startup.cobranza.empresa.dto.EmpresaDTO;
-import com.startup.cobranza.empresa.service.EmpresaService;
+import com.startup.cobranza.agencia.repository.AgenciaRepository;
 import com.startup.cobranza.operacion.dto.OperacionDTO;
 import com.startup.cobranza.operacion.dto.OperacionFormDTO;
 import com.startup.cobranza.operacion.exception.OperacionException;
@@ -25,14 +24,14 @@ public class OperacionController {
 
     private final OperacionService operacionService;
     private final OperacionMapper operacionMapper;
-    private final EmpresaService empresaService;
+    private final AgenciaRepository agenciaRepository;
 
     public OperacionController(OperacionService operacionService,
                                OperacionMapper operacionMapper,
-                               EmpresaService empresaService) {
+                               AgenciaRepository agenciaRepository) {
         this.operacionService = operacionService;
         this.operacionMapper = operacionMapper;
-        this.empresaService = empresaService;
+        this.agenciaRepository = agenciaRepository;
     }
 
     @GetMapping("/{id}")
@@ -52,10 +51,9 @@ public class OperacionController {
             OperacionDTO dto = operacionService.obtenerPorId(id);
             OperacionFormDTO form = operacionMapper.toFormDTO(
                     operacionService.obtenerEntityPorId(id));
-            List<EmpresaDTO> empresas = empresaService.listarActivas();
             model.addAttribute("operacionForm", form);
-            model.addAttribute("empresas", empresas);
             model.addAttribute("operacionId", id);
+            model.addAttribute("agencias", agenciaRepository.findByActivoTrue());
             return "operacion/formulario";
         } catch (OperacionException e) {
             redirectAttrs.addFlashAttribute("error", e.getMessage());
@@ -80,7 +78,6 @@ public class OperacionController {
             }
         } catch (OperacionException e) {
             model.addAttribute("error", e.getMessage());
-            model.addAttribute("empresas", empresaService.listarActivas());
             model.addAttribute("operacionId", form.getId());
             return "operacion/formulario";
         }

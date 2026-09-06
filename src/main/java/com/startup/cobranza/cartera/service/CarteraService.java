@@ -14,14 +14,13 @@ import com.startup.cobranza.operacion.entity.BienEmbargado;
 import com.startup.cobranza.operacion.repository.BienEmbargadoRepository;
 import com.startup.cobranza.operacion.entity.Operacion;
 import com.startup.cobranza.operacion.repository.OperacionRepository;
-import com.startup.cobranza.empresa.entity.Empresa;
-import com.startup.cobranza.empresa.repository.EmpresaRepository;
 import jakarta.annotation.PostConstruct;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -40,7 +39,6 @@ public class CarteraService {
     private final ImportacionRepository importacionRepository;
     private final ClienteRepository clienteRepository;
     private final OperacionRepository operacionRepository;
-    private final EmpresaRepository empresaRepository;
     private final AgenciaRepository agenciaRepository;
     private final BienEmbargadoRepository bienEmbargadoRepository;
 
@@ -54,13 +52,11 @@ public class CarteraService {
     public CarteraService(ImportacionRepository importacionRepository,
                           ClienteRepository clienteRepository,
                           OperacionRepository operacionRepository,
-                          EmpresaRepository empresaRepository,
                           AgenciaRepository agenciaRepository,
                           BienEmbargadoRepository bienEmbargadoRepository) {
         this.importacionRepository = importacionRepository;
         this.clienteRepository = clienteRepository;
         this.operacionRepository = operacionRepository;
-        this.empresaRepository = empresaRepository;
         this.agenciaRepository = agenciaRepository;
         this.bienEmbargadoRepository = bienEmbargadoRepository;
     }
@@ -88,7 +84,7 @@ public class CarteraService {
     }
 
     @Transactional
-    public ImportacionDTO importarExcel(MultipartFile archivo, Long empresaId, Long agenciaId, String usuario) {
+    public ImportacionDTO importarExcel(MultipartFile archivo, Long agenciaId, String usuario) {
         if (archivo.isEmpty()) {
             throw new CarteraException("El archivo está vacío");
         }
@@ -97,25 +93,28 @@ public class CarteraService {
             throw new CarteraException("Solo se permiten archivos Excel (.xlsx)");
         }
 
-        Empresa empresa = empresaRepository.findById(empresaId)
-                .orElseThrow(() -> new CarteraException("Empresa no encontrada: " + empresaId));
+        // Procesar archivo — todo dentro de esta transacción
+        ProcesamientoResult resultado = procesarArchivo(archivo, nombreOriginal);
 
-        int total = 0;
-        int creados = 0;
-        int actualizados = 0;
-        int errores = 0;
+        // Guardar Importacion en su propia transacción para que no se abort
+        // si hubo errores en filas individuales (rollback parcial)
+        return registrarImportacion(
+                nombreOriginal, resultado.total, resultado.creados, resultado.actualizados,
+                resultado.errores, resultado.listaErrores, agenciaId, usuario);
+    }
+
+    private ProcesamientoResult procesarArchivo(MultipartFile archivo, String nombreOriginal) {
+        int total = 0, creados = 0, actualizados = 0, errores = 0;
         List<String> listaErrores = new ArrayList<>();
 
         try (InputStream is = archivo.getInputStream();
              Workbook workbook = new XSSFWorkbook(is)) {
 
-            // Iterar sobre las hojas reales del archivo Excel
             for (int s = 0; s < workbook.getNumberOfSheets(); s++) {
                 Sheet sheet = workbook.getSheetAt(s);
                 String hojaNombre = sheet.getSheetName();
                 if (sheet == null) continue;
 
-                // Determinar perfil y estado según nombre de hoja
                 String perfilPath;
                 String estadoCarteraDefault;
 
@@ -126,11 +125,9 @@ public class CarteraService {
                     perfilPath = PERFIL_EXCEL_AVANCE;
                     estadoCarteraDefault = "ACTIVO";
                 } else if (hojaNombre.toLowerCase().contains("cancelado") || hojaNombre.toLowerCase().contains("cancelada")) {
-                    // Hoja 2: CARTERA C. CREDITO CANCELADO
                     perfilPath = PERFIL_CAJA_AREQUIPA;
                     estadoCarteraDefault = "CANCELADA";
                 } else if (hojaNombre.toLowerCase().contains("devuelta")) {
-                    // Hoja 3: CARPETAS DEVUELTAS.
                     perfilPath = PERFIL_CAJA_AREQUIPA;
                     estadoCarteraDefault = "DEVUELTA";
                 } else {
@@ -149,19 +146,11 @@ public class CarteraService {
                     continue;
                 }
 
-                // PASOS 1 y 2: Procesar filas — la deteccion de section headers
-                // va ANTES de isRowEmpty para que el estado se actualice incluso
-                // cuando la fila del header no tiene datos (DNI vacio).
-                // Logica: ni bien se encuentra un section header, el estado cambia
-                // para esa fila y todas las siguientes hasta el proximo header.
                 int lastRowNum = sheet.getLastRowNum();
                 for (int i = headerRowIdx + 1; i <= lastRowNum; i++) {
                     Row row = sheet.getRow(i);
                     if (row == null) continue;
 
-                    // Primero: detectar si es un section header en col B (ej. CARTERA VENDIDA)
-                    // — esto se hace antes de isRowEmpty para que el estado se actualice
-                    // aunque la fila del header no tenga DNI ni datos.
                     Cell cellB = row.getCell(1);
                     if (cellB != null) {
                         String val = cellToString(cellB);
@@ -171,28 +160,19 @@ public class CarteraService {
                                 estadoCarteraDefault = "DESASIGNADA";
                             } else if (upper.startsWith("CARTERA VENDIDA")) {
                                 estadoCarteraDefault = "VENDIDA";
-                            } else if (upper.startsWith("CARTERA CANCELADA")) {
-                                estadoCarteraDefault = "CANCELADA";
-                            } else if (upper.startsWith("CARTERA CANCELADO")) {
+                            } else if (upper.startsWith("CARTERA CANCELADA") || upper.startsWith("CARTERA CANCELADO")) {
                                 estadoCarteraDefault = "CANCELADA";
                             }
                         }
                     }
 
-                    // Segundo: si no hay datos en las columnas clave, saltar.
-                    // El estado ya se actualizo arriba si era un section header.
-                    if (isRowEmpty(row, columns)) {
-                        continue;
-                    }
+                    if (isRowEmpty(row, columns)) continue;
 
                     total++;
                     try {
-                        ParseResult result = parseRow(row, columns, empresa, skipRowsWithoutDni, estadoCarteraDefault, i);
-                        if (result.esNuevo) {
-                            creados++;
-                        } else {
-                            actualizados++;
-                        }
+                        ParseResult result = parseRow(row, columns, skipRowsWithoutDni, estadoCarteraDefault, i);
+                        if (result.esNuevo) creados++;
+                        else actualizados++;
                     } catch (Exception e) {
                         errores++;
                         listaErrores.add("Hoja '" + hojaNombre + "' fila " + (i + 1) + ": " + e.getMessage());
@@ -206,25 +186,31 @@ public class CarteraService {
             throw new CarteraException("Error al leer el archivo: " + e.getMessage());
         }
 
+        return new ProcesamientoResult(total, creados, actualizados, errores, listaErrores);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public ImportacionDTO registrarImportacion(String nombreArchivo, int total, int creados,
+            int actualizados, int errores, List<String> listaErrores, Long agenciaId, String usuario) {
         Importacion importacion = Importacion.builder()
-                .nombreArchivo(nombreOriginal)
+                .nombreArchivo(nombreArchivo)
                 .totalRegistros(total)
                 .registrosExitosos(creados + actualizados)
                 .registrosFallidos(errores)
-                .empresaId(empresaId)
                 .agenciaId(agenciaId)
                 .usuarioImporta(usuario)
                 .estado(errores == 0 ? "COMPLETADO" : "COMPLETADO_CON_ERRORES")
                 .errores(listaErrores.isEmpty() ? null : String.join("\n", listaErrores))
                 .build();
-
         Importacion saved = importacionRepository.save(importacion);
-        return toDTO(saved, empresa.getNombre(), null);
+        return toDTO(saved, null);
     }
+
+    private record ProcesamientoResult(int total, int creados, int actualizados, int errores, List<String> listaErrores) {}
 
     private record ParseResult(Cliente cliente, Operacion operacion, boolean esNuevo) {}
 
-    private ParseResult parseRow(Row row, JsonNode columns, Empresa empresa,
+    private ParseResult parseRow(Row row, JsonNode columns,
                                  boolean skipRowsWithoutDni, String estadoCarteraDefault,
                                  int rowIndex) {
         // 1) Leer campos crudos del Excel según el perfil
@@ -300,32 +286,28 @@ public class CarteraService {
             clienteRepository.save(cliente);
         }
 
-        // 5) Find-or-create Agencia por nombre + empresa
+        // 5) Find-or-create Agencia por nombre
         Agencia agencia = null;
         if (agenciaNombre != null && !agenciaNombre.isBlank()) {
-            agencia = agenciaRepository.findByEmpresaIdAndActivoTrue(empresa.getId()).stream()
-                    .filter(a -> a.getNombre().equalsIgnoreCase(agenciaNombre.trim()))
-                    .findFirst()
+            agencia = agenciaRepository.findByNombreIgnoreCaseAndActivoTrue(agenciaNombre.trim())
                     .orElse(null);
             if (agencia == null) {
                 agencia = Agencia.builder()
                         .nombre(agenciaNombre.trim())
-                        .empresa(empresa)
                         .activo(true)
                         .build();
                 agencia = agenciaRepository.save(agencia);
             }
         }
 
-        // 6) Upsert Operacion por (empresa_id, cuenta, numero_operacion)
+        // 6) Upsert Operacion por (cuenta, numero_operacion)
         Operacion operacion = operacionRepository
-                .findByEmpresaIdAndCuentaAndNumeroOperacion(empresa.getId(), cuenta.trim(), numeroOperacion.trim())
+                .findByCuentaAndNumeroOperacion(cuenta.trim(), numeroOperacion.trim())
                 .orElse(null);
         boolean operacionNueva = false;
         if (operacion == null) {
             operacion = Operacion.builder()
                     .cliente(cliente)
-                    .empresa(empresa)
                     .agencia(agencia)
                     .cuenta(cuenta.trim())
                     .numeroOperacion(numeroOperacion.trim())
@@ -701,26 +683,22 @@ public class CarteraService {
     public List<ImportacionDTO> listarImportaciones() {
         return importacionRepository.findAllByOrderByFechaImportacionDesc().stream()
                 .map(i -> {
-                    String empNombre = empresaRepository.findById(i.getEmpresaId())
-                            .map(Empresa::getNombre).orElse("N/A");
                     String agNombre = i.getAgenciaId() != null
                             ? agenciaRepository.findById(i.getAgenciaId())
                                     .map(Agencia::getNombre).orElse("N/A")
                             : null;
-                    return toDTO(i, empNombre, agNombre);
+                    return toDTO(i, agNombre);
                 })
                 .toList();
     }
 
-    private ImportacionDTO toDTO(Importacion entity, String empresaNombre, String agenciaNombre) {
+    private ImportacionDTO toDTO(Importacion entity, String agenciaNombre) {
         return ImportacionDTO.builder()
                 .id(entity.getId())
                 .nombreArchivo(entity.getNombreArchivo())
                 .totalRegistros(entity.getTotalRegistros())
                 .registrosExitosos(entity.getRegistrosExitosos())
                 .registrosFallidos(entity.getRegistrosFallidos())
-                .empresaId(entity.getEmpresaId())
-                .empresaNombre(empresaNombre)
                 .agenciaId(entity.getAgenciaId())
                 .agenciaNombre(agenciaNombre)
                 .estado(entity.getEstado())

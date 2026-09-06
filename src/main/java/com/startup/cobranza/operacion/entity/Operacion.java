@@ -1,7 +1,6 @@
 package com.startup.cobranza.operacion.entity;
 
 import com.startup.cobranza.agencia.entity.Agencia;
-import com.startup.cobranza.empresa.entity.Empresa;
 import com.startup.cobranza.operacion.entity.BienEmbargado;
 import com.startup.cobranza.usuario.entity.Usuario;
 import jakarta.persistence.*;
@@ -14,8 +13,8 @@ import java.util.List;
 @Entity
 @Table(name = "operaciones",
        uniqueConstraints = @UniqueConstraint(
-           columnNames = {"empresa_id", "cuenta", "numero_operacion"},
-           name = "uk_operacion_empresa_cuenta_operacion"))
+           columnNames = {"cuenta", "numero_operacion"},
+           name = "uk_operacion_cuenta_operacion"))
 public class Operacion {
 
     @Id
@@ -25,10 +24,6 @@ public class Operacion {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cliente_id", nullable = false)
     private com.startup.cobranza.cliente.entity.Cliente cliente;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "empresa_id", nullable = false)
-    private Empresa empresa;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "agencia_id")
@@ -245,7 +240,7 @@ public class Operacion {
 
     public Operacion() {}
 
-    public Operacion(Long id, com.startup.cobranza.cliente.entity.Cliente cliente, Empresa empresa,
+    public Operacion(Long id, com.startup.cobranza.cliente.entity.Cliente cliente,
                      Agencia agencia, String cuenta, String numeroOperacion,
                      BigDecimal montoCapital, BigDecimal montoTotal, Integer diasMora,
                      String moneda, String tipoCredito, String situacion, String estado,
@@ -269,7 +264,6 @@ public class Operacion {
                      LocalDateTime fechaCreacion, LocalDateTime fechaActualizacion) {
         this.id = id;
         this.cliente = cliente;
-        this.empresa = empresa;
         this.agencia = agencia;
         this.cuenta = cuenta;
         this.numeroOperacion = numeroOperacion;
@@ -328,8 +322,6 @@ public class Operacion {
     public void setId(Long id) { this.id = id; }
     public com.startup.cobranza.cliente.entity.Cliente getCliente() { return cliente; }
     public void setCliente(com.startup.cobranza.cliente.entity.Cliente cliente) { this.cliente = cliente; }
-    public Empresa getEmpresa() { return empresa; }
-    public void setEmpresa(Empresa empresa) { this.empresa = empresa; }
     public Agencia getAgencia() { return agencia; }
     public void setAgencia(Agencia agencia) { this.agencia = agencia; }
     public String getCuenta() { return cuenta; }
@@ -466,7 +458,6 @@ public class Operacion {
     public static class Builder {
         private Long id;
         private com.startup.cobranza.cliente.entity.Cliente cliente;
-        private Empresa empresa;
         private Agencia agencia;
         private String cuenta;
         private String numeroOperacion;
@@ -495,7 +486,6 @@ public class Operacion {
 
         public Builder id(Long v) { id = v; return this; }
         public Builder cliente(com.startup.cobranza.cliente.entity.Cliente v) { cliente = v; return this; }
-        public Builder empresa(Empresa v) { empresa = v; return this; }
         public Builder agencia(Agencia v) { agencia = v; return this; }
         public Builder cuenta(String v) { cuenta = v; return this; }
         public Builder numeroOperacion(String v) { numeroOperacion = v; return this; }
@@ -608,7 +598,6 @@ public class Operacion {
             Operacion o = new Operacion();
             if (id != null) o.setId(id);
             o.setCliente(cliente);
-            o.setEmpresa(empresa);
             o.setAgencia(agencia);
             o.setCuenta(cuenta);
             o.setNumeroOperacion(numeroOperacion);
