@@ -159,57 +159,82 @@
         <!-- SECCIÓN 3: DATOS DEL EXPEDIENTE CAUTELAR / HIPOTECA (cols Y-AP) -->
         <div class="card animate-in" style="margin-top: 16px;">
             <div class="card-header">Datos del Expediente Cautelar / Hipoteca</div>
-            <div class="table-wrapper">
-                <table class="data-table" th:if="${operacion.bienEmbargados != null and !operacion.bienEmbargados.isEmpty()}">
-                    <thead>
-                        <tr>
-                            <th>Exp. Cautelar</th>
-                            <th>Cód. Cautelar</th>
-                            <th>Detalle Bien / Garantía</th>
-                            <th>N° Partida</th>
-                            <th>Bien (Mueble/Inmueble)</th>
-                            <th>Rango</th>
-                            <th>Detalle Acreedores</th>
-                            <th>Preferente</th>
-                            <th>Monto MC</th>
-                            <th>Moneda</th>
-                            <th>Garantía Inscrita</th>
-                            <th>Fech. Inscripción</th>
-                            <th>Fech. Present. RRPP</th>
-                            <th>Asiento</th>
-                            <th>Fech. Present. MC</th>
-                            <th>Fech. Inadmisible</th>
-                            <th>Fech. Admisión</th>
-                            <th>Comentario</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="bien : ${operacion.bienEmbargados}">
-                            <td th:text="${operacion.codigoExpCautelar}">-</td>
-                            <td th:text="${operacion.codigoExpCautelar}">-</td>
-                            <td th:text="${bien.detalleGarantia}">-</td>
-                            <td th:text="${bien.partidaRegistral}">-</td>
-                            <td th:text="${bien.tipoBien}">-</td>
-                            <td th:text="${bien.rango}">-</td>
-                            <td th:text="${bien.detalleAcreedores}">-</td>
-                            <td th:text="${bien.tipoPreferencia}">-</td>
-                            <td th:text="${bien.montoMc}">-</td>
-                            <td th:text="${bien.monedaMc}">-</td>
-                            <td th:text="${bien.garantiaInscrita}">-</td>
-                            <td th:text="${bien.fechaInscripcion != null ? #temporals.format(bien.fechaInscripcion, 'dd/MM/yyyy') : '-'}">-</td>
-                            <td th:text="${bien.fechaPresentacionRrpp != null ? #temporals.format(bien.fechaPresentacionRrpp, 'dd/MM/yyyy') : '-'}">-</td>
-                            <td th:text="${bien.asientoInscripcion}">-</td>
-                            <td th:text="${bien.fechaPresentacionMc != null ? #temporals.format(bien.fechaPresentacionMc, 'dd/MM/yyyy') : '-'}">-</td>
-                            <td th:text="${bien.fechaInadmisible != null ? #temporals.format(bien.fechaInadmisible, 'dd/MM/yyyy') : '-'}">-</td>
-                            <td th:text="${bien.fechaAdmision != null ? #temporals.format(bien.fechaAdmision, 'dd/MM/yyyy') : '-'}">-</td>
-                            <td th:text="${bien.comentarioMc}">-</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <p th:if="${operacion.bienEmbargados == null or operacion.bienEmbargados.isEmpty()}"
-                   style="padding: 16px; color: #888; font-style: italic;">
-                    Sin bienes embargados registrados.
-                </p>
+            <div class="card-body"
+                 th:if="${operacion.bienEmbargados != null and !operacion.bienEmbargados.isEmpty()}"
+                 th:each="bien : ${operacion.bienEmbargados}">
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+                    <div class="info-item">
+                        <span class="info-label">Exp. Cautelar</span>
+                        <span class="info-value" th:text="${operacion.codigoExpCautelar}">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">N° Partida</span>
+                        <span class="info-value" th:text="${bien.partidaRegistral}">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Tipo de Bien</span>
+                        <span class="info-value" th:text="${bien.tipoBien}">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Rango</span>
+                        <span class="info-value" th:text="${bien.rango}">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Detalle Garantía</span>
+                        <span class="info-value" th:text="${bien.detalleGarantia}">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Detalle Acreedores</span>
+                        <span class="info-value" th:text="${bien.detalleAcreedores}">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Preferencia</span>
+                        <span class="info-value" th:text="${bien.tipoPreferencia}">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Monto MC</span>
+                        <span class="info-value" th:text="${bien.montoMc}">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Moneda</span>
+                        <span class="info-value" th:text="${bien.monedaMc}">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Garantía Inscrita</span>
+                        <span class="info-value" th:text="${bien.garantiaInscrita}">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Fecha Inscripción</span>
+                        <span class="info-value" th:text="${bien.fechaInscripcion != null ? #temporals.format(bien.fechaInscripcion, 'dd/MM/yyyy') : '-'}">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Fecha Present. RRPP</span>
+                        <span class="info-value" th:text="${bien.fechaPresentacionRrpp != null ? #temporals.format(bien.fechaPresentacionRrpp, 'dd/MM/yyyy') : '-'}">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Asiento</span>
+                        <span class="info-value" th:text="${bien.asientoInscripcion}">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Fecha Present. MC</span>
+                        <span class="info-value" th:text="${bien.fechaPresentacionMc != null ? #temporals.format(bien.fechaPresentacionMc, 'dd/MM/yyyy') : '-'}">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Fecha Inadmisible</span>
+                        <span class="info-value" th:text="${bien.fechaInadmisible != null ? #temporals.format(bien.fechaInadmisible, 'dd/MM/yyyy') : '-'}">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Fecha Admisión</span>
+                        <span class="info-value" th:text="${bien.fechaAdmision != null ? #temporals.format(bien.fechaAdmision, 'dd/MM/yyyy') : '-'}">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Comentario</span>
+                        <span class="info-value" th:text="${bien.comentarioMc}">-</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" th:if="${operacion.bienEmbargados == null or operacion.bienEmbargados.isEmpty()}">
+                <p style="color: #888; font-style: italic;">Sin bienes embargados registrados.</p>
             </div>
         </div>
 
