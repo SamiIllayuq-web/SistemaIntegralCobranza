@@ -196,12 +196,12 @@
                             <td th:text="${bien.montoMc}">-</td>
                             <td th:text="${bien.monedaMc}">-</td>
                             <td th:text="${bien.garantiaInscrita}">-</td>
-                            <td th:text="${#temporals.format(bien.fechaInscripcion, 'dd/MM/yyyy')}">-</td>
-                            <td th:text="${#temporals.format(bien.fechaPresentacionRrpp, 'dd/MM/yyyy')}">-</td>
+                            <td th:text="${bien.fechaInscripcion != null ? #temporals.format(bien.fechaInscripcion, 'dd/MM/yyyy') : '-'}">-</td>
+                            <td th:text="${bien.fechaPresentacionRrpp != null ? #temporals.format(bien.fechaPresentacionRrpp, 'dd/MM/yyyy') : '-'}">-</td>
                             <td th:text="${bien.asientoInscripcion}">-</td>
-                            <td th:text="${#temporals.format(bien.fechaPresentacionMc, 'dd/MM/yyyy')}">-</td>
-                            <td th:text="${#temporals.format(bien.fechaInadmisibleMc, 'dd/MM/yyyy')}">-</td>
-                            <td th:text="${#temporals.format(bien.fechaAdmisionMc, 'dd/MM/yyyy')}">-</td>
+                            <td th:text="${bien.fechaPresentacionMc != null ? #temporals.format(bien.fechaPresentacionMc, 'dd/MM/yyyy') : '-'}">-</td>
+                            <td th:text="${bien.fechaInadmisible != null ? #temporals.format(bien.fechaInadmisible, 'dd/MM/yyyy') : '-'}">-</td>
+                            <td th:text="${bien.fechaAdmision != null ? #temporals.format(bien.fechaAdmision, 'dd/MM/yyyy') : '-'}">-</td>
                             <td th:text="${bien.comentarioMc}">-</td>
                         </tr>
                     </tbody>
@@ -220,47 +220,47 @@
                 <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
                     <div class="info-item">
                         <span class="info-label">Fecha de Presentación</span>
-                        <span class="info-value" th:text="${#temporals.format(operacion.fechaPresentacion, 'dd/MM/yyyy')}">-</span>
+                        <span class="info-value" th:text="${operacion.fechaPresentacion != null ? #temporals.format(operacion.fechaPresentacion, 'dd/MM/yyyy') : '-'}">-</span>
                     </div>
                     <div class="info-item">
                         <span class="info-label">Fecha de Inadmisible</span>
-                        <span class="info-value" th:text="${#temporals.format(operacion.fechaInadmisiblePrincipal, 'dd/MM/yyyy')}">-</span>
+                        <span class="info-value" th:text="${operacion.fechaInadmisiblePrincipal != null ? #temporals.format(operacion.fechaInadmisiblePrincipal, 'dd/MM/yyyy') : '-'}">-</span>
                     </div>
                     <div class="info-item">
                         <span class="info-label">Fecha de Admisión</span>
-                        <span class="info-value" th:text="${#temporals.format(operacion.fechaAdmisionPrincipal, 'dd/MM/yyyy')}">-</span>
+                        <span class="info-value" th:text="${operacion.fechaAdmisionPrincipal != null ? #temporals.format(operacion.fechaAdmisionPrincipal, 'dd/MM/yyyy') : '-'}">-</span>
                     </div>
                     <div class="info-item">
                         <span class="info-label">Audiencia Única / Saneamiento</span>
-                        <span class="info-value" th:text="${#temporals.format(operacion.fechaAudienciaUnica, 'dd/MM/yyyy')}">-</span>
+                        <span class="info-value" th:text="${operacion.fechaAudienciaUnica != null ? #temporals.format(operacion.fechaAudienciaUnica, 'dd/MM/yyyy') : '-'}">-</span>
                     </div>
                     <div class="info-item">
                         <span class="info-label">Fecha Auto Final</span>
-                        <span class="info-value" th:text="${#temporals.format(operacion.fechaAutoFinal, 'dd/MM/yyyy')}">-</span>
+                        <span class="info-value" th:text="${operacion.fechaAutoFinal != null ? #temporals.format(operacion.fechaAutoFinal, 'dd/MM/yyyy') : '-'}">-</span>
                     </div>
                     <div class="info-item">
                         <span class="info-label">Consentimiento / Ejecutoriada</span>
-                        <span class="info-value" th:text="${#temporals.format(operacion.fechaConsentimiento, 'dd/MM/yyyy')}">-</span>
+                        <span class="info-value" th:text="${operacion.fechaConsentimiento != null ? #temporals.format(operacion.fechaConsentimiento, 'dd/MM/yyyy') : '-'}">-</span>
                     </div>
                     <div class="info-item">
                         <span class="info-label">Ingreso Ejecución / Peritos</span>
-                        <span class="info-value" th:text="${#temporals.format(operacion.fechaIngresoEjecucion, 'dd/MM/yyyy')}">-</span>
+                        <span class="info-value" th:text="${operacion.fechaIngresoEjecucion != null ? #temporals.format(operacion.fechaIngresoEjecucion, 'dd/MM/yyyy') : '-'}">-</span>
                     </div>
                     <div class="info-item">
                         <span class="info-label">Tasación / Martillero</span>
-                        <span class="info-value" th:text="${#temporals.format(operacion.fechaTasacion, 'dd/MM/yyyy')}">-</span>
+                        <span class="info-value" th:text="${operacion.fechaTasacion != null ? #temporals.format(operacion.fechaTasacion, 'dd/MM/yyyy') : '-'}">-</span>
                     </div>
                     <div class="info-item">
                         <span class="info-label">Remate 1°</span>
-                        <span class="info-value" th:text="${#temporals.format(operacion.fechaRemate1, 'dd/MM/yyyy')}">-</span>
+                        <span class="info-value" th:text="${operacion.fechaRemate1 != null ? #temporals.format(operacion.fechaRemate1, 'dd/MM/yyyy') : '-'}">-</span>
                     </div>
                     <div class="info-item">
                         <span class="info-label">Remate 2°</span>
-                        <span class="info-value" th:text="${#temporals.format(operacion.fechaRemate2, 'dd/MM/yyyy')}">-</span>
+                        <span class="info-value" th:text="${operacion.fechaRemate2 != null ? #temporals.format(operacion.fechaRemate2, 'dd/MM/yyyy') : '-'}">-</span>
                     </div>
                     <div class="info-item">
                         <span class="info-label">Remate 3°</span>
-                        <span class="info-value" th:text="${#temporals.format(operacion.fechaRemate3, 'dd/MM/yyyy')}">-</span>
+                        <span class="info-value" th:text="${operacion.fechaRemate3 != null ? #temporals.format(operacion.fechaRemate3, 'dd/MM/yyyy') : '-'}">-</span>
                     </div>
                 </div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
