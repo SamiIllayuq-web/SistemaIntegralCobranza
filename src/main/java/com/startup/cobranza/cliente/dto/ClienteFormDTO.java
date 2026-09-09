@@ -20,14 +20,13 @@ public class ClienteFormDTO {
     @Email(message = "Email inválido")
     private String email;
 
-    private Long empresaId;
     private Long agenciaId;
 
     public ClienteFormDTO() {}
 
     public ClienteFormDTO(Long id, String nombreCompleto, String dni, String telefono,
                           String telefono2, String telefono3, String direccion, String email,
-                          Long empresaId, Long agenciaId) {
+                          Long agenciaId) {
         this.id = id;
         this.nombreCompleto = nombreCompleto;
         this.dni = dni;
@@ -36,7 +35,6 @@ public class ClienteFormDTO {
         this.telefono3 = telefono3;
         this.direccion = direccion;
         this.email = email;
-        this.empresaId = empresaId;
         this.agenciaId = agenciaId;
     }
 
@@ -56,8 +54,6 @@ public class ClienteFormDTO {
     public void setDireccion(String direccion) { this.direccion = direccion; }
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
-    public Long getEmpresaId() { return empresaId; }
-    public void setEmpresaId(Long empresaId) { this.empresaId = empresaId; }
     public Long getAgenciaId() { return agenciaId; }
     public void setAgenciaId(Long agenciaId) { this.agenciaId = agenciaId; }
 
@@ -72,7 +68,6 @@ public class ClienteFormDTO {
         private String telefono3;
         private String direccion;
         private String email;
-        private Long empresaId;
         private Long agenciaId;
 
         public Builder id(Long v) { id = v; return this; }
@@ -83,11 +78,10 @@ public class ClienteFormDTO {
         public Builder telefono3(String v) { telefono3 = v; return this; }
         public Builder direccion(String v) { direccion = v; return this; }
         public Builder email(String v) { email = v; return this; }
-        public Builder empresaId(Long v) { empresaId = v; return this; }
         public Builder agenciaId(Long v) { agenciaId = v; return this; }
 
         public ClienteFormDTO build() {
-            return new ClienteFormDTO(id, nombreCompleto, dni, telefono, telefono2, telefono3, direccion, email, empresaId, agenciaId);
+            return new ClienteFormDTO(id, nombreCompleto, dni, telefono, telefono2, telefono3, direccion, email, agenciaId);
         }
     }
 }

@@ -49,6 +49,8 @@ public class OperacionFormDTO {
     private String fechaAsignacionAbogado;
     private String fechaCastigo;
     private String tipoFondo;
+    private String coTitularAval;
+    private String numeroPartida;
     private List<BienEmbargadoDTO> bienesEmbargados;
 
     public OperacionFormDTO() {}
@@ -176,6 +178,10 @@ public class OperacionFormDTO {
     public void setFechaCastigo(String fechaCastigo) { this.fechaCastigo = fechaCastigo; }
     public String getTipoFondo() { return tipoFondo; }
     public void setTipoFondo(String tipoFondo) { this.tipoFondo = tipoFondo; }
+    public String getCoTitularAval() { return coTitularAval; }
+    public void setCoTitularAval(String coTitularAval) { this.coTitularAval = coTitularAval; }
+    public String getNumeroPartida() { return numeroPartida; }
+    public void setNumeroPartida(String numeroPartida) { this.numeroPartida = numeroPartida; }
     public List<BienEmbargadoDTO> getBienesEmbargados() { return bienesEmbargados; }
     public void setBienesEmbargados(List<BienEmbargadoDTO> bienesEmbargados) { this.bienesEmbargados = bienesEmbargados; }
 
@@ -226,6 +232,8 @@ public class OperacionFormDTO {
         private String fechaAsignacionAbogado;
         private String fechaCastigo;
         private String tipoFondo;
+        private String coTitularAval;
+        private String numeroPartida;
         private List<BienEmbargadoDTO> bienesEmbargados;
 
         public Builder id(Long v) { id = v; return this; }
@@ -272,6 +280,8 @@ public class OperacionFormDTO {
         public Builder fechaAsignacionAbogado(String v) { fechaAsignacionAbogado = v; return this; }
         public Builder fechaCastigo(String v) { fechaCastigo = v; return this; }
         public Builder tipoFondo(String v) { tipoFondo = v; return this; }
+        public Builder coTitularAval(String v) { coTitularAval = v; return this; }
+        public Builder numeroPartida(String v) { numeroPartida = v; return this; }
         public Builder bienesEmbargados(List<BienEmbargadoDTO> v) { bienesEmbargados = v; return this; }
 
         public OperacionFormDTO build() {
@@ -298,6 +308,8 @@ public class OperacionFormDTO {
             dto.setFechaAsignacionAbogado(fechaAsignacionAbogado);
             dto.setFechaCastigo(fechaCastigo);
             dto.setTipoFondo(tipoFondo);
+            dto.setCoTitularAval(coTitularAval);
+            dto.setNumeroPartida(numeroPartida);
             dto.setBienesEmbargados(bienesEmbargados);
             return dto;
         }

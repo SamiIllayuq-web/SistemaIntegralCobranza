@@ -11,8 +11,6 @@ public class OperacionDTO {
     private Long clienteId;
     private String clienteNombre;
     private String clienteDni;
-    private Long empresaId;
-    private String empresaNombre;
     private Long agenciaId;
     private String agenciaNombre;
     private String cuenta;
@@ -82,11 +80,13 @@ public class OperacionDTO {
     private LocalDate fechaAsignacionAbogado;
     private LocalDate fechaCastigo;
     private String tipoFondo;
+    private String coTitularAval;
+    private String numeroPartida;
 
     public OperacionDTO() {}
 
     public OperacionDTO(Long id, Long clienteId, String clienteNombre, String clienteDni,
-                        Long empresaId, String empresaNombre, Long agenciaId, String agenciaNombre,
+                        Long agenciaId, String agenciaNombre,
                         String cuenta, String numeroOperacion, BigDecimal montoCapital,
                         BigDecimal montoTotal, Integer diasMora, String moneda, String tipoCredito,
                         String situacion, String estado, String etapa, String observacion,
@@ -99,8 +99,6 @@ public class OperacionDTO {
         this.clienteId = clienteId;
         this.clienteNombre = clienteNombre;
         this.clienteDni = clienteDni;
-        this.empresaId = empresaId;
-        this.empresaNombre = empresaNombre;
         this.agenciaId = agenciaId;
         this.agenciaNombre = agenciaNombre;
         this.cuenta = cuenta;
@@ -137,10 +135,6 @@ public class OperacionDTO {
     public void setClienteNombre(String clienteNombre) { this.clienteNombre = clienteNombre; }
     public String getClienteDni() { return clienteDni; }
     public void setClienteDni(String clienteDni) { this.clienteDni = clienteDni; }
-    public Long getEmpresaId() { return empresaId; }
-    public void setEmpresaId(Long empresaId) { this.empresaId = empresaId; }
-    public String getEmpresaNombre() { return empresaNombre; }
-    public void setEmpresaNombre(String empresaNombre) { this.empresaNombre = empresaNombre; }
     public Long getAgenciaId() { return agenciaId; }
     public void setAgenciaId(Long agenciaId) { this.agenciaId = agenciaId; }
     public String getAgenciaNombre() { return agenciaNombre; }
@@ -275,6 +269,10 @@ public class OperacionDTO {
     public void setFechaCastigo(LocalDate fechaCastigo) { this.fechaCastigo = fechaCastigo; }
     public String getTipoFondo() { return tipoFondo; }
     public void setTipoFondo(String tipoFondo) { this.tipoFondo = tipoFondo; }
+    public String getCoTitularAval() { return coTitularAval; }
+    public void setCoTitularAval(String coTitularAval) { this.coTitularAval = coTitularAval; }
+    public String getNumeroPartida() { return numeroPartida; }
+    public void setNumeroPartida(String numeroPartida) { this.numeroPartida = numeroPartida; }
 
     public static Builder builder() { return new Builder(); }
 
@@ -283,8 +281,6 @@ public class OperacionDTO {
         private Long clienteId;
         private String clienteNombre;
         private String clienteDni;
-        private Long empresaId;
-        private String empresaNombre;
         private Long agenciaId;
         private String agenciaNombre;
         private String cuenta;
@@ -351,13 +347,13 @@ public class OperacionDTO {
         private LocalDate fechaAsignacionAbogado;
         private LocalDate fechaCastigo;
         private String tipoFondo;
+        private String coTitularAval;
+        private String numeroPartida;
 
         public Builder id(Long v) { id = v; return this; }
         public Builder clienteId(Long v) { clienteId = v; return this; }
         public Builder clienteNombre(String v) { clienteNombre = v; return this; }
         public Builder clienteDni(String v) { clienteDni = v; return this; }
-        public Builder empresaId(Long v) { empresaId = v; return this; }
-        public Builder empresaNombre(String v) { empresaNombre = v; return this; }
         public Builder agenciaId(Long v) { agenciaId = v; return this; }
         public Builder agenciaNombre(String v) { agenciaNombre = v; return this; }
         public Builder cuenta(String v) { cuenta = v; return this; }
@@ -424,9 +420,11 @@ public class OperacionDTO {
         public Builder fechaAsignacionAbogado(LocalDate v) { fechaAsignacionAbogado = v; return this; }
         public Builder fechaCastigo(LocalDate v) { fechaCastigo = v; return this; }
         public Builder tipoFondo(String v) { tipoFondo = v; return this; }
+        public Builder coTitularAval(String v) { coTitularAval = v; return this; }
+        public Builder numeroPartida(String v) { numeroPartida = v; return this; }
 
         public OperacionDTO build() {
-            OperacionDTO dto = new OperacionDTO(id, clienteId, clienteNombre, clienteDni, empresaId, empresaNombre,
+            OperacionDTO dto = new OperacionDTO(id, clienteId, clienteNombre, clienteDni,
                     agenciaId, agenciaNombre, cuenta, numeroOperacion, montoCapital, montoTotal,
                     diasMora, moneda, tipoCredito, situacion, estado, etapa, observacion, rango,
                     analista, analistaSenior, numeroExpediente, tipoProceso, tipoJuzgado,
@@ -472,6 +470,8 @@ public class OperacionDTO {
             dto.setFechaAsignacionAbogado(fechaAsignacionAbogado);
             dto.setFechaCastigo(fechaCastigo);
             dto.setTipoFondo(tipoFondo);
+            dto.setCoTitularAval(coTitularAval);
+            dto.setNumeroPartida(numeroPartida);
             return dto;
         }
     }

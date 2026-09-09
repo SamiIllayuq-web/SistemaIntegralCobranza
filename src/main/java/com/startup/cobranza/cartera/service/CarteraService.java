@@ -121,7 +121,7 @@ public class CarteraService {
                 if (hojaNombre.equalsIgnoreCase("Inventario")) {
                     perfilPath = PERFIL_INVENTARIO_JUNIO;
                     estadoCarteraDefault = "ACTIVO";
-                } else if (hojaNombre.toLowerCase().contains("avance") || hojaNombre.toLowerCase().contains("procesal")) {
+                } else if (hojaNombre.toLowerCase().contains("avance") || hojaNombre.toLowerCase().contains("procesal") || hojaNombre.toLowerCase().contains("selva")) {
                     perfilPath = PERFIL_EXCEL_AVANCE;
                     estadoCarteraDefault = "ACTIVO";
                 } else if (hojaNombre.toLowerCase().contains("cancelado") || hojaNombre.toLowerCase().contains("cancelada")) {
@@ -171,11 +171,26 @@ public class CarteraService {
                     total++;
                     try {
                         ParseResult result = parseRow(row, columns, skipRowsWithoutDni, estadoCarteraDefault, i);
-                        if (result.esNuevo) creados++;
+                        if (result.esNuevo()) creados++;
                         else actualizados++;
-                    } catch (Exception e) {
+                    } catch (IllegalArgumentException | IllegalStateException e) {
+                        // Error de validacion de datos (DNI vacio, cuenta vacia, etc.)
                         errores++;
-                        listaErrores.add("Hoja '" + hojaNombre + "' fila " + (i + 1) + ": " + e.getMessage());
+                        String dniDebug = getCellString(row, columns, "dni");
+                        String cuentaDebug = getCellString(row, columns, "cuenta");
+                        String numOpDebug = getCellString(row, columns, "numeroOperacion");
+                        listaErrores.add("Hoja '" + hojaNombre + "' fila " + (i + 1)
+                                + " [DNI=" + dniDebug + " cuenta=" + cuentaDebug + " numOp=" + numOpDebug + "]: "
+                                + e.getClass().getSimpleName() + ": " + e.getMessage());
+                    } catch (Exception e) {
+                        // Error de base de datos u otro — no avanza contador de exitos
+                        errores++;
+                        String dniDebug = getCellString(row, columns, "dni");
+                        String cuentaDebug = getCellString(row, columns, "cuenta");
+                        String numOpDebug = getCellString(row, columns, "numeroOperacion");
+                        listaErrores.add("Hoja '" + hojaNombre + "' fila " + (i + 1)
+                                + " [DNI=" + dniDebug + " cuenta=" + cuentaDebug + " numOp=" + numOpDebug + "]: "
+                                + e.getClass().getSimpleName() + ": " + e.getMessage());
                     }
                 }
             }
@@ -228,6 +243,7 @@ public class CarteraService {
         String situacion = getCellString(row, columns, "situacion");
         Integer diasMora = getCellInteger(row, columns, "diasMora");
         String observacion = getCellString(row, columns, "observacion");
+        String coTitularAval = getCellString(row, columns, "coTitularAval");
 
         // Campos judiciales
         String numeroExpediente = getCellString(row, columns, "numeroExpediente");
@@ -366,6 +382,8 @@ public class CarteraService {
                     .fechaAsignacionAbogado(getCellLocalDate(row, columns, "fechaAsignacionAbogado"))
                     .fechaCastigo(getCellLocalDate(row, columns, "fechaCastigo"))
                     .tipoFondo(getCellString(row, columns, "tipoFondo"))
+                    .coTitularAval(coTitularAval)
+                    .numeroPartida(getCellString(row, columns, "numeroPartida"))
                     .activo(true)
                     .build();
             operacionNueva = true;
@@ -427,6 +445,8 @@ public class CarteraService {
             operacion.setFechaAsignacionAbogado(getCellLocalDate(row, columns, "fechaAsignacionAbogado"));
             operacion.setFechaCastigo(getCellLocalDate(row, columns, "fechaCastigo"));
             operacion.setTipoFondo(getCellString(row, columns, "tipoFondo"));
+            operacion.setCoTitularAval(coTitularAval);
+            operacion.setNumeroPartida(getCellString(row, columns, "numeroPartida"));
         }
         operacion = operacionRepository.save(operacion);
 

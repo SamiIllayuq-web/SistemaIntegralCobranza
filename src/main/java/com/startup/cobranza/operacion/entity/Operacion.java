@@ -190,6 +190,14 @@ public class Operacion {
     @Column(name = "estado_cartera")
     private String estadoCartera;
 
+    // ─── Co-titular / Aval ─────────────────────────────────────────────
+    @Column(name = "co_titular_aval", columnDefinition = "TEXT")
+    private String coTitularAval;
+
+    // ─── Número de partida registral (Exp. Cautelar) ──────────────────
+    @Column(name = "numero_partida", columnDefinition = "TEXT")
+    private String numeroPartida;
+
     // ─── Datos del desembolso ──────────────────────────────────────────
     @Column(name = "fecha_desembolso")
     private LocalDate fechaDesembolso;
@@ -452,6 +460,10 @@ public class Operacion {
     public void setFechaCastigo(LocalDate fechaCastigo) { this.fechaCastigo = fechaCastigo; }
     public String getTipoFondo() { return tipoFondo; }
     public void setTipoFondo(String tipoFondo) { this.tipoFondo = tipoFondo; }
+    public String getCoTitularAval() { return coTitularAval; }
+    public void setCoTitularAval(String coTitularAval) { this.coTitularAval = coTitularAval; }
+    public String getNumeroPartida() { return numeroPartida; }
+    public void setNumeroPartida(String numeroPartida) { this.numeroPartida = numeroPartida; }
 
     public static Builder builder() { return new Builder(); }
 
@@ -552,7 +564,8 @@ public class Operacion {
         private LocalDate fechaAsignacionAbogado;
         private LocalDate fechaCastigo;
         private String tipoFondo;
-
+        private String coTitularAval;
+        private String numeroPartida;
         public Builder trans(Boolean v) { trans = v; return this; }
         public Builder busquedaBienes(Boolean v) { busquedaBienes = v; return this; }
         public Builder montoDemandado(BigDecimal v) { montoDemandado = v; return this; }
@@ -593,6 +606,8 @@ public class Operacion {
         public Builder fechaAsignacionAbogado(LocalDate v) { fechaAsignacionAbogado = v; return this; }
         public Builder fechaCastigo(LocalDate v) { fechaCastigo = v; return this; }
         public Builder tipoFondo(String v) { tipoFondo = v; return this; }
+        public Builder coTitularAval(String v) { coTitularAval = v; return this; }
+        public Builder numeroPartida(String v) { numeroPartida = v; return this; }
 
         public Operacion build() {
             Operacion o = new Operacion();
@@ -661,6 +676,9 @@ public class Operacion {
             o.setFechaAsignacionAbogado(fechaAsignacionAbogado);
             o.setFechaCastigo(fechaCastigo);
             o.setTipoFondo(tipoFondo);
+            o.setCoTitularAval(coTitularAval);
+            o.setNumeroPartida(numeroPartida);
+            o.setActivo(activo != null ? activo : true);
             return o;
         }
     }

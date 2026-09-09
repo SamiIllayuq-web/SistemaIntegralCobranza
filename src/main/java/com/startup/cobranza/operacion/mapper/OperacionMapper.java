@@ -81,6 +81,8 @@ public class OperacionMapper {
                 .fechaAsignacionAbogado(entity.getFechaAsignacionAbogado())
                 .fechaCastigo(entity.getFechaCastigo())
                 .tipoFondo(entity.getTipoFondo())
+                .coTitularAval(entity.getCoTitularAval())
+                .numeroPartida(entity.getNumeroPartida())
                 .build();
 
         if (entity.getCliente() != null) {
@@ -157,6 +159,25 @@ public class OperacionMapper {
                 .distritoJudicial(dto.getDistritoJudicial())
                 .numeroJuzgado(dto.getNumeroJuzgado())
                 .abogado(abogado)
+                .trans(dto.getTrans())
+                .busquedaBienes(dto.getBusquedaBienes())
+                .montoDemandado(dto.getMontoDemandado())
+                .escribanoLegal(dto.getEscribanoLegal())
+                .codigoExpCautelar(dto.getCodigoExpCautelar())
+                .incidente(dto.getIncidente())
+                .fechaPresentacion(dto.getFechaPresentacion())
+                .fechaInadmisiblePrincipal(dto.getFechaInadmisiblePrincipal())
+                .fechaAdmisionPrincipal(dto.getFechaAdmisionPrincipal())
+                .fechaAudienciaUnica(dto.getFechaAudienciaUnica())
+                .fechaAutoFinal(dto.getFechaAutoFinal())
+                .fechaConsentimiento(dto.getFechaConsentimiento())
+                .fechaEjecutoriada(dto.getFechaEjecutoriada())
+                .fechaIngresoEjecucion(dto.getFechaIngresoEjecucion())
+                .fechaTasacion(dto.getFechaTasacion())
+                .fechaNombramientoMartillero(dto.getFechaNombramientoMartillero())
+                .fechaRemate1(dto.getFechaRemate1())
+                .fechaRemate2(dto.getFechaRemate2())
+                .fechaRemate3(dto.getFechaRemate3())
                 .observacionActos(dto.getObservacionActos())
                 .comentario(dto.getComentario())
                 .estadoCartera(dto.getEstadoCartera())
@@ -178,6 +199,8 @@ public class OperacionMapper {
                 .fechaAsignacionAbogado(dto.getFechaAsignacionAbogado())
                 .fechaCastigo(dto.getFechaCastigo())
                 .tipoFondo(dto.getTipoFondo())
+                .coTitularAval(dto.getCoTitularAval())
+                .numeroPartida(dto.getNumeroPartida())
                 .build();
     }
 
@@ -228,6 +251,8 @@ public class OperacionMapper {
                 .fechaAsignacionAbogado(entity.getFechaAsignacionAbogado() != null ? entity.getFechaAsignacionAbogado().toString() : null)
                 .fechaCastigo(entity.getFechaCastigo() != null ? entity.getFechaCastigo().toString() : null)
                 .tipoFondo(entity.getTipoFondo())
+                .coTitularAval(entity.getCoTitularAval())
+                .numeroPartida(entity.getNumeroPartida())
                 .bienesEmbargados(entity.getBienesEmbargados() != null
                         ? entity.getBienesEmbargados().stream().map(this::toBienEmbargadoDTO).toList()
                         : null)
@@ -289,6 +314,8 @@ public class OperacionMapper {
                 .fechaCastigo(form.getFechaCastigo() != null && !form.getFechaCastigo().isEmpty()
                         ? java.time.LocalDate.parse(form.getFechaCastigo()) : null)
                 .tipoFondo(form.getTipoFondo())
+                .coTitularAval(form.getCoTitularAval())
+                .numeroPartida(form.getNumeroPartida())
                 .build();
     }
 }

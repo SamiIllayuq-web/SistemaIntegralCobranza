@@ -6,8 +6,6 @@ public class ImportacionDTO {
     private Integer totalRegistros;
     private Integer registrosExitosos;
     private Integer registrosFallidos;
-    private Long empresaId;
-    private String empresaNombre;
     private Long agenciaId;
     private String agenciaNombre;
     private String estado;
@@ -18,7 +16,7 @@ public class ImportacionDTO {
     public ImportacionDTO() {}
 
     public ImportacionDTO(Long id, String nombreArchivo, Integer totalRegistros, Integer registrosExitosos,
-                          Integer registrosFallidos, Long empresaId, String empresaNombre, Long agenciaId,
+                          Integer registrosFallidos, Long agenciaId,
                           String agenciaNombre, String estado, String usuarioImporta,
                           String fechaImportacion, String errores) {
         this.id = id;
@@ -26,8 +24,6 @@ public class ImportacionDTO {
         this.totalRegistros = totalRegistros;
         this.registrosExitosos = registrosExitosos;
         this.registrosFallidos = registrosFallidos;
-        this.empresaId = empresaId;
-        this.empresaNombre = empresaNombre;
         this.agenciaId = agenciaId;
         this.agenciaNombre = agenciaNombre;
         this.estado = estado;
@@ -46,10 +42,6 @@ public class ImportacionDTO {
     public void setRegistrosExitosos(Integer registrosExitosos) { this.registrosExitosos = registrosExitosos; }
     public Integer getRegistrosFallidos() { return registrosFallidos; }
     public void setRegistrosFallidos(Integer registrosFallidos) { this.registrosFallidos = registrosFallidos; }
-    public Long getEmpresaId() { return empresaId; }
-    public void setEmpresaId(Long empresaId) { this.empresaId = empresaId; }
-    public String getEmpresaNombre() { return empresaNombre; }
-    public void setEmpresaNombre(String empresaNombre) { this.empresaNombre = empresaNombre; }
     public Long getAgenciaId() { return agenciaId; }
     public void setAgenciaId(Long agenciaId) { this.agenciaId = agenciaId; }
     public String getAgenciaNombre() { return agenciaNombre; }
@@ -71,8 +63,6 @@ public class ImportacionDTO {
         private Integer totalRegistros;
         private Integer registrosExitosos;
         private Integer registrosFallidos;
-        private Long empresaId;
-        private String empresaNombre;
         private Long agenciaId;
         private String agenciaNombre;
         private String estado;
@@ -85,8 +75,6 @@ public class ImportacionDTO {
         public Builder totalRegistros(Integer totalRegistros) { this.totalRegistros = totalRegistros; return this; }
         public Builder registrosExitosos(Integer registrosExitosos) { this.registrosExitosos = registrosExitosos; return this; }
         public Builder registrosFallidos(Integer registrosFallidos) { this.registrosFallidos = registrosFallidos; return this; }
-        public Builder empresaId(Long empresaId) { this.empresaId = empresaId; return this; }
-        public Builder empresaNombre(String empresaNombre) { this.empresaNombre = empresaNombre; return this; }
         public Builder agenciaId(Long agenciaId) { this.agenciaId = agenciaId; return this; }
         public Builder agenciaNombre(String agenciaNombre) { this.agenciaNombre = agenciaNombre; return this; }
         public Builder estado(String estado) { this.estado = estado; return this; }
@@ -96,7 +84,7 @@ public class ImportacionDTO {
 
         public ImportacionDTO build() {
             return new ImportacionDTO(id, nombreArchivo, totalRegistros, registrosExitosos, registrosFallidos,
-                    empresaId, empresaNombre, agenciaId, agenciaNombre, estado, usuarioImporta,
+                    agenciaId, agenciaNombre, estado, usuarioImporta,
                     fechaImportacion, errores);
         }
     }
