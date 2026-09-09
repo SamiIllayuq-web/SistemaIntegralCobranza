@@ -157,11 +157,10 @@
         </div>
 
         <!-- SECCIÓN 3: DATOS DEL EXPEDIENTE CAUTELAR / HIPOTECA (cols Y-AP) -->
-        <div class="card animate-in" style="margin-top: 16px;"
-             th:if="${operacion.bienEmbargados != null and !operacion.bienEmbargados.isEmpty()}">
+        <div class="card animate-in" style="margin-top: 16px;">
             <div class="card-header">Datos del Expediente Cautelar / Hipoteca</div>
             <div class="table-wrapper">
-                <table class="data-table">
+                <table class="data-table" th:if="${operacion.bienEmbargados != null and !operacion.bienEmbargados.isEmpty()}">
                     <thead>
                         <tr>
                             <th>Exp. Cautelar</th>
@@ -207,6 +206,10 @@
                         </tr>
                     </tbody>
                 </table>
+                <p th:if="${operacion.bienEmbargados == null or operacion.bienEmbargados.isEmpty()}"
+                   style="padding: 16px; color: #888; font-style: italic;">
+                    Sin bienes embargados registrados.
+                </p>
             </div>
         </div>
 

@@ -450,13 +450,13 @@ public class CarteraService {
         }
         operacion = operacionRepository.save(operacion);
 
-        // 7) BienEmbargado — solo si hay partida registral
-        String partidaRegistral = getCellString(row, columns, "numeroFichaRegistral");
+        // 7) BienEmbargado — se crea si hay partida registral en col 28 (Nº PARTIDA)
+        String partidaRegistral = getCellString(row, columns, "numeroPartida");
         if (partidaRegistral != null && !partidaRegistral.isBlank()) {
             BienEmbargado bien = BienEmbargado.builder()
                     .operacion(operacion)
                     .detalleGarantia(getCellString(row, columns, "detalleBien"))
-                    .partidaRegistral(getCellString(row, columns, "numeroFichaRegistral"))
+                    .partidaRegistral(getCellString(row, columns, "numeroPartida"))
                     .tipoBien(getCellString(row, columns, "tipoBien"))
                     .direccion(getCellString(row, columns, "direccionInmueble"))
                     .distrito(getCellString(row, columns, "distritoInmueble"))
@@ -638,6 +638,9 @@ public class CarteraService {
                 }
                 if (val.equals("no") || val.equals("negativo") || val.equals("false") || val.equals("0")) {
                     yield false;
+                }
+                if (val.equals("positivo")) {
+                    yield true;
                 }
                 yield null;
             }
