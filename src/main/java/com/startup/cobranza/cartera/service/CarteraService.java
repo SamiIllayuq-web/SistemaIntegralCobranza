@@ -251,12 +251,12 @@ public class CarteraService {
         String tipoJuzgado = getCellString(row, columns, "tipoJuzgado");
         String distritoJudicial = getCellString(row, columns, "distritoJudicial");
         String numeroJuzgado = getCellString(row, columns, "numeroJuzgado");
-        Boolean trans = getCellBoolean(row, columns, "trans");
-        Boolean busquedaBienes = getCellBoolean(row, columns, "busquedaBienes");
+        String trans = getCellString(row, columns, "trans");
+        String busquedaBienes = getCellString(row, columns, "busquedaBienes");
         BigDecimal montoDemandado = getCellBigDecimal(row, columns, "montoDemandado");
         String escribanoLegal = getCellString(row, columns, "escribanoLegal");
         String codigoExpCautelar = getCellString(row, columns, "codigoExpCautelar");
-        Boolean incidente = getCellBoolean(row, columns, "incidente");
+        String incidente = getCellString(row, columns, "incidente");
 
         // 5 campos nuevos (solo hojas 2 y 3)
         LocalDate fechaDesembolso = getCellLocalDate(row, columns, "fechaDesembolso");

@@ -40,12 +40,12 @@ public class OperacionDTO {
     private List<BienEmbargadoDTO> bienEmbargados;
 
     // --- Campos judiciales ---
-    private Boolean trans;
-    private Boolean busquedaBienes;
+    private String trans;
+    private String busquedaBienes;
     private BigDecimal montoDemandado;
     private String escribanoLegal;
     private String codigoExpCautelar;
-    private Boolean incidente;
+    private String incidente;
     private LocalDate fechaPresentacion;
     private LocalDate fechaInadmisiblePrincipal;
     private LocalDate fechaAdmisionPrincipal;
@@ -189,18 +189,18 @@ public class OperacionDTO {
     public void setFechaActualizacion(LocalDateTime fechaActualizacion) { this.fechaActualizacion = fechaActualizacion; }
     public List<BienEmbargadoDTO> getBienEmbargados() { return bienEmbargados; }
     public void setBienEmbargados(List<BienEmbargadoDTO> bienEmbargados) { this.bienEmbargados = bienEmbargados; }
-    public Boolean getTrans() { return trans; }
-    public void setTrans(Boolean trans) { this.trans = trans; }
-    public Boolean getBusquedaBienes() { return busquedaBienes; }
-    public void setBusquedaBienes(Boolean busquedaBienes) { this.busquedaBienes = busquedaBienes; }
+    public String getTrans() { return trans; }
+    public void setTrans(String trans) { this.trans = trans; }
+    public String getBusquedaBienes() { return busquedaBienes; }
+    public void setBusquedaBienes(String busquedaBienes) { this.busquedaBienes = busquedaBienes; }
     public BigDecimal getMontoDemandado() { return montoDemandado; }
     public void setMontoDemandado(BigDecimal montoDemandado) { this.montoDemandado = montoDemandado; }
     public String getEscribanoLegal() { return escribanoLegal; }
     public void setEscribanoLegal(String escribanoLegal) { this.escribanoLegal = escribanoLegal; }
     public String getCodigoExpCautelar() { return codigoExpCautelar; }
     public void setCodigoExpCautelar(String codigoExpCautelar) { this.codigoExpCautelar = codigoExpCautelar; }
-    public Boolean getIncidente() { return incidente; }
-    public void setIncidente(Boolean incidente) { this.incidente = incidente; }
+    public String getIncidente() { return incidente; }
+    public void setIncidente(String incidente) { this.incidente = incidente; }
     public LocalDate getFechaPresentacion() { return fechaPresentacion; }
     public void setFechaPresentacion(LocalDate fechaPresentacion) { this.fechaPresentacion = fechaPresentacion; }
     public LocalDate getFechaInadmisiblePrincipal() { return fechaInadmisiblePrincipal; }
@@ -307,12 +307,12 @@ public class OperacionDTO {
         private Boolean activo;
         private LocalDateTime fechaCreacion;
         private LocalDateTime fechaActualizacion;
-        private Boolean trans;
-        private Boolean busquedaBienes;
+        private String trans;
+        private String busquedaBienes;
         private BigDecimal montoDemandado;
         private String escribanoLegal;
         private String codigoExpCautelar;
-        private Boolean incidente;
+        private String incidente;
         private LocalDate fechaPresentacion;
         private LocalDate fechaInadmisiblePrincipal;
         private LocalDate fechaAdmisionPrincipal;
@@ -380,12 +380,12 @@ public class OperacionDTO {
         public Builder activo(Boolean v) { activo = v; return this; }
         public Builder fechaCreacion(LocalDateTime v) { fechaCreacion = v; return this; }
         public Builder fechaActualizacion(LocalDateTime v) { fechaActualizacion = v; return this; }
-        public Builder trans(Boolean v) { trans = v; return this; }
-        public Builder busquedaBienes(Boolean v) { busquedaBienes = v; return this; }
+        public Builder trans(String v) { trans = v; return this; }
+        public Builder busquedaBienes(String v) { busquedaBienes = v; return this; }
         public Builder montoDemandado(BigDecimal v) { montoDemandado = v; return this; }
         public Builder escribanoLegal(String v) { escribanoLegal = v; return this; }
         public Builder codigoExpCautelar(String v) { codigoExpCautelar = v; return this; }
-        public Builder incidente(Boolean v) { incidente = v; return this; }
+        public Builder incidente(String v) { incidente = v; return this; }
         public Builder fechaPresentacion(LocalDate v) { fechaPresentacion = v; return this; }
         public Builder fechaInadmisiblePrincipal(LocalDate v) { fechaInadmisiblePrincipal = v; return this; }
         public Builder fechaAdmisionPrincipal(LocalDate v) { fechaAdmisionPrincipal = v; return this; }

@@ -93,10 +93,10 @@ public class Operacion {
     // ─── Datos del proceso judicial ───────────────────────────────────
 
     @Column(name = "trans")
-    private Boolean trans;
+    private String trans;
 
     @Column(name = "busqueda_bienes")
-    private Boolean busquedaBienes;
+    private String busquedaBienes;
 
     @Column(name = "monto_demandado", precision = 15, scale = 2)
     private BigDecimal montoDemandado;
@@ -108,7 +108,7 @@ public class Operacion {
     private String codigoExpCautelar;
 
     @Column(name = "incidente")
-    private Boolean incidente;
+    private String incidente;
 
     // ─── Fechas del cuaderno principal ────────────────────────────────
 
@@ -255,9 +255,9 @@ public class Operacion {
                      String etapa, String observacion, String rango, String analista,
                      String analistaSenior, String numeroExpediente, String tipoProceso,
                      String tipoJuzgado, String distritoJudicial, String numeroJuzgado,
-                     Usuario abogado, Boolean trans, Boolean busquedaBienes,
+                     Usuario abogado, String trans, String busquedaBienes,
                      BigDecimal montoDemandado, String escribanoLegal,
-                     String codigoExpCautelar, Boolean incidente,
+                     String codigoExpCautelar, String incidente,
                      LocalDate fechaPresentacion, LocalDate fechaInadmisiblePrincipal,
                      LocalDate fechaAdmisionPrincipal, LocalDate fechaAudienciaUnica,
                      LocalDate fechaAutoFinal, LocalDate fechaConsentimiento,
@@ -380,18 +380,18 @@ public class Operacion {
     public void setFechaCreacion(LocalDateTime fechaCreacion) { this.fechaCreacion = fechaCreacion; }
     public LocalDateTime getFechaActualizacion() { return fechaActualizacion; }
     public void setFechaActualizacion(LocalDateTime fechaActualizacion) { this.fechaActualizacion = fechaActualizacion; }
-    public Boolean getTrans() { return trans; }
-    public void setTrans(Boolean trans) { this.trans = trans; }
-    public Boolean getBusquedaBienes() { return busquedaBienes; }
-    public void setBusquedaBienes(Boolean busquedaBienes) { this.busquedaBienes = busquedaBienes; }
+    public String getTrans() { return trans; }
+    public void setTrans(String trans) { this.trans = trans; }
+    public String getBusquedaBienes() { return busquedaBienes; }
+    public void setBusquedaBienes(String busquedaBienes) { this.busquedaBienes = busquedaBienes; }
     public BigDecimal getMontoDemandado() { return montoDemandado; }
     public void setMontoDemandado(BigDecimal montoDemandado) { this.montoDemandado = montoDemandado; }
     public String getEscribanoLegal() { return escribanoLegal; }
     public void setEscribanoLegal(String escribanoLegal) { this.escribanoLegal = escribanoLegal; }
     public String getCodigoExpCautelar() { return codigoExpCautelar; }
     public void setCodigoExpCautelar(String codigoExpCautelar) { this.codigoExpCautelar = codigoExpCautelar; }
-    public Boolean getIncidente() { return incidente; }
-    public void setIncidente(Boolean incidente) { this.incidente = incidente; }
+    public String getIncidente() { return incidente; }
+    public void setIncidente(String incidente) { this.incidente = incidente; }
     public LocalDate getFechaPresentacion() { return fechaPresentacion; }
     public void setFechaPresentacion(LocalDate fechaPresentacion) { this.fechaPresentacion = fechaPresentacion; }
     public LocalDate getFechaInadmisiblePrincipal() { return fechaInadmisiblePrincipal; }
@@ -524,12 +524,12 @@ public class Operacion {
         public Builder fechaCreacion(LocalDateTime v) { fechaCreacion = v; return this; }
         public Builder fechaActualizacion(LocalDateTime v) { fechaActualizacion = v; return this; }
 
-        private Boolean trans;
-        private Boolean busquedaBienes;
+        private String trans;
+        private String busquedaBienes;
         private BigDecimal montoDemandado;
         private String escribanoLegal;
         private String codigoExpCautelar;
-        private Boolean incidente;
+        private String incidente;
         private LocalDate fechaPresentacion;
         private LocalDate fechaInadmisiblePrincipal;
         private LocalDate fechaAdmisionPrincipal;
@@ -566,12 +566,12 @@ public class Operacion {
         private String tipoFondo;
         private String coTitularAval;
         private String numeroPartida;
-        public Builder trans(Boolean v) { trans = v; return this; }
-        public Builder busquedaBienes(Boolean v) { busquedaBienes = v; return this; }
+        public Builder trans(String v) { trans = v; return this; }
+        public Builder busquedaBienes(String v) { busquedaBienes = v; return this; }
         public Builder montoDemandado(BigDecimal v) { montoDemandado = v; return this; }
         public Builder escribanoLegal(String v) { escribanoLegal = v; return this; }
         public Builder codigoExpCautelar(String v) { codigoExpCautelar = v; return this; }
-        public Builder incidente(Boolean v) { incidente = v; return this; }
+        public Builder incidente(String v) { incidente = v; return this; }
         public Builder fechaPresentacion(LocalDate v) { fechaPresentacion = v; return this; }
         public Builder fechaInadmisiblePrincipal(LocalDate v) { fechaInadmisiblePrincipal = v; return this; }
         public Builder fechaAdmisionPrincipal(LocalDate v) { fechaAdmisionPrincipal = v; return this; }
