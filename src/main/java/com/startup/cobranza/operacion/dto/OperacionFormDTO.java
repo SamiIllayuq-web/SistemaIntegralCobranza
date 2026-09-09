@@ -51,6 +51,26 @@ public class OperacionFormDTO {
     private String tipoFondo;
     private String coTitularAval;
     private String numeroPartida;
+    // --- Campos judiciales (desde Excel) ---
+    private String trans;
+    private String busquedaBienes;
+    private String escribanoLegal;
+    private String codigoExpCautelar;
+    private String incidente;
+    private BigDecimal montoDemandado;
+    private String fechaPresentacion;
+    private String fechaInadmisiblePrincipal;
+    private String fechaAdmisionPrincipal;
+    private String fechaAudienciaUnica;
+    private String fechaAutoFinal;
+    private String fechaConsentimiento;
+    private String fechaEjecutoriada;
+    private String fechaIngresoEjecucion;
+    private String fechaTasacion;
+    private String fechaNombramientoMartillero;
+    private String fechaRemate1;
+    private String fechaRemate2;
+    private String fechaRemate3;
     private List<BienEmbargadoDTO> bienesEmbargados;
 
     public OperacionFormDTO() {}
@@ -182,6 +202,44 @@ public class OperacionFormDTO {
     public void setCoTitularAval(String coTitularAval) { this.coTitularAval = coTitularAval; }
     public String getNumeroPartida() { return numeroPartida; }
     public void setNumeroPartida(String numeroPartida) { this.numeroPartida = numeroPartida; }
+    public String getTrans() { return trans; }
+    public void setTrans(String trans) { this.trans = trans; }
+    public String getBusquedaBienes() { return busquedaBienes; }
+    public void setBusquedaBienes(String busquedaBienes) { this.busquedaBienes = busquedaBienes; }
+    public String getEscribanoLegal() { return escribanoLegal; }
+    public void setEscribanoLegal(String escribanoLegal) { this.escribanoLegal = escribanoLegal; }
+    public String getCodigoExpCautelar() { return codigoExpCautelar; }
+    public void setCodigoExpCautelar(String codigoExpCautelar) { this.codigoExpCautelar = codigoExpCautelar; }
+    public String getIncidente() { return incidente; }
+    public void setIncidente(String incidente) { this.incidente = incidente; }
+    public BigDecimal getMontoDemandado() { return montoDemandado; }
+    public void setMontoDemandado(BigDecimal montoDemandado) { this.montoDemandado = montoDemandado; }
+    public String getFechaPresentacion() { return fechaPresentacion; }
+    public void setFechaPresentacion(String fechaPresentacion) { this.fechaPresentacion = fechaPresentacion; }
+    public String getFechaInadmisiblePrincipal() { return fechaInadmisiblePrincipal; }
+    public void setFechaInadmisiblePrincipal(String fechaInadmisiblePrincipal) { this.fechaInadmisiblePrincipal = fechaInadmisiblePrincipal; }
+    public String getFechaAdmisionPrincipal() { return fechaAdmisionPrincipal; }
+    public void setFechaAdmisionPrincipal(String fechaAdmisionPrincipal) { this.fechaAdmisionPrincipal = fechaAdmisionPrincipal; }
+    public String getFechaAudienciaUnica() { return fechaAudienciaUnica; }
+    public void setFechaAudienciaUnica(String fechaAudienciaUnica) { this.fechaAudienciaUnica = fechaAudienciaUnica; }
+    public String getFechaAutoFinal() { return fechaAutoFinal; }
+    public void setFechaAutoFinal(String fechaAutoFinal) { this.fechaAutoFinal = fechaAutoFinal; }
+    public String getFechaConsentimiento() { return fechaConsentimiento; }
+    public void setFechaConsentimiento(String fechaConsentimiento) { this.fechaConsentimiento = fechaConsentimiento; }
+    public String getFechaEjecutoriada() { return fechaEjecutoriada; }
+    public void setFechaEjecutoriada(String fechaEjecutoriada) { this.fechaEjecutoriada = fechaEjecutoriada; }
+    public String getFechaIngresoEjecucion() { return fechaIngresoEjecucion; }
+    public void setFechaIngresoEjecucion(String fechaIngresoEjecucion) { this.fechaIngresoEjecucion = fechaIngresoEjecucion; }
+    public String getFechaTasacion() { return fechaTasacion; }
+    public void setFechaTasacion(String fechaTasacion) { this.fechaTasacion = fechaTasacion; }
+    public String getFechaNombramientoMartillero() { return fechaNombramientoMartillero; }
+    public void setFechaNombramientoMartillero(String fechaNombramientoMartillero) { this.fechaNombramientoMartillero = fechaNombramientoMartillero; }
+    public String getFechaRemate1() { return fechaRemate1; }
+    public void setFechaRemate1(String fechaRemate1) { this.fechaRemate1 = fechaRemate1; }
+    public String getFechaRemate2() { return fechaRemate2; }
+    public void setFechaRemate2(String fechaRemate2) { this.fechaRemate2 = fechaRemate2; }
+    public String getFechaRemate3() { return fechaRemate3; }
+    public void setFechaRemate3(String fechaRemate3) { this.fechaRemate3 = fechaRemate3; }
     public List<BienEmbargadoDTO> getBienesEmbargados() { return bienesEmbargados; }
     public void setBienesEmbargados(List<BienEmbargadoDTO> bienesEmbargados) { this.bienesEmbargados = bienesEmbargados; }
 
@@ -234,6 +292,25 @@ public class OperacionFormDTO {
         private String tipoFondo;
         private String coTitularAval;
         private String numeroPartida;
+        private String trans;
+        private String busquedaBienes;
+        private String escribanoLegal;
+        private String codigoExpCautelar;
+        private String incidente;
+        private BigDecimal montoDemandado;
+        private String fechaPresentacion;
+        private String fechaInadmisiblePrincipal;
+        private String fechaAdmisionPrincipal;
+        private String fechaAudienciaUnica;
+        private String fechaAutoFinal;
+        private String fechaConsentimiento;
+        private String fechaEjecutoriada;
+        private String fechaIngresoEjecucion;
+        private String fechaTasacion;
+        private String fechaNombramientoMartillero;
+        private String fechaRemate1;
+        private String fechaRemate2;
+        private String fechaRemate3;
         private List<BienEmbargadoDTO> bienesEmbargados;
 
         public Builder id(Long v) { id = v; return this; }
@@ -282,6 +359,25 @@ public class OperacionFormDTO {
         public Builder tipoFondo(String v) { tipoFondo = v; return this; }
         public Builder coTitularAval(String v) { coTitularAval = v; return this; }
         public Builder numeroPartida(String v) { numeroPartida = v; return this; }
+        public Builder trans(String v) { trans = v; return this; }
+        public Builder busquedaBienes(String v) { busquedaBienes = v; return this; }
+        public Builder escribanoLegal(String v) { escribanoLegal = v; return this; }
+        public Builder codigoExpCautelar(String v) { codigoExpCautelar = v; return this; }
+        public Builder incidente(String v) { incidente = v; return this; }
+        public Builder montoDemandado(BigDecimal v) { montoDemandado = v; return this; }
+        public Builder fechaPresentacion(String v) { fechaPresentacion = v; return this; }
+        public Builder fechaInadmisiblePrincipal(String v) { fechaInadmisiblePrincipal = v; return this; }
+        public Builder fechaAdmisionPrincipal(String v) { fechaAdmisionPrincipal = v; return this; }
+        public Builder fechaAudienciaUnica(String v) { fechaAudienciaUnica = v; return this; }
+        public Builder fechaAutoFinal(String v) { fechaAutoFinal = v; return this; }
+        public Builder fechaConsentimiento(String v) { fechaConsentimiento = v; return this; }
+        public Builder fechaEjecutoriada(String v) { fechaEjecutoriada = v; return this; }
+        public Builder fechaIngresoEjecucion(String v) { fechaIngresoEjecucion = v; return this; }
+        public Builder fechaTasacion(String v) { fechaTasacion = v; return this; }
+        public Builder fechaNombramientoMartillero(String v) { fechaNombramientoMartillero = v; return this; }
+        public Builder fechaRemate1(String v) { fechaRemate1 = v; return this; }
+        public Builder fechaRemate2(String v) { fechaRemate2 = v; return this; }
+        public Builder fechaRemate3(String v) { fechaRemate3 = v; return this; }
         public Builder bienesEmbargados(List<BienEmbargadoDTO> v) { bienesEmbargados = v; return this; }
 
         public OperacionFormDTO build() {
