@@ -107,7 +107,6 @@ public class OperacionService {
         existing.setMontoTotal(form.getMontoTotal());
         existing.setDiasMora(form.getDiasMora());
         existing.setMoneda(form.getMoneda());
-        existing.setTipoCredito(form.getTipoCredito());
         existing.setSituacion(form.getSituacion());
         existing.setEstado(form.getEstado());
         existing.setEtapa(form.getEtapa());

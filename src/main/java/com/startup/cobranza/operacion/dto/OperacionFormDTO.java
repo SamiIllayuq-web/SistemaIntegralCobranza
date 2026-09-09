@@ -14,7 +14,6 @@ public class OperacionFormDTO {
     private BigDecimal montoTotal;
     private Integer diasMora;
     private String moneda;
-    private String tipoCredito;
     private String situacion;
     private String estado;
     private String etapa;
@@ -78,7 +77,7 @@ public class OperacionFormDTO {
     public OperacionFormDTO(Long id, Long clienteId, Long agenciaId,
                             String cuenta, String numeroOperacion, BigDecimal montoCapital,
                             BigDecimal montoTotal, Integer diasMora, String moneda,
-                            String tipoCredito, String situacion, String estado, String etapa,
+                            String situacion, String estado, String etapa,
                             String observacion, String rango, String analista, String analistaSenior,
                             String numeroExpediente, String tipoProceso, String tipoJuzgado,
                             String distritoJudicial, String numeroJuzgado, Long abogadoId,
@@ -92,7 +91,6 @@ public class OperacionFormDTO {
         this.montoTotal = montoTotal;
         this.diasMora = diasMora;
         this.moneda = moneda;
-        this.tipoCredito = tipoCredito;
         this.situacion = situacion;
         this.estado = estado;
         this.etapa = etapa;
@@ -128,8 +126,6 @@ public class OperacionFormDTO {
     public void setDiasMora(Integer diasMora) { this.diasMora = diasMora; }
     public String getMoneda() { return moneda; }
     public void setMoneda(String moneda) { this.moneda = moneda; }
-    public String getTipoCredito() { return tipoCredito; }
-    public void setTipoCredito(String tipoCredito) { this.tipoCredito = tipoCredito; }
     public String getSituacion() { return situacion; }
     public void setSituacion(String situacion) { this.situacion = situacion; }
     public String getEstado() { return estado; }
@@ -255,7 +251,6 @@ public class OperacionFormDTO {
         private BigDecimal montoTotal;
         private Integer diasMora;
         private String moneda;
-        private String tipoCredito;
         private String situacion;
         private String estado;
         private String etapa;
@@ -322,7 +317,6 @@ public class OperacionFormDTO {
         public Builder montoTotal(BigDecimal v) { montoTotal = v; return this; }
         public Builder diasMora(Integer v) { diasMora = v; return this; }
         public Builder moneda(String v) { moneda = v; return this; }
-        public Builder tipoCredito(String v) { tipoCredito = v; return this; }
         public Builder situacion(String v) { situacion = v; return this; }
         public Builder estado(String v) { estado = v; return this; }
         public Builder etapa(String v) { etapa = v; return this; }
@@ -382,7 +376,7 @@ public class OperacionFormDTO {
 
         public OperacionFormDTO build() {
             OperacionFormDTO dto = new OperacionFormDTO(id, clienteId, agenciaId, cuenta, numeroOperacion,
-                    montoCapital, montoTotal, diasMora, moneda, tipoCredito, situacion, estado, etapa,
+                    montoCapital, montoTotal, diasMora, moneda, situacion, estado, etapa,
                     observacion, rango, analista, analistaSenior, numeroExpediente, tipoProceso,
                     tipoJuzgado, distritoJudicial, numeroJuzgado, abogadoId, observacionActos, comentario);
             dto.setEstadoCartera(estadoCartera);

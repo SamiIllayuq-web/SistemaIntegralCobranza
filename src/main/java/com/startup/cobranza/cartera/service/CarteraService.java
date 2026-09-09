@@ -233,7 +233,6 @@ public class CarteraService {
         String nombreCompleto = getCellString(row, columns, "nombreCompleto");
         String cuenta = getCellString(row, columns, "cuenta");
         String numeroOperacion = getCellString(row, columns, "numeroOperacion");
-        String tipoCredito = getCellString(row, columns, "tipoCredito");
         String analista = getCellString(row, columns, "analista");
         String analistaSenior = getCellString(row, columns, "analistaSenior");
         String moneda = getCellString(row, columns, "moneda");
@@ -327,7 +326,6 @@ public class CarteraService {
                     .agencia(agencia)
                     .cuenta(cuenta.trim())
                     .numeroOperacion(numeroOperacion.trim())
-                    .tipoCredito(tipoCredito)
                     .analista(analista)
                     .analistaSenior(analistaSenior)
                     .moneda(moneda != null ? moneda : "PEN")
@@ -390,7 +388,6 @@ public class CarteraService {
         } else {
             // Actualizar montos y datos operativos
             operacion.setAgencia(agencia);
-            operacion.setTipoCredito(tipoCredito);
             operacion.setAnalista(analista);
             operacion.setAnalistaSenior(analistaSenior);
             if (moneda != null) operacion.setMoneda(moneda);
