@@ -335,6 +335,7 @@ public class CarteraService {
                     .estado(estado)
                     .etapa(etapa)
                     .situacion(situacion)
+                    .observacion(observacion)
                     .numeroExpediente(numeroExpediente)
                     .tipoProceso(tipoProceso)
                     .tipoJuzgado(tipoJuzgado)
@@ -381,6 +382,7 @@ public class CarteraService {
                     .fechaCastigo(getCellLocalDate(row, columns, "fechaCastigo"))
                     .tipoFondo(getCellString(row, columns, "tipoFondo"))
                     .coTitularAval(coTitularAval)
+                    .rango(getCellString(row, columns, "rango"))
                     .numeroPartida(getCellString(row, columns, "numeroPartida"))
                     .activo(true)
                     .build();
@@ -397,6 +399,7 @@ public class CarteraService {
             operacion.setEstado(estado);
             operacion.setEtapa(etapa);
             operacion.setSituacion(situacion);
+            operacion.setObservacion(observacion);
             operacion.setNumeroExpediente(numeroExpediente);
             operacion.setTipoProceso(tipoProceso);
             operacion.setTipoJuzgado(tipoJuzgado);
@@ -443,6 +446,7 @@ public class CarteraService {
             operacion.setFechaCastigo(getCellLocalDate(row, columns, "fechaCastigo"));
             operacion.setTipoFondo(getCellString(row, columns, "tipoFondo"));
             operacion.setCoTitularAval(coTitularAval);
+            operacion.setRango(getCellString(row, columns, "rango"));
             operacion.setNumeroPartida(getCellString(row, columns, "numeroPartida"));
         }
         operacion = operacionRepository.save(operacion);
@@ -457,8 +461,7 @@ public class CarteraService {
                     .tipoBien(getCellString(row, columns, "tipoBien"))
                     .direccion(getCellString(row, columns, "direccionInmueble"))
                     .distrito(getCellString(row, columns, "distritoInmueble"))
-                    .provincia(getCellString(row, columns, "provinciaInmueble"))
-                    .departamento(getCellString(row, columns, "departamentoInmueble"))
+                    .rango(getCellString(row, columns, "rango"))
                     .tipoPreferencia(getCellString(row, columns, "tipoPreferencia"))
                     .montoMc(getCellBigDecimal(row, columns, "montoMc"))
                     .monedaMc(getCellString(row, columns, "monedaMc"))
