@@ -668,14 +668,29 @@ public class CarteraService {
         if (cell == null) return null;
         try {
             if (cell.getCellType() == CellType.NUMERIC) {
-                if (DateUtil.isCellDateFormatted(cell)) {
+                // Intentar primero como fecha (funciona para celdas date y formula date cacheadas)
+                try {
                     return cell.getLocalDateTimeCellValue().toLocalDate();
+                } catch (Exception dateEx) {
+                    // Si falla, puede ser un serial date sin formato
+                    if (DateUtil.isCellDateFormatted(cell)) {
+                        return cell.getLocalDateTimeCellValue().toLocalDate();
+                    }
+                    return LocalDate.ofEpochDay((long) cell.getNumericCellValue());
                 }
-                return LocalDate.ofEpochDay((long) cell.getNumericCellValue());
             } else if (cell.getCellType() == CellType.STRING) {
                 String val = cell.getStringCellValue().trim();
                 if (val.isEmpty()) return null;
                 return LocalDate.parse(val, dateFormatter);
+            } else if (cell.getCellType() == CellType.FORMULA) {
+                try {
+                    return cell.getLocalDateTimeCellValue().toLocalDate();
+                } catch (Exception e) {
+                    if (DateUtil.isCellDateFormatted(cell)) {
+                        return cell.getLocalDateTimeCellValue().toLocalDate();
+                    }
+                    return null;
+                }
             }
         } catch (DateTimeParseException e) {
             return null;
