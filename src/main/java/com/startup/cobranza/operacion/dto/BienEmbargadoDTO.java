@@ -25,9 +25,9 @@ public class BienEmbargadoDTO {
     private String tipoPreferencia;
     private String titularPredio;
     private LocalDate fechaGeneracionMc;
-    private LocalDate fechaPresentacionMc;
-    private LocalDate fechaInadmisible;
-    private LocalDate fechaAdmision;
+    private String fechaPresentacionMc;
+    private String fechaInadmisible;
+    private String fechaAdmision;
     private String comentarioMc;
 
     public BienEmbargadoDTO() {}
@@ -72,12 +72,12 @@ public class BienEmbargadoDTO {
     public void setTitularPredio(String titularPredio) { this.titularPredio = titularPredio; }
     public LocalDate getFechaGeneracionMc() { return fechaGeneracionMc; }
     public void setFechaGeneracionMc(LocalDate fechaGeneracionMc) { this.fechaGeneracionMc = fechaGeneracionMc; }
-    public LocalDate getFechaPresentacionMc() { return fechaPresentacionMc; }
-    public void setFechaPresentacionMc(LocalDate fechaPresentacionMc) { this.fechaPresentacionMc = fechaPresentacionMc; }
-    public LocalDate getFechaInadmisible() { return fechaInadmisible; }
-    public void setFechaInadmisible(LocalDate fechaInadmisible) { this.fechaInadmisible = fechaInadmisible; }
-    public LocalDate getFechaAdmision() { return fechaAdmision; }
-    public void setFechaAdmision(LocalDate fechaAdmision) { this.fechaAdmision = fechaAdmision; }
+    public String getFechaPresentacionMc() { return fechaPresentacionMc; }
+    public void setFechaPresentacionMc(String fechaPresentacionMc) { this.fechaPresentacionMc = fechaPresentacionMc; }
+    public String getFechaInadmisible() { return fechaInadmisible; }
+    public void setFechaInadmisible(String fechaInadmisible) { this.fechaInadmisible = fechaInadmisible; }
+    public String getFechaAdmision() { return fechaAdmision; }
+    public void setFechaAdmision(String fechaAdmision) { this.fechaAdmision = fechaAdmision; }
     public String getComentarioMc() { return comentarioMc; }
     public void setComentarioMc(String comentarioMc) { this.comentarioMc = comentarioMc; }
 
@@ -104,9 +104,9 @@ public class BienEmbargadoDTO {
         private String tipoPreferencia;
         private String titularPredio;
         private LocalDate fechaGeneracionMc;
-        private LocalDate fechaPresentacionMc;
-        private LocalDate fechaInadmisible;
-        private LocalDate fechaAdmision;
+        private String fechaPresentacionMc;
+        private String fechaInadmisible;
+        private String fechaAdmision;
         private String comentarioMc;
 
         public Builder id(Long v) { id = v; return this; }
@@ -129,9 +129,9 @@ public class BienEmbargadoDTO {
         public Builder tipoPreferencia(String v) { tipoPreferencia = v; return this; }
         public Builder titularPredio(String v) { titularPredio = v; return this; }
         public Builder fechaGeneracionMc(LocalDate v) { fechaGeneracionMc = v; return this; }
-        public Builder fechaPresentacionMc(LocalDate v) { fechaPresentacionMc = v; return this; }
-        public Builder fechaInadmisible(LocalDate v) { fechaInadmisible = v; return this; }
-        public Builder fechaAdmision(LocalDate v) { fechaAdmision = v; return this; }
+        public Builder fechaPresentacionMc(String v) { fechaPresentacionMc = v; return this; }
+        public Builder fechaInadmisible(String v) { fechaInadmisible = v; return this; }
+        public Builder fechaAdmision(String v) { fechaAdmision = v; return this; }
         public Builder comentarioMc(String v) { comentarioMc = v; return this; }
 
         public BienEmbargadoDTO build() {

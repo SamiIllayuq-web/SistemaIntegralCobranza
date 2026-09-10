@@ -49,14 +49,14 @@ public class BienEmbargado {
     @Column(name = "asiento_inscripcion", columnDefinition = "TEXT")
     private String asientoInscripcion;
 
-    @Column(name = "fecha_presentacion_mc")
-    private LocalDate fechaPresentacionMc;
+    @Column(name = "fecha_presentacion_mc", columnDefinition = "TEXT")
+    private String fechaPresentacionMc;
 
-    @Column(name = "fecha_inadmisible")
-    private LocalDate fechaInadmisible;
+    @Column(name = "fecha_inadmisible", columnDefinition = "TEXT")
+    private String fechaInadmisible;
 
-    @Column(name = "fecha_admision")
-    private LocalDate fechaAdmision;
+    @Column(name = "fecha_admision", columnDefinition = "TEXT")
+    private String fechaAdmision;
 
     @Column(name = "comentario_mc", columnDefinition = "TEXT")
     private String comentarioMc;
@@ -110,12 +110,12 @@ public class BienEmbargado {
     public void setFechaPresentacionRrpp(LocalDate fechaPresentacionRrpp) { this.fechaPresentacionRrpp = fechaPresentacionRrpp; }
     public String getAsientoInscripcion() { return asientoInscripcion; }
     public void setAsientoInscripcion(String asientoInscripcion) { this.asientoInscripcion = asientoInscripcion; }
-    public LocalDate getFechaPresentacionMc() { return fechaPresentacionMc; }
-    public void setFechaPresentacionMc(LocalDate fechaPresentacionMc) { this.fechaPresentacionMc = fechaPresentacionMc; }
-    public LocalDate getFechaInadmisible() { return fechaInadmisible; }
-    public void setFechaInadmisible(LocalDate fechaInadmisible) { this.fechaInadmisible = fechaInadmisible; }
+    public String getFechaPresentacionMc() { return fechaPresentacionMc; }
+    public void setFechaPresentacionMc(String fechaPresentacionMc) { this.fechaPresentacionMc = fechaPresentacionMc; }
+    public String getFechaInadmisible() { return fechaInadmisible; }
+    public void setFechaInadmisible(String fechaInadmisible) { this.fechaInadmisible = fechaInadmisible; }
     public LocalDate getFechaAdmision() { return fechaAdmision; }
-    public void setFechaAdmision(LocalDate fechaAdmision) { this.fechaAdmision = fechaAdmision; }
+    public void setFechaAdmision(String fechaAdmision) { this.fechaAdmision = fechaAdmision; }
     public String getComentarioMc() { return comentarioMc; }
     public void setComentarioMc(String comentarioMc) { this.comentarioMc = comentarioMc; }
     public String getDetalleAcreedores() { return detalleAcreedores; }
@@ -149,9 +149,9 @@ public class BienEmbargado {
         private LocalDate fechaInscripcion;
         private LocalDate fechaPresentacionRrpp;
         private String asientoInscripcion;
-        private LocalDate fechaPresentacionMc;
-        private LocalDate fechaInadmisible;
-        private LocalDate fechaAdmision;
+        private String fechaPresentacionMc;
+        private String fechaInadmisible;
+        private String fechaAdmision;
         private String comentarioMc;
         private String detalleAcreedores;
         private String tipoPreferencia;
@@ -174,9 +174,9 @@ public class BienEmbargado {
         public Builder fechaInscripcion(LocalDate v) { fechaInscripcion = v; return this; }
         public Builder fechaPresentacionRrpp(LocalDate v) { fechaPresentacionRrpp = v; return this; }
         public Builder asientoInscripcion(String v) { asientoInscripcion = v; return this; }
-        public Builder fechaPresentacionMc(LocalDate v) { fechaPresentacionMc = v; return this; }
-        public Builder fechaInadmisible(LocalDate v) { fechaInadmisible = v; return this; }
-        public Builder fechaAdmision(LocalDate v) { fechaAdmision = v; return this; }
+        public Builder fechaPresentacionMc(String v) { fechaPresentacionMc = v; return this; }
+        public Builder fechaInadmisible(String v) { fechaInadmisible = v; return this; }
+        public Builder fechaAdmision(String v) { fechaAdmision = v; return this; }
         public Builder comentarioMc(String v) { comentarioMc = v; return this; }
         public Builder detalleAcreedores(String v) { detalleAcreedores = v; return this; }
         public Builder tipoPreferencia(String v) { tipoPreferencia = v; return this; }

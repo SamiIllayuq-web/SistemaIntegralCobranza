@@ -82,6 +82,7 @@ public class OperacionMapper {
                 .tipoFondo(entity.getTipoFondo())
                 .coTitularAval(entity.getCoTitularAval())
                 .numeroPartida(entity.getNumeroPartida())
+                .numeroFichaRegistral(entity.getNumeroFichaRegistral())
                 .build();
 
         if (entity.getCliente() != null) {
@@ -129,6 +130,10 @@ public class OperacionMapper {
                 .tipoPreferencia(entity.getTipoPreferencia())
                 .titularPredio(entity.getTitularPredio())
                 .fechaGeneracionMc(entity.getFechaGeneracionMc())
+                .fechaPresentacionMc(entity.getFechaPresentacionMc())
+                .fechaInadmisible(entity.getFechaInadmisible())
+                .fechaAdmision(entity.getFechaAdmision())
+                .comentarioMc(entity.getComentarioMc())
                 .build();
     }
 
@@ -199,6 +204,7 @@ public class OperacionMapper {
                 .tipoFondo(dto.getTipoFondo())
                 .coTitularAval(dto.getCoTitularAval())
                 .numeroPartida(dto.getNumeroPartida())
+                .numeroFichaRegistral(dto.getNumeroFichaRegistral())
                 .build();
     }
 

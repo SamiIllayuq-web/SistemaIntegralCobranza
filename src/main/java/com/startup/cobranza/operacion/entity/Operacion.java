@@ -195,6 +195,10 @@ public class Operacion {
     @Column(name = "numero_partida", columnDefinition = "TEXT")
     private String numeroPartida;
 
+    // ─── Número de ficha registral ────────────────────────────────────
+    @Column(name = "numero_ficha_registral", columnDefinition = "TEXT")
+    private String numeroFichaRegistral;
+
     // ─── Datos del desembolso ──────────────────────────────────────────
     @Column(name = "fecha_desembolso")
     private LocalDate fechaDesembolso;
@@ -458,6 +462,8 @@ public class Operacion {
     public void setCoTitularAval(String coTitularAval) { this.coTitularAval = coTitularAval; }
     public String getNumeroPartida() { return numeroPartida; }
     public void setNumeroPartida(String numeroPartida) { this.numeroPartida = numeroPartida; }
+    public String getNumeroFichaRegistral() { return numeroFichaRegistral; }
+    public void setNumeroFichaRegistral(String numeroFichaRegistral) { this.numeroFichaRegistral = numeroFichaRegistral; }
 
     public static Builder builder() { return new Builder(); }
 
@@ -486,6 +492,8 @@ public class Operacion {
         private Usuario abogado;
         private List<BienEmbargado> bienesEmbargados;
         private Boolean activo;
+        private String numeroPartida;
+        private String numeroFichaRegistral;
         private LocalDateTime fechaCreacion;
         private LocalDateTime fechaActualizacion;
 
@@ -600,6 +608,7 @@ public class Operacion {
         public Builder tipoFondo(String v) { tipoFondo = v; return this; }
         public Builder coTitularAval(String v) { coTitularAval = v; return this; }
         public Builder numeroPartida(String v) { numeroPartida = v; return this; }
+        public Builder numeroFichaRegistral(String v) { numeroFichaRegistral = v; return this; }
 
         public Operacion build() {
             Operacion o = new Operacion();
@@ -669,6 +678,7 @@ public class Operacion {
             o.setTipoFondo(tipoFondo);
             o.setCoTitularAval(coTitularAval);
             o.setNumeroPartida(numeroPartida);
+            o.setNumeroFichaRegistral(numeroFichaRegistral);
             o.setActivo(activo != null ? activo : true);
             return o;
         }

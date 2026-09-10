@@ -81,6 +81,7 @@ public class OperacionDTO {
     private String tipoFondo;
     private String coTitularAval;
     private String numeroPartida;
+    private String numeroFichaRegistral;
 
     public OperacionDTO() {}
 
@@ -269,6 +270,8 @@ public class OperacionDTO {
     public void setCoTitularAval(String coTitularAval) { this.coTitularAval = coTitularAval; }
     public String getNumeroPartida() { return numeroPartida; }
     public void setNumeroPartida(String numeroPartida) { this.numeroPartida = numeroPartida; }
+    public String getNumeroFichaRegistral() { return numeroFichaRegistral; }
+    public void setNumeroFichaRegistral(String numeroFichaRegistral) { this.numeroFichaRegistral = numeroFichaRegistral; }
 
     public static Builder builder() { return new Builder(); }
 
@@ -344,6 +347,7 @@ public class OperacionDTO {
         private String tipoFondo;
         private String coTitularAval;
         private String numeroPartida;
+        private String numeroFichaRegistral;
 
         public Builder id(Long v) { id = v; return this; }
         public Builder clienteId(Long v) { clienteId = v; return this; }
@@ -416,6 +420,7 @@ public class OperacionDTO {
         public Builder tipoFondo(String v) { tipoFondo = v; return this; }
         public Builder coTitularAval(String v) { coTitularAval = v; return this; }
         public Builder numeroPartida(String v) { numeroPartida = v; return this; }
+        public Builder numeroFichaRegistral(String v) { numeroFichaRegistral = v; return this; }
 
         public OperacionDTO build() {
             OperacionDTO dto = new OperacionDTO(id, clienteId, clienteNombre, clienteDni,
@@ -466,6 +471,7 @@ public class OperacionDTO {
             dto.setTipoFondo(tipoFondo);
             dto.setCoTitularAval(coTitularAval);
             dto.setNumeroPartida(numeroPartida);
+            dto.setNumeroFichaRegistral(numeroFichaRegistral);
             return dto;
         }
     }

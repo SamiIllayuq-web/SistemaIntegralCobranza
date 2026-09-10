@@ -168,6 +168,10 @@
                         <span class="info-value" th:text="${operacion.codigoExpCautelar}">-</span>
                     </div>
                     <div class="info-item">
+                        <span class="info-label">N° Ficha Registral</span>
+                        <span class="info-value" th:text="${operacion.numeroFichaRegistral}">-</span>
+                    </div>
+                    <div class="info-item">
                         <span class="info-label">N° Partida</span>
                         <span class="info-value" th:text="${bien.partidaRegistral}">-</span>
                     </div>
@@ -217,15 +221,15 @@
                     </div>
                     <div class="info-item">
                         <span class="info-label">Fecha Present. MC</span>
-                        <span class="info-value" th:text="${bien.fechaPresentacionMc != null ? #temporals.format(bien.fechaPresentacionMc, 'dd/MM/yyyy') : '-'}">-</span>
+                        <span class="info-value" th:text="${bien.fechaPresentacionMc != null ? bien.fechaPresentacionMc : '-'}">-</span>
                     </div>
                     <div class="info-item">
                         <span class="info-label">Fecha Inadmisible</span>
-                        <span class="info-value" th:text="${bien.fechaInadmisible != null ? #temporals.format(bien.fechaInadmisible, 'dd/MM/yyyy') : '-'}">-</span>
+                        <span class="info-value" th:text="${bien.fechaInadmisible != null ? bien.fechaInadmisible : '-'}">-</span>
                     </div>
                     <div class="info-item">
                         <span class="info-label">Fecha Admisión</span>
-                        <span class="info-value" th:text="${bien.fechaAdmision != null ? #temporals.format(bien.fechaAdmision, 'dd/MM/yyyy') : '-'}">-</span>
+                        <span class="info-value" th:text="${bien.fechaAdmision != null ? bien.fechaAdmision : '-'}">-</span>
                     </div>
                     <div class="info-item">
                         <span class="info-label">Comentario</span>

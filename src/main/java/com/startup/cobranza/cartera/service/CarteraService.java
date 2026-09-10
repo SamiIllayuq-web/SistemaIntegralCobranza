@@ -384,6 +384,7 @@ public class CarteraService {
                     .coTitularAval(coTitularAval)
                     .rango(getCellString(row, columns, "rango"))
                     .numeroPartida(getCellString(row, columns, "numeroPartida"))
+                    .numeroFichaRegistral(getCellString(row, columns, "numeroFichaRegistral"))
                     .activo(true)
                     .build();
             operacionNueva = true;
@@ -448,6 +449,7 @@ public class CarteraService {
             operacion.setCoTitularAval(coTitularAval);
             operacion.setRango(getCellString(row, columns, "rango"));
             operacion.setNumeroPartida(getCellString(row, columns, "numeroPartida"));
+            operacion.setNumeroFichaRegistral(getCellString(row, columns, "numeroFichaRegistral"));
         }
         operacion = operacionRepository.save(operacion);
 
@@ -469,9 +471,9 @@ public class CarteraService {
                     .fechaInscripcion(getCellLocalDate(row, columns, "fechaInscripcionRrpp"))
                     .fechaPresentacionRrpp(getCellLocalDate(row, columns, "fechaPresentacionRrpp"))
                     .asientoInscripcion(getCellString(row, columns, "asientoInscripcion"))
-                    .fechaPresentacionMc(getCellLocalDate(row, columns, "fechaPresentacionMc"))
-                    .fechaInadmisible(getCellLocalDate(row, columns, "fechaInadmisibleMc"))
-                    .fechaAdmision(getCellLocalDate(row, columns, "fechaAdmisionMc"))
+                    .fechaPresentacionMc(getCellString(row, columns, "fechaPresentacionMc"))
+                    .fechaInadmisible(getCellString(row, columns, "fechaInadmisibleMc"))
+                    .fechaAdmision(getCellString(row, columns, "fechaAdmisionMc"))
                     .comentarioMc(getCellString(row, columns, "comentarioMc"))
                     .detalleAcreedores(getCellString(row, columns, "detalleAcreedores"))
                     .titularPredio(getCellString(row, columns, "titularPredio"))
