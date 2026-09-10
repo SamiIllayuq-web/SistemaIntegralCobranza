@@ -114,7 +114,7 @@ public class BienEmbargado {
     public void setFechaPresentacionMc(String fechaPresentacionMc) { this.fechaPresentacionMc = fechaPresentacionMc; }
     public String getFechaInadmisible() { return fechaInadmisible; }
     public void setFechaInadmisible(String fechaInadmisible) { this.fechaInadmisible = fechaInadmisible; }
-    public LocalDate getFechaAdmision() { return fechaAdmision; }
+    public String getFechaAdmision() { return fechaAdmision; }
     public void setFechaAdmision(String fechaAdmision) { this.fechaAdmision = fechaAdmision; }
     public String getComentarioMc() { return comentarioMc; }
     public void setComentarioMc(String comentarioMc) { this.comentarioMc = comentarioMc; }
