@@ -492,7 +492,6 @@ public class Operacion {
         private Usuario abogado;
         private List<BienEmbargado> bienesEmbargados;
         private Boolean activo;
-        private String numeroPartida;
         private String numeroFichaRegistral;
         private LocalDateTime fechaCreacion;
         private LocalDateTime fechaActualizacion;
