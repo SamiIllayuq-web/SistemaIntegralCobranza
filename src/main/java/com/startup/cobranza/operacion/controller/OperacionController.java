@@ -1,6 +1,7 @@
 package com.startup.cobranza.operacion.controller;
 
 import com.startup.cobranza.agencia.repository.AgenciaRepository;
+import com.startup.cobranza.cartera.service.CarteraService;
 import com.startup.cobranza.operacion.dto.OperacionDTO;
 import com.startup.cobranza.operacion.dto.OperacionFormDTO;
 import com.startup.cobranza.operacion.exception.OperacionException;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -25,13 +27,16 @@ public class OperacionController {
     private final OperacionService operacionService;
     private final OperacionMapper operacionMapper;
     private final AgenciaRepository agenciaRepository;
+    private final CarteraService carteraService;
 
     public OperacionController(OperacionService operacionService,
                                OperacionMapper operacionMapper,
-                               AgenciaRepository agenciaRepository) {
+                               AgenciaRepository agenciaRepository,
+                               CarteraService carteraService) {
         this.operacionService = operacionService;
         this.operacionMapper = operacionMapper;
         this.agenciaRepository = agenciaRepository;
+        this.carteraService = carteraService;
     }
 
     @GetMapping("/{id}")
@@ -74,7 +79,8 @@ public class OperacionController {
     @PreAuthorize("hasRole('ADMIN')")
     public String guardar(OperacionFormDTO form,
                          RedirectAttributes redirectAttrs,
-                         Model model) {
+                         Model model,
+                         HttpServletRequest request) {
         try {
             if (form.getId() != null) {
                 operacionService.actualizar(form.getId(), form);
@@ -82,6 +88,7 @@ public class OperacionController {
                 return "redirect:/operaciones/editar/" + form.getId();
             } else {
                 OperacionDTO created = operacionService.crear(form);
+                carteraService.registrarAltaManual(form.getAgenciaId(), request.getUserPrincipal().getName());
                 redirectAttrs.addFlashAttribute("success", "Operación creada correctamente");
                 return "redirect:/operaciones/" + created.getId();
             }

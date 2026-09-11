@@ -221,6 +221,23 @@ public class CarteraService {
         return toDTO(saved, null);
     }
 
+    /**
+     * Registra un alta manual de operación en el historial.
+     */
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void registrarAltaManual(Long agenciaId, String usuario) {
+        Importacion importacion = Importacion.builder()
+                .nombreArchivo("Alta manual")
+                .totalRegistros(1)
+                .registrosExitosos(1)
+                .registrosFallidos(0)
+                .agenciaId(agenciaId)
+                .usuarioImporta(usuario)
+                .estado("COMPLETADO")
+                .build();
+        importacionRepository.save(importacion);
+    }
+
     private record ProcesamientoResult(int total, int creados, int actualizados, int errores, List<String> listaErrores) {}
 
     private record ParseResult(Cliente cliente, Operacion operacion, boolean esNuevo) {}
