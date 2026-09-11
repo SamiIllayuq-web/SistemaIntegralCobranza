@@ -179,6 +179,7 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
         WHERE o.activo = true
           AND o.numeroExpediente IS NOT NULL
           AND o.numeroExpediente <> ''
+          AND (:agenciaId IS NULL OR o.agencia.id = :agenciaId)
           AND (:situacion IS NULL OR o.situacion = :situacion)
           AND (:busqueda IS NULL OR
               LOWER(o.numeroExpediente) LIKE LOWER(CONCAT('%', :busqueda, '%'))
@@ -188,6 +189,7 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
         ORDER BY o.numeroExpediente ASC, o.cliente.nombreCompleto ASC
         """)
     Page<Operacion> findExpedientes(
+            @Param("agenciaId") Long agenciaId,
             @Param("situacion") String situacion,
             @Param("busqueda") String busqueda,
             Pageable pageable

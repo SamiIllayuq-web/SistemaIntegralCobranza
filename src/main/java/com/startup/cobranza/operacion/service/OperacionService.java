@@ -330,9 +330,9 @@ public class OperacionService {
      * Lista de operaciones con numeroExpediente — la vista "Expedientes"
      * lee de la misma entidad Operacion, solo filtra y ordena diferente.
      */
-    public Page<OperacionDTO> listarExpedientes(String situacion,
+    public Page<OperacionDTO> listarExpedientes(Long agenciaId, String situacion,
                                                  String busqueda, Pageable pageable) {
-        return operacionRepository.findExpedientes(situacion, busqueda, pageable)
+        return operacionRepository.findExpedientes(agenciaId, situacion, busqueda, pageable)
                 .map(operacionMapper::toDTO);
     }
 }

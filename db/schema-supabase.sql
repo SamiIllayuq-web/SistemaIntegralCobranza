@@ -422,6 +422,8 @@ CREATE TABLE public.importaciones (
     estado character varying(255) NOT NULL,
     fecha_importacion timestamp(6) without time zone,
     nombre_archivo character varying(255) NOT NULL,
+    registros_actualizados integer,
+    registros_creados integer,
     registros_exitosos integer,
     registros_fallidos integer,
     total_registros integer,

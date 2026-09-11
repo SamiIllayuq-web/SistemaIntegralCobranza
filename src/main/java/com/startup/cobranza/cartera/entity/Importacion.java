@@ -23,6 +23,12 @@ public class Importacion {
     @Column(name = "registros_fallidos")
     private Integer registrosFallidos;
 
+    @Column(name = "registros_creados")
+    private Integer registrosCreados;
+
+    @Column(name = "registros_actualizados")
+    private Integer registrosActualizados;
+
 
     @Column(name = "agencia_id")
     private Long agenciaId;
@@ -42,13 +48,16 @@ public class Importacion {
     public Importacion() {}
 
     public Importacion(Long id, String nombreArchivo, Integer totalRegistros, Integer registrosExitosos,
-                       Integer registrosFallidos, Long agenciaId, String estado,
+                       Integer registrosFallidos, Integer registrosCreados, Integer registrosActualizados,
+                       Long agenciaId, String estado,
                        String usuarioImporta, LocalDateTime fechaImportacion, String errores) {
         this.id = id;
         this.nombreArchivo = nombreArchivo;
         this.totalRegistros = totalRegistros;
         this.registrosExitosos = registrosExitosos;
         this.registrosFallidos = registrosFallidos;
+        this.registrosCreados = registrosCreados;
+        this.registrosActualizados = registrosActualizados;
         this.agenciaId = agenciaId;
         this.estado = estado;
         this.usuarioImporta = usuarioImporta;
@@ -66,6 +75,10 @@ public class Importacion {
     public void setRegistrosExitosos(Integer registrosExitosos) { this.registrosExitosos = registrosExitosos; }
     public Integer getRegistrosFallidos() { return registrosFallidos; }
     public void setRegistrosFallidos(Integer registrosFallidos) { this.registrosFallidos = registrosFallidos; }
+    public Integer getRegistrosCreados() { return registrosCreados; }
+    public void setRegistrosCreados(Integer registrosCreados) { this.registrosCreados = registrosCreados; }
+    public Integer getRegistrosActualizados() { return registrosActualizados; }
+    public void setRegistrosActualizados(Integer registrosActualizados) { this.registrosActualizados = registrosActualizados; }
     public Long getAgenciaId() { return agenciaId; }
     public void setAgenciaId(Long agenciaId) { this.agenciaId = agenciaId; }
     public String getEstado() { return estado; }
@@ -85,6 +98,8 @@ public class Importacion {
         private Integer totalRegistros;
         private Integer registrosExitosos;
         private Integer registrosFallidos;
+        private Integer registrosCreados;
+        private Integer registrosActualizados;
         private Long agenciaId;
         private String estado;
         private String usuarioImporta;
@@ -96,6 +111,8 @@ public class Importacion {
         public Builder totalRegistros(Integer totalRegistros) { this.totalRegistros = totalRegistros; return this; }
         public Builder registrosExitosos(Integer registrosExitosos) { this.registrosExitosos = registrosExitosos; return this; }
         public Builder registrosFallidos(Integer registrosFallidos) { this.registrosFallidos = registrosFallidos; return this; }
+        public Builder registrosCreados(Integer registrosCreados) { this.registrosCreados = registrosCreados; return this; }
+        public Builder registrosActualizados(Integer registrosActualizados) { this.registrosActualizados = registrosActualizados; return this; }
         public Builder agenciaId(Long agenciaId) { this.agenciaId = agenciaId; return this; }
         public Builder estado(String estado) { this.estado = estado; return this; }
         public Builder usuarioImporta(String usuarioImporta) { this.usuarioImporta = usuarioImporta; return this; }
@@ -104,6 +121,7 @@ public class Importacion {
 
         public Importacion build() {
             return new Importacion(id, nombreArchivo, totalRegistros, registrosExitosos, registrosFallidos,
+                    registrosCreados, registrosActualizados,
                     agenciaId, estado, usuarioImporta, fechaImportacion, errores);
         }
     }

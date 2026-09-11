@@ -52,7 +52,8 @@
                             <th>Archivo</th>
                             <th>Agencia</th>
                             <th>Total</th>
-                            <th>Exitosos</th>
+                            <th>Creados</th>
+                            <th>Actualizados</th>
                             <th>Fallidos</th>
                             <th>Estado</th>
                             <th>Usuario</th>
@@ -65,7 +66,10 @@
                             <td th:text="${imp.agenciaNombre ?: '-'}">-</td>
                             <td th:text="${imp.totalRegistros}">-</td>
                             <td>
-                                <span class="badge badge-success" th:text="${imp.registrosExitosos}">0</span>
+                                <span class="badge badge-success" th:text="${imp.registrosCreados ?: 0}">0</span>
+                            </td>
+                            <td>
+                                <span class="badge badge-info" th:text="${imp.registrosActualizados ?: 0}">0</span>
                             </td>
                             <td>
                                 <span class="badge badge-danger" th:text="${imp.registrosFallidos}">0</span>
@@ -74,7 +78,7 @@
                             <td th:text="${imp.usuarioImporta}">-</td>
                         </tr>
                         <tr th:if="${#lists.isEmpty(importaciones)}">
-                            <td colspan="8">
+                            <td colspan="9">
                                 <div class="empty-state">
                                     <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                         <circle cx="12" cy="12" r="10"/>

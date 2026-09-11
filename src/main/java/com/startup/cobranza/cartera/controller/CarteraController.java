@@ -62,6 +62,7 @@ public class CarteraController {
 
     @GetMapping("/expedientes")
     public String expedientes(
+            @RequestParam(value = "agenciaId", required = false) Long agenciaId,
             @RequestParam(value = "situacion", required = false) String situacion,
             @RequestParam(value = "busqueda", required = false) String busqueda,
             @RequestParam(value = "page", defaultValue = "0") int page,
@@ -72,9 +73,10 @@ public class CarteraController {
                 Sort.by("numeroExpediente").ascending()
                     .and(Sort.by("cliente.nombreCompleto").ascending()));
         Page<OperacionDTO> pagina = operacionService.listarExpedientes(
-                situacion, busqueda, pageable);
+                agenciaId, situacion, busqueda, pageable);
 
         model.addAttribute("pagina", pagina);
+        model.addAttribute("agenciaId", agenciaId);
         model.addAttribute("situacion", situacion);
         model.addAttribute("busqueda", busqueda);
         model.addAttribute("agencias", agenciaRepository.findByActivoTrue());
