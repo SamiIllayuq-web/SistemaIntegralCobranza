@@ -1,8 +1,8 @@
 package com.startup.cobranza.agencia.controller;
 
+import com.startup.cobranza.agencia.dto.AgenciaAgrupadaDTO;
 import com.startup.cobranza.agencia.dto.AgenciaDTO;
 import com.startup.cobranza.agencia.dto.AgenciaFormDTO;
-import com.startup.cobranza.agencia.exception.AgenciaException;
 import com.startup.cobranza.agencia.service.AgenciaService;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,7 +27,7 @@ public class AgenciaController {
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public String listar(Model model) {
-        List<AgenciaDTO> agencias = agenciaService.listarTodos();
+        List<AgenciaAgrupadaDTO> agencias = agenciaService.agruparOperaciones();
         model.addAttribute("agencias", agencias);
         return "agencia/lista";
     }
@@ -74,7 +74,7 @@ public class AgenciaController {
                 redirectAttrs.addFlashAttribute("success", "Agencia creada correctamente");
             }
             return "redirect:/agencias";
-        } catch (AgenciaException e) {
+        } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
             model.addAttribute("agenciaId", agenciaId);
             return "agencia/formulario";
@@ -87,7 +87,7 @@ public class AgenciaController {
         try {
             agenciaService.eliminar(id);
             redirectAttrs.addFlashAttribute("success", "Agencia eliminada correctamente");
-        } catch (AgenciaException e) {
+        } catch (Exception e) {
             redirectAttrs.addFlashAttribute("error", e.getMessage());
         }
         return "redirect:/agencias";

@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agencias — Sistema Integral de Cobranza</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
@@ -32,7 +31,7 @@
         <div class="page-header animate-in">
             <div>
                 <h1 class="page-title">Agencias</h1>
-                <p class="page-subtitle">Sucursales y agencias del sistema</p>
+                <p class="page-subtitle">Operaciones agrupadas por agencia</p>
             </div>
             <div class="page-actions">
                 <a th:href="@{/agencias/nuevo}" class="btn btn-primary btn-sm">
@@ -41,6 +40,7 @@
                     </svg>
                     Nueva Agencia
                 </a>
+                <a th:href="@{/operaciones}" class="btn btn-ghost btn-sm">Ver todas</a>
             </div>
         </div>
 
@@ -61,84 +61,160 @@
             <span th:text="${error}"></span>
         </div>
 
-        <!-- Table -->
-        <div class="card animate-in stagger-1">
-            <div class="table-wrapper">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Código</th>
-                            <th>Teléfono</th>
-                            <th>Dirección</th>
-                            <th>Estado</th>
-                            <th class="col-actions">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="agencia : ${agencias}">
-                            <td>
-                                <a th:href="@{/agencias/editar/{id}(id=${agencia.id})}"
-                                   th:text="${agencia.nombre}"
-                                   style="font-weight: 500;">-</a>
-                            </td>
-                            <td>
-                                <span th:if="${agencia.codigo != null}" class="font-mono text-muted"
-                                      th:text="${agencia.codigo}">-</span>
-                                <span th:unless="${agencia.codigo != null}" class="text-muted">—</span>
-                            </td>
-                            <td>
-                                <span th:if="${agencia.telefono != null}" th:text="${agencia.telefono}">-</span>
-                                <span th:unless="${agencia.telefono != null}" class="text-muted">—</span>
-                            </td>
-                            <td>
-                                <span th:if="${agencia.direccion != null}" th:text="${agencia.direccion}">-</span>
-                                <span th:unless="${agencia.direccion != null}" class="text-muted">—</span>
-                            </td>
-                            <td>
-                                <span th:if="${agencia.activo}" class="badge badge-success">Activo</span>
-                                <span th:unless="${agencia.activo}" class="badge badge-default">Inactivo</span>
-                            </td>
-                            <td class="col-actions">
-                                <a th:href="@{/agencias/editar/{id}(id=${agencia.id})}"
-                                   class="btn-icon" title="Editar">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                                    </svg>
-                                </a>
-                                <form th:action="@{/agencias/eliminar/{id}(id=${agencia.id})}" method="post"
-                                      style="display: inline;"
-                                      onsubmit="return confirm('¿Eliminar esta agencia?')">
-                                    <button type="submit" class="btn-icon" title="Eliminar"
-                                            style="color: var(--color-danger);">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <polyline points="3 6 5 6 21 6"/>
-                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
-                                        </svg>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                        <tr th:if="${#lists.isEmpty(agencias)}">
-                            <td colspan="6">
-                                <div class="empty-state">
-                                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
-                                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
-                                    </svg>
-                                    <h3>Sin agencias</h3>
-                                    <p>No hay agencias registradas. Crea la primera.</p>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+        <!-- Resumen stats -->
+        <div class="stats-grid animate-in stagger-1" style="margin-bottom: 24px;">
+            <div class="stat-card">
+                <div class="stat-label">Total Agencies</div>
+                <div class="stat-value" th:text="${#lists.size(agencias)}">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Operaciones</div>
+                <div class="stat-value" th:with="total=${agencias.stream().sum(v -> v.totalOperaciones)}"
+                     th:text="${total}">0</div>
             </div>
         </div>
+
+        <!-- Agency groups -->
+        <div th:if="${#lists.isEmpty(agencias)}" class="card animate-in stagger-1">
+            <div class="empty-state">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                </svg>
+                <h3>Sin agencias</h3>
+                <p>No hay operaciones registradas. Importa el Excel para ver los datos aquí.</p>
+                <a th:href="@{/cartera/importar}" class="btn btn-primary" style="margin-top: 12px;">Importar</a>
+            </div>
+        </div>
+
+        <div th:each="ag : ${agencias}" class="agencia-group animate-in stagger-1" style="margin-bottom: 16px;">
+
+            <!-- Agency header -->
+            <div class="agencia-header" th:attr="data-agencia=${ag.agenciaId}" onclick="toggleAgencia(this)" style="
+                background: var(--color-surface);
+                border: 1px solid var(--color-border);
+                border-radius: 8px;
+                padding: 14px 18px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                user-select: none;
+                transition: background 0.15s;
+            " onmouseover="this.style.background='var(--color-surface-2)'" onmouseout="this.style.background='var(--color-surface)'">
+                <svg class="agencia-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.2s; flex-shrink: 0; color: var(--color-text-muted);">
+                    <polyline points="6 9 12 15 18 9"/>
+                </svg>
+                <div style="flex: 1; min-width: 0;">
+                    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                        <span style="font-weight: 600; font-size: 15px;" th:text="${ag.agenciaNombre}">Agencia</span>
+                        <span th:if="${ag.agenciaCodigo}" class="badge badge-default" style="font-family: monospace;" th:text="${ag.agenciaCodigo}">COD</span>
+                    </div>
+                    <div style="font-size: 12px; color: var(--color-text-muted); margin-top: 2px;">
+                        <span th:text="${ag.totalOperaciones}">0</span> operación(es)
+                        <span th:if="${ag.montoTotal != null}">
+                            · <span th:text="${ag.moneda != null ? ag.moneda : 'S/'}">S/</span>
+                            <span th:text="${#numbers.formatDecimal(ag.montoTotal, 1, 'COMMA', 2, 'POINT')}">0.00</span>
+                        </span>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 8px; flex-shrink: 0;">
+                    <a th:href="@{/agencias/editar/{id}(id=${ag.agenciaId})}"
+                       class="btn btn-ghost btn-sm"
+                       onclick="event.stopPropagation();"
+                       title="Editar agencia">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Operations table (collapsed by default) -->
+            <div class="agencia-operaciones" style="display: none; margin-top: 4px;">
+                <div class="card" style="border-top-left-radius: 0; border-top-right-radius: 0; border-top: none;">
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Cliente</th>
+                                    <th>DNI</th>
+                                    <th>N° Operación</th>
+                                    <th>N° Expediente</th>
+                                    <th>Situación</th>
+                                    <th>Etapa</th>
+                                    <th>Monto Total</th>
+                                    <th class="col-actions">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="op : ${ag.operaciones}">
+                                    <td>
+                                        <a th:href="@{/clientes/{id}(id=${op.clienteId})}"
+                                           th:text="${op.clienteNombre}"
+                                           style="font-weight: 500;">-</a>
+                                    </td>
+                                    <td th:text="${op.clienteDni}">-</td>
+                                    <td>
+                                        <a th:href="@{/operaciones/{id}(id=${op.operacionId})}"
+                                           class="font-mono text-muted"
+                                           th:text="${op.numeroOperacion}">-</a>
+                                    </td>
+                                    <td>
+                                        <span th:if="${op.numeroExpediente != null}" class="font-mono"
+                                              th:text="${op.numeroExpediente}">-</span>
+                                        <span th:unless="${op.numeroExpediente != null}" class="text-muted">—</span>
+                                    </td>
+                                    <td>
+                                        <span th:if="${op.situacion != null}" class="badge badge-default"
+                                              th:text="${op.situacion}">-</span>
+                                        <span th:unless="${op.situacion != null}" class="text-muted">—</span>
+                                    </td>
+                                    <td>
+                                        <span th:if="${op.etapa != null}" class="badge badge-info"
+                                              th:text="${op.etapa}">-</span>
+                                        <span th:unless="${op.etapa != null}" class="text-muted">—</span>
+                                    </td>
+                                    <td>
+                                        <span th:if="${op.montoTotal != null}"
+                                              th:text="${op.moneda != null ? op.moneda : 'S/'} + ' ' + ${#numbers.formatDecimal(op.montoTotal, 1, 'COMMA', 2, 'POINT')}">-</span>
+                                        <span th:unless="${op.montoTotal != null}" class="text-muted">—</span>
+                                    </td>
+                                    <td class="col-actions">
+                                        <a th:href="@{/operaciones/{id}(id=${op.operacionId})}"
+                                           class="btn-icon" title="Ver operación">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                                <circle cx="12" cy="12" r="3"/>
+                                            </svg>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
     </div>
 </div>
 
+<script>
+function toggleAgencia(el) {
+    var ops = el.nextElementSibling;
+    var chev = el.querySelector('.agencia-chevron');
+    if (ops.style.display === 'none') {
+        ops.style.display = 'block';
+        chev.style.transform = 'rotate(180deg)';
+    } else {
+        ops.style.display = 'none';
+        chev.style.transform = 'rotate(0deg)';
+    }
+}
+</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -192,4 +192,17 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
             @Param("busqueda") String busqueda,
             Pageable pageable
     );
+
+    /**
+     * Todas las operaciones activas para agruparlas por agencia.
+     * JOIN FETCH evita N+1 al acceder a cliente y agencia.
+     */
+    @Query("""
+        SELECT o FROM Operacion o
+        JOIN FETCH o.cliente
+        LEFT JOIN FETCH o.agencia
+        WHERE o.activo = true
+        ORDER BY o.agencia.nombre ASC NULLS LAST, o.cliente.nombreCompleto ASC
+        """)
+    List<Operacion> findAllActivasAgrupadasPorAgencia();
 }
