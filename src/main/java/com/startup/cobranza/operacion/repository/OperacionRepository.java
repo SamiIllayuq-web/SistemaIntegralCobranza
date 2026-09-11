@@ -31,7 +31,7 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
         """)
     List<Operacion> findByClienteIdAndActivoTrueWithBienes(Long clienteId);
 
-    @Query("SELECT o FROM Operacion o LEFT JOIN FETCH o.bienesEmbargados WHERE o.id = :id")
+    @Query("SELECT o FROM Operacion o JOIN FETCH o.cliente LEFT JOIN FETCH o.bienesEmbargados WHERE o.id = :id")
     Optional<Operacion> findByIdWithBienes(Long id);
 
     /**

@@ -37,6 +37,7 @@
 
         <form th:action="@{/operaciones/guardar}" th:object="${operacionForm}" method="post">
             <input type="hidden" name="id" th:value="${operacionId}" />
+            <input type="hidden" name="clienteId" th:value="*{clienteId}" />
 
         <!-- SECCIÓN 0: DATOS DEL CLIENTE -->
         <div class="card animate-in stagger-0">
