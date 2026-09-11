@@ -214,6 +214,8 @@ public class OperacionMapper {
         return OperacionFormDTO.builder()
                 .id(entity.getId())
                 .clienteId(entity.getCliente() != null ? entity.getCliente().getId() : null)
+                .dni(entity.getCliente() != null ? entity.getCliente().getDni() : null)
+                .nombreCliente(entity.getCliente() != null ? entity.getCliente().getNombreCompleto() : null)
                 .agenciaId(entity.getAgencia() != null ? entity.getAgencia().getId() : null)
                 .cuenta(entity.getCuenta())
                 .numeroOperacion(entity.getNumeroOperacion())

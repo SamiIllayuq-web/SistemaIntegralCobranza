@@ -253,6 +253,8 @@ public class OperacionFormDTO {
     public static class Builder {
         private Long id;
         private Long clienteId;
+        private String dni;
+        private String nombreCliente;
         private Long agenciaId;
         private String cuenta;
         private String numeroOperacion;
@@ -320,6 +322,8 @@ public class OperacionFormDTO {
 
         public Builder id(Long v) { id = v; return this; }
         public Builder clienteId(Long v) { clienteId = v; return this; }
+        public Builder dni(String v) { dni = v; return this; }
+        public Builder nombreCliente(String v) { nombreCliente = v; return this; }
         public Builder agenciaId(Long v) { agenciaId = v; return this; }
         public Builder cuenta(String v) { cuenta = v; return this; }
         public Builder numeroOperacion(String v) { numeroOperacion = v; return this; }
@@ -390,6 +394,8 @@ public class OperacionFormDTO {
                     montoCapital, montoTotal, diasMora, moneda, situacion, estado, etapa,
                     observacion, rango, analista, analistaSenior, numeroExpediente, tipoProceso,
                     tipoJuzgado, distritoJudicial, numeroJuzgado, abogadoId, observacionActos, comentario);
+            dto.setDni(dni);
+            dto.setNombreCliente(nombreCliente);
             dto.setEstadoCartera(estadoCartera);
             dto.setFechaDesembolso(fechaDesembolso);
             dto.setImporteDesembolso(importeDesembolso);
