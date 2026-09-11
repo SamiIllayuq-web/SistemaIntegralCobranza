@@ -56,6 +56,7 @@ public class OperacionController {
         model.addAttribute("operacionForm", new OperacionFormDTO());
         model.addAttribute("operacionId", null);
         model.addAttribute("agencias", agenciaRepository.findByActivoTrue());
+        model.addAttribute("soloLectura", false);
         return "operacion/formulario";
     }
 
@@ -69,6 +70,7 @@ public class OperacionController {
             model.addAttribute("operacionForm", form);
             model.addAttribute("operacionId", id);
             model.addAttribute("agencias", agenciaRepository.findByActivoTrue());
+            model.addAttribute("soloLectura", true);
             return "operacion/formulario";
         } catch (OperacionException e) {
             redirectAttrs.addFlashAttribute("error", e.getMessage());

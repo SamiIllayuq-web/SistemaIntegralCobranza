@@ -46,11 +46,11 @@
                 <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
                     <div>
                         <label class="form-label">DNI</label>
-                        <input type="text" class="form-control" th:field="*{dni}" readonly>
+                        <input type="text" class="form-control" th:field="*{dni}" th:readonly="${soloLectura}">
                     </div>
                     <div>
                         <label class="form-label">Nombre Completo</label>
-                        <input type="text" class="form-control" th:field="*{nombreCliente}" readonly>
+                        <input type="text" class="form-control" th:field="*{nombreCliente}" th:readonly="${soloLectura}">
                     </div>
                     <div>
                         <label class="form-label">Agencia</label>
