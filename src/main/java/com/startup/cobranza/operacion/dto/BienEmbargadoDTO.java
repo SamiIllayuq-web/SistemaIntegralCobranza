@@ -75,8 +75,8 @@ public class BienEmbargadoDTO {
     public void setTitularPredio(String titularPredio) { this.titularPredio = titularPredio; }
     public LocalDate getFechaGeneracionMc() { return fechaGeneracionMc; }
     public void setFechaGeneracionMc(LocalDate fechaGeneracionMc) { this.fechaGeneracionMc = fechaGeneracionMc; }
-    public LocalDate getFechaPresentacionMc() { return fechaPresentacionMc; }
-    public void setFechaPresentacionMc(LocalDate fechaPresentacionMc) { this.fechaPresentacionMc = fechaPresentacionMc; }
+    public String getFechaPresentacionMc() { return fechaPresentacionMc; }
+    public void setFechaPresentacionMc(String fechaPresentacionMc) { this.fechaPresentacionMc = fechaPresentacionMc; }
     public String getFechaInadmisible() { return fechaInadmisible; }
     public void setFechaInadmisible(String fechaInadmisible) { this.fechaInadmisible = fechaInadmisible; }
     public String getFechaAdmision() { return fechaAdmision; }
