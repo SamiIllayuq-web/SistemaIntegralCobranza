@@ -16,7 +16,7 @@
         <div class="breadcrumb-nav">
             <a th:href="@{/dashboard}">Inicio</a>
             <span class="breadcrumb-sep">/</span>
-            <a th:href="@{/cartera/registros}">Registros</a>
+            <a th:href="@{/agencias}">Agencias</a>
             <span class="breadcrumb-sep">/</span>
             <span style="color: var(--color-text);" th:text="${agenciaId != null ? 'Editar' : 'Nueva'}">Agencia</span>
         </div>
@@ -65,7 +65,7 @@
 
             <div style="margin-top: 20px; display: flex; gap: 8px;">
                 <button type="submit" class="btn btn-primary">Guardar</button>
-                <a th:href="@{/cartera/registros}" class="btn btn-ghost">Cancelar</a>
+                <a th:href="@{/agencias}" class="btn btn-ghost">Cancelar</a>
             </div>
         </form>
     </div>
