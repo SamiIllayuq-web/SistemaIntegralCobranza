@@ -7,6 +7,8 @@ public class OperacionFormDTO {
 
     private Long id;
     private Long clienteId;
+    private String dni;
+    private String nombreCliente;
     private Long agenciaId;
     private String cuenta;
     private String numeroOperacion;
@@ -113,6 +115,10 @@ public class OperacionFormDTO {
     public void setId(Long id) { this.id = id; }
     public Long getClienteId() { return clienteId; }
     public void setClienteId(Long clienteId) { this.clienteId = clienteId; }
+    public String getDni() { return dni; }
+    public void setDni(String dni) { this.dni = dni; }
+    public String getNombreCliente() { return nombreCliente; }
+    public void setNombreCliente(String nombreCliente) { this.nombreCliente = nombreCliente; }
     public Long getAgenciaId() { return agenciaId; }
     public void setAgenciaId(Long agenciaId) { this.agenciaId = agenciaId; }
     public String getCuenta() { return cuenta; }

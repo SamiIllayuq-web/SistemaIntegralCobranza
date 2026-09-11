@@ -44,6 +44,15 @@ public class OperacionController {
         return "operacion/detalle";
     }
 
+    @GetMapping("/nuevo")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String nuevoForm(Model model) {
+        model.addAttribute("operacionForm", new OperacionFormDTO());
+        model.addAttribute("operacionId", null);
+        model.addAttribute("agencias", agenciaRepository.findByActivoTrue());
+        return "operacion/formulario";
+    }
+
     @GetMapping("/editar/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public String editarForm(@PathVariable Long id, Model model, RedirectAttributes redirectAttrs) {

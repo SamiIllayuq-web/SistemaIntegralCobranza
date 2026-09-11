@@ -71,8 +71,28 @@ public class OperacionService {
 
     @Transactional
     public OperacionDTO crear(OperacionFormDTO form) {
-        Cliente cliente = clienteRepository.findById(form.getClienteId())
-                .orElseThrow(() -> new OperacionException("Cliente no encontrado"));
+        // Find-or-create Cliente por DNI
+        String dni = form.getDni();
+        Cliente cliente;
+        if (dni != null && !dni.isBlank()) {
+            cliente = clienteRepository.findByDni(dni).orElse(null);
+            if (cliente == null) {
+                cliente = Cliente.builder()
+                        .dni(dni)
+                        .nombreCompleto(form.getNombreCliente())
+                        .activo(true)
+                        .build();
+                cliente = clienteRepository.save(cliente);
+            } else {
+                if (form.getNombreCliente() != null && !form.getNombreCliente().isBlank()) {
+                    cliente.setNombreCompleto(form.getNombreCliente());
+                    cliente = clienteRepository.save(cliente);
+                }
+            }
+        } else {
+            throw new OperacionException("DNI es obligatorio para crear una operación");
+        }
+
         Agencia agencia = form.getAgenciaId() != null
                 ? agenciaRepository.findById(form.getAgenciaId()).orElse(null)
                 : null;
@@ -81,6 +101,82 @@ public class OperacionService {
                 : null;
 
         Operacion operacion = operacionMapper.toEntityFromForm(form, cliente, agencia, abogado);
+
+        // Sync todos los campos — igual que actualizar() pero sin el findById previo
+        operacion.setTrans(form.getTrans());
+        operacion.setBusquedaBienes(form.getBusquedaBienes());
+        operacion.setMontoDemandado(form.getMontoDemandado());
+        operacion.setEscribanoLegal(form.getEscribanoLegal());
+        operacion.setCodigoExpCautelar(form.getCodigoExpCautelar());
+        operacion.setIncidente(form.getIncidente());
+        operacion.setFechaPresentacion(parseFecha(form.getFechaPresentacion()));
+        operacion.setFechaInadmisiblePrincipal(parseFecha(form.getFechaInadmisiblePrincipal()));
+        operacion.setFechaAdmisionPrincipal(parseFecha(form.getFechaAdmisionPrincipal()));
+        operacion.setFechaAudienciaUnica(parseFecha(form.getFechaAudienciaUnica()));
+        operacion.setFechaAutoFinal(parseFecha(form.getFechaAutoFinal()));
+        operacion.setFechaConsentimiento(parseFecha(form.getFechaConsentimiento()));
+        operacion.setFechaEjecutoriada(parseFecha(form.getFechaEjecutoriada()));
+        operacion.setFechaIngresoEjecucion(parseFecha(form.getFechaIngresoEjecucion()));
+        operacion.setFechaTasacion(parseFecha(form.getFechaTasacion()));
+        operacion.setFechaNombramientoMartillero(parseFecha(form.getFechaNombramientoMartillero()));
+        operacion.setFechaRemate1(parseFecha(form.getFechaRemate1()));
+        operacion.setFechaRemate2(parseFecha(form.getFechaRemate2()));
+        operacion.setFechaRemate3(parseFecha(form.getFechaRemate3()));
+        operacion.setObservacionActos(form.getObservacionActos());
+        operacion.setComentario(form.getComentario());
+        operacion.setEstadoCartera(form.getEstadoCartera());
+        operacion.setFechaDesembolso(parseFecha(form.getFechaDesembolso()));
+        operacion.setImporteDesembolso(parseImporte(form.getImporteDesembolso()));
+        operacion.setEtapaProcesalTexto(form.getEtapaProcesalTexto());
+        operacion.setActoPendiente(form.getActoPendiente());
+        operacion.setFechaUltimoEstadoProceso(parseFecha(form.getFechaUltimoEstadoProceso()));
+        operacion.setZona(form.getZona());
+        operacion.setDepartamento(form.getDepartamento());
+        operacion.setProvincia(form.getProvincia());
+        operacion.setDistrito(form.getDistrito());
+        operacion.setDireccion(form.getDireccion());
+        operacion.setReferencia(form.getReferencia());
+        operacion.setTelefono(form.getTelefono());
+        operacion.setMontoAprobado(parseImporte(form.getMontoAprobado()));
+        operacion.setFechaAceptacionDemanda(parseFecha(form.getFechaAceptacionDemanda()));
+        operacion.setFechaEnvioJudicial(parseFecha(form.getFechaEnvioJudicial()));
+        operacion.setFechaAsignacionAbogado(parseFecha(form.getFechaAsignacionAbogado()));
+        operacion.setFechaCastigo(parseFecha(form.getFechaCastigo()));
+        operacion.setTipoFondo(form.getTipoFondo());
+        operacion.setCoTitularAval(form.getCoTitularAval());
+        operacion.setNumeroPartida(form.getNumeroPartida());
+        operacion.setNumeroFichaRegistral(form.getNumeroFichaRegistral());
+
+        // Bienes embargados
+        if (form.getBienesEmbargados() != null && !form.getBienesEmbargados().isEmpty()) {
+            for (BienEmbargadoDTO bDto : form.getBienesEmbargados()) {
+                BienEmbargado bien = new BienEmbargado();
+                bien.setOperacion(operacion);
+                bien.setDetalleGarantia(bDto.getDetalleGarantia());
+                bien.setPartidaRegistral(bDto.getNumeroPartida());
+                bien.setTipoBien(bDto.getTipoBien());
+                bien.setDireccion(bDto.getDireccion());
+                bien.setDistrito(bDto.getDistrito());
+                bien.setProvincia(bDto.getProvincia());
+                bien.setDepartamento(bDto.getDepartamento());
+                bien.setGarantiaInscrita(bDto.getGarantiaInscrita());
+                bien.setFechaInscripcion(bDto.getFechaInscripcion());
+                bien.setFechaPresentacionRrpp(bDto.getFechaPresentacionRrpp());
+                bien.setAsientoInscripcion(bDto.getAsientoInscripcion());
+                bien.setFechaPresentacionMc(bDto.getFechaPresentacionMc());
+                bien.setFechaInadmisible(bDto.getFechaInadmisible());
+                bien.setFechaAdmision(bDto.getFechaAdmision());
+                bien.setComentarioMc(bDto.getComentarioMc());
+                bien.setDetalleAcreedores(bDto.getDetalleAcreedores());
+                bien.setTipoPreferencia(bDto.getTipoPreferencia());
+                bien.setTitularPredio(bDto.getTitularPredio());
+                bien.setMontoMc(bDto.getMontoMc());
+                bien.setMonedaMc(bDto.getMonedaMc());
+                bien.setRango(bDto.getRango());
+                operacion.getBienesEmbargados().add(bien);
+            }
+        }
+
         Operacion saved = operacionRepository.save(operacion);
         return operacionMapper.toDTO(saved);
     }
