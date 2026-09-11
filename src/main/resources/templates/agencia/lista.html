@@ -83,21 +83,21 @@
                                    style="font-weight: 500;">-</a>
                             </td>
                             <td>
-                                <span th:if="${agencia.codigo}" class="font-mono text-muted"
+                                <span th:if="${agencia.codigo != null}" class="font-mono text-muted"
                                       th:text="${agencia.codigo}">-</span>
-                                <span th:if="${!agencia.codigo}" class="text-muted">—</span>
+                                <span th:unless="${agencia.codigo != null}" class="text-muted">—</span>
                             </td>
                             <td>
-                                <span th:if="${agencia.telefono}" th:text="${agencia.telefono}">-</span>
-                                <span th:if="${!agencia.telefono}" class="text-muted">—</span>
+                                <span th:if="${agencia.telefono != null}" th:text="${agencia.telefono}">-</span>
+                                <span th:unless="${agencia.telefono != null}" class="text-muted">—</span>
                             </td>
                             <td>
-                                <span th:if="${agencia.direccion}" th:text="${agencia.direccion}">-</span>
-                                <span th:if="${!agencia.direccion}" class="text-muted">—</span>
+                                <span th:if="${agencia.direccion != null}" th:text="${agencia.direccion}">-</span>
+                                <span th:unless="${agencia.direccion != null}" class="text-muted">—</span>
                             </td>
                             <td>
                                 <span th:if="${agencia.activo}" class="badge badge-success">Activo</span>
-                                <span th:if="${!agencia.activo}" class="badge badge-default">Inactivo</span>
+                                <span th:unless="${agencia.activo}" class="badge badge-default">Inactivo</span>
                             </td>
                             <td class="col-actions">
                                 <a th:href="@{/agencias/editar/{id}(id=${agencia.id})}"
