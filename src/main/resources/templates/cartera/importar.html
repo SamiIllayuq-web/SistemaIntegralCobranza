@@ -77,55 +77,6 @@
             </div>
         </div>
 
-        <!-- Format info -->
-        <div class="card animate-in stagger-2" style="margin-top: 16px;">
-            <div class="card-header">Formato esperado del archivo</div>
-            <div class="card-body">
-                <p class="text-muted" style="font-size: 13px; margin-bottom: 12px;">
-                    El archivo Excel debe tener la siguiente estructura en la primera hoja.
-                    Los headers deben estar en la fila 1.
-                </p>
-                <div class="table-wrapper">
-                    <table class="data-table" style="font-size: 12px;">
-                        <thead>
-                            <tr>
-                                <th>A</th><th>B</th><th>C</th><th>D</th><th>E</th>
-                                <th>F</th><th>G</th><th>H</th><th>I</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>NOMBRE</strong></td>
-                                <td><strong>DNI</strong></td>
-                                <td><strong>NUMERO_CUENTA</strong></td>
-                                <td><strong>NUMERO_OPERACION</strong></td>
-                                <td><strong>DEUDA_CAPITAL</strong></td>
-                                <td><strong>DEUDA_TOTAL</strong></td>
-                                <td><strong>TELEFONO</strong></td>
-                                <td><strong>DIRECCION</strong></td>
-                                <td><strong>ESTADO</strong></td>
-                            </tr>
-                            <tr style="color: var(--color-text-muted);">
-                                <td>Juan Perez</td>
-                                <td>12345678</td>
-                                <td>001234</td>
-                                <td>OP001</td>
-                                <td>5000.00</td>
-                                <td>6500.00</td>
-                                <td>999888777</td>
-                                <td>Av. Lima 123</td>
-                                <td>Sin Gestionar</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div style="margin-top: 12px;">
-                    <a th:href="@{/cartera/descargar-plantilla}" class="btn btn-ghost btn-sm">
-                        Descargar plantilla
-                    </a>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 
