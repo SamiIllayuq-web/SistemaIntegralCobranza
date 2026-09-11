@@ -9,6 +9,7 @@ public class BienEmbargadoDTO {
     private Long operacionId;
     private String tipoBien;
     private String partidaRegistral;
+    private String numeroPartida;
     private String detalleGarantia;
     private String direccion;
     private String distrito;
@@ -40,6 +41,8 @@ public class BienEmbargadoDTO {
     public void setTipoBien(String tipoBien) { this.tipoBien = tipoBien; }
     public String getPartidaRegistral() { return partidaRegistral; }
     public void setPartidaRegistral(String partidaRegistral) { this.partidaRegistral = partidaRegistral; }
+    public String getNumeroPartida() { return numeroPartida; }
+    public void setNumeroPartida(String numeroPartida) { this.numeroPartida = numeroPartida; }
     public String getDetalleGarantia() { return detalleGarantia; }
     public void setDetalleGarantia(String detalleGarantia) { this.detalleGarantia = detalleGarantia; }
     public String getDireccion() { return direccion; }
@@ -88,6 +91,7 @@ public class BienEmbargadoDTO {
         private Long operacionId;
         private String tipoBien;
         private String partidaRegistral;
+        private String numeroPartida;
         private String detalleGarantia;
         private String direccion;
         private String distrito;
@@ -113,6 +117,7 @@ public class BienEmbargadoDTO {
         public Builder operacionId(Long v) { operacionId = v; return this; }
         public Builder tipoBien(String v) { tipoBien = v; return this; }
         public Builder partidaRegistral(String v) { partidaRegistral = v; return this; }
+        public Builder numeroPartida(String v) { numeroPartida = v; return this; }
         public Builder detalleGarantia(String v) { detalleGarantia = v; return this; }
         public Builder direccion(String v) { direccion = v; return this; }
         public Builder distrito(String v) { distrito = v; return this; }
@@ -140,6 +145,7 @@ public class BienEmbargadoDTO {
             dto.setOperacionId(operacionId);
             dto.setTipoBien(tipoBien);
             dto.setPartidaRegistral(partidaRegistral);
+            dto.setNumeroPartida(numeroPartida);
             dto.setDetalleGarantia(detalleGarantia);
             dto.setDireccion(direccion);
             dto.setDistrito(distrito);

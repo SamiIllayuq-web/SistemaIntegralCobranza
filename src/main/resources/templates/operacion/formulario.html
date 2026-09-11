@@ -197,6 +197,7 @@
                                 th:each="bien, stat : ${operacionForm.bienesEmbargados}"
                                 th:data-index="${stat.index}">
                                 <input type="hidden" th:name="'bienesEmbargados[' + ${stat.index} + '].id'" th:value="${bien.id}"/>
+                                <input type="hidden" th:name="'bienesEmbargados[' + ${stat.index} + '].partidaRegistral'" th:value="${bien.partidaRegistral}"/>
                                 <td><input type="text" class="form-control form-control-sm" th:name="'bienesEmbargados[' + ${stat.index} + '].detalleGarantia'" th:value="${bien.detalleGarantia}"/></td>
                                 <td><input type="text" class="form-control form-control-sm" th:name="'bienesEmbargados[' + ${stat.index} + '].numeroPartida'" th:value="${bien.numeroPartida}"/></td>
                                 <td><input type="text" class="form-control form-control-sm" th:name="'bienesEmbargados[' + ${stat.index} + '].tipoBien'" th:value="${bien.tipoBien}"/></td>
@@ -346,8 +347,8 @@
     </tr>
 </template>
 
-<script>
-let bienIndex = [[${operacionForm.bienesEmbargados != null ? operacionForm.bienesEmbargados.size() : 0}]];
+<script th:inline="javascript">
+let bienIndex = /*[[${operacionForm.bienesEmbargados != null ? operacionForm.bienesEmbargados.size() : 0}]]*/ 0;
 
 function agregarBien() {
     const tbody = document.getElementById('bienesBody');

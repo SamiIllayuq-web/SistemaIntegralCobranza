@@ -50,6 +50,7 @@ public class OperacionFormDTO {
     private String tipoFondo;
     private String coTitularAval;
     private String numeroPartida;
+    private String numeroFichaRegistral;
     // --- Campos judiciales (desde Excel) ---
     private String trans;
     private String busquedaBienes;
@@ -198,6 +199,8 @@ public class OperacionFormDTO {
     public void setCoTitularAval(String coTitularAval) { this.coTitularAval = coTitularAval; }
     public String getNumeroPartida() { return numeroPartida; }
     public void setNumeroPartida(String numeroPartida) { this.numeroPartida = numeroPartida; }
+    public String getNumeroFichaRegistral() { return numeroFichaRegistral; }
+    public void setNumeroFichaRegistral(String numeroFichaRegistral) { this.numeroFichaRegistral = numeroFichaRegistral; }
     public String getTrans() { return trans; }
     public void setTrans(String trans) { this.trans = trans; }
     public String getBusquedaBienes() { return busquedaBienes; }
@@ -287,6 +290,7 @@ public class OperacionFormDTO {
         private String tipoFondo;
         private String coTitularAval;
         private String numeroPartida;
+        private String numeroFichaRegistral;
         private String trans;
         private String busquedaBienes;
         private String escribanoLegal;
@@ -353,6 +357,7 @@ public class OperacionFormDTO {
         public Builder tipoFondo(String v) { tipoFondo = v; return this; }
         public Builder coTitularAval(String v) { coTitularAval = v; return this; }
         public Builder numeroPartida(String v) { numeroPartida = v; return this; }
+        public Builder numeroFichaRegistral(String v) { numeroFichaRegistral = v; return this; }
         public Builder trans(String v) { trans = v; return this; }
         public Builder busquedaBienes(String v) { busquedaBienes = v; return this; }
         public Builder escribanoLegal(String v) { escribanoLegal = v; return this; }
@@ -400,6 +405,7 @@ public class OperacionFormDTO {
             dto.setTipoFondo(tipoFondo);
             dto.setCoTitularAval(coTitularAval);
             dto.setNumeroPartida(numeroPartida);
+            dto.setNumeroFichaRegistral(numeroFichaRegistral);
             dto.setBienesEmbargados(bienesEmbargados);
             return dto;
         }

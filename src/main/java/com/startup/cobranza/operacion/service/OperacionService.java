@@ -120,8 +120,49 @@ public class OperacionService {
         existing.setDistritoJudicial(form.getDistritoJudicial());
         existing.setNumeroJuzgado(form.getNumeroJuzgado());
         existing.setAbogado(abogado);
+        existing.setTrans(form.getTrans());
+        existing.setBusquedaBienes(form.getBusquedaBienes());
+        existing.setMontoDemandado(form.getMontoDemandado());
+        existing.setEscribanoLegal(form.getEscribanoLegal());
+        existing.setCodigoExpCautelar(form.getCodigoExpCautelar());
+        existing.setIncidente(form.getIncidente());
+        existing.setFechaPresentacion(parseFecha(form.getFechaPresentacion()));
+        existing.setFechaInadmisiblePrincipal(parseFecha(form.getFechaInadmisiblePrincipal()));
+        existing.setFechaAdmisionPrincipal(parseFecha(form.getFechaAdmisionPrincipal()));
+        existing.setFechaAudienciaUnica(parseFecha(form.getFechaAudienciaUnica()));
+        existing.setFechaAutoFinal(parseFecha(form.getFechaAutoFinal()));
+        existing.setFechaConsentimiento(parseFecha(form.getFechaConsentimiento()));
+        existing.setFechaEjecutoriada(parseFecha(form.getFechaEjecutoriada()));
+        existing.setFechaIngresoEjecucion(parseFecha(form.getFechaIngresoEjecucion()));
+        existing.setFechaTasacion(parseFecha(form.getFechaTasacion()));
+        existing.setFechaNombramientoMartillero(parseFecha(form.getFechaNombramientoMartillero()));
+        existing.setFechaRemate1(parseFecha(form.getFechaRemate1()));
+        existing.setFechaRemate2(parseFecha(form.getFechaRemate2()));
+        existing.setFechaRemate3(parseFecha(form.getFechaRemate3()));
         existing.setObservacionActos(form.getObservacionActos());
         existing.setComentario(form.getComentario());
+        existing.setEstadoCartera(form.getEstadoCartera());
+        existing.setFechaDesembolso(parseFecha(form.getFechaDesembolso()));
+        existing.setImporteDesembolso(parseImporte(form.getImporteDesembolso()));
+        existing.setEtapaProcesalTexto(form.getEtapaProcesalTexto());
+        existing.setActoPendiente(form.getActoPendiente());
+        existing.setFechaUltimoEstadoProceso(parseFecha(form.getFechaUltimoEstadoProceso()));
+        existing.setZona(form.getZona());
+        existing.setDepartamento(form.getDepartamento());
+        existing.setProvincia(form.getProvincia());
+        existing.setDistrito(form.getDistrito());
+        existing.setDireccion(form.getDireccion());
+        existing.setReferencia(form.getReferencia());
+        existing.setTelefono(form.getTelefono());
+        existing.setMontoAprobado(parseImporte(form.getMontoAprobado()));
+        existing.setFechaAceptacionDemanda(parseFecha(form.getFechaAceptacionDemanda()));
+        existing.setFechaEnvioJudicial(parseFecha(form.getFechaEnvioJudicial()));
+        existing.setFechaAsignacionAbogado(parseFecha(form.getFechaAsignacionAbogado()));
+        existing.setFechaCastigo(parseFecha(form.getFechaCastigo()));
+        existing.setTipoFondo(form.getTipoFondo());
+        existing.setCoTitularAval(form.getCoTitularAval());
+        existing.setNumeroPartida(form.getNumeroPartida());
+        existing.setNumeroFichaRegistral(form.getNumeroFichaRegistral());
 
         // Sync bienes embargados
         if (form.getBienesEmbargados() != null) {
@@ -131,7 +172,7 @@ public class OperacionService {
                 bien.setId(bDto.getId());
                 bien.setOperacion(existing);
                 bien.setDetalleGarantia(bDto.getDetalleGarantia());
-                bien.setPartidaRegistral(bDto.getPartidaRegistral());
+                bien.setPartidaRegistral(bDto.getNumeroPartida());
                 bien.setTipoBien(bDto.getTipoBien());
                 bien.setDireccion(bDto.getDireccion());
                 bien.setDistrito(bDto.getDistrito());
@@ -167,6 +208,18 @@ public class OperacionService {
                 .orElseThrow(() -> new OperacionException("Operacion no encontrada"));
         op.setActivo(false);
         operacionRepository.save(op);
+    }
+
+    private java.time.LocalDate parseFecha(String fecha) {
+        if (fecha == null || fecha.isBlank()) return null;
+        try { return java.time.LocalDate.parse(fecha); }
+        catch (Exception e) { return null; }
+    }
+
+    private java.math.BigDecimal parseImporte(String valor) {
+        if (valor == null || valor.isBlank()) return null;
+        try { return new java.math.BigDecimal(valor); }
+        catch (Exception e) { return null; }
     }
 
     public Page<OperacionDTO> listarCarteraConFiltros(

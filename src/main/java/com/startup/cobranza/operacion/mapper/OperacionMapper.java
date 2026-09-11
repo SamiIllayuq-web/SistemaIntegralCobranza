@@ -114,6 +114,7 @@ public class OperacionMapper {
                 .operacionId(entity.getOperacion() != null ? entity.getOperacion().getId() : null)
                 .tipoBien(entity.getTipoBien())
                 .partidaRegistral(entity.getPartidaRegistral())
+                .numeroPartida(entity.getPartidaRegistral())
                 .detalleGarantia(entity.getDetalleGarantia())
                 .direccion(entity.getDireccion())
                 .distrito(entity.getDistrito())
@@ -275,6 +276,7 @@ public class OperacionMapper {
                 .tipoFondo(entity.getTipoFondo())
                 .coTitularAval(entity.getCoTitularAval())
                 .numeroPartida(entity.getNumeroPartida())
+                .numeroFichaRegistral(entity.getNumeroFichaRegistral())
                 .bienesEmbargados(entity.getBienesEmbargados() != null
                         ? entity.getBienesEmbargados().stream().map(this::toBienEmbargadoDTO).toList()
                         : null)
@@ -356,6 +358,7 @@ public class OperacionMapper {
                 .tipoFondo(form.getTipoFondo())
                 .coTitularAval(form.getCoTitularAval())
                 .numeroPartida(form.getNumeroPartida())
+                .numeroFichaRegistral(form.getNumeroFichaRegistral())
                 .build();
     }
 }
