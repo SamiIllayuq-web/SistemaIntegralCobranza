@@ -28,7 +28,9 @@ public class AgenciaController {
     @PreAuthorize("hasRole('ADMIN')")
     public String listar(Model model) {
         List<AgenciaAgrupadaDTO> agencias = agenciaService.agruparOperaciones();
+        long totalOps = agencias.stream().mapToLong(AgenciaAgrupadaDTO::getTotalOperaciones).sum();
         model.addAttribute("agencias", agencias);
+        model.addAttribute("totalOperacionesGlobal", totalOps);
         return "agencia/lista";
     }
 

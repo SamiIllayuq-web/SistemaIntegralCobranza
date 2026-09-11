@@ -69,8 +69,7 @@
             </div>
             <div class="stat-card">
                 <div class="stat-label">Total Operaciones</div>
-                <div class="stat-value" th:with="total=${agencias.stream().sum(v -> v.totalOperaciones)}"
-                     th:text="${total}">0</div>
+                <div class="stat-value" th:text="${totalOperacionesGlobal}">0</div>
             </div>
         </div>
 
@@ -178,7 +177,7 @@
                                     </td>
                                     <td>
                                         <span th:if="${op.montoTotal != null}"
-                                              th:text="${op.moneda != null ? op.moneda : 'S/'} + ' ' + ${#numbers.formatDecimal(op.montoTotal, 1, 'COMMA', 2, 'POINT')}">-</span>
+                                              th:text="|${op.moneda != null ? op.moneda : 'S/'} ${#numbers.formatDecimal(op.montoTotal, 1, 'COMMA', 2, 'POINT')}|">-</span>
                                         <span th:unless="${op.montoTotal != null}" class="text-muted">—</span>
                                     </td>
                                     <td class="col-actions">
