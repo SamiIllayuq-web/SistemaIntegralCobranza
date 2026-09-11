@@ -211,8 +211,8 @@
                                 <td><input type="date" class="form-control form-control-sm" th:name="'bienesEmbargados[' + ${stat.index} + '].fechaPresentacionRrpp'" th:value="${bien.fechaPresentacionRrpp}"/></td>
                                 <td><input type="text" class="form-control form-control-sm" th:name="'bienesEmbargados[' + ${stat.index} + '].asientoInscripcion'" th:value="${bien.asientoInscripcion}"/></td>
                                 <td><input type="date" class="form-control form-control-sm" th:name="'bienesEmbargados[' + ${stat.index} + '].fechaPresentacionMc'" th:value="${bien.fechaPresentacionMc}"/></td>
-                                <td><input type="date" class="form-control form-control-sm" th:name="'bienesEmbargados[' + ${stat.index} + '].fechaInadmisibleMc'" th:value="${bien.fechaInadmisibleMc}"/></td>
-                                <td><input type="date" class="form-control form-control-sm" th:name="'bienesEmbargados[' + ${stat.index} + '].fechaAdmisionMc'" th:value="${bien.fechaAdmisionMc}"/></td>
+                                <td><input type="text" class="form-control form-control-sm" th:name="'bienesEmbargados[' + ${stat.index} + '].fechaInadmisible'" th:value="${bien.fechaInadmisible}"/></td>
+                                <td><input type="text" class="form-control form-control-sm" th:name="'bienesEmbargados[' + ${stat.index} + '].fechaAdmision'" th:value="${bien.fechaAdmision}"/></td>
                                 <td><input type="text" class="form-control form-control-sm" th:name="'bienesEmbargados[' + ${stat.index} + '].comentarioMc'" th:value="${bien.comentarioMc}"/></td>
                                 <td>
                                     <button type="button" class="btn-icon btn-icon-danger" onclick="eliminarBien(this)">
@@ -334,8 +334,8 @@
         <td><input type="date" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].fechaPresentacionRrpp" value=""/></td>
         <td><input type="text" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].asientoInscripcion" value=""/></td>
         <td><input type="date" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].fechaPresentacionMc" value=""/></td>
-        <td><input type="date" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].fechaInadmisibleMc" value=""/></td>
-        <td><input type="date" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].fechaAdmisionMc" value=""/></td>
+        <td><input type="text" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].fechaInadmisible" value=""/></td>
+        <td><input type="text" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].fechaAdmision" value=""/></td>
         <td><input type="text" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].comentarioMc" value=""/></td>
         <td>
             <button type="button" class="btn-icon btn-icon-danger" onclick="eliminarBien(this)">
