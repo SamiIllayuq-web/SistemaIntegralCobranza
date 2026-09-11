@@ -7,6 +7,7 @@ import com.startup.cobranza.cartera.service.CarteraService;
 import com.startup.cobranza.operacion.dto.OperacionDTO;
 import com.startup.cobranza.operacion.service.OperacionService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequestMapping("/cartera")
 @RequiredArgsConstructor
@@ -68,6 +70,8 @@ public class CarteraController {
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "50") int size,
             Model model) {
+
+        log.debug("expedientes - agenciaId={}, situacion={}, busqueda={}", agenciaId, situacion, busqueda);
 
         PageRequest pageable = PageRequest.of(page, size,
                 Sort.by("numeroExpediente").ascending()
