@@ -1,5 +1,6 @@
 package com.startup.cobranza.cartera.controller;
 
+import com.startup.cobranza.agencia.repository.AgenciaRepository;
 import com.startup.cobranza.cartera.dto.ImportacionDTO;
 import com.startup.cobranza.cartera.exception.CarteraException;
 import com.startup.cobranza.cartera.service.CarteraService;
@@ -26,6 +27,7 @@ public class CarteraController {
 
     private final CarteraService carteraService;
     private final OperacionService operacionService;
+    private final AgenciaRepository agenciaRepository;
 
     @GetMapping("/importar")
     @PreAuthorize("hasRole('ADMIN')")
@@ -59,6 +61,7 @@ public class CarteraController {
     }
 
     @GetMapping("/expedientes")
+    public String expedientes(
             @RequestParam(value = "situacion", required = false) String situacion,
             @RequestParam(value = "busqueda", required = false) String busqueda,
             @RequestParam(value = "page", defaultValue = "0") int page,
@@ -74,6 +77,7 @@ public class CarteraController {
         model.addAttribute("pagina", pagina);
         model.addAttribute("situacion", situacion);
         model.addAttribute("busqueda", busqueda);
+        model.addAttribute("agencias", agenciaRepository.findByActivoTrue());
         return "cartera/expedientes";
     }
 }

@@ -37,7 +37,7 @@
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
                     Importar
                 </a>
-                <a th:href="@{/cartera/registros}" class="btn btn-ghost">
+                <a th:href="@{/operaciones}" class="btn btn-ghost">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
                     Ver cartera
                 </a>
@@ -126,7 +126,7 @@
                             </td>
                             <td th:text="${op.etapa}">-</td>
                             <td th:text="${op.abogadoNombre}">-</td>
-                            <td th:text="${op.moneda} + ' ' + ${#numbers.formatDecimal(op.montoTotal, 1, 'COMMA', 2, 'POINT')}">-</td>
+                            <td th:text="|${op.moneda} ${#numbers.formatDecimal(op.montoTotal, 1, 'COMMA', 2, 'POINT')}|">-</td>
                             <td class="col-actions">
                                 <a th:href="@{/operaciones/{id}(id=${op.id})}" class="btn-icon" title="Ver operación">
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
