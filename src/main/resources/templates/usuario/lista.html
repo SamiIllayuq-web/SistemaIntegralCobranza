@@ -34,7 +34,8 @@
                 <p class="page-subtitle"> Gestión de usuarios del sistema</p>
             </div>
             <div class="page-actions">
-                <a th:href="@{/usuarios/nuevo}" class="btn btn-primary">
+                <a th:href="@{/usuarios/nuevo}" class="btn btn-primary"
+                   sec:authorize="hasAuthority('ROLE_ADMIN')">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
                     </svg>
@@ -107,7 +108,7 @@
                                 <span th:if="${usuario.activo}" class="badge badge-success">Activo</span>
                                 <span th:unless="${usuario.activo}" class="badge badge-danger">Inactivo</span>
                             </td>
-                            <td class="col-actions">
+                            <td class="col-actions" sec:authorize="hasAuthority('ROLE_ADMIN')">
                                 <a th:href="@{/usuarios/editar/{id}(id=${usuario.id})}"
                                    class="btn-icon" title="Editar usuario">
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

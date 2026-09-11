@@ -40,6 +40,7 @@ public class OperacionController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SECRETARIO')")
     public String detalle(@PathVariable Long id, Model model) {
         OperacionDTO op = operacionService.obtenerPorId(id);
         model.addAttribute("operacion", op);

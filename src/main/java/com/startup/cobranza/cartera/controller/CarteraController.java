@@ -55,7 +55,7 @@ public class CarteraController {
     }
 
     @GetMapping("/historial")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SECRETARIO')")
     public String historial(Model model) {
         List<ImportacionDTO> importaciones = carteraService.listarImportaciones();
         model.addAttribute("importaciones", importaciones);
@@ -63,6 +63,7 @@ public class CarteraController {
     }
 
     @GetMapping("/expedientes")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SECRETARIO')")
     public String expedientes(
             @RequestParam(value = "agenciaId", required = false) Long agenciaId,
             @RequestParam(value = "situacion", required = false) String situacion,

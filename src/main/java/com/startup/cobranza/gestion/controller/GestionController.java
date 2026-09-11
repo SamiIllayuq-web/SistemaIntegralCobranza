@@ -35,6 +35,7 @@ public class GestionController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'SECRETARIO')")
     public ResponseEntity<List<GestionDTO>> listar(@PathVariable Long clienteId) {
         List<GestionDTO> gestiones = gestionService.listarPorCliente(clienteId);
         return ResponseEntity.ok(gestiones);

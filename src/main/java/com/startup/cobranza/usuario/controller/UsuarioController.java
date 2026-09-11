@@ -67,6 +67,7 @@ public class UsuarioController {
                 usuarioService.actualizar(usuarioId, form);
                 redirectAttrs.addFlashAttribute("success", "Usuario actualizado correctamente");
             } else {
+                form.setRol("SECRETARIO");
                 usuarioService.crear(form);
                 redirectAttrs.addFlashAttribute("success", "Usuario creado correctamente");
             }
