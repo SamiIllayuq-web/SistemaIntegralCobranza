@@ -58,34 +58,7 @@ public class CarteraController {
         return "cartera/historial";
     }
 
-    @GetMapping("/registros")
-    public String registros(
-            @RequestParam(value = "agenciaId", required = false) Long agenciaId,
-            @RequestParam(value = "estado", required = false) String estado,
-            @RequestParam(value = "etapa", required = false) String etapa,
-            @RequestParam(value = "busqueda", required = false) String busqueda,
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "50") int size,
-            Model model) {
-
-        PageRequest pageable = PageRequest.of(page, size, Sort.by("cliente.nombreCompleto").ascending());
-        Page<OperacionDTO> pagina = operacionService.listarCarteraConFiltros(
-                agenciaId, estado, etapa, busqueda, pageable);
-
-        model.addAttribute("pagina", pagina);
-        model.addAttribute("agenciaId", agenciaId);
-        model.addAttribute("estado", estado);
-        model.addAttribute("etapa", etapa);
-        model.addAttribute("busqueda", busqueda);
-        return "cartera/registros";
-    }
-
-    /**
-     * Vista de Expedientes — misma entidad Operacion, solo filtra
-     * por numeroExpediente informado y muestra columnas judiciales.
-     */
     @GetMapping("/expedientes")
-    public String expedientes(
             @RequestParam(value = "situacion", required = false) String situacion,
             @RequestParam(value = "busqueda", required = false) String busqueda,
             @RequestParam(value = "page", defaultValue = "0") int page,
