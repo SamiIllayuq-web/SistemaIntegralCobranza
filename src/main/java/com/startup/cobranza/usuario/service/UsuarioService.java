@@ -40,6 +40,10 @@ public class UsuarioService {
             throw new UsuarioException("El nombre de usuario ya existe: " + form.getUsername());
         }
         Usuario usuario = usuarioMapper.toEntityFromForm(form);
+        // SECRETARIO se crea sin nombreCompleto en el formulario — usar el username como nombre
+        if (usuario.getNombreCompleto() == null || usuario.getNombreCompleto().isBlank()) {
+            usuario.setNombreCompleto(form.getUsername());
+        }
         return usuarioMapper.toDTO(usuarioRepository.save(usuario));
     }
 
@@ -62,6 +66,16 @@ public class UsuarioService {
     public void eliminar(Long id) {
         if (!usuarioRepository.existsById(id)) {
             throw new UsuarioException("Usuario no encontrado con id: " + id);
+        }
+        // Impedir eliminar al último ADMIN
+        Usuario usuario = usuarioRepository.findById(id).orElseThrow();
+        if ("ADMIN".equals(usuario.getRol())) {
+            long adminCount = usuarioRepository.findAll().stream()
+                    .filter(u -> "ADMIN".equals(u.getRol()))
+                    .count();
+            if (adminCount <= 1) {
+                throw new UsuarioException("No se puede eliminar al último usuario administrador");
+            }
         }
         usuarioRepository.deleteById(id);
     }
