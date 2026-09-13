@@ -56,7 +56,6 @@
                 <div class="filters-grid">
                     <div>
                         <label class="form-label">Agencia</label>
-                        <input type="hidden" name="agenciaId" value="">
                         <select class="form-select" name="agenciaId">
                             <option value="">Todas</option>
                             <option th:each="a : ${agencias}" th:value="${a.id}" th:text="${a.nombre}" th:selected="${agenciaId != null and agenciaId == a.id}"></option>
@@ -64,11 +63,10 @@
                     </div>
                     <div>
                         <label class="form-label">Situación</label>
-                        <input type="hidden" name="situacion" value="">
                         <select class="form-select" name="situacion">
                             <option value="">Todas</option>
-                            <option value="Judicial" th:selected="${situacion != null and situacion == 'Judicial'}">Judicial</option>
-                            <option value="Castigada" th:selected="${situacion != null and situacion == 'Castigada'}">Castigada</option>
+                            <option value="Judicial" th:selected="${situacion == 'Judicial'}">Judicial</option>
+                            <option value="Castigada" th:selected="${situacion == 'Castigada'}">Castigada</option>
                         </select>
                     </div>
                     <div>
@@ -149,19 +147,19 @@
             <div class="card-footer" th:if="${pagina.totalPages > 1}" style="display: flex; justify-content: center; padding: .75rem;">
                 <div class="pagination">
                     <a class="pagination-btn"
-                       th:href="@{/cartera/expedientes(page=${pagina.number - 1}, agenciaId=${agenciaId}, situacion=${situacion != null ? situacion : ''}, busqueda=${busqueda != null ? busqueda : ''})}"
+                       th:href="@{/cartera/expedientes(page=${pagina.number - 1}, agenciaId=${agenciaId}, situacion=${situacion}, busqueda=${busqueda})}"
                        th:classappend="${pagina.number == 0 ? 'disabled' : ''}">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
                     </a>
 
                     <a class="pagination-btn"
                        th:each="i : ${#numbers.sequence(0, pagina.totalPages - 1)}"
-                       th:href="@{/cartera/expedientes(page=${i}, agenciaId=${agenciaId}, situacion=${situacion != null ? situacion : ''}, busqueda=${busqueda != null ? busqueda : ''})}"
+                       th:href="@{/cartera/expedientes(page=${i}, agenciaId=${agenciaId}, situacion=${situacion}, busqueda=${busqueda})}"
                        th:text="${i + 1}"
                        th:classappend="${i == pagina.number ? 'active' : ''}"></a>
 
                     <a class="pagination-btn"
-                       th:href="@{/cartera/expedientes(page=${pagina.number + 1}, agenciaId=${agenciaId}, situacion=${situacion != null ? situacion : ''}, busqueda=${busqueda != null ? busqueda : ''})}"
+                       th:href="@{/cartera/expedientes(page=${pagina.number + 1}, agenciaId=${agenciaId}, situacion=${situacion}, busqueda=${busqueda})}"
                        th:classappend="${pagina.number == pagina.totalPages - 1 ? 'disabled' : ''}">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
                     </a>
