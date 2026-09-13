@@ -82,6 +82,7 @@ public class OperacionDTO {
     private String coTitularAval;
     private String numeroPartida;
     private String numeroFichaRegistral;
+    private String etapaProcesal;
 
     public OperacionDTO() {}
 
@@ -272,7 +273,8 @@ public class OperacionDTO {
     public void setNumeroPartida(String numeroPartida) { this.numeroPartida = numeroPartida; }
     public String getNumeroFichaRegistral() { return numeroFichaRegistral; }
     public void setNumeroFichaRegistral(String numeroFichaRegistral) { this.numeroFichaRegistral = numeroFichaRegistral; }
-
+    public String getEtapaProcesal() { return etapaProcesal; }
+    public void setEtapaProcesal(String etapaProcesal) { this.etapaProcesal = etapaProcesal; }
     public static Builder builder() { return new Builder(); }
 
     public static class Builder {
@@ -332,6 +334,7 @@ public class OperacionDTO {
         private String etapaProcesalTexto;
         private String actoPendiente;
         private LocalDate fechaUltimoEstadoProceso;
+        private String etapaProcesal;
         private String zona;
         private String departamento;
         private String provincia;
@@ -404,6 +407,7 @@ public class OperacionDTO {
         public Builder importeDesembolso(BigDecimal v) { importeDesembolso = v; return this; }
         public Builder etapaProcesalTexto(String v) { etapaProcesalTexto = v; return this; }
         public Builder actoPendiente(String v) { actoPendiente = v; return this; }
+        public Builder etapaProcesal(String v) { etapaProcesal = v; return this; }
         public Builder fechaUltimoEstadoProceso(LocalDate v) { fechaUltimoEstadoProceso = v; return this; }
         public Builder zona(String v) { zona = v; return this; }
         public Builder departamento(String v) { departamento = v; return this; }
@@ -455,6 +459,7 @@ public class OperacionDTO {
             dto.setImporteDesembolso(importeDesembolso);
             dto.setEtapaProcesalTexto(etapaProcesalTexto);
             dto.setActoPendiente(actoPendiente);
+            dto.setEtapaProcesal(etapaProcesal);
             dto.setFechaUltimoEstadoProceso(fechaUltimoEstadoProceso);
             dto.setZona(zona);
             dto.setDepartamento(departamento);

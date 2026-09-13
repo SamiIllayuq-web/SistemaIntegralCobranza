@@ -50,6 +50,7 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
           AND (:maxMora IS NULL OR o.diasMora <= :maxMora)
           AND (:minMonto IS NULL OR o.montoTotal >= :minMonto)
           AND (:maxMonto IS NULL OR o.montoTotal <= :maxMonto)
+          AND (:etapaProcesal IS NULL OR o.etapaProcesal = :etapaProcesal)
         """)
     Page<Long> findClienteIdsConFiltros(
             @Param("estado") String estado,
@@ -59,6 +60,7 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
             @Param("maxMora") Integer maxMora,
             @Param("minMonto") BigDecimal minMonto,
             @Param("maxMonto") BigDecimal maxMonto,
+            @Param("etapaProcesal") String etapaProcesal,
             Pageable pageable
     );
 
@@ -76,6 +78,7 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
           AND (:maxMora IS NULL OR o.diasMora <= :maxMora)
           AND (:minMonto IS NULL OR o.montoTotal >= :minMonto)
           AND (:maxMonto IS NULL OR o.montoTotal <= :maxMonto)
+          AND (:etapaProcesal IS NULL OR o.etapaProcesal = :etapaProcesal)
         """)
     long countClienteIdsConFiltros(
             @Param("estado") String estado,
@@ -84,7 +87,8 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
             @Param("minMora") Integer minMora,
             @Param("maxMora") Integer maxMora,
             @Param("minMonto") BigDecimal minMonto,
-            @Param("maxMonto") BigDecimal maxMonto
+            @Param("maxMonto") BigDecimal maxMonto,
+            @Param("etapaProcesal") String etapaProcesal
     );
 
     /**
@@ -102,6 +106,7 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
           AND (:maxMora IS NULL OR o.diasMora <= :maxMora)
           AND (:minMonto IS NULL OR o.montoTotal >= :minMonto)
           AND (:maxMonto IS NULL OR o.montoTotal <= :maxMonto)
+          AND (:etapaProcesal IS NULL OR o.etapaProcesal = :etapaProcesal)
         """)
     List<Operacion> findByClienteIdConFiltros(
             @Param("clienteId") Long clienteId,
@@ -111,7 +116,8 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
             @Param("minMora") Integer minMora,
             @Param("maxMora") Integer maxMora,
             @Param("minMonto") BigDecimal minMonto,
-            @Param("maxMonto") BigDecimal maxMonto
+            @Param("maxMonto") BigDecimal maxMonto,
+            @Param("etapaProcesal") String etapaProcesal
     );
 
     /**
@@ -128,6 +134,7 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
           AND (:maxMora IS NULL OR o.diasMora <= :maxMora)
           AND (:minMonto IS NULL OR o.montoTotal >= :minMonto)
           AND (:maxMonto IS NULL OR o.montoTotal <= :maxMonto)
+          AND (:etapaProcesal IS NULL OR o.etapaProcesal = :etapaProcesal)
         """)
     long countByClienteIdConFiltros(
             @Param("clienteId") Long clienteId,
@@ -137,7 +144,8 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
             @Param("minMora") Integer minMora,
             @Param("maxMora") Integer maxMora,
             @Param("minMonto") BigDecimal minMonto,
-            @Param("maxMonto") BigDecimal maxMonto
+            @Param("maxMonto") BigDecimal maxMonto,
+            @Param("etapaProcesal") String etapaProcesal
     );
 
     /**
@@ -192,6 +200,26 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
             @Param("agenciaId") Long agenciaId,
             @Param("situacion") String situacion,
             @Param("busqueda") String busqueda,
+            Pageable pageable
+    );
+
+    /**
+     * Filtra operaciones por estadoCartera y etapaProcesal — usado para /cartera/estado-cartera.
+     */
+    @Query("""
+        SELECT o FROM Operacion o
+        JOIN FETCH o.cliente
+        LEFT JOIN FETCH o.agencia
+        WHERE o.activo = true
+          AND (:estadoCartera IS NULL OR o.estadoCartera = :estadoCartera)
+          AND (:etapaProcesal IS NULL OR o.etapaProcesal = :etapaProcesal)
+          AND (:agenciaId IS NULL OR o.agencia.id = :agenciaId)
+        ORDER BY o.cliente.nombreCompleto ASC, o.id ASC
+        """)
+    Page<Operacion> findByEstadoCarteraConFiltros(
+            @Param("estadoCartera") String estadoCartera,
+            @Param("etapaProcesal") String etapaProcesal,
+            @Param("agenciaId") Long agenciaId,
             Pageable pageable
     );
 

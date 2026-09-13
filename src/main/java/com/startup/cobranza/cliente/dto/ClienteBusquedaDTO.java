@@ -13,6 +13,7 @@ public class ClienteBusquedaDTO {
     private Integer maxMora;
     private BigDecimal minMonto;
     private BigDecimal maxMonto;
+    private String etapaProcesal;
 
     public ClienteBusquedaDTO() {}
 
@@ -34,11 +35,14 @@ public class ClienteBusquedaDTO {
     public void setMinMonto(BigDecimal minMonto) { this.minMonto = minMonto; }
     public BigDecimal getMaxMonto() { return maxMonto; }
     public void setMaxMonto(BigDecimal maxMonto) { this.maxMonto = maxMonto; }
+    public String getEtapaProcesal() { return etapaProcesal; }
+    public void setEtapaProcesal(String etapaProcesal) { this.etapaProcesal = etapaProcesal; }
 
     public boolean hasFiltrosAdicionales() {
         return estado != null || estadoCartera != null || etapa != null
                 || minMora != null || maxMora != null
-                || minMonto != null || maxMonto != null;
+                || minMonto != null || maxMonto != null
+                || etapaProcesal != null;
     }
 
     public static Builder builder() { return new Builder(); }
@@ -53,6 +57,7 @@ public class ClienteBusquedaDTO {
         private Integer maxMora;
         private BigDecimal minMonto;
         private BigDecimal maxMonto;
+        private String etapaProcesal;
 
         public Builder nombre(String v) { nombre = v; return this; }
         public Builder dni(String v) { dni = v; return this; }
@@ -63,6 +68,7 @@ public class ClienteBusquedaDTO {
         public Builder maxMora(Integer v) { maxMora = v; return this; }
         public Builder minMonto(BigDecimal v) { minMonto = v; return this; }
         public Builder maxMonto(BigDecimal v) { maxMonto = v; return this; }
+        public Builder etapaProcesal(String v) { etapaProcesal = v; return this; }
 
         public ClienteBusquedaDTO build() {
             ClienteBusquedaDTO dto = new ClienteBusquedaDTO();
@@ -75,6 +81,7 @@ public class ClienteBusquedaDTO {
             dto.setMaxMora(maxMora);
             dto.setMinMonto(minMonto);
             dto.setMaxMonto(maxMonto);
+            dto.setEtapaProcesal(etapaProcesal);
             return dto;
         }
     }

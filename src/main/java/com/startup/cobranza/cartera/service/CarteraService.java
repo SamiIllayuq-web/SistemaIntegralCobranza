@@ -282,6 +282,7 @@ public class CarteraService {
         LocalDate fechaDesembolso = getCellLocalDate(row, columns, "fechaDesembolso");
         BigDecimal importeDesembolso = getCellBigDecimal(row, columns, "importeDesembolso");
         String etapaProcesalTexto = getCellString(row, columns, "etapaProcesal");
+        String etapaProcesal = getCellString(row, columns, "etapaProcesal");
         String actoPendiente = getCellString(row, columns, "actoPendiente");
         LocalDate fechaUltimoEstadoProceso = getCellLocalDate(row, columns, "fechaUltimoEstadoProceso");
 
@@ -387,6 +388,7 @@ public class CarteraService {
                     .fechaDesembolso(fechaDesembolso)
                     .importeDesembolso(importeDesembolso)
                     .etapaProcesalTexto(etapaProcesalTexto)
+                    .etapaProcesal(etapaProcesal)
                     .actoPendiente(actoPendiente)
                     .fechaUltimoEstadoProceso(fechaUltimoEstadoProceso)
                     .zona(getCellString(row, columns, "zona"))
@@ -452,6 +454,7 @@ public class CarteraService {
             operacion.setFechaDesembolso(fechaDesembolso);
             operacion.setImporteDesembolso(importeDesembolso);
             operacion.setEtapaProcesalTexto(etapaProcesalTexto);
+            operacion.setEtapaProcesal(etapaProcesal);
             operacion.setActoPendiente(actoPendiente);
             operacion.setFechaUltimoEstadoProceso(fechaUltimoEstadoProceso);
             operacion.setZona(getCellString(row, columns, "zona"));

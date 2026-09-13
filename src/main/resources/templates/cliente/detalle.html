@@ -109,6 +109,7 @@
                                     <th class="text-center">Días Mora</th>
                                     <th>Estado</th>
                                     <th>Etapa</th>
+                                    <th>Etapa Procesal</th>
                                     <th>Bien Emb.</th>
                                     <th class="col-actions"></th>
                                 </tr>
@@ -129,6 +130,13 @@
                                         <span th:if="${op.etapa == 'JUDICIAL'}" class="badge badge-judicial">Judicial</span>
                                         <span th:if="${op.etapa == 'EXTRAJUDICIAL'}" class="badge badge-info">Extrajudicial</span>
                                         <span th:if="${op.etapa == null}" class="text-muted">—</span>
+                                    </td>
+                                    <td>
+                                        <span th:if="${op.etapaProcesal == 'POSTULATORIA'}" class="badge badge-judicial">Postulatoria</span>
+                                        <span th:if="${op.etapaProcesal == 'PROBATORIA'}" class="badge badge-info">Probatoria</span>
+                                        <span th:if="${op.etapaProcesal == 'RESOLUTORIA'}" class="badge badge-warning">Resolutoria</span>
+                                        <span th:if="${op.etapaProcesal == 'EJECUTORIA'}" class="badge badge-success">Ejecutoria</span>
+                                        <span th:if="${op.etapaProcesal == null or op.etapaProcesal == ''}" class="text-muted">—</span>
                                     </td>
                                     <td>
                                         <span th:if="${op.bienEmbargados != null and !#lists.isEmpty(op.bienEmbargados)}"

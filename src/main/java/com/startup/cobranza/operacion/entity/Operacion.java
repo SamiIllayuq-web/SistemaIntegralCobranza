@@ -210,6 +210,11 @@ public class Operacion {
     @Column(name = "etapa_procesal_texto")
     private String etapaProcesalTexto;
 
+    // ─── Etapa procesal del estado de cartera ──────────────────────────────
+    // Valores: POSTULATORIA, PROBATORIA, RESOLUTORIA, EJECUTORIA
+    @Column(name = "etapa_procesal")
+    private String etapaProcesal;
+
     // ─── Acto pendiente ───────────────────────────────────────────────
     @Column(name = "acto_pendiente", columnDefinition = "TEXT")
     private String actoPendiente;
@@ -430,6 +435,8 @@ public class Operacion {
     public void setEtapaProcesalTexto(String etapaProcesalTexto) { this.etapaProcesalTexto = etapaProcesalTexto; }
     public String getActoPendiente() { return actoPendiente; }
     public void setActoPendiente(String actoPendiente) { this.actoPendiente = actoPendiente; }
+    public String getEtapaProcesal() { return etapaProcesal; }
+    public void setEtapaProcesal(String etapaProcesal) { this.etapaProcesal = etapaProcesal; }
     public LocalDate getFechaUltimoEstadoProceso() { return fechaUltimoEstadoProceso; }
     public void setFechaUltimoEstadoProceso(LocalDate fechaUltimoEstadoProceso) { this.fechaUltimoEstadoProceso = fechaUltimoEstadoProceso; }
     public String getZona() { return zona; }
@@ -565,6 +572,7 @@ public class Operacion {
         private String tipoFondo;
         private String coTitularAval;
         private String numeroPartida;
+        private String etapaProcesal;
         public Builder trans(String v) { trans = v; return this; }
         public Builder busquedaBienes(String v) { busquedaBienes = v; return this; }
         public Builder montoDemandado(BigDecimal v) { montoDemandado = v; return this; }
@@ -607,6 +615,7 @@ public class Operacion {
         public Builder tipoFondo(String v) { tipoFondo = v; return this; }
         public Builder coTitularAval(String v) { coTitularAval = v; return this; }
         public Builder numeroPartida(String v) { numeroPartida = v; return this; }
+        public Builder etapaProcesal(String v) { etapaProcesal = v; return this; }
         public Builder numeroFichaRegistral(String v) { numeroFichaRegistral = v; return this; }
 
         public Operacion build() {
@@ -660,6 +669,7 @@ public class Operacion {
             o.setFechaDesembolso(fechaDesembolso);
             o.setImporteDesembolso(importeDesembolso);
             o.setEtapaProcesalTexto(etapaProcesalTexto);
+            o.setEtapaProcesal(etapaProcesal);
             o.setActoPendiente(actoPendiente);
             o.setFechaUltimoEstadoProceso(fechaUltimoEstadoProceso);
             o.setZona(zona);

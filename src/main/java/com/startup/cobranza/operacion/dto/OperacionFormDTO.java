@@ -35,6 +35,7 @@ public class OperacionFormDTO {
     private String fechaDesembolso;
     private String importeDesembolso;
     private String etapaProcesalTexto;
+    private String etapaProcesal;
     private String actoPendiente;
     private String fechaUltimoEstadoProceso;
     private String zona;
@@ -171,6 +172,8 @@ public class OperacionFormDTO {
     public void setImporteDesembolso(String importeDesembolso) { this.importeDesembolso = importeDesembolso; }
     public String getEtapaProcesalTexto() { return etapaProcesalTexto; }
     public void setEtapaProcesalTexto(String etapaProcesalTexto) { this.etapaProcesalTexto = etapaProcesalTexto; }
+    public String getEtapaProcesal() { return etapaProcesal; }
+    public void setEtapaProcesal(String etapaProcesal) { this.etapaProcesal = etapaProcesal; }
     public String getActoPendiente() { return actoPendiente; }
     public void setActoPendiente(String actoPendiente) { this.actoPendiente = actoPendiente; }
     public String getFechaUltimoEstadoProceso() { return fechaUltimoEstadoProceso; }
@@ -282,6 +285,7 @@ public class OperacionFormDTO {
         private String importeDesembolso;
         private String etapaProcesalTexto;
         private String actoPendiente;
+        private String etapaProcesal;
         private String fechaUltimoEstadoProceso;
         private String zona;
         private String departamento;
@@ -350,6 +354,7 @@ public class OperacionFormDTO {
         public Builder fechaDesembolso(String v) { fechaDesembolso = v; return this; }
         public Builder importeDesembolso(String v) { importeDesembolso = v; return this; }
         public Builder etapaProcesalTexto(String v) { etapaProcesalTexto = v; return this; }
+        public Builder etapaProcesal(String v) { etapaProcesal = v; return this; }
         public Builder actoPendiente(String v) { actoPendiente = v; return this; }
         public Builder fechaUltimoEstadoProceso(String v) { fechaUltimoEstadoProceso = v; return this; }
         public Builder zona(String v) { zona = v; return this; }
@@ -400,6 +405,7 @@ public class OperacionFormDTO {
             dto.setFechaDesembolso(fechaDesembolso);
             dto.setImporteDesembolso(importeDesembolso);
             dto.setEtapaProcesalTexto(etapaProcesalTexto);
+            dto.setEtapaProcesal(etapaProcesal);
             dto.setActoPendiente(actoPendiente);
             dto.setFechaUltimoEstadoProceso(fechaUltimoEstadoProceso);
             dto.setZona(zona);

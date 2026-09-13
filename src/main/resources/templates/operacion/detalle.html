@@ -105,6 +105,24 @@
                         <span class="info-label">Observación</span>
                         <span class="info-value" th:text="${operacion.observacion}">-</span>
                     </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 1B: ESTADO DE CARTERA -->
+        <div class="card animate-in" style="margin-top: 16px;">
+            <div class="card-header">Estado de Cartera</div>
+            <div class="card-body">
+                <div class="info-grid" style="grid-template-columns: 1fr 1fr;">
+                    <div class="info-item">
+                        <span class="info-label">Estado Cartera</span>
+                        <span class="info-value" th:text="${operacion.estadoCartera ?: '-'}">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Etapa Procesal</span>
+                        <span class="info-value" th:text="${operacion.etapaProcesal ?: '-'}">-</span>
+                    </div>
                 </div>
             </div>
         </div>

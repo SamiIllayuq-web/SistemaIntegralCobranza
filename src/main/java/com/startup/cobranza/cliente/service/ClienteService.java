@@ -125,6 +125,7 @@ public class ClienteService {
                 filtros.getMaxMora(),
                 filtros.getMinMonto(),
                 filtros.getMaxMonto(),
+                filtros.getEtapaProcesal(),
                 unsortedPageable
         );
 
@@ -193,7 +194,8 @@ public class ClienteService {
                 filtros.getMinMora(),
                 filtros.getMaxMora(),
                 filtros.getMinMonto(),
-                filtros.getMaxMonto()
+                filtros.getMaxMonto(),
+                filtros.getEtapaProcesal()
         );
         return buildBandejaDTO(cliente, ops);
     }

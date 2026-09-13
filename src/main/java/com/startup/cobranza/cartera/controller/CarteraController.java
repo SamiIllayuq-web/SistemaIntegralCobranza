@@ -87,4 +87,30 @@ public class CarteraController {
         model.addAttribute("agencias", agenciaRepository.findByActivoTrue());
         return "cartera/expedientes";
     }
+
+    @GetMapping("/estado-cartera")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SECRETARIO')")
+    public String estadoCartera(
+            @RequestParam(value = "estadoCartera", required = false) String estadoCartera,
+            @RequestParam(value = "etapaProcesal", required = false) String etapaProcesal,
+            @RequestParam(value = "agenciaId", required = false) Long agenciaId,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "50") int size,
+            Model model) {
+
+        size = Math.min(size, 200);
+        PageRequest pageable = PageRequest.of(page, size,
+                Sort.by("cliente.nombreCompleto").ascending()
+                    .and(Sort.by("id").ascending()));
+
+        Page<OperacionDTO> pagina = operacionService.listarPorEstadoCartera(
+                estadoCartera, etapaProcesal, agenciaId, pageable);
+
+        model.addAttribute("pagina", pagina);
+        model.addAttribute("estadoCartera", estadoCartera);
+        model.addAttribute("etapaProcesal", etapaProcesal);
+        model.addAttribute("agenciaId", agenciaId);
+        model.addAttribute("agencias", agenciaRepository.findByActivoTrue());
+        return "cartera/estado-cartera";
+    }
 }

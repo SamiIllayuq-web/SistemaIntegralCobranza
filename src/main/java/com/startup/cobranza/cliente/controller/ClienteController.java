@@ -57,6 +57,7 @@ public class ClienteController {
                           @RequestParam(required = false) Integer maxMora,
                           @RequestParam(required = false) BigDecimal minMonto,
                           @RequestParam(required = false) BigDecimal maxMonto,
+                          @RequestParam(required = false) String etapaProcesal,
                           Model model) {
 
         size = Math.min(size, 200); // cap para evitar queries enormes
@@ -71,6 +72,7 @@ public class ClienteController {
                 .maxMora(maxMora)
                 .minMonto(minMonto)
                 .maxMonto(maxMonto)
+                .etapaProcesal(etapaProcesal)
                 .build();
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("cliente.nombreCompleto").ascending());
