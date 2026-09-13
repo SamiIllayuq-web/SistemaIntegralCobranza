@@ -39,27 +39,30 @@
             <div class="card-body" style="display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap;">
                 <div>
                     <label class="form-label">Estado Cartera</label>
+                    <input type="hidden" name="estadoCartera" value="">
                     <select class="form-select" name="estadoCartera">
                         <option value="">Todos</option>
-                        <option value="ACTIVO" th:selected="${estadoCartera == 'ACTIVO'}">Activo</option>
-                        <option value="CANCELADA" th:selected="${estadoCartera == 'CANCELADA'}">Cancelada</option>
-                        <option value="DESASIGNADA" th:selected="${estadoCartera == 'DESASIGNADA'}">Desasignada</option>
-                        <option value="VENDIDA" th:selected="${estadoCartera == 'VENDIDA'}">Vendida</option>
-                        <option value="DEVUELTA" th:selected="${estadoCartera == 'DEVUELTA'}">Devuelta</option>
+                        <option value="ACTIVO" th:selected="${estadoCartera != null and estadoCartera == 'ACTIVO'}">Activo</option>
+                        <option value="CANCELADA" th:selected="${estadoCartera != null and estadoCartera == 'CANCELADA'}">Cancelada</option>
+                        <option value="DESASIGNADA" th:selected="${estadoCartera != null and estadoCartera == 'DESASIGNADA'}">Desasignada</option>
+                        <option value="VENDIDA" th:selected="${estadoCartera != null and estadoCartera == 'VENDIDA'}">Vendida</option>
+                        <option value="DEVUELTA" th:selected="${estadoCartera != null and estadoCartera == 'DEVUELTA'}">Devuelta</option>
                     </select>
                 </div>
                 <div>
                     <label class="form-label">Etapa Procesal</label>
+                    <input type="hidden" name="etapaProcesal" value="">
                     <select class="form-select" name="etapaProcesal">
                         <option value="">Todas</option>
-                        <option value="POSTULATORIA" th:selected="${etapaProcesal == 'POSTULATORIA'}">Postulatoria</option>
-                        <option value="PROBATORIA" th:selected="${etapaProcesal == 'PROBATORIA'}">Probatoria</option>
-                        <option value="RESOLUTORIA" th:selected="${etapaProcesal == 'RESOLUTORIA'}">Resolutoria</option>
-                        <option value="EJECUTORIA" th:selected="${etapaProcesal == 'EJECUTORIA'}">Ejecutoria</option>
+                        <option value="POSTULATORIA" th:selected="${etapaProcesal != null and etapaProcesal == 'POSTULATORIA'}">Postulatoria</option>
+                        <option value="PROBATORIA" th:selected="${etapaProcesal != null and etapaProcesal == 'PROBATORIA'}">Probatoria</option>
+                        <option value="RESOLUTORIA" th:selected="${etapaProcesal != null and etapaProcesal == 'RESOLUTORIA'}">Resolutoria</option>
+                        <option value="EJECUTORIA" th:selected="${etapaProcesal != null and etapaProcesal == 'EJECUTORIA'}">Ejecutoria</option>
                     </select>
                 </div>
                 <div>
                     <label class="form-label">Agencia</label>
+                    <input type="hidden" name="agenciaId" value="">
                     <select class="form-select" name="agenciaId">
                         <option value="">Todas</option>
                         <option th:each="a : ${agencias}" th:value="${a.id}" th:text="${a.nombre}" th:selected="${agenciaId != null and agenciaId == a.id}"></option>
@@ -127,17 +130,17 @@
             <div class="card-footer" th:if="${pagina.totalPages > 1}" style="display: flex; justify-content: center; padding: .75rem;">
                 <div class="pagination">
                     <a class="pagination-btn"
-                       th:href="@{/cartera/estado-cartera(page=${pagina.number - 1}, estadoCartera=${estadoCartera}, etapaProcesal=${etapaProcesal}, agenciaId=${agenciaId})}"
+                       th:href="@{/cartera/estado-cartera(page=${pagina.number - 1}, estadoCartera=${estadoCartera != null ? estadoCartera : ''}, etapaProcesal=${etapaProcesal != null ? etapaProcesal : ''}, agenciaId=${agenciaId != null ? agenciaId : ''})}"
                        th:classappend="${pagina.number == 0 ? 'disabled' : ''}">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
                     </a>
                     <a class="pagination-btn"
                        th:each="i : ${#numbers.sequence(0, pagina.totalPages - 1)}"
-                       th:href="@{/cartera/estado-cartera(page=${i}, estadoCartera=${estadoCartera}, etapaProcesal=${etapaProcesal}, agenciaId=${agenciaId})}"
+                       th:href="@{/cartera/estado-cartera(page=${i}, estadoCartera=${estadoCartera != null ? estadoCartera : ''}, etapaProcesal=${etapaProcesal != null ? etapaProcesal : ''}, agenciaId=${agenciaId != null ? agenciaId : ''})}"
                        th:text="${i + 1}"
                        th:classappend="${i == pagina.number ? 'active' : ''}"></a>
                     <a class="pagination-btn"
-                       th:href="@{/cartera/estado-cartera(page=${pagina.number + 1}, estadoCartera=${estadoCartera}, etapaProcesal=${etapaProcesal}, agenciaId=${agenciaId})}"
+                       th:href="@{/cartera/estado-cartera(page=${pagina.number + 1}, estadoCartera=${estadoCartera != null ? estadoCartera : ''}, etapaProcesal=${etapaProcesal != null ? etapaProcesal : ''}, agenciaId=${agenciaId != null ? agenciaId : ''})}"
                        th:classappend="${pagina.number == pagina.totalPages - 1 ? 'disabled' : ''}">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
                     </a>
