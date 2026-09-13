@@ -205,7 +205,6 @@ public class OperacionService {
         existing.setMoneda(form.getMoneda());
         existing.setSituacion(form.getSituacion());
         existing.setEstado(form.getEstado());
-        existing.setEtapa(form.getEtapa());
         existing.setObservacion(form.getObservacion());
         existing.setRango(form.getRango());
         existing.setAnalista(form.getAnalista());
@@ -320,10 +319,10 @@ public class OperacionService {
     }
 
     public Page<OperacionDTO> listarCarteraConFiltros(
-            Long agenciaId, String estado, String etapa,
+            Long agenciaId, String estado,
             String busqueda, Pageable pageable) {
         return operacionRepository.findCarteraConFiltros(
-                agenciaId, estado, etapa, busqueda, pageable)
+                agenciaId, estado, busqueda, pageable)
                 .map(operacionMapper::toDTO);
     }
 

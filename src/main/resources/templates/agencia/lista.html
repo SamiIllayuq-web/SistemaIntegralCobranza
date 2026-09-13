@@ -133,7 +133,6 @@
                                     <th>N° Operación</th>
                                     <th>N° Expediente</th>
                                     <th>Situación</th>
-                                    <th>Etapa</th>
                                     <th>Monto Total</th>
                                     <th class="col-actions">Acciones</th>
                                 </tr>
@@ -160,11 +159,6 @@
                                         <span th:if="${op.situacion != null}" class="badge badge-default"
                                               th:text="${op.situacion}">-</span>
                                         <span th:unless="${op.situacion != null}" class="text-muted">—</span>
-                                    </td>
-                                    <td>
-                                        <span th:if="${op.etapa != null}" class="badge badge-info"
-                                              th:text="${op.etapa}">-</span>
-                                        <span th:unless="${op.etapa != null}" class="text-muted">—</span>
                                     </td>
                                     <td>
                                         <span th:if="${op.montoTotal != null}"

@@ -69,13 +69,6 @@
                         </select>
                     </div>
                     <div>
-                        <label class="form-label">Etapa</label>
-                        <select name="etapa" class="form-select">
-                            <option value="">Todas</option>
-                            <option value="EXTRAJUDICIAL" th:selected="${filtros.etapa == 'EXTRAJUDICIAL'}">Extrajudicial</option>
-                            <option value="JUDICIAL" th:selected="${filtros.etapa == 'JUDICIAL'}">Judicial</option>
-                        </select>
-                    </div>
                     <div>
                         <label class="form-label">Mín. Mora</label>
                         <input type="number" name="minMora" class="form-control" th:value="${filtros.minMora}" placeholder="0">
@@ -110,7 +103,6 @@
                             <th>DNI</th>
                             <th>Nombre</th>
                             <th>Estado Cartera</th>
-                            <th>Etapa</th>
                             <th class="text-end">Monto Total</th>
                             <th>Agencias</th>
                             <th class="text-center">Ops.</th>
@@ -131,11 +123,6 @@
                                 <span th:if="${c.estadoCartera == 'VENDIDA'}" class="badge badge-info" th:text="${c.estadoCartera}">Vendida</span>
                                 <span th:if="${c.estadoCartera == 'DEVUELTA'}" class="badge badge-danger" th:text="${c.estadoCartera}">Devuelta</span>
                                 <span th:if="${c.estadoCartera == null}" class="text-muted">—</span>
-                            </td>
-                            <td>
-                                <span th:if="${c.etapa == 'JUDICIAL'}" class="badge badge-judicial" th:text="${c.etapa}">Judicial</span>
-                                <span th:if="${c.etapa == 'EXTRAJUDICIAL'}" class="badge badge-info" th:text="${c.etapa}">Extrajudicial</span>
-                                <span th:if="${c.etapa == null}" class="text-muted">—</span>
                             </td>
                             <td class="text-end">
                                 <span th:if="${c.montoTotal != null}"

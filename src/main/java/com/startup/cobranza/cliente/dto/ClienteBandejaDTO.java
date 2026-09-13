@@ -11,7 +11,6 @@ public class ClienteBandejaDTO {
     private List<String> agencias;
     private String estado;
     private String estadoCartera;
-    private String etapa;
     private BigDecimal montoTotal;
     private BigDecimal montoCapital;
     private long totalOperaciones;
@@ -20,7 +19,7 @@ public class ClienteBandejaDTO {
 
     public ClienteBandejaDTO(Long id, String dni, String nombreCompleto,
                              List<String> agencias,
-                             String estado, String etapa,
+                             String estado, String estadoCartera,
                              BigDecimal montoTotal, BigDecimal montoCapital,
                              long totalOperaciones) {
         this.id = id;
@@ -28,7 +27,7 @@ public class ClienteBandejaDTO {
         this.nombreCompleto = nombreCompleto;
         this.agencias = agencias;
         this.estado = estado;
-        this.etapa = etapa;
+        this.estadoCartera = estadoCartera;
         this.montoTotal = montoTotal;
         this.montoCapital = montoCapital;
         this.totalOperaciones = totalOperaciones;
@@ -46,8 +45,6 @@ public class ClienteBandejaDTO {
     public void setEstado(String estado) { this.estado = estado; }
     public String getEstadoCartera() { return estadoCartera; }
     public void setEstadoCartera(String estadoCartera) { this.estadoCartera = estadoCartera; }
-    public String getEtapa() { return etapa; }
-    public void setEtapa(String etapa) { this.etapa = etapa; }
     public BigDecimal getMontoTotal() { return montoTotal; }
     public void setMontoTotal(BigDecimal montoTotal) { this.montoTotal = montoTotal; }
     public BigDecimal getMontoCapital() { return montoCapital; }
@@ -61,10 +58,9 @@ public class ClienteBandejaDTO {
         private Long id;
         private String dni;
         private String nombreCompleto;
-            private List<String> agencias;
+        private List<String> agencias;
         private String estado;
         private String estadoCartera;
-        private String etapa;
         private BigDecimal montoTotal = BigDecimal.ZERO;
         private BigDecimal montoCapital = BigDecimal.ZERO;
         private long totalOperaciones;
@@ -75,14 +71,13 @@ public class ClienteBandejaDTO {
         public Builder agencias(List<String> v) { agencias = v; return this; }
         public Builder estado(String v) { estado = v; return this; }
         public Builder estadoCartera(String v) { estadoCartera = v; return this; }
-        public Builder etapa(String v) { etapa = v; return this; }
         public Builder montoTotal(BigDecimal v) { montoTotal = v; return this; }
         public Builder montoCapital(BigDecimal v) { montoCapital = v; return this; }
         public Builder totalOperaciones(long v) { totalOperaciones = v; return this; }
 
         public ClienteBandejaDTO build() {
             return new ClienteBandejaDTO(id, dni, nombreCompleto, agencias,
-                    estado, etapa, montoTotal, montoCapital, totalOperaciones);
+                    estado, estadoCartera, montoTotal, montoCapital, totalOperaciones);
         }
     }
 }

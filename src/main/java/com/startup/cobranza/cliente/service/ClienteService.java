@@ -32,7 +32,6 @@ public class ClienteService {
 
     private static final List<String> ESTADO_PRIORIDAD = List.of("VIGENTE", "VENCIDA", "PRESCRITA", "PAGADA");
     private static final List<String> ESTADO_CARTERA_PRIORIDAD = List.of("ACTIVO", "CANCELADA", "DESASIGNADA", "VENDIDA", "DEVUELTA");
-    private static final List<String> ETAPA_PRIORIDAD = List.of("JUDICIAL", "EXTRAJUDICIAL");
 
     private final ClienteRepository clienteRepository;
     private final OperacionRepository operacionRepository;
@@ -120,7 +119,6 @@ public class ClienteService {
         Page<Long> clienteIdsPage = operacionRepository.findClienteIdsConFiltros(
                 filtros.getEstado(),
                 filtros.getEstadoCartera(),
-                filtros.getEtapa(),
                 filtros.getMinMora(),
                 filtros.getMaxMora(),
                 filtros.getMinMonto(),
@@ -190,7 +188,6 @@ public class ClienteService {
                 cliente.getId(),
                 filtros.getEstado(),
                 filtros.getEstadoCartera(),
-                filtros.getEtapa(),
                 filtros.getMinMora(),
                 filtros.getMaxMora(),
                 filtros.getMinMonto(),
@@ -206,7 +203,6 @@ public class ClienteService {
         BigDecimal montoCapital = BigDecimal.ZERO;
         String peorEstado = null;
         String peorEstadoCartera = null;
-        String peorEtapa = null;
 
         for (Operacion op : ops) {
             if (op.getAgencia() != null && op.getAgencia().getNombre() != null) {
@@ -216,7 +212,6 @@ public class ClienteService {
             if (op.getMontoCapital() != null) montoCapital = montoCapital.add(op.getMontoCapital());
             if (op.getEstado() != null) peorEstado = priorize(peorEstado, op.getEstado(), ESTADO_PRIORIDAD);
             if (op.getEstadoCartera() != null) peorEstadoCartera = priorize(peorEstadoCartera, op.getEstadoCartera(), ESTADO_CARTERA_PRIORIDAD);
-            if (op.getEtapa() != null) peorEtapa = priorize(peorEtapa, op.getEtapa(), ETAPA_PRIORIDAD);
         }
 
         return ClienteBandejaDTO.builder()
@@ -226,7 +221,6 @@ public class ClienteService {
                 .agencias(List.copyOf(agencias))
                 .estado(peorEstado)
                 .estadoCartera(peorEstadoCartera)
-                .etapa(peorEtapa)
                 .montoTotal(montoTotal)
                 .montoCapital(montoCapital)
                 .totalOperaciones(ops.size())

@@ -36,7 +36,7 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
 
     /**
      * Busca operaciones activas con filtros. Se usa para la bandeja de clientes
-     * cuando hay filtros activos (estado, etapa, mora, monto).
+     * cuando hay filtros activos (estado, estadoCartera, mora, monto, etapaProcesal).
      * Retorna paginado los clienteIds únicos.
      */
     @Query("""
@@ -45,7 +45,6 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
         WHERE o.activo = true
           AND (:estado IS NULL OR o.estado = :estado)
           AND (:estadoCartera IS NULL OR o.estadoCartera = :estadoCartera)
-          AND (:etapa IS NULL OR o.etapa = :etapa)
           AND (:minMora IS NULL OR o.diasMora >= :minMora)
           AND (:maxMora IS NULL OR o.diasMora <= :maxMora)
           AND (:minMonto IS NULL OR o.montoTotal >= :minMonto)
@@ -55,7 +54,6 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
     Page<Long> findClienteIdsConFiltros(
             @Param("estado") String estado,
             @Param("estadoCartera") String estadoCartera,
-            @Param("etapa") String etapa,
             @Param("minMora") Integer minMora,
             @Param("maxMora") Integer maxMora,
             @Param("minMonto") BigDecimal minMonto,
@@ -73,7 +71,6 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
         WHERE o.activo = true
           AND (:estado IS NULL OR o.estado = :estado)
           AND (:estadoCartera IS NULL OR o.estadoCartera = :estadoCartera)
-          AND (:etapa IS NULL OR o.etapa = :etapa)
           AND (:minMora IS NULL OR o.diasMora >= :minMora)
           AND (:maxMora IS NULL OR o.diasMora <= :maxMora)
           AND (:minMonto IS NULL OR o.montoTotal >= :minMonto)
@@ -83,7 +80,6 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
     long countClienteIdsConFiltros(
             @Param("estado") String estado,
             @Param("estadoCartera") String estadoCartera,
-            @Param("etapa") String etapa,
             @Param("minMora") Integer minMora,
             @Param("maxMora") Integer maxMora,
             @Param("minMonto") BigDecimal minMonto,
@@ -101,7 +97,6 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
           AND o.activo = true
           AND (:estado IS NULL OR o.estado = :estado)
           AND (:estadoCartera IS NULL OR o.estadoCartera = :estadoCartera)
-          AND (:etapa IS NULL OR o.etapa = :etapa)
           AND (:minMora IS NULL OR o.diasMora >= :minMora)
           AND (:maxMora IS NULL OR o.diasMora <= :maxMora)
           AND (:minMonto IS NULL OR o.montoTotal >= :minMonto)
@@ -112,7 +107,6 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
             @Param("clienteId") Long clienteId,
             @Param("estado") String estado,
             @Param("estadoCartera") String estadoCartera,
-            @Param("etapa") String etapa,
             @Param("minMora") Integer minMora,
             @Param("maxMora") Integer maxMora,
             @Param("minMonto") BigDecimal minMonto,
@@ -129,7 +123,6 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
           AND o.activo = true
           AND (:estado IS NULL OR o.estado = :estado)
           AND (:estadoCartera IS NULL OR o.estadoCartera = :estadoCartera)
-          AND (:etapa IS NULL OR o.etapa = :etapa)
           AND (:minMora IS NULL OR o.diasMora >= :minMora)
           AND (:maxMora IS NULL OR o.diasMora <= :maxMora)
           AND (:minMonto IS NULL OR o.montoTotal >= :minMonto)
@@ -140,7 +133,6 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
             @Param("clienteId") Long clienteId,
             @Param("estado") String estado,
             @Param("estadoCartera") String estadoCartera,
-            @Param("etapa") String etapa,
             @Param("minMora") Integer minMora,
             @Param("maxMora") Integer maxMora,
             @Param("minMonto") BigDecimal minMonto,
@@ -158,7 +150,6 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
         WHERE o.activo = true
           AND (:agenciaId IS NULL OR o.agencia.id = :agenciaId)
           AND (:estado IS NULL OR o.estado = :estado)
-          AND (:etapa IS NULL OR o.etapa = :etapa)
           AND (:busqueda IS NULL OR (
               LOWER(o.cliente.nombreCompleto) LIKE LOWER(CONCAT('%', :busqueda, '%'))
               OR o.cliente.dni = :busqueda
@@ -170,7 +161,6 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
     Page<Operacion> findCarteraConFiltros(
             @Param("agenciaId") Long agenciaId,
             @Param("estado") String estado,
-            @Param("etapa") String etapa,
             @Param("busqueda") String busqueda,
             Pageable pageable
     );
