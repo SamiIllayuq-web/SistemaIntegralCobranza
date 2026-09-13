@@ -94,7 +94,6 @@
                             <th>Tipo Proceso</th>
                             <th>Distrito Judicial</th>
                             <th>Situación</th>
-                            <th>Abogado</th>
                             <th>Monto Total</th>
                             <th class="col-actions">Acciones</th>
                         </tr>
@@ -121,7 +120,6 @@
                                 <span class="badge badge-en-tramite" th:if="${op.situacion == 'En Tramite'}" th:text="${op.situacion}"></span>
                                 <span class="badge badge-default" th:if="${op.situacion != 'Judicial' and op.situacion != 'Castigada' and op.situacion != 'Finalizada' and op.situacion != 'En Tramite'}" th:text="${op.situacion}">-</span>
                             </td>
-                            <td th:text="${op.abogadoNombre}">-</td>
                             <td th:text="|${op.moneda} ${#numbers.formatDecimal(op.montoTotal, 1, 'COMMA', 2, 'POINT')}|">-</td>
                             <td class="col-actions">
                                 <a th:href="@{/operaciones/{id}(id=${op.id})}" class="btn-icon" title="Ver operación">
@@ -133,7 +131,7 @@
                             </td>
                         </tr>
                         <tr th:if="${pagina.content.isEmpty()}">
-                            <td colspan="10">
+                            <td colspan="9">
                                 <div class="empty-state">
                                     <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                                     <h3>Sin expedientes</h3>

@@ -68,15 +68,6 @@
                             <option value="DEVUELTA" th:selected="${filtros.estadoCartera == 'DEVUELTA'}">Devuelta</option>
                         </select>
                     </div>
-                    <div>
-                    <div>
-                        <label class="form-label">Mín. Mora</label>
-                        <input type="number" name="minMora" class="form-control" th:value="${filtros.minMora}" placeholder="0">
-                    </div>
-                    <div>
-                        <label class="form-label">Máx. Mora</label>
-                        <input type="number" name="maxMora" class="form-control" th:value="${filtros.maxMora}" placeholder="9999">
-                    </div>
                     <div style="display: flex; gap: .5rem; align-items: flex-end;">
                         <button type="submit" class="btn btn-primary" style="flex:1;">Filtrar</button>
                         <a th:href="@{/clientes}" class="btn btn-ghost">Limpiar</a>
