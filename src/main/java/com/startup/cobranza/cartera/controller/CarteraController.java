@@ -4,6 +4,8 @@ import com.startup.cobranza.agencia.repository.AgenciaRepository;
 import com.startup.cobranza.cartera.dto.ImportacionDTO;
 import com.startup.cobranza.cartera.exception.CarteraException;
 import com.startup.cobranza.cartera.service.CarteraService;
+import com.startup.cobranza.cliente.dto.ClienteExpedienteDTO;
+import com.startup.cobranza.cliente.service.ClienteService;
 import com.startup.cobranza.operacion.dto.OperacionDTO;
 import com.startup.cobranza.operacion.service.OperacionService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,7 @@ import java.util.List;
 public class CarteraController {
 
     private final CarteraService carteraService;
+    private final ClienteService clienteService;
     private final OperacionService operacionService;
     private final AgenciaRepository agenciaRepository;
 
@@ -66,28 +69,25 @@ public class CarteraController {
     @PreAuthorize("hasAnyRole('ADMIN', 'SECRETARIO')")
     public String expedientes(
             @RequestParam(value = "agenciaId", required = false) Long agenciaId,
-            @RequestParam(value = "situacion", required = false) String situacion,
             @RequestParam(value = "busqueda", required = false) String busqueda,
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "50") int size,
             Model model) {
 
-        // Sanitizar: string vacío del query params → null para que el filtro IS NULL funcione
+        // Sanitizar: string vacío del query params → null
         if (agenciaId != null && agenciaId == 0L) {
             agenciaId = null;
         }
 
-        log.debug("expedientes - agenciaId={}, situacion={}, busqueda={}", agenciaId, situacion, busqueda);
+        log.debug("expedientes - agenciaId={}, busqueda={}", agenciaId, busqueda);
 
         PageRequest pageable = PageRequest.of(page, size,
-                Sort.by("numeroExpediente").ascending()
-                    .and(Sort.by("cliente.nombreCompleto").ascending()));
-        Page<OperacionDTO> pagina = operacionService.listarExpedientes(
-                agenciaId, situacion, busqueda, pageable);
+                Sort.by("nombreCompleto").ascending());
+        Page<ClienteExpedienteDTO> pagina = clienteService.listarClientesConExpedientes(
+                agenciaId, busqueda, pageable);
 
         model.addAttribute("pagina", pagina);
         model.addAttribute("agenciaId", agenciaId != null ? agenciaId : "");
-        model.addAttribute("situacion", situacion != null ? situacion : "");
         model.addAttribute("busqueda", busqueda != null ? busqueda : "");
         model.addAttribute("agencias", agenciaRepository.findByActivoTrue());
         return "cartera/expedientes";

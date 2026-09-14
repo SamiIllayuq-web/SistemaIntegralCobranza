@@ -94,10 +94,15 @@
 
                 <!-- Operaciones -->
                 <div class="card animate-in stagger-2">
-                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
                         <span>Operaciones</span>
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <span class="badge badge-info" th:text="${operaciones.size()} + ' ops.'">0 ops.</span>
+                        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                            <!-- Filtro -->
+                            <div class="btn-group" style="display: flex; gap: 2px;">
+                                <button type="button" class="btn btn-ghost btn-sm filter-ops active" data-filter="todos">Todos</button>
+                                <button type="button" class="btn btn-ghost btn-sm filter-ops" data-filter="expediente">Con expediente</button>
+                            </div>
+                            <span class="badge badge-info" id="ops-count" th:text="${operaciones.size()} + ' ops.'">0 ops.</span>
                             <a th:href="@{/operaciones/nuevo(clienteId=${cliente.id})}"
                                class="btn btn-primary btn-sm"
                                sec:authorize="hasRole('ADMIN')">+ Sumar Operación</a>
@@ -107,6 +112,7 @@
                         <table class="data-table">
                             <thead>
                                 <tr>
+                                    <th>N° Expediente</th>
                                     <th>Agencia</th>
                                     <th>Cuenta</th>
                                     <th>N° Oper.</th>
@@ -120,7 +126,14 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr th:each="op : ${operaciones}">
+                                <tr th:each="op : ${operaciones}" th:data-expediente="${op.numeroExpediente != null and op.numeroExpediente != '' ? 'yes' : 'no'}">
+                                    <td>
+                                        <span th:if="${op.numeroExpediente != null and op.numeroExpediente != ''}"
+                                              th:text="${op.numeroExpediente}"
+                                              style="font-weight: 600;"></span>
+                                        <span th:if="${op.numeroExpediente == null or op.numeroExpediente == ''}"
+                                              class="text-muted">—</span>
+                                    </td>
                                     <td th:text="${op.agenciaNombre}">-</td>
                                     <td th:text="${op.cuenta}">-</td>
                                     <td th:text="${op.numeroOperacion}">-</td>
@@ -139,7 +152,7 @@
                                     <td>
                                         <span th:if="${op.etapaProcesal == 'POSTULATORIA'}" class="badge badge-judicial">Postulatoria</span>
                                         <span th:if="${op.etapaProcesal == 'PROBATORIA'}" class="badge badge-info">Probatoria</span>
-                                        <span th:if="${op.etapaProcesal == 'RESOLUTORIA'}" class="badge badge-warning">Resolutoria</span>
+                                        <span th:if="${op.etapaProcesal == 'RESOLUTORA'}" class="badge badge-warning">Resolutora</span>
                                         <span th:if="${op.etapaProcesal == 'EJECUTORIA'}" class="badge badge-success">Ejecutoria</span>
                                         <span th:if="${op.etapaProcesal == null or op.etapaProcesal == ''}" class="text-muted">—</span>
                                     </td>
@@ -204,5 +217,40 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const filterBtns = document.querySelectorAll('.filter-ops');
+    const rows = document.querySelectorAll('tr[data-expediente]');
+    const opsCount = document.getElementById('ops-count');
+
+    filterBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            filterBtns.forEach(function(b) { b.classList.remove('active'); });
+            this.classList.add('active');
+
+            const filter = this.dataset.filter;
+            let visible = 0;
+
+            rows.forEach(function(row) {
+                if (filter === 'todos') {
+                    row.style.display = '';
+                    visible++;
+                } else if (filter === 'expediente') {
+                    if (row.dataset.expediente === 'yes') {
+                        row.style.display = '';
+                        visible++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                }
+            });
+
+            if (opsCount) {
+                opsCount.textContent = visible + ' ops.';
+            }
+        });
+    });
+});
+</script>
 </body>
 </html>

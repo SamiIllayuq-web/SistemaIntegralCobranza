@@ -4,6 +4,7 @@ import com.startup.cobranza.auditoria.service.AuditoriaService;
 import com.startup.cobranza.cliente.dto.ClienteBandejaDTO;
 import com.startup.cobranza.cliente.dto.ClienteBusquedaDTO;
 import com.startup.cobranza.cliente.dto.ClienteDTO;
+import com.startup.cobranza.cliente.dto.ClienteExpedienteDTO;
 import com.startup.cobranza.cliente.dto.ClienteFormDTO;
 import com.startup.cobranza.cliente.entity.Cliente;
 import com.startup.cobranza.cliente.exception.ClienteException;
@@ -354,5 +355,13 @@ public class ClienteService {
                             .build();
                     return clienteMapper.toDTO(clienteRepository.save(nuevo));
                 });
+    }
+
+    /**
+     * Lista de clientes que tienen al menos una operación con número de expediente.
+     * Para la vista /cartera/expedientes — muestra Judicial N / Castigada N por cliente.
+     */
+    public Page<ClienteExpedienteDTO> listarClientesConExpedientes(Long agenciaId, String busqueda, Pageable pageable) {
+        return clienteRepository.findClientesConExpedientes(agenciaId, busqueda, pageable);
     }
 }
