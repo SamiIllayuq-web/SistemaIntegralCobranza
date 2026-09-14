@@ -369,6 +369,23 @@ public class ClienteService {
      */
     @Transactional(readOnly = true)
     public Page<ClienteExpedienteDTO> listarClientesConExpedientes(Long agenciaId, String busqueda, Pageable pageable) {
+        StringBuilder where = new StringBuilder("""
+            WHERE c.activo = true
+              AND o.activo = true
+              AND o.numero_expediente IS NOT NULL
+              AND o.numero_expediente <> ''
+            """);
+
+        if (agenciaId != null) {
+            where.append(" AND o.agencia_id = ").append(agenciaId);
+        }
+
+        if (busqueda != null && !busqueda.isBlank()) {
+            String like = "'%" + busqueda.toLowerCase() + "%'";
+            where.append(" AND (LOWER(c.nombre_completo) LIKE ").append(like)
+                 .append(" OR c.dni = '").append(busqueda).append("')");
+        }
+
         String select = """
             SELECT c.id,
                    c.nombre_completo,
@@ -381,35 +398,14 @@ public class ClienteService {
             FROM operaciones o
             JOIN clientes c ON c.id = o.cliente_id
             LEFT JOIN agencias a ON a.id = o.agencia_id
-            WHERE c.activo = true
-              AND o.activo = true
-              AND o.numero_expediente IS NOT NULL
-              AND o.numero_expediente <> ''
-              AND (:agenciaId IS NULL OR o.agencia_id = :agenciaId)
-              AND (:busqueda IS NULL
-                   OR LOWER(c.nombre_completo) LIKE LOWER(CONCAT('%', :busqueda, '%'))
-                   OR c.dni = :busqueda)
+            """
+            + where +
+            """
             GROUP BY c.id, c.nombre_completo, c.dni, o.agencia_id, a.nombre
             ORDER BY c.nombre_completo ASC
             """;
 
-        String count = """
-            SELECT COUNT(DISTINCT c.id)
-            FROM operaciones o
-            JOIN clientes c ON c.id = o.cliente_id
-            WHERE c.activo = true
-              AND o.activo = true
-              AND o.numero_expediente IS NOT NULL
-              AND o.numero_expediente <> ''
-              AND (:agenciaId IS NULL OR o.agencia_id = :agenciaId)
-              AND (:busqueda IS NULL
-                   OR LOWER(c.nombre_completo) LIKE LOWER(CONCAT('%', :busqueda, '%'))
-                   OR c.dni = :busqueda)
-            """;
-
         jakarta.persistence.Query emQuery = entityManager.createNativeQuery(select);
-        emQuery.setParameter("agenciaId", agenciaId);
-        emQuery.setParameter("busqueda", busqueda);
         emQuery.setFirstResult((int) pageable.getOffset());
         emQuery.setMaxResults(pageable.getPageSize());
 
@@ -428,9 +424,14 @@ public class ClienteService {
                 .build()
         ).collect(Collectors.toList());
 
+        String count = """
+            SELECT COUNT(DISTINCT c.id)
+            FROM operaciones o
+            JOIN clientes c ON c.id = o.cliente_id
+            """
+            + where;
+
         jakarta.persistence.Query countQuery = entityManager.createNativeQuery(count);
-        countQuery.setParameter("agenciaId", agenciaId);
-        countQuery.setParameter("busqueda", busqueda);
         long total = ((Number) countQuery.getSingleResult()).longValue();
 
         return new PageImpl<>(dtos, pageable, total);
