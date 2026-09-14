@@ -40,9 +40,6 @@
                 <a th:href="@{/cartera/actividad}"
                    class="btn btn-sm"
                    th:classappend="${tipoFiltro == null} ? 'btn-primary' : 'btn-ghost'">Todos</a>
-                <a th:href="@{/cartera/actividad(tipo=CLIENTE_CREADO)}"
-                   class="btn btn-sm"
-                   th:classappend="${tipoFiltro == 'CLIENTE_CREADO'} ? 'btn-primary' : 'btn-ghost'">Clientes Creados</a>
                 <a th:href="@{/cartera/actividad(tipo=CLIENTE_ELIMINADO)}"
                    class="btn btn-sm"
                    th:classappend="${tipoFiltro == 'CLIENTE_ELIMINADO'} ? 'btn-primary' : 'btn-ghost'">Clientes Eliminados</a>
@@ -70,7 +67,6 @@
                                 <span th:text="${#temporals.format(a.fecha, 'yyyy-MM-dd HH:mm:ss')}">-</span>
                             </td>
                             <td>
-                                <span th:if="${a.tipo == 'CLIENTE_CREADO'}" class="badge badge-success">Cliente Creado</span>
                                 <span th:if="${a.tipo == 'CLIENTE_ELIMINADO'}" class="badge badge-danger">Cliente Eliminado</span>
                                 <span th:if="${a.tipo == 'OPERACION_ELIMINADA'}" class="badge badge-warning">Operación Eliminada</span>
                             </td>
