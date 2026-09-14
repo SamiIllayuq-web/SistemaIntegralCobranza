@@ -102,7 +102,7 @@
                                 <button type="button" class="btn btn-ghost btn-sm filter-ops active" data-filter="todos">Todos</button>
                                 <button type="button" class="btn btn-ghost btn-sm filter-ops" data-filter="expediente">Con expediente</button>
                             </div>
-                            <span class="badge badge-info" id="ops-count" th:text="${operaciones.size()} + ' ops.'">0 ops.</span>
+                            <span class="badge badge-info" id="ops-count">0 ops.</span>
                             <a th:href="@{/operaciones/nuevo(clienteId=${cliente.id})}"
                                class="btn btn-primary btn-sm"
                                sec:authorize="hasRole('ADMIN')">+ Sumar Operación</a>
