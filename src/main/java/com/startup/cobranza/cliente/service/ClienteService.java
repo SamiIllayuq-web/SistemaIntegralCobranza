@@ -29,6 +29,9 @@ import java.util.Set;
 import java.util.LinkedHashSet;
 import java.util.stream.Collectors;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
 @Service
 public class ClienteService {
 
@@ -39,6 +42,9 @@ public class ClienteService {
     private final OperacionRepository operacionRepository;
     private final ClienteMapper clienteMapper;
     private final AuditoriaService auditoriaService;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public ClienteService(ClienteRepository clienteRepository,
                           OperacionRepository operacionRepository,
@@ -361,7 +367,72 @@ public class ClienteService {
      * Lista de clientes que tienen al menos una operación con número de expediente.
      * Para la vista /cartera/expedientes — muestra Judicial N / Castigada N por cliente.
      */
+    @Transactional(readOnly = true)
     public Page<ClienteExpedienteDTO> listarClientesConExpedientes(Long agenciaId, String busqueda, Pageable pageable) {
-        return clienteRepository.findClientesConExpedientes(agenciaId, busqueda, pageable);
+        String select = """
+            SELECT c.id,
+                   c.nombre_completo,
+                   c.dni,
+                   o.agencia_id,
+                   a.nombre,
+                   SUM(CASE WHEN o.situacion = 'Judicial' THEN 1 ELSE 0 END),
+                   SUM(CASE WHEN o.situacion = 'Castigada' THEN 1 ELSE 0 END),
+                   COUNT(o.id)
+            FROM operaciones o
+            JOIN clientes c ON c.id = o.cliente_id
+            LEFT JOIN agencias a ON a.id = o.agencia_id
+            WHERE c.activo = true
+              AND o.activo = true
+              AND o.numero_expediente IS NOT NULL
+              AND o.numero_expediente <> ''
+              AND (:agenciaId IS NULL OR o.agencia_id = :agenciaId)
+              AND (:busqueda IS NULL
+                   OR LOWER(c.nombre_completo) LIKE LOWER(CONCAT('%', :busqueda, '%'))
+                   OR c.dni = :busqueda)
+            GROUP BY c.id, c.nombre_completo, c.dni, o.agencia_id, a.nombre
+            ORDER BY c.nombre_completo ASC
+            """;
+
+        String count = """
+            SELECT COUNT(DISTINCT c.id)
+            FROM operaciones o
+            JOIN clientes c ON c.id = o.cliente_id
+            WHERE c.activo = true
+              AND o.activo = true
+              AND o.numero_expediente IS NOT NULL
+              AND o.numero_expediente <> ''
+              AND (:agenciaId IS NULL OR o.agencia_id = :agenciaId)
+              AND (:busqueda IS NULL
+                   OR LOWER(c.nombre_completo) LIKE LOWER(CONCAT('%', :busqueda, '%'))
+                   OR c.dni = :busqueda)
+            """;
+
+        jakarta.persistence.Query emQuery = entityManager.createNativeQuery(select);
+        emQuery.setParameter("agenciaId", agenciaId);
+        emQuery.setParameter("busqueda", busqueda);
+        emQuery.setFirstResult((int) pageable.getOffset());
+        emQuery.setMaxResults(pageable.getPageSize());
+
+        @SuppressWarnings("unchecked")
+        List<Object[]> rows = emQuery.getResultList();
+        List<ClienteExpedienteDTO> dtos = rows.stream().map(row ->
+            ClienteExpedienteDTO.builder()
+                .clienteId(((Number) row[0]).longValue())
+                .nombreCompleto((String) row[1])
+                .dni((String) row[2])
+                .agenciaId(row[3] != null ? ((Number) row[3]).longValue() : null)
+                .agenciaNombre((String) row[4])
+                .judiciales(((Number) row[5]).longValue())
+                .castigadas(((Number) row[6]).longValue())
+                .total(((Number) row[7]).longValue())
+                .build()
+        ).collect(Collectors.toList());
+
+        jakarta.persistence.Query countQuery = entityManager.createNativeQuery(count);
+        countQuery.setParameter("agenciaId", agenciaId);
+        countQuery.setParameter("busqueda", busqueda);
+        long total = ((Number) countQuery.getSingleResult()).longValue();
+
+        return new PageImpl<>(dtos, pageable, total);
     }
 }
