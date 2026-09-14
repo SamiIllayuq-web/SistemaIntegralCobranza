@@ -316,10 +316,9 @@ public class OperacionService {
 
     @Transactional
     public void eliminar(Long id) {
-        Operacion op = operacionRepository.findById(id)
+        Operacion op = operacionRepository.findByIdWithBienes(id)
                 .orElseThrow(() -> new OperacionException("Operacion no encontrada"));
-        op.setActivo(false);
-        operacionRepository.save(op);
+        operacionRepository.delete(op);
     }
 
     private java.time.LocalDate parseFecha(String fecha) {

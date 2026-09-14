@@ -345,8 +345,12 @@ public class ClienteService {
     public void eliminar(Long id) {
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new ClienteException("Cliente no encontrado con id: " + id));
-        cliente.setActivo(false);
-        clienteRepository.save(cliente);
+        // cascade: borrar operaciones del cliente (los bienes se borran por orphanRemoval)
+        List<Operacion> ops = operacionRepository.findByClienteIdAndActivoTrue(cliente.getId());
+        for (Operacion op : ops) {
+            operacionRepository.delete(op);
+        }
+        clienteRepository.delete(cliente);
     }
 
     @Transactional

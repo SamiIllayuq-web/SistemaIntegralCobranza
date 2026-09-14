@@ -124,4 +124,22 @@ public class OperacionController {
             return "operacion/formulario";
         }
     }
+
+    @PostMapping("/eliminar/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String eliminar(@PathVariable Long id,
+                          RedirectAttributes redirectAttrs,
+                          HttpServletRequest request) {
+        try {
+            operacionService.eliminar(id);
+            redirectAttrs.addFlashAttribute("success", "Operación eliminada");
+        } catch (OperacionException e) {
+            redirectAttrs.addFlashAttribute("error", e.getMessage());
+        }
+        String referer = request.getHeader("Referer");
+        if (referer != null && referer.contains("/clientes/")) {
+            return "redirect:" + referer;
+        }
+        return "redirect:/operaciones/" + id;
+    }
 }
