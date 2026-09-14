@@ -31,13 +31,13 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long>, JpaSpec
     /**
      * Clientes que tienen al menos una operación con número de expediente.
      * Retorna DTOs con conteos Judicial / Castigada por cliente.
-     * Filtra por agencia y búsqueda (nombre, DNI del cliente).
+     * Filtra por agencia (del expediente) y búsqueda (nombre, DNI del cliente).
      */
     @Query(value = """
         SELECT c.id AS clienteId,
                c.nombre_completo AS nombreCompleto,
                c.dni AS dni,
-               c.agencia_id AS agenciaId,
+               o.agencia_id AS agenciaId,
                a.nombre AS agenciaNombre,
                COUNT(CASE WHEN o.situacion = 'Judicial' THEN 1 END) AS judiciales,
                COUNT(CASE WHEN o.situacion = 'Castigada' THEN 1 END) AS castigadas,
@@ -45,13 +45,13 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long>, JpaSpec
         FROM clientes c
         JOIN operaciones o ON o.cliente_id = c.id AND o.activo = true
                AND o.numero_expediente IS NOT NULL AND o.numero_expediente <> ''
-        LEFT JOIN agencias a ON a.id = c.agencia_id
+        LEFT JOIN agencias a ON a.id = o.agencia_id
         WHERE c.activo = true
-          AND (:agenciaId IS NULL OR c.agencia_id = :agenciaId)
+          AND (:agenciaId IS NULL OR o.agencia_id = :agenciaId)
           AND (:busqueda IS NULL
                OR LOWER(c.nombre_completo) LIKE LOWER(CONCAT('%', :busqueda, '%'))
                OR c.dni = :busqueda)
-        GROUP BY c.id, c.nombre_completo, c.dni, c.agencia_id, a.nombre
+        GROUP BY c.id, c.nombre_completo, c.dni, o.agencia_id, a.nombre
         ORDER BY c.nombre_completo ASC
         """,
         countQuery = """
@@ -60,7 +60,7 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long>, JpaSpec
         JOIN operaciones o ON o.cliente_id = c.id AND o.activo = true
                AND o.numero_expediente IS NOT NULL AND o.numero_expediente <> ''
         WHERE c.activo = true
-          AND (:agenciaId IS NULL OR c.agencia_id = :agenciaId)
+          AND (:agenciaId IS NULL OR o.agencia_id = :agenciaId)
           AND (:busqueda IS NULL
                OR LOWER(c.nombre_completo) LIKE LOWER(CONCAT('%', :busqueda, '%'))
                OR c.dni = :busqueda)
