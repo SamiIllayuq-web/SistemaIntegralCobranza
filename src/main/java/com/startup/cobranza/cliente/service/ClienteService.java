@@ -299,8 +299,10 @@ public class ClienteService {
 
     @Transactional
     public ClienteDTO crear(ClienteFormDTO form) {
+        log.error(">>> ENTRANDO A crear()");
         Cliente cliente = clienteMapper.toEntityFromForm(form);
         Cliente saved = clienteRepository.save(cliente);
+        log.error(">>> CLIENTE GUARDADO id={}", saved.getId());
         ActividadSistema actividad = new ActividadSistema(
                 "CLIENTE_CREADO",
                 saved.getId(),
@@ -310,6 +312,7 @@ public class ClienteService {
         );
         log.error(">>> SAVE CLIENTE_CREADO: id={}, nombre={}", saved.getId(), saved.getNombreCompleto());
         actividadSistemaRepository.save(actividad);
+        log.error(">>> ACTIVIDAD GUARDADA OK");
         return clienteMapper.toDTO(saved);
     }
 
