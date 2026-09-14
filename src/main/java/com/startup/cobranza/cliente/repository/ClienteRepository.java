@@ -46,16 +46,14 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long>, JpaSpec
             COUNT(o)
         )
         FROM Operacion o
-        JOIN o.cliente c
-        LEFT JOIN o.agencia
-        WHERE c.activo = true
+        WHERE o.cliente.activo = true
           AND o.activo = true
           AND o.numeroExpediente IS NOT NULL
           AND o.numeroExpediente <> ''
           AND (:agenciaId IS NULL OR o.agencia.id = :agenciaId)
           AND (:busqueda IS NULL
-               OR LOWER(c.nombreCompleto) LIKE LOWER(CONCAT('%', :busqueda, '%'))
-               OR c.dni = :busqueda)
+               OR LOWER(o.cliente.nombreCompleto) LIKE LOWER(CONCAT('%', :busqueda, '%'))
+               OR o.cliente.dni = :busqueda)
         GROUP BY o.cliente.id, o.cliente.nombreCompleto, o.cliente.dni, o.agencia.id, o.agencia.nombre
         ORDER BY o.cliente.nombreCompleto ASC
         """)
