@@ -96,7 +96,12 @@
                 <div class="card animate-in stagger-2">
                     <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
                         <span>Operaciones</span>
-                        <span class="badge badge-info" th:text="${operaciones.size()} + ' ops.'">0 ops.</span>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span class="badge badge-info" th:text="${operaciones.size()} + ' ops.'">0 ops.</span>
+                            <a th:href="@{/operaciones/nuevo(clienteId=${cliente.id})}"
+                               class="btn btn-primary btn-sm"
+                               sec:authorize="hasRole('ADMIN')">+ Sumar Operación</a>
+                        </div>
                     </div>
                     <div class="card-body p-0" th:if="${!#lists.isEmpty(operaciones)}">
                         <table class="data-table">

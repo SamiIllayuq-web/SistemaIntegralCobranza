@@ -2,6 +2,9 @@ package com.startup.cobranza.operacion.controller;
 
 import com.startup.cobranza.agencia.repository.AgenciaRepository;
 import com.startup.cobranza.cartera.service.CarteraService;
+import com.startup.cobranza.cliente.dto.ClienteDTO;
+import com.startup.cobranza.cliente.exception.ClienteException;
+import com.startup.cobranza.cliente.service.ClienteService;
 import com.startup.cobranza.operacion.dto.OperacionDTO;
 import com.startup.cobranza.operacion.dto.OperacionFormDTO;
 import com.startup.cobranza.operacion.exception.OperacionException;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,15 +32,18 @@ public class OperacionController {
     private final OperacionMapper operacionMapper;
     private final AgenciaRepository agenciaRepository;
     private final CarteraService carteraService;
+    private final ClienteService clienteService;
 
     public OperacionController(OperacionService operacionService,
                                OperacionMapper operacionMapper,
                                AgenciaRepository agenciaRepository,
-                               CarteraService carteraService) {
+                               CarteraService carteraService,
+                               ClienteService clienteService) {
         this.operacionService = operacionService;
         this.operacionMapper = operacionMapper;
         this.agenciaRepository = agenciaRepository;
         this.carteraService = carteraService;
+        this.clienteService = clienteService;
     }
 
     @GetMapping("/{id}")
@@ -52,8 +59,24 @@ public class OperacionController {
 
     @GetMapping("/nuevo")
     @PreAuthorize("hasRole('ADMIN')")
-    public String nuevoForm(Model model) {
-        model.addAttribute("operacionForm", new OperacionFormDTO());
+    public String nuevoForm(
+            @RequestParam(value = "clienteId", required = false) Long clienteId,
+            Model model) {
+        OperacionFormDTO form = new OperacionFormDTO();
+        if (clienteId != null) {
+            try {
+                ClienteDTO cliente = clienteService.obtenerPorId(clienteId);
+                form.setClienteId(cliente.getId());
+                form.setNombreCliente(cliente.getNombreCompleto());
+                form.setDni(cliente.getDni());
+                form.setTelefono(cliente.getTelefono());
+                form.setEmail(cliente.getEmail());
+                form.setDireccion(cliente.getDireccion());
+            } catch (ClienteException e) {
+                // cliente no existe, se crea vacío
+            }
+        }
+        model.addAttribute("operacionForm", form);
         model.addAttribute("operacionId", null);
         model.addAttribute("agencias", agenciaRepository.findByActivoTrue());
         model.addAttribute("soloLectura", false);
