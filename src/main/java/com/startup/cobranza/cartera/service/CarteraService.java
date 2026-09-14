@@ -388,8 +388,8 @@ public class CarteraService {
                     .etapaProcesalTexto(etapaProcesalTexto)
                     .etapaProcesal(etapaProcesal)
                     .actoPendiente(actoPendiente)
-                    .fechaUltimoEstadoProceso(fechaUltimoEstadoProceso))
-                    .departamento(getCellString(row, columns, "departamento")))))))
+                    .fechaUltimoEstadoProceso(fechaUltimoEstadoProceso)
+                    .departamento(getCellString(row, columns, "departamento"))
                     .montoAprobado(getCellBigDecimal(row, columns, "montoAprobado"))
                     .fechaAceptacionDemanda(getCellLocalDate(row, columns, "fechaAceptacionDemanda"))
                     .fechaEnvioJudicial(getCellLocalDate(row, columns, "fechaEnvioJudicial"))
@@ -406,7 +406,6 @@ public class CarteraService {
         } else {
             // Actualizar montos y datos operativos
             operacion.setAgencia(agencia);
-            operacion.setAnalistaSenior(analistaSenior);
             if (moneda != null) operacion.setMoneda(moneda);
             operacion.setMontoCapital(getCellBigDecimal(row, columns, "montoCapital"));
             operacion.setMontoTotal(getCellBigDecimal(row, columns, "montoTotal"));
@@ -448,11 +447,6 @@ public class CarteraService {
             operacion.setEtapaProcesal(etapaProcesal);
             operacion.setActoPendiente(actoPendiente);
             operacion.setFechaUltimoEstadoProceso(fechaUltimoEstadoProceso);
-            operacion.setZona(getCellString(row, columns, "zona"));
-            operacion.setDepartamento(getCellString(row, columns, "departamento"));
-            operacion.setProvincia(getCellString(row, columns, "provincia"));
-            operacion.setDistrito(getCellString(row, columns, "distrito"));
-            operacion.setReferencia(getCellString(row, columns, "referencia"));
             operacion.setMontoAprobado(getCellBigDecimal(row, columns, "montoAprobado"));
             operacion.setFechaAceptacionDemanda(getCellLocalDate(row, columns, "fechaAceptacionDemanda"));
             operacion.setFechaEnvioJudicial(getCellLocalDate(row, columns, "fechaEnvioJudicial"));
