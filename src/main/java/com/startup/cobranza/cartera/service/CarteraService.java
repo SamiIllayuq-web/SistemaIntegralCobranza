@@ -348,8 +348,6 @@ public class CarteraService {
                     .agencia(agencia)
                     .cuenta(cuenta.trim())
                     .numeroOperacion(numeroOperacion.trim())
-                    .analista(analista)
-                    .analistaSenior(analistaSenior)
                     .moneda(moneda != null ? moneda : "PEN")
                     .montoCapital(getCellBigDecimal(row, columns, "montoCapital"))
                     .montoTotal(getCellBigDecimal(row, columns, "montoTotal"))
@@ -390,14 +388,8 @@ public class CarteraService {
                     .etapaProcesalTexto(etapaProcesalTexto)
                     .etapaProcesal(etapaProcesal)
                     .actoPendiente(actoPendiente)
-                    .fechaUltimoEstadoProceso(fechaUltimoEstadoProceso)
-                    .zona(getCellString(row, columns, "zona"))
-                    .departamento(getCellString(row, columns, "departamento"))
-                    .provincia(getCellString(row, columns, "provincia"))
-                    .distrito(getCellString(row, columns, "distrito"))
-                    .direccion(getCellString(row, columns, "direccion"))
-                    .referencia(getCellString(row, columns, "referencia"))
-                    .telefono(getCellString(row, columns, "telefono"))
+                    .fechaUltimoEstadoProceso(fechaUltimoEstadoProceso))
+                    .departamento(getCellString(row, columns, "departamento")))))))
                     .montoAprobado(getCellBigDecimal(row, columns, "montoAprobado"))
                     .fechaAceptacionDemanda(getCellLocalDate(row, columns, "fechaAceptacionDemanda"))
                     .fechaEnvioJudicial(getCellLocalDate(row, columns, "fechaEnvioJudicial"))
@@ -414,7 +406,6 @@ public class CarteraService {
         } else {
             // Actualizar montos y datos operativos
             operacion.setAgencia(agencia);
-            operacion.setAnalista(analista);
             operacion.setAnalistaSenior(analistaSenior);
             if (moneda != null) operacion.setMoneda(moneda);
             operacion.setMontoCapital(getCellBigDecimal(row, columns, "montoCapital"));
@@ -482,9 +473,7 @@ public class CarteraService {
                     .operacion(operacion)
                     .detalleGarantia(getCellString(row, columns, "detalleBien"))
                     .partidaRegistral(getCellString(row, columns, "numeroPartida"))
-                    .tipoBien(getCellString(row, columns, "tipoBien"))
-                    .direccion(getCellString(row, columns, "direccionInmueble"))
-                    .distrito(getCellString(row, columns, "distritoInmueble"))
+                    .tipoBien(getCellString(row, columns, "tipoBien"))))
                     .rango(getCellString(row, columns, "rango"))
                     .tipoPreferencia(getCellString(row, columns, "tipoPreferencia"))
                     .montoMc(getCellBigDecimal(row, columns, "montoMc"))
