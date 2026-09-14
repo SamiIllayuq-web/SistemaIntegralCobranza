@@ -79,7 +79,7 @@ public class CarteraService {
                 "No se pudo cargar el perfil de import: " + path + " — " + e.getMessage(), e);
         }
         String dateFormat = perfilJson.has("dateFormat") ? perfilJson.get("dateFormat").asText() : "dd/MM/yyyy";
-        this.dateFormatter = DateTimeFormatter.ofPattern(dateFormat);
+        this.dateFormatter = DateTimeFormatter.ofPattern(dateFormat.replace("MM", "M").replace("dd", "d"));
         this.perfilActual = path;
     }
 
