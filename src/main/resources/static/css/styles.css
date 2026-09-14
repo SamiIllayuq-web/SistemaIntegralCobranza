@@ -115,6 +115,29 @@ body {
     justify-content: center;
 }
 
+/* Botón flotante para expandir el sidebar */
+.sidebar-expand-btn {
+    display: none;
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 1000;
+    background: var(--color-sidebar-bg);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.sidebar-expand-btn:hover {
+    background: var(--color-surface-2);
+    color: var(--color-text);
+}
+body.sidebar-collapsed .sidebar-expand-btn {
+    display: flex;
+}
+
 .sidebar-header {
     display: flex;
     align-items: center;

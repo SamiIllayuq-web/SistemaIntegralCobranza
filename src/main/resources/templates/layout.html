@@ -22,7 +22,7 @@
             </svg>
             <span class="sidebar-title">SIC</span>
         </div>
-        <button class="sidebar-toggle" onclick="toggleSidebar()" title="Colapsar">
+        <button class="sidebar-toggle" onclick="toggleSidebar()" title="Colapsar" id="sidebar-toggle">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="3" y1="12" x2="21" y2="12"/>
                 <line x1="3" y1="6" x2="21" y2="6"/>
@@ -30,6 +30,15 @@
             </svg>
         </button>
     </div>
+
+    <!-- Botón flotante para expandir (visible solo cuando está colapsado) -->
+    <button class="sidebar-expand-btn" onclick="toggleSidebar()" title="Expandir" id="sidebar-expand-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+    </button>
 
     <nav class="sidebar-nav">
         <!-- Inicio -->
@@ -173,7 +182,9 @@ function toggleTheme() {
     localStorage.setItem('theme', isLight ? 'light' : 'dark');
 }
 function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('collapsed');
+    var sidebar = document.getElementById('sidebar');
+    sidebar.classList.toggle('collapsed');
+    document.body.classList.toggle('sidebar-collapsed');
 }
 /*]]>*/
 </script>

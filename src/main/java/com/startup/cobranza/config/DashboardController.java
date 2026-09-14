@@ -1,6 +1,6 @@
 package com.startup.cobranza.config;
 
-import com.startup.cobranza.cartera.repository.ImportacionRepository;
+import com.startup.cobranza.agencia.repository.AgenciaRepository;
 import com.startup.cobranza.cliente.repository.ClienteRepository;
 import com.startup.cobranza.operacion.repository.OperacionRepository;
 import org.springframework.security.core.Authentication;
@@ -16,21 +16,21 @@ public class DashboardController {
 
     private final OperacionRepository operacionRepo;
     private final ClienteRepository clienteRepo;
-    private final ImportacionRepository importacionRepo;
+    private final AgenciaRepository agenciaRepo;
 
     public DashboardController(OperacionRepository operacionRepo,
-                               ClienteRepository clienteRepo,
-                               ImportacionRepository importacionRepo) {
+                              ClienteRepository clienteRepo,
+                              AgenciaRepository agenciaRepo) {
         this.operacionRepo = operacionRepo;
         this.clienteRepo = clienteRepo;
-        this.importacionRepo = importacionRepo;
+        this.agenciaRepo = agenciaRepo;
     }
 
     @GetMapping("/dashboard")
     public String dashboard(Model model, Authentication auth) {
         model.addAttribute("totalOperaciones", operacionRepo.count());
         model.addAttribute("totalClientes", clienteRepo.count());
-        model.addAttribute("totalImportaciones", importacionRepo.count());
+        model.addAttribute("totalAgencias", agenciaRepo.count());
         model.addAttribute("fechaHoy", LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMM yyyy")));
         if (auth != null) {
             model.addAttribute("nombreUsuario", auth.getName());

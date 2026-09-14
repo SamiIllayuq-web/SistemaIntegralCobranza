@@ -41,8 +41,8 @@
                 <div class="stat-value" th:text="${totalClientes}">0</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Importaciones</div>
-                <div class="stat-value" th:text="${totalImportaciones}">0</div>
+                <div class="stat-label">Agencias</div>
+                <div class="stat-value" th:text="${totalAgencias}">0</div>
             </div>
         </div>
 
@@ -57,18 +57,19 @@
                         </svg>
                         Expedientes
                     </a>
-                    <a th:href="@{/cartera/importar}" class="btn btn-secondary" style="justify-content: flex-start;">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/>
-                        </svg>
-                        Importar Cartera
-                    </a>
                     <a th:href="@{/clientes}" class="btn btn-secondary" style="justify-content: flex-start;">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
                             <circle cx="9" cy="7" r="4"/>
                         </svg>
                         Clientes
+                    </a>
+                    <a th:href="@{/agencias}" class="btn btn-secondary" style="justify-content: flex-start;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                        </svg>
+                        Agencias
                     </a>
                 </div>
             </div>
