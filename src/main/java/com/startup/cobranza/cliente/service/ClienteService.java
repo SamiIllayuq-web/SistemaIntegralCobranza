@@ -363,18 +363,10 @@ public class ClienteService {
                 });
     }
 
-    /**
-     * Lista de clientes que tienen al menos una operación con número de expediente.
-     * Para la vista /cartera/expedientes — muestra Judicial N / Castigada N por cliente.
-     */
     @Transactional(readOnly = true)
     public Page<ClienteExpedienteDTO> listarClientesConExpedientes(Long agenciaId, String busqueda, Pageable pageable) {
-        StringBuilder where = new StringBuilder("""
-            WHERE c.activo = true
-              AND o.activo = true
-              AND o.numero_expediente IS NOT NULL
-              AND o.numero_expediente <> ''
-            """);
+        StringBuilder where = new StringBuilder();
+        where.append("WHERE c.activo = true AND o.activo = true AND o.numero_expediente IS NOT NULL AND o.numero_expediente <> ''");
 
         if (agenciaId != null) {
             where.append(" AND o.agencia_id = ").append(agenciaId);
@@ -386,12 +378,8 @@ public class ClienteService {
                  .append(" OR c.dni = '").append(busqueda).append("')");
         }
 
-        String select = """
-            SELECT c.id,
-                   c.nombre_completo,
-                   c.dni,
-                   o.agencia_id,
-                   a.nombre,
+        String sql = """
+            SELECT c.id, c.nombre_completo, c.dni, o.agencia_id, a.nombre,
                    SUM(CASE WHEN o.situacion = 'Judicial' THEN 1 ELSE 0 END),
                    SUM(CASE WHEN o.situacion = 'Castigada' THEN 1 ELSE 0 END),
                    COUNT(o.id)
@@ -399,15 +387,16 @@ public class ClienteService {
             JOIN clientes c ON c.id = o.cliente_id
             LEFT JOIN agencias a ON a.id = o.agencia_id
             """
-            + where +
-            """
+            + where + """
+            
             GROUP BY c.id, c.nombre_completo, c.dni, o.agencia_id, a.nombre
             ORDER BY c.nombre_completo ASC
+            FETCH FIRST :limit ROWS ONLY
             """;
 
-        jakarta.persistence.Query emQuery = entityManager.createNativeQuery(select);
+        jakarta.persistence.Query emQuery = entityManager.createNativeQuery(sql);
+        emQuery.setParameter("limit", pageable.getPageSize());
         emQuery.setFirstResult((int) pageable.getOffset());
-        emQuery.setMaxResults(pageable.getPageSize());
 
         @SuppressWarnings("unchecked")
         List<Object[]> rows = emQuery.getResultList();
