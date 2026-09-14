@@ -16,8 +16,6 @@
         <div class="breadcrumb-nav">
             <a th:href="@{/dashboard}">Inicio</a>
             <span class="breadcrumb-sep">/</span>
-            <a th:href="@{/cartera/importar}">Cartera</a>
-            <span class="breadcrumb-sep">/</span>
             <span style="color: var(--color-text);">Expedientes</span>
         </div>
         <div class="topbar-actions">
@@ -32,15 +30,6 @@
                 <h1 class="page-title">Clientes con Expedientes</h1>
                 <p class="page-subtitle">Clientes que tienen operaciones con número de expediente judicial</p>
             </div>
-            <div class="page-actions">
-                <a th:href="@{/cartera/importar}" class="btn btn-secondary">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
-                    Importar
-                </a>
-                <a th:href="@{/operaciones}" class="btn btn-ghost">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-                    Ver cartera
-                </a>
             </div>
         </div>
 
