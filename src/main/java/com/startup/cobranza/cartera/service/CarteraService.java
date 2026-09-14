@@ -112,27 +112,9 @@ public class CarteraService {
                 String hojaNombre = sheet.getSheetName();
                 if (sheet == null) continue;
 
-                String perfilPath;
-                String estadoCarteraDefault;
+                String estadoCarteraDefault = "ACTIVO";
 
-                if (hojaNombre.equalsIgnoreCase("Inventario")) {
-                    perfilPath = PERFIL_INVENTARIO_JUNIO;
-                    estadoCarteraDefault = "ACTIVO";
-                } else if (hojaNombre.toLowerCase().contains("avance") || hojaNombre.toLowerCase().contains("procesal") || hojaNombre.toLowerCase().contains("selva")) {
-                    perfilPath = PERFIL_EXCEL_AVANCE;
-                    estadoCarteraDefault = "ACTIVO";
-                } else if (hojaNombre.toLowerCase().contains("cancelado") || hojaNombre.toLowerCase().contains("cancelada")) {
-                    perfilPath = PERFIL_CAJA_AREQUIPA;
-                    estadoCarteraDefault = "CANCELADA";
-                } else if (hojaNombre.toLowerCase().contains("devuelta")) {
-                    perfilPath = PERFIL_CAJA_AREQUIPA;
-                    estadoCarteraDefault = "DEVUELTA";
-                } else {
-                    perfilPath = PERFIL_CAJA_AREQUIPA;
-                    estadoCarteraDefault = "ACTIVO";
-                }
-
-                cargarPerfil(perfilPath);
+                cargarPerfil(PERFIL_EXCEL_AVANCE);
                 JsonNode columns = perfilJson.get("columns");
                 int headerRowIdx = perfilJson.has("headerRow") ? perfilJson.get("headerRow").asInt() : 0;
                 boolean skipRowsWithoutDni = perfilJson.has("skipRowsWithoutDni") && perfilJson.get("skipRowsWithoutDni").asBoolean();
