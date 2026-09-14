@@ -147,19 +147,19 @@
             <div class="card-footer" th:if="${pagina.totalPages > 1}" style="display: flex; justify-content: center; padding: .75rem;">
                 <div class="pagination">
                     <a class="pagination-btn"
-                       th:href="@{/cartera/expedientes(page=${pagina.number - 1}, agenciaId=${agenciaId}, situacion=${situacion}, busqueda=${busqueda})}"
+                       th:href="@{/cartera/expedientes(page=${pagina.number - 1}, agenciaId=${agenciaId != null ? agenciaId : null}, situacion=${situacion ?: null}, busqueda=${busqueda ?: null})}"
                        th:classappend="${pagina.number == 0 ? 'disabled' : ''}">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
                     </a>
 
                     <a class="pagination-btn"
                        th:each="i : ${#numbers.sequence(0, pagina.totalPages - 1)}"
-                       th:href="@{/cartera/expedientes(page=${i}, agenciaId=${agenciaId}, situacion=${situacion}, busqueda=${busqueda})}"
+                       th:href="@{/cartera/expedientes(page=${i}, agenciaId=${agenciaId != null ? agenciaId : null}, situacion=${situacion ?: null}, busqueda=${busqueda ?: null})}"
                        th:text="${i + 1}"
                        th:classappend="${i == pagina.number ? 'active' : ''}"></a>
 
                     <a class="pagination-btn"
-                       th:href="@{/cartera/expedientes(page=${pagina.number + 1}, agenciaId=${agenciaId}, situacion=${situacion}, busqueda=${busqueda})}"
+                       th:href="@{/cartera/expedientes(page=${pagina.number + 1}, agenciaId=${agenciaId != null ? agenciaId : null}, situacion=${situacion ?: null}, busqueda=${busqueda ?: null})}"
                        th:classappend="${pagina.number == pagina.totalPages - 1 ? 'disabled' : ''}">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
                     </a>
