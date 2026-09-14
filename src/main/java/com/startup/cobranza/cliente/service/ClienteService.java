@@ -1,5 +1,6 @@
 package com.startup.cobranza.cliente.service;
 
+import lombok.extern.slf4j.Slf4j;
 import com.startup.cobranza.auditoria.service.AuditoriaService;
 import com.startup.cobranza.cartera.entity.ActividadSistema;
 import com.startup.cobranza.cartera.repository.ActividadSistemaRepository;
@@ -34,6 +35,7 @@ import java.util.stream.Collectors;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
+@Slf4j
 @Service
 public class ClienteService {
 
@@ -299,13 +301,15 @@ public class ClienteService {
     public ClienteDTO crear(ClienteFormDTO form) {
         Cliente cliente = clienteMapper.toEntityFromForm(form);
         Cliente saved = clienteRepository.save(cliente);
-        actividadSistemaRepository.save(new ActividadSistema(
+        ActividadSistema actividad = new ActividadSistema(
                 "CLIENTE_CREADO",
                 saved.getId(),
                 saved.getNombreCompleto(),
                 "{\"dni\": \"" + (saved.getDni() != null ? saved.getDni() : "") + "\"}",
                 null
-        ));
+        );
+        log.debug("Registrando actividad CLIENTE_CREADO: id={}, nombre={}", saved.getId(), saved.getNombreCompleto());
+        actividadSistemaRepository.save(actividad);
         return clienteMapper.toDTO(saved);
     }
 
