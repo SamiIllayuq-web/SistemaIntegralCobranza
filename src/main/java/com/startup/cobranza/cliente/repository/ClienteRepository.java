@@ -57,7 +57,7 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long>, JpaSpec
                OR LOWER(c.nombreCompleto) LIKE LOWER(CONCAT('%', :busqueda, '%'))
                OR c.dni = :busqueda)
         GROUP BY o.cliente.id, o.cliente.nombreCompleto, o.cliente.dni, o.agencia.id, o.agencia.nombre
-        ORDER BY c.nombreCompleto ASC
+        ORDER BY o.cliente.nombreCompleto ASC
         """)
     Page<ClienteExpedienteDTO> findClientesConExpedientes(
             @Param("agenciaId") Long agenciaId,
