@@ -100,7 +100,8 @@
                             <!-- Filtro -->
                             <div class="btn-group" style="display: flex; gap: 2px;">
                                 <button type="button" class="btn btn-ghost btn-sm filter-ops active" data-filter="todos">Todos</button>
-                                <button type="button" class="btn btn-ghost btn-sm filter-ops" data-filter="expediente">Con expediente</button>
+                                <button type="button" class="btn btn-ghost btn-sm filter-ops" data-filter="judicial">Judicial</button>
+                                <button type="button" class="btn btn-ghost btn-sm filter-ops" data-filter="castigada">Castigada</button>
                             </div>
                             <span class="badge badge-info" id="ops-count">0 ops.</span>
                             <a th:href="@{/operaciones/nuevo(clienteId=${cliente.id})}"
@@ -119,6 +120,7 @@
                                     <th class="text-end">Monto Total</th>
                                     <th class="text-center">Días Mora</th>
                                     <th>Estado</th>
+                                    <th>Situación</th>
                                     <th>Etapa</th>
                                     <th>Etapa Procesal</th>
                                     <th>Bien Emb.</th>
@@ -126,7 +128,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr th:each="op : ${operaciones}" th:data-expediente="${op.numeroExpediente != null and op.numeroExpediente != '' ? 'yes' : 'no'}">
+                                <tr th:each="op : ${operaciones}" th:data-situacion="${op.situacion != null ? op.situacion.toUpperCase() : 'SIN_SITUACION'}">
                                     <td>
                                         <span th:if="${op.numeroExpediente != null and op.numeroExpediente != ''}"
                                               th:text="${op.numeroExpediente}"
@@ -144,6 +146,11 @@
                                     </td>
                                     <td class="text-center" th:text="${op.diasMora ?: '-'}">-</td>
                                     <td th:text="${op.estado ?: '-'}">-</td>
+                                    <td>
+                                        <span th:if="${op.situacion == 'JUDICIAL'}" class="badge badge-judicial">Judicial</span>
+                                        <span th:if="${op.situacion == 'CASTIGADA'}" class="badge badge-danger">Castigada</span>
+                                        <span th:if="${op.situacion == null or op.situacion == ''}" class="text-muted">—</span>
+                                    </td>
                                     <td>
                                         <span th:if="${op.etapa == 'JUDICIAL'}" class="badge badge-judicial">Judicial</span>
                                         <span th:if="${op.etapa == 'EXTRAJUDICIAL'}" class="badge badge-info">Extrajudicial</span>
@@ -220,7 +227,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const filterBtns = document.querySelectorAll('.filter-ops');
-    const rows = document.querySelectorAll('tr[data-expediente]');
+    const rows = document.querySelectorAll('tr[data-situacion]');
     const opsCount = document.getElementById('ops-count');
 
     filterBtns.forEach(function(btn) {
@@ -235,8 +242,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (filter === 'todos') {
                     row.style.display = '';
                     visible++;
-                } else if (filter === 'expediente') {
-                    if (row.dataset.expediente === 'yes') {
+                } else if (filter === 'judicial') {
+                    if (row.dataset.situacion === 'JUDICIAL') {
+                        row.style.display = '';
+                        visible++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                } else if (filter === 'castigada') {
+                    if (row.dataset.situacion === 'CASTIGADA') {
                         row.style.display = '';
                         visible++;
                     } else {
