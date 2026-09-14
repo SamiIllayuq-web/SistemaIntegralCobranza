@@ -45,9 +45,7 @@ public class CarteraService {
     private JsonNode perfilJson;
     private DateTimeFormatter dateFormatter;
     private String perfilActual;
-    private static final String PERFIL_CAJA_AREQUIPA = "perfiles-import/caja-arequipa-cartera.json";
     private static final String PERFIL_EXCEL_AVANCE = "perfiles-import/excel-avance-procesal-arequipa.json";
-    private static final String PERFIL_INVENTARIO_JUNIO = "perfiles-import/inventario-junio-2026.json";
 
     public CarteraService(ImportacionRepository importacionRepository,
                           ClienteRepository clienteRepository,
@@ -63,8 +61,7 @@ public class CarteraService {
 
     @PostConstruct
     public void init() {
-        // Por defecto se carga el perfil caja-arequipa; se sobrescribe en importarExcel si corresponde
-        cargarPerfil(PERFIL_CAJA_AREQUIPA);
+        cargarPerfil(PERFIL_EXCEL_AVANCE);
     }
 
     private void cargarPerfil(String path) {
