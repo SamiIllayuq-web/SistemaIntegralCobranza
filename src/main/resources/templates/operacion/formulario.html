@@ -199,64 +199,102 @@
                 Datos del Expediente Cautelar / Hipoteca
                 <button type="button" class="btn btn-ghost btn-sm" onclick="agregarBien()">+ Agregar Bien</button>
             </div>
-            <div class="card-body p-0">
-                <div class="table-wrapper">
-                    <table class="data-table" id="bienesTable">
-                        <thead>
-                            <tr>
-                                <th>Detalle Garantía</th>
-                                <th>N° Partida</th>
-                                <th>Bien (Mueble/Inmueble)</th>
-                                <th>Rango</th>
-                                <th>Detalle Acreedores</th>
-                                <th>Preferente</th>
-                                <th>Monto MC</th>
-                                <th>Moneda</th>
-                                <th>Garantía Inscrita</th>
-                                <th>Fech. Inscripción</th>
-                                <th>Fech. Present. RRPP</th>
-                                <th>Asiento</th>
-                                <th>Fech. Present. MC</th>
-                                <th>Fech. Inadmisible MC</th>
-                                <th>Fech. Admisión MC</th>
-                                <th>Comentario</th>
-                                <th class="col-actions"></th>
-                            </tr>
-                        </thead>
-                        <tbody id="bienesBody">
-                            <tr th:if="${operacionForm.bienesEmbargados != null}"
-                                th:each="bien, stat : ${operacionForm.bienesEmbargados}"
-                                th:data-index="${stat.index}">
-                                <input type="hidden" th:name="'bienesEmbargados[' + ${stat.index} + '].id'" th:value="${bien.id}"/>
-                                <input type="hidden" th:name="'bienesEmbargados[' + ${stat.index} + '].partidaRegistral'" th:value="${bien.partidaRegistral}"/>
-                                <td><input type="text" class="form-control form-control-sm" th:name="'bienesEmbargados[' + ${stat.index} + '].detalleGarantia'" th:value="${bien.detalleGarantia}"/></td>
-                                <td><input type="text" class="form-control form-control-sm" th:name="'bienesEmbargados[' + ${stat.index} + '].numeroPartida'" th:value="${bien.numeroPartida}"/></td>
-                                <td><input type="text" class="form-control form-control-sm" th:name="'bienesEmbargados[' + ${stat.index} + '].tipoBien'" th:value="${bien.tipoBien}"/></td>
-                                <td><input type="text" class="form-control form-control-sm" th:name="'bienesEmbargados[' + ${stat.index} + '].rango'" th:value="${bien.rango}"/></td>
-                                <td><input type="text" class="form-control form-control-sm" th:name="'bienesEmbargados[' + ${stat.index} + '].detalleAcreedores'" th:value="${bien.detalleAcreedores}"/></td>
-                                <td><input type="text" class="form-control form-control-sm" th:name="'bienesEmbargados[' + ${stat.index} + '].tipoPreferencia'" th:value="${bien.tipoPreferencia}"/></td>
-                                <td><input type="text" class="form-control form-control-sm" th:name="'bienesEmbargados[' + ${stat.index} + '].montoMc'" th:value="${bien.montoMc}"/></td>
-                                <td><input type="text" class="form-control form-control-sm" th:name="'bienesEmbargados[' + ${stat.index} + '].monedaMc'" th:value="${bien.monedaMc}"/></td>
-                                <td><input type="text" class="form-control form-control-sm" th:name="'bienesEmbargados[' + ${stat.index} + '].garantiaInscrita'" th:value="${bien.garantiaInscrita}"/></td>
-                                <td><input type="date" class="form-control form-control-sm" th:name="'bienesEmbargados[' + ${stat.index} + '].fechaInscripcion'" th:value="${bien.fechaInscripcion}"/></td>
-                                <td><input type="date" class="form-control form-control-sm" th:name="'bienesEmbargados[' + ${stat.index} + '].fechaPresentacionRrpp'" th:value="${bien.fechaPresentacionRrpp}"/></td>
-                                <td><input type="text" class="form-control form-control-sm" th:name="'bienesEmbargados[' + ${stat.index} + '].asientoInscripcion'" th:value="${bien.asientoInscripcion}"/></td>
-                                <td><input type="date" class="form-control form-control-sm" th:name="'bienesEmbargados[' + ${stat.index} + '].fechaPresentacionMc'" th:value="${bien.fechaPresentacionMc}"/></td>
-                                <td><input type="text" class="form-control form-control-sm" th:name="'bienesEmbargados[' + ${stat.index} + '].fechaInadmisible'" th:value="${bien.fechaInadmisible}"/></td>
-                                <td><input type="text" class="form-control form-control-sm" th:name="'bienesEmbargados[' + ${stat.index} + '].fechaAdmision'" th:value="${bien.fechaAdmision}"/></td>
-                                <td><input type="text" class="form-control form-control-sm" th:name="'bienesEmbargados[' + ${stat.index} + '].comentarioMc'" th:value="${bien.comentarioMc}"/></td>
-                                <td>
-                                    <button type="button" class="btn-icon btn-icon-danger" onclick="eliminarBien(this)">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <div class="card-body">
+                <!-- Campos del Expediente Cautelar (nivel Operación) -->
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px;">
+                    <div>
+                        <label class="form-label">Exp. Cautelar</label>
+                        <input type="text" class="form-control" th:field="*{codigoExpCautelar}"/>
+                    </div>
+                    <div>
+                        <label class="form-label">N° Ficha Registral</label>
+                        <input type="text" class="form-control" th:field="*{numeroFichaRegistral}"/>
+                    </div>
+                    <div>
+                        <label class="form-label">N° Partida</label>
+                        <input type="text" class="form-control" th:field="*{numeroPartida}"/>
+                    </div>
+                </div>
+
+                <!-- Lista de bienes embargados (uno por tarjeta) -->
+                <div id="bienesContainer">
+                    <div th:if="${operacionForm.bienesEmbargados != null}"
+                        th:each="bien, stat : ${operacionForm.bienesEmbargados}"
+                        th:data-index="${stat.index}"
+                        class="bien-card"
+                        style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-bottom: 16px; position: relative;">
+                        <input type="hidden" th:name="'bienesEmbargados[' + ${stat.index} + '].id'" th:value="${bien.id}"/>
+                        <input type="hidden" th:name="'bienesEmbargados[' + ${stat.index} + '].partidaRegistral'" th:value="${bien.partidaRegistral}"/>
+                        <button type="button" onclick="eliminarBien(this)" style="position: absolute; top: 8px; right: 8px; background: none; border: none; cursor: pointer; color: #dc2626;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                        </button>
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+                            <div>
+                                <label class="form-label">Detalle Garantía</label>
+                                <textarea class="form-control" rows="2" th:name="'bienesEmbargados[' + ${stat.index} + '].detalleGarantia'" th:text="${bien.detalleGarantia}"></textarea>
+                            </div>
+                            <div>
+                                <label class="form-label">Bien (Mueble/Inmueble)</label>
+                                <input type="text" class="form-control" th:name="'bienesEmbargados[' + ${stat.index} + '].tipoBien'" th:value="${bien.tipoBien}"/>
+                            </div>
+                            <div>
+                                <label class="form-label">Rango</label>
+                                <input type="text" class="form-control" th:name="'bienesEmbargados[' + ${stat.index} + '].rango'" th:value="${bien.rango}"/>
+                            </div>
+                            <div>
+                                <label class="form-label">Detalle Acreedores</label>
+                                <input type="text" class="form-control" th:name="'bienesEmbargados[' + ${stat.index} + '].detalleAcreedores'" th:value="${bien.detalleAcreedores}"/>
+                            </div>
+                            <div>
+                                <label class="form-label">Preferencia</label>
+                                <input type="text" class="form-control" th:name="'bienesEmbargados[' + ${stat.index} + '].tipoPreferencia'" th:value="${bien.tipoPreferencia}"/>
+                            </div>
+                            <div>
+                                <label class="form-label">Monto MC</label>
+                                <input type="text" class="form-control" th:name="'bienesEmbargados[' + ${stat.index} + '].montoMc'" th:value="${bien.montoMc}"/>
+                            </div>
+                            <div>
+                                <label class="form-label">Moneda</label>
+                                <input type="text" class="form-control" th:name="'bienesEmbargados[' + ${stat.index} + '].monedaMc'" th:value="${bien.monedaMc}"/>
+                            </div>
+                            <div>
+                                <label class="form-label">Garantía Inscrita</label>
+                                <input type="text" class="form-control" th:name="'bienesEmbargados[' + ${stat.index} + '].garantiaInscrita'" th:value="${bien.garantiaInscrita}"/>
+                            </div>
+                            <div>
+                                <label class="form-label">Fech. Inscripción</label>
+                                <input type="date" class="form-control" th:name="'bienesEmbargados[' + ${stat.index} + '].fechaInscripcion'" th:value="${bien.fechaInscripcion != null ? bien.fechaInscripcion : ''}"/>
+                            </div>
+                            <div>
+                                <label class="form-label">Fech. Present. RRPP</label>
+                                <input type="date" class="form-control" th:name="'bienesEmbargados[' + ${stat.index} + '].fechaPresentacionRrpp'" th:value="${bien.fechaPresentacionRrpp != null ? bien.fechaPresentacionRrpp : ''}"/>
+                            </div>
+                            <div>
+                                <label class="form-label">Asiento</label>
+                                <input type="text" class="form-control" th:name="'bienesEmbargados[' + ${stat.index} + '].asientoInscripcion'" th:value="${bien.asientoInscripcion}"/>
+                            </div>
+                            <div>
+                                <label class="form-label">Fech. Present. MC</label>
+                                <input type="text" class="form-control" th:name="'bienesEmbargados[' + ${stat.index} + '].fechaPresentacionMc'" th:value="${bien.fechaPresentacionMc}"/>
+                            </div>
+                            <div>
+                                <label class="form-label">Fech. Inadmisible MC</label>
+                                <input type="text" class="form-control" th:name="'bienesEmbargados[' + ${stat.index} + '].fechaInadmisible'" th:value="${bien.fechaInadmisible}"/>
+                            </div>
+                            <div>
+                                <label class="form-label">Fech. Admisión MC</label>
+                                <input type="text" class="form-control" th:name="'bienesEmbargados[' + ${stat.index} + '].fechaAdmision'" th:value="${bien.fechaAdmision}"/>
+                            </div>
+                            <div>
+                                <label class="form-label">Comentario</label>
+                                <input type="text" class="form-control" th:name="'bienesEmbargados[' + ${stat.index} + '].comentarioMc'" th:value="${bien.comentarioMc}"/>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div th:if="${operacionForm.bienesEmbargados == null or operacionForm.bienesEmbargados.isEmpty()}"
-                     class="text-center text-muted" style="padding: 24px;">
-                    Sin bienes embargados registrados
+                     class="text-center text-muted" style="padding: 24px; color: #888; font-style: italic;">
+                    Sin bienes embargados registrados — usa "+ Agregar Bien" para añadir uno
                 </div>
             </div>
         </div>
@@ -380,52 +418,95 @@
 </div>
 
 <template id="bienRowTemplate">
-    <tr>
+    <div class="bien-card" style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-bottom: 16px; position: relative;">
         <input type="hidden" name="bienesEmbargados[__INDEX__].id" value=""/>
-        <td><input type="text" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].detalleGarantia" value=""/></td>
-        <td><input type="text" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].numeroPartida" value=""/></td>
-        <td><input type="text" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].tipoBien" value=""/></td>
-        <td><input type="text" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].rango" value=""/></td>
-        <td><input type="text" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].detalleAcreedores" value=""/></td>
-        <td><input type="text" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].tipoPreferencia" value=""/></td>
-        <td><input type="text" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].montoMc" value=""/></td>
-        <td><input type="text" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].monedaMc" value=""/></td>
-        <td><input type="text" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].garantiaInscrita" value=""/></td>
-        <td><input type="date" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].fechaInscripcion" value=""/></td>
-        <td><input type="date" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].fechaPresentacionRrpp" value=""/></td>
-        <td><input type="text" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].asientoInscripcion" value=""/></td>
-        <td><input type="date" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].fechaPresentacionMc" value=""/></td>
-        <td><input type="text" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].fechaInadmisible" value=""/></td>
-        <td><input type="text" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].fechaAdmision" value=""/></td>
-        <td><input type="text" class="form-control form-control-sm" name="bienesEmbargados[__INDEX__].comentarioMc" value=""/></td>
-        <td>
-            <button type="button" class="btn-icon btn-icon-danger" onclick="eliminarBien(this)">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
-            </button>
-        </td>
-    </tr>
+        <input type="hidden" name="bienesEmbargados[__INDEX__].partidaRegistral" value=""/>
+        <button type="button" onclick="eliminarBien(this)" style="position: absolute; top: 8px; right: 8px; background: none; border: none; cursor: pointer; color: #dc2626;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+        </button>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+            <div>
+                <label class="form-label">Detalle Garantía</label>
+                <textarea class="form-control" rows="2" name="bienesEmbargados[__INDEX__].detalleGarantia"></textarea>
+            </div>
+            <div>
+                <label class="form-label">Bien (Mueble/Inmueble)</label>
+                <input type="text" class="form-control" name="bienesEmbargados[__INDEX__].tipoBien" value=""/>
+            </div>
+            <div>
+                <label class="form-label">Rango</label>
+                <input type="text" class="form-control" name="bienesEmbargados[__INDEX__].rango" value=""/>
+            </div>
+            <div>
+                <label class="form-label">Detalle Acreedores</label>
+                <input type="text" class="form-control" name="bienesEmbargados[__INDEX__].detalleAcreedores" value=""/>
+            </div>
+            <div>
+                <label class="form-label">Preferencia</label>
+                <input type="text" class="form-control" name="bienesEmbargados[__INDEX__].tipoPreferencia" value=""/>
+            </div>
+            <div>
+                <label class="form-label">Monto MC</label>
+                <input type="text" class="form-control" name="bienesEmbargados[__INDEX__].montoMc" value=""/>
+            </div>
+            <div>
+                <label class="form-label">Moneda</label>
+                <input type="text" class="form-control" name="bienesEmbargados[__INDEX__].monedaMc" value=""/>
+            </div>
+            <div>
+                <label class="form-label">Garantía Inscrita</label>
+                <input type="text" class="form-control" name="bienesEmbargados[__INDEX__].garantiaInscrita" value=""/>
+            </div>
+            <div>
+                <label class="form-label">Fech. Inscripción</label>
+                <input type="date" class="form-control" name="bienesEmbargados[__INDEX__].fechaInscripcion" value=""/>
+            </div>
+            <div>
+                <label class="form-label">Fech. Present. RRPP</label>
+                <input type="date" class="form-control" name="bienesEmbargados[__INDEX__].fechaPresentacionRrpp" value=""/>
+            </div>
+            <div>
+                <label class="form-label">Asiento</label>
+                <input type="text" class="form-control" name="bienesEmbargados[__INDEX__].asientoInscripcion" value=""/>
+            </div>
+            <div>
+                <label class="form-label">Fech. Present. MC</label>
+                <input type="text" class="form-control" name="bienesEmbargados[__INDEX__].fechaPresentacionMc" value=""/>
+            </div>
+            <div>
+                <label class="form-label">Fech. Inadmisible MC</label>
+                <input type="text" class="form-control" name="bienesEmbargados[__INDEX__].fechaInadmisible" value=""/>
+            </div>
+            <div>
+                <label class="form-label">Fech. Admisión MC</label>
+                <input type="text" class="form-control" name="bienesEmbargados[__INDEX__].fechaAdmision" value=""/>
+            </div>
+            <div>
+                <label class="form-label">Comentario</label>
+                <input type="text" class="form-control" name="bienesEmbargados[__INDEX__].comentarioMc" value=""/>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script th:inline="javascript">
 let bienIndex = /*[[${operacionForm.bienesEmbargados != null ? operacionForm.bienesEmbargados.size() : 0}]]*/ 0;
 
 function agregarBien() {
-    const tbody = document.getElementById('bienesBody');
-    const table = document.getElementById('bienesTable');
+    const container = document.getElementById('bienesContainer');
     // Ocultar mensaje vacío si existe
-    const emptyMsg = table.parentElement.querySelector('.text-center.text-muted');
+    const emptyMsg = container.parentElement.querySelector('.text-center.text-muted');
     if (emptyMsg) emptyMsg.remove();
-    table.style.display = '';
     const html = document.getElementById('bienRowTemplate').innerHTML.replace(/__INDEX__/g, bienIndex);
-    tbody.insertAdjacentHTML('beforeend', html);
+    container.insertAdjacentHTML('beforeend', html);
     bienIndex++;
 }
 
 function eliminarBien(btn) {
-    const row = btn.closest('tr');
-    row.remove();
+    const card = btn.closest('.bien-card');
+    card.remove();
 }
 
 function toggleGuardar() {

@@ -88,7 +88,7 @@ public class OperacionController {
             if (form.getId() != null) {
                 operacionService.actualizar(form.getId(), form);
                 redirectAttrs.addFlashAttribute("success", "Operación actualizada correctamente");
-                return "redirect:/operaciones/editar/" + form.getId();
+                return "redirect:/operaciones/" + form.getId();
             } else {
                 OperacionDTO created = operacionService.crear(form);
                 carteraService.registrarAltaManual(form.getAgenciaId(), request.getUserPrincipal().getName());
