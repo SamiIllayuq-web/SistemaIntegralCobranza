@@ -6,6 +6,8 @@ import com.startup.cobranza.operacion.entity.Operacion;
 import com.startup.cobranza.operacion.exception.OperacionException;
 import com.startup.cobranza.operacion.mapper.OperacionMapper;
 import com.startup.cobranza.operacion.repository.OperacionRepository;
+import com.startup.cobranza.cartera.entity.ActividadSistema;
+import com.startup.cobranza.cartera.repository.ActividadSistemaRepository;
 import com.startup.cobranza.cliente.entity.Cliente;
 import com.startup.cobranza.cliente.repository.ClienteRepository;
 import com.startup.cobranza.agencia.entity.Agencia;
@@ -31,19 +33,22 @@ public class OperacionService {
     private final AgenciaRepository agenciaRepository;
     private final UsuarioRepository usuarioRepository;
     private final BienEmbargadoRepository bienEmbargadoRepository;
+    private final ActividadSistemaRepository actividadSistemaRepository;
 
     public OperacionService(OperacionRepository operacionRepository,
                             OperacionMapper operacionMapper,
                             ClienteRepository clienteRepository,
                             AgenciaRepository agenciaRepository,
                             UsuarioRepository usuarioRepository,
-                            BienEmbargadoRepository bienEmbargadoRepository) {
+                            BienEmbargadoRepository bienEmbargadoRepository,
+                            ActividadSistemaRepository actividadSistemaRepository) {
         this.operacionRepository = operacionRepository;
         this.operacionMapper = operacionMapper;
         this.clienteRepository = clienteRepository;
         this.agenciaRepository = agenciaRepository;
         this.usuarioRepository = usuarioRepository;
         this.bienEmbargadoRepository = bienEmbargadoRepository;
+        this.actividadSistemaRepository = actividadSistemaRepository;
     }
 
     public List<OperacionDTO> listarActivas() {
@@ -318,6 +323,17 @@ public class OperacionService {
     public void eliminar(Long id) {
         Operacion op = operacionRepository.findByIdWithBienes(id)
                 .orElseThrow(() -> new OperacionException("Operacion no encontrada"));
+        String detalle = "{\"numero_operacion\": \"" + (op.getNumeroOperacion() != null ? op.getNumeroOperacion() : "")
+                      + "\", \"cuenta\": \"" + (op.getCuenta() != null ? op.getCuenta() : "")
+                      + "\", \"situacion\": \"" + (op.getSituacion() != null ? op.getSituacion() : "")
+                      + "\", \"cliente_id\": " + (op.getCliente() != null ? op.getCliente().getId() : "null") + "}";
+        actividadSistemaRepository.save(new ActividadSistema(
+                "OPERACION_ELIMINADA",
+                op.getId(),
+                op.getNumeroOperacion(),
+                detalle,
+                null
+        ));
         operacionRepository.delete(op);
     }
 

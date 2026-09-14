@@ -1,6 +1,8 @@
 package com.startup.cobranza.cliente.service;
 
 import com.startup.cobranza.auditoria.service.AuditoriaService;
+import com.startup.cobranza.cartera.entity.ActividadSistema;
+import com.startup.cobranza.cartera.repository.ActividadSistemaRepository;
 import com.startup.cobranza.cliente.dto.ClienteBandejaDTO;
 import com.startup.cobranza.cliente.dto.ClienteBusquedaDTO;
 import com.startup.cobranza.cliente.dto.ClienteDTO;
@@ -42,6 +44,7 @@ public class ClienteService {
     private final OperacionRepository operacionRepository;
     private final ClienteMapper clienteMapper;
     private final AuditoriaService auditoriaService;
+    private final ActividadSistemaRepository actividadSistemaRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -49,11 +52,13 @@ public class ClienteService {
     public ClienteService(ClienteRepository clienteRepository,
                           OperacionRepository operacionRepository,
                           ClienteMapper clienteMapper,
-                          AuditoriaService auditoriaService) {
+                          AuditoriaService auditoriaService,
+                          ActividadSistemaRepository actividadSistemaRepository) {
         this.clienteRepository = clienteRepository;
         this.operacionRepository = operacionRepository;
         this.clienteMapper = clienteMapper;
         this.auditoriaService = auditoriaService;
+        this.actividadSistemaRepository = actividadSistemaRepository;
     }
 
     public List<ClienteDTO> listarTodos() {
@@ -293,7 +298,15 @@ public class ClienteService {
     @Transactional
     public ClienteDTO crear(ClienteFormDTO form) {
         Cliente cliente = clienteMapper.toEntityFromForm(form);
-        return clienteMapper.toDTO(clienteRepository.save(cliente));
+        Cliente saved = clienteRepository.save(cliente);
+        actividadSistemaRepository.save(new ActividadSistema(
+                "CLIENTE_CREADO",
+                saved.getId(),
+                saved.getNombreCompleto(),
+                "{\"dni\": \"" + (saved.getDni() != null ? saved.getDni() : "") + "\"}",
+                null
+        ));
+        return clienteMapper.toDTO(saved);
     }
 
     @Transactional
@@ -345,11 +358,25 @@ public class ClienteService {
     public void eliminar(Long id) {
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new ClienteException("Cliente no encontrado con id: " + id));
-        // cascade: borrar operaciones del cliente (los bienes se borran por orphanRemoval)
         List<Operacion> ops = operacionRepository.findByClienteIdAndActivoTrue(cliente.getId());
-        for (Operacion op : ops) {
+        StringBuilder sb = new StringBuilder("{\"operaciones_eliminadas\": [");
+        for (int i = 0; i < ops.size(); i++) {
+            Operacion op = ops.get(i);
+            if (i > 0) sb.append(",");
+            sb.append("{\"id\": ").append(op.getId())
+              .append(", \"numero_operacion\": \"").append(op.getNumeroOperacion() != null ? op.getNumeroOperacion() : "").append("\"")
+              .append(", \"cuenta\": \"").append(op.getCuenta() != null ? op.getCuenta() : "").append("\"")
+              .append(", \"situacion\": \"").append(op.getSituacion() != null ? op.getSituacion() : "").append("\"}}");
             operacionRepository.delete(op);
         }
+        sb.append("]}");
+        actividadSistemaRepository.save(new ActividadSistema(
+                "CLIENTE_ELIMINADO",
+                cliente.getId(),
+                cliente.getNombreCompleto(),
+                sb.toString(),
+                null
+        ));
         clienteRepository.delete(cliente);
     }
 

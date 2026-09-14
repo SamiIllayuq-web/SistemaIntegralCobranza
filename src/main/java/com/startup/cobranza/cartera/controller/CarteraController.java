@@ -2,7 +2,9 @@ package com.startup.cobranza.cartera.controller;
 
 import com.startup.cobranza.agencia.repository.AgenciaRepository;
 import com.startup.cobranza.cartera.dto.ImportacionDTO;
+import com.startup.cobranza.cartera.entity.ActividadSistema;
 import com.startup.cobranza.cartera.exception.CarteraException;
+import com.startup.cobranza.cartera.repository.ActividadSistemaRepository;
 import com.startup.cobranza.cartera.service.CarteraService;
 import com.startup.cobranza.cliente.dto.ClienteExpedienteDTO;
 import com.startup.cobranza.cliente.service.ClienteService;
@@ -32,6 +34,7 @@ public class CarteraController {
     private final CarteraService carteraService;
     private final ClienteService clienteService;
     private final OperacionService operacionService;
+    private final ActividadSistemaRepository actividadSistemaRepository;
     private final AgenciaRepository agenciaRepository;
 
     @GetMapping("/importar")
@@ -63,6 +66,22 @@ public class CarteraController {
         List<ImportacionDTO> importaciones = carteraService.listarImportaciones();
         model.addAttribute("importaciones", importaciones);
         return "cartera/historial";
+    }
+
+    @GetMapping("/actividad")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SECRETARIO')")
+    public String actividad(
+            @RequestParam(required = false) String tipo,
+            Model model) {
+        List<ActividadSistema> actividades;
+        if (tipo != null && !tipo.isBlank()) {
+            actividades = actividadSistemaRepository.findByTipoOrderByFechaDesc(tipo);
+        } else {
+            actividades = actividadSistemaRepository.findAllByOrderByFechaDesc();
+        }
+        model.addAttribute("actividades", actividades);
+        model.addAttribute("tipoFiltro", tipo);
+        return "cartera/actividad";
     }
 
     @GetMapping("/expedientes")

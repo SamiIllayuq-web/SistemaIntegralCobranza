@@ -247,3 +247,14 @@ BEGIN
         ALTER TABLE clientes DROP COLUMN empresa_id;
     END IF;
 END $$;
+
+-- ── actividad_sistema ──────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS actividad_sistema (
+    id              bigserial PRIMARY KEY,
+    tipo            varchar(50) NOT NULL,
+    fecha           timestamp NOT NULL DEFAULT now(),
+    entidad_id      bigint,
+    entidad_nombre  varchar(500),
+    detalle         text,
+    usuario         varchar(255)
+);
