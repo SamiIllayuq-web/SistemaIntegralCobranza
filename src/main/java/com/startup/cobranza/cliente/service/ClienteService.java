@@ -308,7 +308,7 @@ public class ClienteService {
                 "{\"dni\": \"" + (saved.getDni() != null ? saved.getDni() : "") + "\"}",
                 null
         );
-        log.info("Registrando actividad CLIENTE_CREADO: id={}, nombre={}", saved.getId(), saved.getNombreCompleto());
+        log.error(">>> SAVE CLIENTE_CREADO: id={}, nombre={}", saved.getId(), saved.getNombreCompleto());
         actividadSistemaRepository.save(actividad);
         return clienteMapper.toDTO(saved);
     }
