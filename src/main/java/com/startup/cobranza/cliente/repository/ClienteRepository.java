@@ -2,6 +2,7 @@ package com.startup.cobranza.cliente.repository;
 
 import com.startup.cobranza.cliente.entity.Cliente;
 import com.startup.cobranza.cliente.dto.ClienteExpedienteDTO;
+import com.startup.cobranza.operacion.entity.Operacion;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -35,17 +36,18 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long>, JpaSpec
      */
     @Query("""
         SELECT new com.startup.cobranza.cliente.dto.ClienteExpedienteDTO(
-            c.id,
-            c.nombreCompleto,
-            c.dni,
+            o.cliente.id,
+            o.cliente.nombreCompleto,
+            o.cliente.dni,
             o.agencia.id,
             o.agencia.nombre,
             SUM(CASE WHEN o.situacion = 'Judicial' THEN 1 ELSE 0 END),
             SUM(CASE WHEN o.situacion = 'Castigada' THEN 1 ELSE 0 END),
             COUNT(o)
         )
-        FROM Cliente c
-        JOIN c.operaciones o
+        FROM Operacion o
+        JOIN o.cliente c
+        LEFT JOIN o.agencia
         WHERE c.activo = true
           AND o.activo = true
           AND o.numeroExpediente IS NOT NULL
@@ -54,7 +56,7 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long>, JpaSpec
           AND (:busqueda IS NULL
                OR LOWER(c.nombreCompleto) LIKE LOWER(CONCAT('%', :busqueda, '%'))
                OR c.dni = :busqueda)
-        GROUP BY c.id, c.nombreCompleto, c.dni, o.agencia.id, o.agencia.nombre
+        GROUP BY o.cliente.id, o.cliente.nombreCompleto, o.cliente.dni, o.agencia.id, o.agencia.nombre
         ORDER BY c.nombreCompleto ASC
         """)
     Page<ClienteExpedienteDTO> findClientesConExpedientes(
