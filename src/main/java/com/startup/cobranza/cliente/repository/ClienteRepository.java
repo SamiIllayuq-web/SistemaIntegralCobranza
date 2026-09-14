@@ -33,39 +33,30 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long>, JpaSpec
      * Retorna DTOs con conteos Judicial / Castigada por cliente.
      * Filtra por agencia (del expediente) y búsqueda (nombre, DNI del cliente).
      */
-    @Query(value = """
-        SELECT c.id AS clienteId,
-               c.nombre_completo AS nombreCompleto,
-               c.dni AS dni,
-               o.agencia_id AS agenciaId,
-               a.nombre AS agenciaNombre,
-               COUNT(CASE WHEN o.situacion = 'Judicial' THEN 1 END) AS judiciales,
-               COUNT(CASE WHEN o.situacion = 'Castigada' THEN 1 END) AS castigadas,
-               COUNT(o.id) AS total
-        FROM clientes c
-        JOIN operaciones o ON o.cliente_id = c.id AND o.activo = true
-               AND o.numero_expediente IS NOT NULL AND o.numero_expediente <> ''
-        LEFT JOIN agencias a ON a.id = o.agencia_id
+    @Query("""
+        SELECT new com.startup.cobranza.cliente.dto.ClienteExpedienteDTO(
+            c.id,
+            c.nombreCompleto,
+            c.dni,
+            o.agencia.id,
+            o.agencia.nombre,
+            SUM(CASE WHEN o.situacion = 'Judicial' THEN 1 ELSE 0 END),
+            SUM(CASE WHEN o.situacion = 'Castigada' THEN 1 ELSE 0 END),
+            COUNT(o)
+        )
+        FROM Cliente c
+        JOIN c.operaciones o
         WHERE c.activo = true
-          AND (:agenciaId IS NULL OR o.agencia_id = :agenciaId)
+          AND o.activo = true
+          AND o.numeroExpediente IS NOT NULL
+          AND o.numeroExpediente <> ''
+          AND (:agenciaId IS NULL OR o.agencia.id = :agenciaId)
           AND (:busqueda IS NULL
-               OR LOWER(c.nombre_completo) LIKE LOWER(CONCAT('%', :busqueda, '%'))
+               OR LOWER(c.nombreCompleto) LIKE LOWER(CONCAT('%', :busqueda, '%'))
                OR c.dni = :busqueda)
-        GROUP BY c.id, c.nombre_completo, c.dni, o.agencia_id, a.nombre
-        ORDER BY c.nombre_completo ASC
-        """,
-        countQuery = """
-        SELECT COUNT(DISTINCT c.id)
-        FROM clientes c
-        JOIN operaciones o ON o.cliente_id = c.id AND o.activo = true
-               AND o.numero_expediente IS NOT NULL AND o.numero_expediente <> ''
-        WHERE c.activo = true
-          AND (:agenciaId IS NULL OR o.agencia_id = :agenciaId)
-          AND (:busqueda IS NULL
-               OR LOWER(c.nombre_completo) LIKE LOWER(CONCAT('%', :busqueda, '%'))
-               OR c.dni = :busqueda)
-        """,
-        nativeQuery = true)
+        GROUP BY c.id, c.nombreCompleto, c.dni, o.agencia.id, o.agencia.nombre
+        ORDER BY c.nombreCompleto ASC
+        """)
     Page<ClienteExpedienteDTO> findClientesConExpedientes(
             @Param("agenciaId") Long agenciaId,
             @Param("busqueda") String busqueda,
