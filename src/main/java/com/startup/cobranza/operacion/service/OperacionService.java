@@ -80,12 +80,31 @@ public class OperacionService {
                 cliente = Cliente.builder()
                         .dni(dni)
                         .nombreCompleto(form.getNombreCliente())
+                        .telefono(form.getTelefono())
+                        .email(form.getEmail())
+                        .direccion(form.getDireccion())
                         .activo(true)
                         .build();
                 cliente = clienteRepository.save(cliente);
             } else {
+                boolean updated = false;
                 if (form.getNombreCliente() != null && !form.getNombreCliente().isBlank()) {
                     cliente.setNombreCompleto(form.getNombreCliente());
+                    updated = true;
+                }
+                if (form.getTelefono() != null && !form.getTelefono().isBlank()) {
+                    cliente.setTelefono(form.getTelefono());
+                    updated = true;
+                }
+                if (form.getEmail() != null && !form.getEmail().isBlank()) {
+                    cliente.setEmail(form.getEmail());
+                    updated = true;
+                }
+                if (form.getDireccion() != null && !form.getDireccion().isBlank()) {
+                    cliente.setDireccion(form.getDireccion());
+                    updated = true;
+                }
+                if (updated) {
                     cliente = clienteRepository.save(cliente);
                 }
             }
@@ -186,6 +205,7 @@ public class OperacionService {
 
         Cliente cliente = clienteRepository.findById(form.getClienteId())
                 .orElseThrow(() -> new OperacionException("Cliente no encontrado"));
+
         Agencia agencia = form.getAgenciaId() != null
                 ? agenciaRepository.findById(form.getAgenciaId()).orElse(null)
                 : null;

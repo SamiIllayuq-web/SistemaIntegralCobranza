@@ -52,6 +52,20 @@
                         <label class="form-label">Nombre Completo</label>
                         <input type="text" class="form-control" th:field="*{nombreCliente}" th:readonly="${soloLectura}">
                     </div>
+                    <div>
+                        <label class="form-label">Teléfono</label>
+                        <input type="text" class="form-control" th:field="*{telefono}" th:readonly="${soloLectura}">
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 16px;">
+                    <div>
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" th:field="*{email}" th:readonly="${soloLectura}">
+                    </div>
+                    <div style="grid-column: 2 / 4;">
+                        <label class="form-label">Dirección</label>
+                        <input type="text" class="form-control" th:field="*{direccion}" th:readonly="${soloLectura}">
+                    </div>
                 </div>
             </div>
         </div>

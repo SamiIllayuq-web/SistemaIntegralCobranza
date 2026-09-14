@@ -9,6 +9,9 @@ public class OperacionFormDTO {
     private Long clienteId;
     private String dni;
     private String nombreCliente;
+    private String telefono;
+    private String email;
+    private String direccion;
     private Long agenciaId;
     private String cuenta;
     private String numeroOperacion;
@@ -118,6 +121,12 @@ public class OperacionFormDTO {
     public void setDni(String dni) { this.dni = dni; }
     public String getNombreCliente() { return nombreCliente; }
     public void setNombreCliente(String nombreCliente) { this.nombreCliente = nombreCliente; }
+    public String getTelefono() { return telefono; }
+    public void setTelefono(String telefono) { this.telefono = telefono; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    public String getDireccion() { return direccion; }
+    public void setDireccion(String direccion) { this.direccion = direccion; }
     public Long getAgenciaId() { return agenciaId; }
     public void setAgenciaId(Long agenciaId) { this.agenciaId = agenciaId; }
     public String getCuenta() { return cuenta; }
@@ -252,6 +261,9 @@ public class OperacionFormDTO {
         private Long clienteId;
         private String dni;
         private String nombreCliente;
+        private String telefono;
+        private String email;
+        private String direccion;
         private Long agenciaId;
         private String cuenta;
         private String numeroOperacion;
@@ -320,6 +332,9 @@ public class OperacionFormDTO {
         public Builder clienteId(Long v) { clienteId = v; return this; }
         public Builder dni(String v) { dni = v; return this; }
         public Builder nombreCliente(String v) { nombreCliente = v; return this; }
+        public Builder telefono(String v) { telefono = v; return this; }
+        public Builder email(String v) { email = v; return this; }
+        public Builder direccion(String v) { direccion = v; return this; }
         public Builder agenciaId(Long v) { agenciaId = v; return this; }
         public Builder cuenta(String v) { cuenta = v; return this; }
         public Builder numeroOperacion(String v) { numeroOperacion = v; return this; }
@@ -391,6 +406,9 @@ public class OperacionFormDTO {
                     tipoJuzgado, distritoJudicial, numeroJuzgado, abogadoId, observacionActos, comentario);
             dto.setDni(dni);
             dto.setNombreCliente(nombreCliente);
+            dto.setTelefono(telefono);
+            dto.setEmail(email);
+            dto.setDireccion(direccion);
             dto.setEstadoCartera(estadoCartera);
             dto.setFechaDesembolso(fechaDesembolso);
             dto.setImporteDesembolso(importeDesembolso);
