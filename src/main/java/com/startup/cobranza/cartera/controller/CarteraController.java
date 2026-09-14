@@ -72,6 +72,11 @@ public class CarteraController {
             @RequestParam(value = "size", defaultValue = "50") int size,
             Model model) {
 
+        // Sanitizar: string vacío del query params → null para que el filtro IS NULL funcione
+        if (agenciaId != null && agenciaId == 0L) {
+            agenciaId = null;
+        }
+
         log.debug("expedientes - agenciaId={}, situacion={}, busqueda={}", agenciaId, situacion, busqueda);
 
         PageRequest pageable = PageRequest.of(page, size,
@@ -81,9 +86,9 @@ public class CarteraController {
                 agenciaId, situacion, busqueda, pageable);
 
         model.addAttribute("pagina", pagina);
-        model.addAttribute("agenciaId", agenciaId);
-        model.addAttribute("situacion", situacion);
-        model.addAttribute("busqueda", busqueda);
+        model.addAttribute("agenciaId", agenciaId != null ? agenciaId : "");
+        model.addAttribute("situacion", situacion != null ? situacion : "");
+        model.addAttribute("busqueda", busqueda != null ? busqueda : "");
         model.addAttribute("agencias", agenciaRepository.findByActivoTrue());
         return "cartera/expedientes";
     }
