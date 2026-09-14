@@ -24,8 +24,6 @@ public class OperacionFormDTO {
     private String etapa;
     private String observacion;
     private String rango;
-    private String analista;
-    private String analistaSenior;
     private String numeroExpediente;
     private String tipoProceso;
     private String tipoJuzgado;
@@ -41,11 +39,7 @@ public class OperacionFormDTO {
     private String etapaProcesal;
     private String actoPendiente;
     private String fechaUltimoEstadoProceso;
-    private String zona;
     private String departamento;
-    private String provincia;
-    private String distrito;
-    private String referencia;
     private String montoAprobado;
     private String fechaAceptacionDemanda;
     private String fechaEnvioJudicial;
@@ -151,8 +145,6 @@ public class OperacionFormDTO {
     public void setObservacion(String observacion) { this.observacion = observacion; }
     public String getRango() { return rango; }
     public void setRango(String rango) { this.rango = rango; }
-    public String getAnalista() { return analista; }
-    public void setAnalista(String analista) { this.analista = analista; }
     public String getAnalistaSenior() { return analistaSenior; }
     public void setAnalistaSenior(String analistaSenior) { this.analistaSenior = analistaSenior; }
     public String getNumeroExpediente() { return numeroExpediente; }
@@ -185,16 +177,8 @@ public class OperacionFormDTO {
     public void setActoPendiente(String actoPendiente) { this.actoPendiente = actoPendiente; }
     public String getFechaUltimoEstadoProceso() { return fechaUltimoEstadoProceso; }
     public void setFechaUltimoEstadoProceso(String fechaUltimoEstadoProceso) { this.fechaUltimoEstadoProceso = fechaUltimoEstadoProceso; }
-    public String getZona() { return zona; }
-    public void setZona(String zona) { this.zona = zona; }
     public String getDepartamento() { return departamento; }
     public void setDepartamento(String departamento) { this.departamento = departamento; }
-    public String getProvincia() { return provincia; }
-    public void setProvincia(String provincia) { this.provincia = provincia; }
-    public String getDistrito() { return distrito; }
-    public void setDistrito(String distrito) { this.distrito = distrito; }
-    public String getReferencia() { return referencia; }
-    public void setReferencia(String referencia) { this.referencia = referencia; }
     public String getMontoAprobado() { return montoAprobado; }
     public void setMontoAprobado(String montoAprobado) { this.montoAprobado = montoAprobado; }
     public String getFechaAceptacionDemanda() { return fechaAceptacionDemanda; }
@@ -276,8 +260,6 @@ public class OperacionFormDTO {
         private String etapa;
         private String observacion;
         private String rango;
-        private String analista;
-        private String analistaSenior;
         private String numeroExpediente;
         private String tipoProceso;
         private String tipoJuzgado;
@@ -293,11 +275,7 @@ public class OperacionFormDTO {
         private String actoPendiente;
         private String etapaProcesal;
         private String fechaUltimoEstadoProceso;
-        private String zona;
         private String departamento;
-        private String provincia;
-        private String distrito;
-        private String referencia;
         private String montoAprobado;
         private String fechaAceptacionDemanda;
         private String fechaEnvioJudicial;
@@ -347,8 +325,6 @@ public class OperacionFormDTO {
         public Builder etapa(String v) { etapa = v; return this; }
         public Builder observacion(String v) { observacion = v; return this; }
         public Builder rango(String v) { rango = v; return this; }
-        public Builder analista(String v) { analista = v; return this; }
-        public Builder analistaSenior(String v) { analistaSenior = v; return this; }
         public Builder numeroExpediente(String v) { numeroExpediente = v; return this; }
         public Builder tipoProceso(String v) { tipoProceso = v; return this; }
         public Builder tipoJuzgado(String v) { tipoJuzgado = v; return this; }
@@ -364,11 +340,7 @@ public class OperacionFormDTO {
         public Builder etapaProcesal(String v) { etapaProcesal = v; return this; }
         public Builder actoPendiente(String v) { actoPendiente = v; return this; }
         public Builder fechaUltimoEstadoProceso(String v) { fechaUltimoEstadoProceso = v; return this; }
-        public Builder zona(String v) { zona = v; return this; }
         public Builder departamento(String v) { departamento = v; return this; }
-        public Builder provincia(String v) { provincia = v; return this; }
-        public Builder distrito(String v) { distrito = v; return this; }
-        public Builder referencia(String v) { referencia = v; return this; }
         public Builder montoAprobado(String v) { montoAprobado = v; return this; }
         public Builder fechaAceptacionDemanda(String v) { fechaAceptacionDemanda = v; return this; }
         public Builder fechaEnvioJudicial(String v) { fechaEnvioJudicial = v; return this; }

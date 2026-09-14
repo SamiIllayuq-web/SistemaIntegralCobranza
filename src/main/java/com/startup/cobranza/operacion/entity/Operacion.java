@@ -1,7 +1,6 @@
 package com.startup.cobranza.operacion.entity;
 
 import com.startup.cobranza.agencia.entity.Agencia;
-import com.startup.cobranza.operacion.entity.BienEmbargado;
 import com.startup.cobranza.usuario.entity.Usuario;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
@@ -61,12 +60,6 @@ public class Operacion {
 
     @Column(name = "rango")
     private String rango;
-
-    @Column(name = "analista")
-    private String analista;
-
-    @Column(name = "analista_senior")
-    private String analistaSenior;
 
     @Column(name = "numero_expediente")
     private String numeroExpediente;
@@ -157,21 +150,8 @@ public class Operacion {
     private String comentario;
 
     // ─── Ubicación geográfica ─────────────────────────────────────────
-    @Column(name = "zona")
-    private String zona;
-
     @Column(name = "departamento")
     private String departamento;
-
-    @Column(name = "provincia")
-    private String provincia;
-
-    @Column(name = "distrito")
-    private String distrito;
-
-    // ─── Datos de contacto del deudor ─────────────────────────────────
-    @Column(name = "referencia", columnDefinition = "TEXT")
-    private String referencia;
 
     // ─── Monto aprobado ───────────────────────────────────────────────
     @Column(name = "monto_aprobado", precision = 15, scale = 2)
@@ -204,7 +184,7 @@ public class Operacion {
     @Column(name = "etapa_procesal_texto")
     private String etapaProcesalTexto;
 
-    // ─── Etapa procesal del estado de cartera ──────────────────────────────
+    // ─── Etapa procesal del estado de cartera ─────────────────────────
     // Valores: POSTULATORIA, PROBATORIA, RESOLUTORIA, EJECUTORIA
     @Column(name = "etapa_procesal")
     private String etapaProcesal;
@@ -248,83 +228,6 @@ public class Operacion {
 
     public Operacion() {}
 
-    public Operacion(Long id, com.startup.cobranza.cliente.entity.Cliente cliente,
-                     Agencia agencia, String cuenta, String numeroOperacion,
-                     BigDecimal montoCapital, BigDecimal montoTotal, Integer diasMora,
-                     String moneda, String situacion, String estado,
-                     String etapa, String observacion, String rango, String analista,
-                     String analistaSenior, String numeroExpediente, String tipoProceso,
-                     String tipoJuzgado, String distritoJudicial, String numeroJuzgado,
-                     Usuario abogado, String trans, String busquedaBienes,
-                     BigDecimal montoDemandado, String escribanoLegal,
-                     String codigoExpCautelar, String incidente,
-                     LocalDate fechaPresentacion, LocalDate fechaInadmisiblePrincipal,
-                     LocalDate fechaAdmisionPrincipal, LocalDate fechaAudienciaUnica,
-                     LocalDate fechaAutoFinal, LocalDate fechaConsentimiento,
-                     LocalDate fechaEjecutoriada, LocalDate fechaIngresoEjecucion,
-                     LocalDate fechaTasacion, LocalDate fechaNombramientoMartillero,
-                     LocalDate fechaRemate1, LocalDate fechaRemate2, LocalDate fechaRemate3,
-                     String observacionActos, String comentario,
-                     String estadoCartera, LocalDate fechaDesembolso,
-                     BigDecimal importeDesembolso, String etapaProcesalTexto,
-                     String actoPendiente, LocalDate fechaUltimoEstadoProceso,
-                     List<BienEmbargado> bienesEmbargados, Boolean activo,
-                     LocalDateTime fechaCreacion, LocalDateTime fechaActualizacion) {
-        this.id = id;
-        this.cliente = cliente;
-        this.agencia = agencia;
-        this.cuenta = cuenta;
-        this.numeroOperacion = numeroOperacion;
-        this.montoCapital = montoCapital;
-        this.montoTotal = montoTotal;
-        this.diasMora = diasMora;
-        this.moneda = moneda;
-        this.situacion = situacion;
-        this.estado = estado;
-        this.etapa = etapa;
-        this.observacion = observacion;
-        this.rango = rango;
-        this.analista = analista;
-        this.analistaSenior = analistaSenior;
-        this.numeroExpediente = numeroExpediente;
-        this.tipoProceso = tipoProceso;
-        this.tipoJuzgado = tipoJuzgado;
-        this.distritoJudicial = distritoJudicial;
-        this.numeroJuzgado = numeroJuzgado;
-        this.abogado = abogado;
-        this.trans = trans;
-        this.busquedaBienes = busquedaBienes;
-        this.montoDemandado = montoDemandado;
-        this.escribanoLegal = escribanoLegal;
-        this.codigoExpCautelar = codigoExpCautelar;
-        this.incidente = incidente;
-        this.fechaPresentacion = fechaPresentacion;
-        this.fechaInadmisiblePrincipal = fechaInadmisiblePrincipal;
-        this.fechaAdmisionPrincipal = fechaAdmisionPrincipal;
-        this.fechaAudienciaUnica = fechaAudienciaUnica;
-        this.fechaAutoFinal = fechaAutoFinal;
-        this.fechaConsentimiento = fechaConsentimiento;
-        this.fechaEjecutoriada = fechaEjecutoriada;
-        this.fechaIngresoEjecucion = fechaIngresoEjecucion;
-        this.fechaTasacion = fechaTasacion;
-        this.fechaNombramientoMartillero = fechaNombramientoMartillero;
-        this.fechaRemate1 = fechaRemate1;
-        this.fechaRemate2 = fechaRemate2;
-        this.fechaRemate3 = fechaRemate3;
-        this.observacionActos = observacionActos;
-        this.comentario = comentario;
-        this.estadoCartera = estadoCartera;
-        this.fechaDesembolso = fechaDesembolso;
-        this.importeDesembolso = importeDesembolso;
-        this.etapaProcesalTexto = etapaProcesalTexto;
-        this.actoPendiente = actoPendiente;
-        this.fechaUltimoEstadoProceso = fechaUltimoEstadoProceso;
-        this.bienesEmbargados = bienesEmbargados;
-        this.activo = activo;
-        this.fechaCreacion = fechaCreacion;
-        this.fechaActualizacion = fechaActualizacion;
-    }
-
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public com.startup.cobranza.cliente.entity.Cliente getCliente() { return cliente; }
@@ -353,10 +256,6 @@ public class Operacion {
     public void setObservacion(String observacion) { this.observacion = observacion; }
     public String getRango() { return rango; }
     public void setRango(String rango) { this.rango = rango; }
-    public String getAnalista() { return analista; }
-    public void setAnalista(String analista) { this.analista = analista; }
-    public String getAnalistaSenior() { return analistaSenior; }
-    public void setAnalistaSenior(String analistaSenior) { this.analistaSenior = analistaSenior; }
     public String getNumeroExpediente() { return numeroExpediente; }
     public void setNumeroExpediente(String numeroExpediente) { this.numeroExpediente = numeroExpediente; }
     public String getTipoProceso() { return tipoProceso; }
@@ -369,14 +268,6 @@ public class Operacion {
     public void setNumeroJuzgado(String numeroJuzgado) { this.numeroJuzgado = numeroJuzgado; }
     public Usuario getAbogado() { return abogado; }
     public void setAbogado(Usuario abogado) { this.abogado = abogado; }
-    public List<BienEmbargado> getBienesEmbargados() { return bienesEmbargados; }
-    public void setBienesEmbargados(List<BienEmbargado> bienesEmbargados) { this.bienesEmbargados = bienesEmbargados; }
-    public Boolean getActivo() { return activo; }
-    public void setActivo(Boolean activo) { this.activo = activo; }
-    public LocalDateTime getFechaCreacion() { return fechaCreacion; }
-    public void setFechaCreacion(LocalDateTime fechaCreacion) { this.fechaCreacion = fechaCreacion; }
-    public LocalDateTime getFechaActualizacion() { return fechaActualizacion; }
-    public void setFechaActualizacion(LocalDateTime fechaActualizacion) { this.fechaActualizacion = fechaActualizacion; }
     public String getTrans() { return trans; }
     public void setTrans(String trans) { this.trans = trans; }
     public String getBusquedaBienes() { return busquedaBienes; }
@@ -419,6 +310,10 @@ public class Operacion {
     public void setObservacionActos(String observacionActos) { this.observacionActos = observacionActos; }
     public String getComentario() { return comentario; }
     public void setComentario(String comentario) { this.comentario = comentario; }
+    public String getDepartamento() { return departamento; }
+    public void setDepartamento(String departamento) { this.departamento = departamento; }
+    public BigDecimal getMontoAprobado() { return montoAprobado; }
+    public void setMontoAprobado(BigDecimal montoAprobado) { this.montoAprobado = montoAprobado; }
     public String getEstadoCartera() { return estadoCartera; }
     public void setEstadoCartera(String estadoCartera) { this.estadoCartera = estadoCartera; }
     public LocalDate getFechaDesembolso() { return fechaDesembolso; }
@@ -433,18 +328,6 @@ public class Operacion {
     public void setEtapaProcesal(String etapaProcesal) { this.etapaProcesal = etapaProcesal; }
     public LocalDate getFechaUltimoEstadoProceso() { return fechaUltimoEstadoProceso; }
     public void setFechaUltimoEstadoProceso(LocalDate fechaUltimoEstadoProceso) { this.fechaUltimoEstadoProceso = fechaUltimoEstadoProceso; }
-    public String getZona() { return zona; }
-    public void setZona(String zona) { this.zona = zona; }
-    public String getDepartamento() { return departamento; }
-    public void setDepartamento(String departamento) { this.departamento = departamento; }
-    public String getProvincia() { return provincia; }
-    public void setProvincia(String provincia) { this.provincia = provincia; }
-    public String getDistrito() { return distrito; }
-    public void setDistrito(String distrito) { this.distrito = distrito; }
-    public String getReferencia() { return referencia; }
-    public void setReferencia(String referencia) { this.referencia = referencia; }
-    public BigDecimal getMontoAprobado() { return montoAprobado; }
-    public void setMontoAprobado(BigDecimal montoAprobado) { this.montoAprobado = montoAprobado; }
     public LocalDate getFechaAceptacionDemanda() { return fechaAceptacionDemanda; }
     public void setFechaAceptacionDemanda(LocalDate fechaAceptacionDemanda) { this.fechaAceptacionDemanda = fechaAceptacionDemanda; }
     public LocalDate getFechaEnvioJudicial() { return fechaEnvioJudicial; }
@@ -461,6 +344,14 @@ public class Operacion {
     public void setNumeroPartida(String numeroPartida) { this.numeroPartida = numeroPartida; }
     public String getNumeroFichaRegistral() { return numeroFichaRegistral; }
     public void setNumeroFichaRegistral(String numeroFichaRegistral) { this.numeroFichaRegistral = numeroFichaRegistral; }
+    public List<BienEmbargado> getBienesEmbargados() { return bienesEmbargados; }
+    public void setBienesEmbargados(List<BienEmbargado> bienesEmbargados) { this.bienesEmbargados = bienesEmbargados; }
+    public Boolean getActivo() { return activo; }
+    public void setActivo(Boolean activo) { this.activo = activo; }
+    public LocalDateTime getFechaCreacion() { return fechaCreacion; }
+    public void setFechaCreacion(LocalDateTime fechaCreacion) { this.fechaCreacion = fechaCreacion; }
+    public LocalDateTime getFechaActualizacion() { return fechaActualizacion; }
+    public void setFechaActualizacion(LocalDateTime fechaActualizacion) { this.fechaActualizacion = fechaActualizacion; }
 
     public static Builder builder() { return new Builder(); }
 
@@ -479,47 +370,12 @@ public class Operacion {
         private String etapa;
         private String observacion;
         private String rango;
-        private String analista;
-        private String analistaSenior;
         private String numeroExpediente;
         private String tipoProceso;
         private String tipoJuzgado;
         private String distritoJudicial;
         private String numeroJuzgado;
         private Usuario abogado;
-        private List<BienEmbargado> bienesEmbargados;
-        private Boolean activo;
-        private String numeroFichaRegistral;
-        private LocalDateTime fechaCreacion;
-        private LocalDateTime fechaActualizacion;
-
-        public Builder id(Long v) { id = v; return this; }
-        public Builder cliente(com.startup.cobranza.cliente.entity.Cliente v) { cliente = v; return this; }
-        public Builder agencia(Agencia v) { agencia = v; return this; }
-        public Builder cuenta(String v) { cuenta = v; return this; }
-        public Builder numeroOperacion(String v) { numeroOperacion = v; return this; }
-        public Builder montoCapital(BigDecimal v) { montoCapital = v; return this; }
-        public Builder montoTotal(BigDecimal v) { montoTotal = v; return this; }
-        public Builder diasMora(Integer v) { diasMora = v; return this; }
-        public Builder moneda(String v) { moneda = v; return this; }
-        public Builder situacion(String v) { situacion = v; return this; }
-        public Builder estado(String v) { estado = v; return this; }
-        public Builder etapa(String v) { etapa = v; return this; }
-        public Builder observacion(String v) { observacion = v; return this; }
-        public Builder rango(String v) { rango = v; return this; }
-        public Builder analista(String v) { analista = v; return this; }
-        public Builder analistaSenior(String v) { analistaSenior = v; return this; }
-        public Builder numeroExpediente(String v) { numeroExpediente = v; return this; }
-        public Builder tipoProceso(String v) { tipoProceso = v; return this; }
-        public Builder tipoJuzgado(String v) { tipoJuzgado = v; return this; }
-        public Builder distritoJudicial(String v) { distritoJudicial = v; return this; }
-        public Builder numeroJuzgado(String v) { numeroJuzgado = v; return this; }
-        public Builder abogado(Usuario v) { abogado = v; return this; }
-        public Builder bienesEmbargados(List<BienEmbargado> v) { bienesEmbargados = v; return this; }
-        public Builder activo(Boolean v) { activo = v; return this; }
-        public Builder fechaCreacion(LocalDateTime v) { fechaCreacion = v; return this; }
-        public Builder fechaActualizacion(LocalDateTime v) { fechaActualizacion = v; return this; }
-
         private String trans;
         private String busquedaBienes;
         private BigDecimal montoDemandado;
@@ -541,20 +397,15 @@ public class Operacion {
         private LocalDate fechaRemate3;
         private String observacionActos;
         private String comentario;
+        private String departamento;
+        private BigDecimal montoAprobado;
         private String estadoCartera;
         private LocalDate fechaDesembolso;
         private BigDecimal importeDesembolso;
         private String etapaProcesalTexto;
         private String actoPendiente;
         private LocalDate fechaUltimoEstadoProceso;
-        private String zona;
-        private String departamento;
-        private String provincia;
-        private String distrito;
-        private String direccion;
-        private String referencia;
-        private String telefono;
-        private BigDecimal montoAprobado;
+        private String etapaProcesal;
         private LocalDate fechaAceptacionDemanda;
         private LocalDate fechaEnvioJudicial;
         private LocalDate fechaAsignacionAbogado;
@@ -562,7 +413,30 @@ public class Operacion {
         private String tipoFondo;
         private String coTitularAval;
         private String numeroPartida;
-        private String etapaProcesal;
+        private String numeroFichaRegistral;
+        private List<BienEmbargado> bienesEmbargados;
+        private Boolean activo;
+
+        public Builder id(Long v) { id = v; return this; }
+        public Builder cliente(com.startup.cobranza.cliente.entity.Cliente v) { cliente = v; return this; }
+        public Builder agencia(Agencia v) { agencia = v; return this; }
+        public Builder cuenta(String v) { cuenta = v; return this; }
+        public Builder numeroOperacion(String v) { numeroOperacion = v; return this; }
+        public Builder montoCapital(BigDecimal v) { montoCapital = v; return this; }
+        public Builder montoTotal(BigDecimal v) { montoTotal = v; return this; }
+        public Builder diasMora(Integer v) { diasMora = v; return this; }
+        public Builder moneda(String v) { moneda = v; return this; }
+        public Builder situacion(String v) { situacion = v; return this; }
+        public Builder estado(String v) { estado = v; return this; }
+        public Builder etapa(String v) { etapa = v; return this; }
+        public Builder observacion(String v) { observacion = v; return this; }
+        public Builder rango(String v) { rango = v; return this; }
+        public Builder numeroExpediente(String v) { numeroExpediente = v; return this; }
+        public Builder tipoProceso(String v) { tipoProceso = v; return this; }
+        public Builder tipoJuzgado(String v) { tipoJuzgado = v; return this; }
+        public Builder distritoJudicial(String v) { distritoJudicial = v; return this; }
+        public Builder numeroJuzgado(String v) { numeroJuzgado = v; return this; }
+        public Builder abogado(Usuario v) { abogado = v; return this; }
         public Builder trans(String v) { trans = v; return this; }
         public Builder busquedaBienes(String v) { busquedaBienes = v; return this; }
         public Builder montoDemandado(BigDecimal v) { montoDemandado = v; return this; }
@@ -584,20 +458,15 @@ public class Operacion {
         public Builder fechaRemate3(LocalDate v) { fechaRemate3 = v; return this; }
         public Builder observacionActos(String v) { observacionActos = v; return this; }
         public Builder comentario(String v) { comentario = v; return this; }
+        public Builder departamento(String v) { departamento = v; return this; }
+        public Builder montoAprobado(BigDecimal v) { montoAprobado = v; return this; }
         public Builder estadoCartera(String v) { estadoCartera = v; return this; }
         public Builder fechaDesembolso(LocalDate v) { fechaDesembolso = v; return this; }
         public Builder importeDesembolso(BigDecimal v) { importeDesembolso = v; return this; }
         public Builder etapaProcesalTexto(String v) { etapaProcesalTexto = v; return this; }
         public Builder actoPendiente(String v) { actoPendiente = v; return this; }
+        public Builder etapaProcesal(String v) { etapaProcesal = v; return this; }
         public Builder fechaUltimoEstadoProceso(LocalDate v) { fechaUltimoEstadoProceso = v; return this; }
-        public Builder zona(String v) { zona = v; return this; }
-        public Builder departamento(String v) { departamento = v; return this; }
-        public Builder provincia(String v) { provincia = v; return this; }
-        public Builder distrito(String v) { distrito = v; return this; }
-        public Builder direccion(String v) { direccion = v; return this; }
-        public Builder referencia(String v) { referencia = v; return this; }
-        public Builder telefono(String v) { telefono = v; return this; }
-        public Builder montoAprobado(BigDecimal v) { montoAprobado = v; return this; }
         public Builder fechaAceptacionDemanda(LocalDate v) { fechaAceptacionDemanda = v; return this; }
         public Builder fechaEnvioJudicial(LocalDate v) { fechaEnvioJudicial = v; return this; }
         public Builder fechaAsignacionAbogado(LocalDate v) { fechaAsignacionAbogado = v; return this; }
@@ -605,8 +474,9 @@ public class Operacion {
         public Builder tipoFondo(String v) { tipoFondo = v; return this; }
         public Builder coTitularAval(String v) { coTitularAval = v; return this; }
         public Builder numeroPartida(String v) { numeroPartida = v; return this; }
-        public Builder etapaProcesal(String v) { etapaProcesal = v; return this; }
         public Builder numeroFichaRegistral(String v) { numeroFichaRegistral = v; return this; }
+        public Builder bienesEmbargados(List<BienEmbargado> v) { bienesEmbargados = v; return this; }
+        public Builder activo(Boolean v) { activo = v; return this; }
 
         public Operacion build() {
             Operacion o = new Operacion();
@@ -624,16 +494,12 @@ public class Operacion {
             o.setEtapa(etapa);
             o.setObservacion(observacion);
             o.setRango(rango);
-            o.setAnalista(analista);
-            o.setAnalistaSenior(analistaSenior);
             o.setNumeroExpediente(numeroExpediente);
             o.setTipoProceso(tipoProceso);
             o.setTipoJuzgado(tipoJuzgado);
             o.setDistritoJudicial(distritoJudicial);
             o.setNumeroJuzgado(numeroJuzgado);
             o.setAbogado(abogado);
-            o.setBienesEmbargados(bienesEmbargados);
-            o.setActivo(activo != null ? activo : true);
             o.setTrans(trans);
             o.setBusquedaBienes(busquedaBienes);
             o.setMontoDemandado(montoDemandado);
@@ -655,19 +521,15 @@ public class Operacion {
             o.setFechaRemate3(fechaRemate3);
             o.setObservacionActos(observacionActos);
             o.setComentario(comentario);
+            o.setDepartamento(departamento);
+            o.setMontoAprobado(montoAprobado);
             o.setEstadoCartera(estadoCartera);
             o.setFechaDesembolso(fechaDesembolso);
             o.setImporteDesembolso(importeDesembolso);
             o.setEtapaProcesalTexto(etapaProcesalTexto);
-            o.setEtapaProcesal(etapaProcesal);
             o.setActoPendiente(actoPendiente);
+            o.setEtapaProcesal(etapaProcesal);
             o.setFechaUltimoEstadoProceso(fechaUltimoEstadoProceso);
-            o.setZona(zona);
-            o.setDepartamento(departamento);
-            o.setProvincia(provincia);
-            o.setDistrito(distrito);
-            o.setReferencia(referencia);
-            o.setMontoAprobado(montoAprobado);
             o.setFechaAceptacionDemanda(fechaAceptacionDemanda);
             o.setFechaEnvioJudicial(fechaEnvioJudicial);
             o.setFechaAsignacionAbogado(fechaAsignacionAbogado);
@@ -676,6 +538,7 @@ public class Operacion {
             o.setCoTitularAval(coTitularAval);
             o.setNumeroPartida(numeroPartida);
             o.setNumeroFichaRegistral(numeroFichaRegistral);
+            o.setBienesEmbargados(bienesEmbargados);
             o.setActivo(activo != null ? activo : true);
             return o;
         }
