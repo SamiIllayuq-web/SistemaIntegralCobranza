@@ -446,7 +446,7 @@ public class CarteraService {
                     .operacion(operacion)
                     .detalleGarantia(getCellString(row, columns, "detalleBien"))
                     .partidaRegistral(getCellString(row, columns, "numeroPartida"))
-                    .tipoBien(getCellString(row, columns, "tipoBien"))))
+                    .tipoBien(getCellString(row, columns, "tipoBien"))
                     .rango(getCellString(row, columns, "rango"))
                     .tipoPreferencia(getCellString(row, columns, "tipoPreferencia"))
                     .montoMc(getCellBigDecimal(row, columns, "montoMc"))

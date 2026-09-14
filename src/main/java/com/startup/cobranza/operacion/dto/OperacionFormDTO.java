@@ -73,40 +73,6 @@ public class OperacionFormDTO {
 
     public OperacionFormDTO() {}
 
-    public OperacionFormDTO(Long id, Long clienteId, Long agenciaId,
-                            String cuenta, String numeroOperacion, BigDecimal montoCapital,
-                            BigDecimal montoTotal, Integer diasMora, String moneda,
-                            String situacion, String estado, String etapa,
-                            String observacion, String rango, String analista, String analistaSenior,
-                            String numeroExpediente, String tipoProceso, String tipoJuzgado,
-                            String distritoJudicial, String numeroJuzgado, Long abogadoId,
-                            String observacionActos, String comentario) {
-        this.id = id;
-        this.clienteId = clienteId;
-        this.agenciaId = agenciaId;
-        this.cuenta = cuenta;
-        this.numeroOperacion = numeroOperacion;
-        this.montoCapital = montoCapital;
-        this.montoTotal = montoTotal;
-        this.diasMora = diasMora;
-        this.moneda = moneda;
-        this.situacion = situacion;
-        this.estado = estado;
-        this.etapa = etapa;
-        this.observacion = observacion;
-        this.rango = rango;
-        this.analista = analista;
-        this.analistaSenior = analistaSenior;
-        this.numeroExpediente = numeroExpediente;
-        this.tipoProceso = tipoProceso;
-        this.tipoJuzgado = tipoJuzgado;
-        this.distritoJudicial = distritoJudicial;
-        this.numeroJuzgado = numeroJuzgado;
-        this.abogadoId = abogadoId;
-        this.observacionActos = observacionActos;
-        this.comentario = comentario;
-    }
-
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public Long getClienteId() { return clienteId; }
@@ -145,8 +111,6 @@ public class OperacionFormDTO {
     public void setObservacion(String observacion) { this.observacion = observacion; }
     public String getRango() { return rango; }
     public void setRango(String rango) { this.rango = rango; }
-    public String getAnalistaSenior() { return analistaSenior; }
-    public void setAnalistaSenior(String analistaSenior) { this.analistaSenior = analistaSenior; }
     public String getNumeroExpediente() { return numeroExpediente; }
     public void setNumeroExpediente(String numeroExpediente) { this.numeroExpediente = numeroExpediente; }
     public String getTipoProceso() { return tipoProceso; }
@@ -272,8 +236,8 @@ public class OperacionFormDTO {
         private String fechaDesembolso;
         private String importeDesembolso;
         private String etapaProcesalTexto;
-        private String actoPendiente;
         private String etapaProcesal;
+        private String actoPendiente;
         private String fechaUltimoEstadoProceso;
         private String departamento;
         private String montoAprobado;
@@ -372,15 +336,34 @@ public class OperacionFormDTO {
         public Builder bienesEmbargados(List<BienEmbargadoDTO> v) { bienesEmbargados = v; return this; }
 
         public OperacionFormDTO build() {
-            OperacionFormDTO dto = new OperacionFormDTO(id, clienteId, agenciaId, cuenta, numeroOperacion,
-                    montoCapital, montoTotal, diasMora, moneda, situacion, estado, etapa,
-                    observacion, rango, analista, analistaSenior, numeroExpediente, tipoProceso,
-                    tipoJuzgado, distritoJudicial, numeroJuzgado, abogadoId, observacionActos, comentario);
+            OperacionFormDTO dto = new OperacionFormDTO();
+            dto.setId(id);
+            dto.setClienteId(clienteId);
             dto.setDni(dni);
             dto.setNombreCliente(nombreCliente);
             dto.setTelefono(telefono);
             dto.setEmail(email);
             dto.setDireccion(direccion);
+            dto.setAgenciaId(agenciaId);
+            dto.setCuenta(cuenta);
+            dto.setNumeroOperacion(numeroOperacion);
+            dto.setMontoCapital(montoCapital);
+            dto.setMontoTotal(montoTotal);
+            dto.setDiasMora(diasMora);
+            dto.setMoneda(moneda);
+            dto.setSituacion(situacion);
+            dto.setEstado(estado);
+            dto.setEtapa(etapa);
+            dto.setObservacion(observacion);
+            dto.setRango(rango);
+            dto.setNumeroExpediente(numeroExpediente);
+            dto.setTipoProceso(tipoProceso);
+            dto.setTipoJuzgado(tipoJuzgado);
+            dto.setDistritoJudicial(distritoJudicial);
+            dto.setNumeroJuzgado(numeroJuzgado);
+            dto.setAbogadoId(abogadoId);
+            dto.setObservacionActos(observacionActos);
+            dto.setComentario(comentario);
             dto.setEstadoCartera(estadoCartera);
             dto.setFechaDesembolso(fechaDesembolso);
             dto.setImporteDesembolso(importeDesembolso);
@@ -388,11 +371,7 @@ public class OperacionFormDTO {
             dto.setEtapaProcesal(etapaProcesal);
             dto.setActoPendiente(actoPendiente);
             dto.setFechaUltimoEstadoProceso(fechaUltimoEstadoProceso);
-            dto.setZona(zona);
             dto.setDepartamento(departamento);
-            dto.setProvincia(provincia);
-            dto.setDistrito(distrito);
-            dto.setReferencia(referencia);
             dto.setMontoAprobado(montoAprobado);
             dto.setFechaAceptacionDemanda(fechaAceptacionDemanda);
             dto.setFechaEnvioJudicial(fechaEnvioJudicial);
@@ -402,6 +381,25 @@ public class OperacionFormDTO {
             dto.setCoTitularAval(coTitularAval);
             dto.setNumeroPartida(numeroPartida);
             dto.setNumeroFichaRegistral(numeroFichaRegistral);
+            dto.setTrans(trans);
+            dto.setBusquedaBienes(busquedaBienes);
+            dto.setEscribanoLegal(escribanoLegal);
+            dto.setCodigoExpCautelar(codigoExpCautelar);
+            dto.setIncidente(incidente);
+            dto.setMontoDemandado(montoDemandado);
+            dto.setFechaPresentacion(fechaPresentacion);
+            dto.setFechaInadmisiblePrincipal(fechaInadmisiblePrincipal);
+            dto.setFechaAdmisionPrincipal(fechaAdmisionPrincipal);
+            dto.setFechaAudienciaUnica(fechaAudienciaUnica);
+            dto.setFechaAutoFinal(fechaAutoFinal);
+            dto.setFechaConsentimiento(fechaConsentimiento);
+            dto.setFechaEjecutoriada(fechaEjecutoriada);
+            dto.setFechaIngresoEjecucion(fechaIngresoEjecucion);
+            dto.setFechaTasacion(fechaTasacion);
+            dto.setFechaNombramientoMartillero(fechaNombramientoMartillero);
+            dto.setFechaRemate1(fechaRemate1);
+            dto.setFechaRemate2(fechaRemate2);
+            dto.setFechaRemate3(fechaRemate3);
             dto.setBienesEmbargados(bienesEmbargados);
             return dto;
         }

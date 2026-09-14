@@ -154,11 +154,6 @@ public class OperacionService {
         operacion.setEtapaProcesalTexto(form.getEtapaProcesalTexto());
         operacion.setActoPendiente(form.getActoPendiente());
         operacion.setFechaUltimoEstadoProceso(parseFecha(form.getFechaUltimoEstadoProceso()));
-        operacion.setZona(form.getZona());
-        operacion.setDepartamento(form.getDepartamento());
-        operacion.setProvincia(form.getProvincia());
-        operacion.setDistrito(form.getDistrito());
-        operacion.setReferencia(form.getReferencia());
         operacion.setMontoAprobado(parseImporte(form.getMontoAprobado()));
         operacion.setFechaAceptacionDemanda(parseFecha(form.getFechaAceptacionDemanda()));
         operacion.setFechaEnvioJudicial(parseFecha(form.getFechaEnvioJudicial()));
@@ -230,8 +225,6 @@ public class OperacionService {
         existing.setEstado(form.getEstado());
         existing.setObservacion(form.getObservacion());
         existing.setRango(form.getRango());
-        existing.setAnalista(form.getAnalista());
-        existing.setAnalistaSenior(form.getAnalistaSenior());
         existing.setNumeroExpediente(form.getNumeroExpediente());
         existing.setTipoProceso(form.getTipoProceso());
         existing.setTipoJuzgado(form.getTipoJuzgado());
@@ -266,11 +259,6 @@ public class OperacionService {
         existing.setEtapaProcesal(form.getEtapaProcesal());
         existing.setActoPendiente(form.getActoPendiente());
         existing.setFechaUltimoEstadoProceso(parseFecha(form.getFechaUltimoEstadoProceso()));
-        existing.setZona(form.getZona());
-        existing.setDepartamento(form.getDepartamento());
-        existing.setProvincia(form.getProvincia());
-        existing.setDistrito(form.getDistrito());
-        existing.setReferencia(form.getReferencia());
         existing.setMontoAprobado(parseImporte(form.getMontoAprobado()));
         existing.setFechaAceptacionDemanda(parseFecha(form.getFechaAceptacionDemanda()));
         existing.setFechaEnvioJudicial(parseFecha(form.getFechaEnvioJudicial()));

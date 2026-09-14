@@ -21,7 +21,6 @@ public class OperacionDTO {
     private String moneda;
     private String situacion;
     private String estado;
-    private String etapa;
     private String observacion;
     private String rango;
     private String numeroExpediente;
@@ -62,11 +61,10 @@ public class OperacionDTO {
     private LocalDate fechaDesembolso;
     private BigDecimal importeDesembolso;
     private String etapaProcesalTexto;
+    private String etapaProcesal;
     private String actoPendiente;
     private LocalDate fechaUltimoEstadoProceso;
     private String departamento;
-    private String direccion;
-    private String telefono;
     private BigDecimal montoAprobado;
     private LocalDate fechaAceptacionDemanda;
     private LocalDate fechaEnvioJudicial;
@@ -76,50 +74,8 @@ public class OperacionDTO {
     private String coTitularAval;
     private String numeroPartida;
     private String numeroFichaRegistral;
-    private String etapaProcesal;
 
     public OperacionDTO() {}
-
-    public OperacionDTO(Long id, Long clienteId, String clienteNombre, String clienteDni,
-                        Long agenciaId, String agenciaNombre,
-                        String cuenta, String numeroOperacion, BigDecimal montoCapital,
-                        BigDecimal montoTotal, Integer diasMora, String moneda,
-                        String situacion, String estado, String etapa, String observacion,
-                        String rango, String analista, String analistaSenior,
-                        String numeroExpediente, String tipoProceso, String tipoJuzgado,
-                        String distritoJudicial, String numeroJuzgado, Long abogadoId,
-                        String abogadoNombre, Boolean activo,
-                        LocalDateTime fechaCreacion, LocalDateTime fechaActualizacion) {
-        this.id = id;
-        this.clienteId = clienteId;
-        this.clienteNombre = clienteNombre;
-        this.clienteDni = clienteDni;
-        this.agenciaId = agenciaId;
-        this.agenciaNombre = agenciaNombre;
-        this.cuenta = cuenta;
-        this.numeroOperacion = numeroOperacion;
-        this.montoCapital = montoCapital;
-        this.montoTotal = montoTotal;
-        this.diasMora = diasMora;
-        this.moneda = moneda;
-        this.situacion = situacion;
-        this.estado = estado;
-        this.etapa = etapa;
-        this.observacion = observacion;
-        this.rango = rango;
-        this.analista = analista;
-        this.analistaSenior = analistaSenior;
-        this.numeroExpediente = numeroExpediente;
-        this.tipoProceso = tipoProceso;
-        this.tipoJuzgado = tipoJuzgado;
-        this.distritoJudicial = distritoJudicial;
-        this.numeroJuzgado = numeroJuzgado;
-        this.abogadoId = abogadoId;
-        this.abogadoNombre = abogadoNombre;
-        this.activo = activo;
-        this.fechaCreacion = fechaCreacion;
-        this.fechaActualizacion = fechaActualizacion;
-    }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -149,14 +105,10 @@ public class OperacionDTO {
     public void setSituacion(String situacion) { this.situacion = situacion; }
     public String getEstado() { return estado; }
     public void setEstado(String estado) { this.estado = estado; }
-    public String getEtapa() { return etapa; }
-    public void setEtapa(String etapa) { this.etapa = etapa; }
     public String getObservacion() { return observacion; }
     public void setObservacion(String observacion) { this.observacion = observacion; }
     public String getRango() { return rango; }
     public void setRango(String rango) { this.rango = rango; }
-    public String getAnalistaSenior() { return analistaSenior; }
-    public void setAnalistaSenior(String analistaSenior) { this.analistaSenior = analistaSenior; }
     public String getNumeroExpediente() { return numeroExpediente; }
     public void setNumeroExpediente(String numeroExpediente) { this.numeroExpediente = numeroExpediente; }
     public String getTipoProceso() { return tipoProceso; }
@@ -229,16 +181,14 @@ public class OperacionDTO {
     public void setImporteDesembolso(BigDecimal importeDesembolso) { this.importeDesembolso = importeDesembolso; }
     public String getEtapaProcesalTexto() { return etapaProcesalTexto; }
     public void setEtapaProcesalTexto(String etapaProcesalTexto) { this.etapaProcesalTexto = etapaProcesalTexto; }
+    public String getEtapaProcesal() { return etapaProcesal; }
+    public void setEtapaProcesal(String etapaProcesal) { this.etapaProcesal = etapaProcesal; }
     public String getActoPendiente() { return actoPendiente; }
     public void setActoPendiente(String actoPendiente) { this.actoPendiente = actoPendiente; }
     public LocalDate getFechaUltimoEstadoProceso() { return fechaUltimoEstadoProceso; }
     public void setFechaUltimoEstadoProceso(LocalDate fechaUltimoEstadoProceso) { this.fechaUltimoEstadoProceso = fechaUltimoEstadoProceso; }
     public String getDepartamento() { return departamento; }
     public void setDepartamento(String departamento) { this.departamento = departamento; }
-    public String getDireccion() { return direccion; }
-    public void setDireccion(String direccion) { this.direccion = direccion; }
-    public String getTelefono() { return telefono; }
-    public void setTelefono(String telefono) { this.telefono = telefono; }
     public BigDecimal getMontoAprobado() { return montoAprobado; }
     public void setMontoAprobado(BigDecimal montoAprobado) { this.montoAprobado = montoAprobado; }
     public LocalDate getFechaAceptacionDemanda() { return fechaAceptacionDemanda; }
@@ -257,8 +207,7 @@ public class OperacionDTO {
     public void setNumeroPartida(String numeroPartida) { this.numeroPartida = numeroPartida; }
     public String getNumeroFichaRegistral() { return numeroFichaRegistral; }
     public void setNumeroFichaRegistral(String numeroFichaRegistral) { this.numeroFichaRegistral = numeroFichaRegistral; }
-    public String getEtapaProcesal() { return etapaProcesal; }
-    public void setEtapaProcesal(String etapaProcesal) { this.etapaProcesal = etapaProcesal; }
+
     public static Builder builder() { return new Builder(); }
 
     public static class Builder {
@@ -276,7 +225,6 @@ public class OperacionDTO {
         private String moneda;
         private String situacion;
         private String estado;
-        private String etapa;
         private String observacion;
         private String rango;
         private String numeroExpediente;
@@ -314,12 +262,10 @@ public class OperacionDTO {
         private LocalDate fechaDesembolso;
         private BigDecimal importeDesembolso;
         private String etapaProcesalTexto;
+        private String etapaProcesal;
         private String actoPendiente;
         private LocalDate fechaUltimoEstadoProceso;
-        private String etapaProcesal;
         private String departamento;
-        private String direccion;
-        private String telefono;
         private BigDecimal montoAprobado;
         private LocalDate fechaAceptacionDemanda;
         private LocalDate fechaEnvioJudicial;
@@ -344,7 +290,6 @@ public class OperacionDTO {
         public Builder moneda(String v) { moneda = v; return this; }
         public Builder situacion(String v) { situacion = v; return this; }
         public Builder estado(String v) { estado = v; return this; }
-        public Builder etapa(String v) { etapa = v; return this; }
         public Builder observacion(String v) { observacion = v; return this; }
         public Builder rango(String v) { rango = v; return this; }
         public Builder numeroExpediente(String v) { numeroExpediente = v; return this; }
@@ -382,12 +327,10 @@ public class OperacionDTO {
         public Builder fechaDesembolso(LocalDate v) { fechaDesembolso = v; return this; }
         public Builder importeDesembolso(BigDecimal v) { importeDesembolso = v; return this; }
         public Builder etapaProcesalTexto(String v) { etapaProcesalTexto = v; return this; }
-        public Builder actoPendiente(String v) { actoPendiente = v; return this; }
         public Builder etapaProcesal(String v) { etapaProcesal = v; return this; }
+        public Builder actoPendiente(String v) { actoPendiente = v; return this; }
         public Builder fechaUltimoEstadoProceso(LocalDate v) { fechaUltimoEstadoProceso = v; return this; }
         public Builder departamento(String v) { departamento = v; return this; }
-        public Builder direccion(String v) { direccion = v; return this; }
-        public Builder telefono(String v) { telefono = v; return this; }
         public Builder montoAprobado(BigDecimal v) { montoAprobado = v; return this; }
         public Builder fechaAceptacionDemanda(LocalDate v) { fechaAceptacionDemanda = v; return this; }
         public Builder fechaEnvioJudicial(LocalDate v) { fechaEnvioJudicial = v; return this; }
@@ -399,12 +342,33 @@ public class OperacionDTO {
         public Builder numeroFichaRegistral(String v) { numeroFichaRegistral = v; return this; }
 
         public OperacionDTO build() {
-            OperacionDTO dto = new OperacionDTO(id, clienteId, clienteNombre, clienteDni,
-                    agenciaId, agenciaNombre, cuenta, numeroOperacion, montoCapital, montoTotal,
-                    diasMora, moneda, situacion, estado, etapa, observacion, rango,
-                    analista, analistaSenior, numeroExpediente, tipoProceso, tipoJuzgado,
-                    distritoJudicial, numeroJuzgado, abogadoId, abogadoNombre, activo,
-                    fechaCreacion, fechaActualizacion);
+            OperacionDTO dto = new OperacionDTO();
+            dto.setId(id);
+            dto.setClienteId(clienteId);
+            dto.setClienteNombre(clienteNombre);
+            dto.setClienteDni(clienteDni);
+            dto.setAgenciaId(agenciaId);
+            dto.setAgenciaNombre(agenciaNombre);
+            dto.setCuenta(cuenta);
+            dto.setNumeroOperacion(numeroOperacion);
+            dto.setMontoCapital(montoCapital);
+            dto.setMontoTotal(montoTotal);
+            dto.setDiasMora(diasMora);
+            dto.setMoneda(moneda);
+            dto.setSituacion(situacion);
+            dto.setEstado(estado);
+            dto.setObservacion(observacion);
+            dto.setRango(rango);
+            dto.setNumeroExpediente(numeroExpediente);
+            dto.setTipoProceso(tipoProceso);
+            dto.setTipoJuzgado(tipoJuzgado);
+            dto.setDistritoJudicial(distritoJudicial);
+            dto.setNumeroJuzgado(numeroJuzgado);
+            dto.setAbogadoId(abogadoId);
+            dto.setAbogadoNombre(abogadoNombre);
+            dto.setActivo(activo);
+            dto.setFechaCreacion(fechaCreacion);
+            dto.setFechaActualizacion(fechaActualizacion);
             dto.setTrans(trans);
             dto.setBusquedaBienes(busquedaBienes);
             dto.setMontoDemandado(montoDemandado);
@@ -430,16 +394,10 @@ public class OperacionDTO {
             dto.setFechaDesembolso(fechaDesembolso);
             dto.setImporteDesembolso(importeDesembolso);
             dto.setEtapaProcesalTexto(etapaProcesalTexto);
-            dto.setActoPendiente(actoPendiente);
             dto.setEtapaProcesal(etapaProcesal);
+            dto.setActoPendiente(actoPendiente);
             dto.setFechaUltimoEstadoProceso(fechaUltimoEstadoProceso);
-            dto.setZona(zona);
             dto.setDepartamento(departamento);
-            dto.setProvincia(provincia);
-            dto.setDistrito(distrito);
-            dto.setDireccion(direccion);
-            dto.setReferencia(referencia);
-            dto.setTelefono(telefono);
             dto.setMontoAprobado(montoAprobado);
             dto.setFechaAceptacionDemanda(fechaAceptacionDemanda);
             dto.setFechaEnvioJudicial(fechaEnvioJudicial);
