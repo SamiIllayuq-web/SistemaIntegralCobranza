@@ -134,9 +134,7 @@ public class OperacionService {
         operacion.setDepartamento(form.getDepartamento());
         operacion.setProvincia(form.getProvincia());
         operacion.setDistrito(form.getDistrito());
-        operacion.setDireccion(form.getDireccion());
         operacion.setReferencia(form.getReferencia());
-        operacion.setTelefono(form.getTelefono());
         operacion.setMontoAprobado(parseImporte(form.getMontoAprobado()));
         operacion.setFechaAceptacionDemanda(parseFecha(form.getFechaAceptacionDemanda()));
         operacion.setFechaEnvioJudicial(parseFecha(form.getFechaEnvioJudicial()));
@@ -247,9 +245,7 @@ public class OperacionService {
         existing.setDepartamento(form.getDepartamento());
         existing.setProvincia(form.getProvincia());
         existing.setDistrito(form.getDistrito());
-        existing.setDireccion(form.getDireccion());
         existing.setReferencia(form.getReferencia());
-        existing.setTelefono(form.getTelefono());
         existing.setMontoAprobado(parseImporte(form.getMontoAprobado()));
         existing.setFechaAceptacionDemanda(parseFecha(form.getFechaAceptacionDemanda()));
         existing.setFechaEnvioJudicial(parseFecha(form.getFechaEnvioJudicial()));

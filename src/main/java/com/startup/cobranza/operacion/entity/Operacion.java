@@ -170,14 +170,8 @@ public class Operacion {
     private String distrito;
 
     // ─── Datos de contacto del deudor ─────────────────────────────────
-    @Column(name = "direccion", columnDefinition = "TEXT")
-    private String direccion;
-
     @Column(name = "referencia", columnDefinition = "TEXT")
     private String referencia;
-
-    @Column(name = "telefono")
-    private String telefono;
 
     // ─── Monto aprobado ───────────────────────────────────────────────
     @Column(name = "monto_aprobado", precision = 15, scale = 2)
@@ -447,12 +441,8 @@ public class Operacion {
     public void setProvincia(String provincia) { this.provincia = provincia; }
     public String getDistrito() { return distrito; }
     public void setDistrito(String distrito) { this.distrito = distrito; }
-    public String getDireccion() { return direccion; }
-    public void setDireccion(String direccion) { this.direccion = direccion; }
     public String getReferencia() { return referencia; }
     public void setReferencia(String referencia) { this.referencia = referencia; }
-    public String getTelefono() { return telefono; }
-    public void setTelefono(String telefono) { this.telefono = telefono; }
     public BigDecimal getMontoAprobado() { return montoAprobado; }
     public void setMontoAprobado(BigDecimal montoAprobado) { this.montoAprobado = montoAprobado; }
     public LocalDate getFechaAceptacionDemanda() { return fechaAceptacionDemanda; }
@@ -676,9 +666,7 @@ public class Operacion {
             o.setDepartamento(departamento);
             o.setProvincia(provincia);
             o.setDistrito(distrito);
-            o.setDireccion(direccion);
             o.setReferencia(referencia);
-            o.setTelefono(telefono);
             o.setMontoAprobado(montoAprobado);
             o.setFechaAceptacionDemanda(fechaAceptacionDemanda);
             o.setFechaEnvioJudicial(fechaEnvioJudicial);

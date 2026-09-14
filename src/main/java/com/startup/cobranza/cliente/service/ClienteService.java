@@ -25,6 +25,7 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.LinkedHashSet;
 import java.util.stream.Collectors;
 
 @Service
@@ -85,17 +86,47 @@ public class ClienteService {
      *   query sobre Operacion para obtener clienteIds únicos, luego lookup de cada cliente.
      */
     public Page<ClienteBandejaDTO> listarBandeja(ClienteBusquedaDTO filtros, Pageable pageable) {
-        boolean conFiltros = filtros.hasFiltrosAdicionales()
-                || (filtros.getNombre() != null && !filtros.getNombre().isBlank())
+        boolean tieneFiltrosOperacion = filtros.hasFiltrosAdicionales();
+        boolean tieneNombreODni = (filtros.getNombre() != null && !filtros.getNombre().isBlank())
                 || (filtros.getDni() != null && !filtros.getDni().isBlank());
 
-        if (!conFiltros) {
+        if (!tieneFiltrosOperacion && !tieneNombreODni) {
             // Sin filtros: lista simple paginada de clientes activos
             return listarBandejaSimple(pageable);
         }
 
-        // Con filtros: buscar sobre operaciones primero
+        if (!tieneFiltrosOperacion) {
+            // Solo nombre o DNI: buscar directo sobre Cliente (ignora activo de Operacion)
+            return listarBandejaPorNombreODni(filtros, pageable);
+        }
+
+        // Con filtros de operación: buscar sobre Operacion
         return listarBandejaConFiltros(filtros, pageable);
+    }
+
+    private Page<ClienteBandejaDTO> listarBandejaPorNombreODni(ClienteBusquedaDTO filtros, Pageable pageable) {
+        String nombre = filtros.getNombre();
+        String dni = filtros.getDni();
+        Pageable cleanPageable = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by("nombreCompleto").ascending());
+        Page<Cliente> clientesPage;
+        if (nombre != null && !nombre.isBlank()) {
+            clientesPage = clienteRepository.findByNombreCompletoContainingIgnoreCaseAndActivoTrue(nombre, cleanPageable);
+        } else {
+            // Solo DNI: traer todos los clientes activos y filtrar en memoria
+            clientesPage = clienteRepository.findByActivoTrue(cleanPageable);
+            List<ClienteBandejaDTO> filtered = clientesPage.getContent().stream()
+                    .filter(c -> c.getDni() != null && c.getDni().equalsIgnoreCase(dni))
+                    .map(this::toBandejaDTO)
+                    .toList();
+            return new PageImpl<>(filtered, cleanPageable, filtered.size());
+        }
+        List<ClienteBandejaDTO> dtos = clientesPage.getContent().stream()
+                .map(this::toBandejaDTO)
+                .toList();
+        return new PageImpl<>(dtos, cleanPageable, clientesPage.getTotalElements());
     }
 
     private Page<ClienteBandejaDTO> listarBandejaSimple(Pageable pageable) {
@@ -124,22 +155,14 @@ public class ClienteService {
                 filtros.getMinMonto(),
                 filtros.getMaxMonto(),
                 filtros.getEtapaProcesal(),
+                filtros.getNombre(),
+                filtros.getDni(),
                 unsortedPageable
         );
 
-        // Si hay búsqueda por nombre o DNI, filtrar adicionalmente
         List<Long> clienteIds = clienteIdsPage.getContent();
         if (clienteIds.isEmpty()) {
             return new PageImpl<>(List.of(), pageable, 0);
-        }
-
-        if ((filtros.getNombre() != null && !filtros.getNombre().isBlank())
-                || (filtros.getDni() != null && !filtros.getDni().isBlank())) {
-            clienteIds = filtrarClienteIdsPorNombreODni(clienteIds, filtros);
-        }
-
-        if (clienteIds.isEmpty()) {
-            return new PageImpl<>(List.of(), pageable, clienteIdsPage.getTotalElements());
         }
 
         // 2) Lookup de los clientes
@@ -198,11 +221,14 @@ public class ClienteService {
     }
 
     private ClienteBandejaDTO buildBandejaDTO(Cliente cliente, List<Operacion> ops) {
-        Set<String> agencias = new HashSet<>();
+        Set<String> agencias = new LinkedHashSet<>();
         BigDecimal montoTotal = BigDecimal.ZERO;
         BigDecimal montoCapital = BigDecimal.ZERO;
         String peorEstado = null;
         String peorEstadoCartera = null;
+        String agenciaNombre = null;
+        String numeroOperacion = null;
+        String cuenta = null;
 
         for (Operacion op : ops) {
             if (op.getAgencia() != null && op.getAgencia().getNombre() != null) {
@@ -212,13 +238,28 @@ public class ClienteService {
             if (op.getMontoCapital() != null) montoCapital = montoCapital.add(op.getMontoCapital());
             if (op.getEstado() != null) peorEstado = priorize(peorEstado, op.getEstado(), ESTADO_PRIORIDAD);
             if (op.getEstadoCartera() != null) peorEstadoCartera = priorize(peorEstadoCartera, op.getEstadoCartera(), ESTADO_CARTERA_PRIORIDAD);
+            // Tomar datos de la primera operación para la columna de la bandeja
+            if (agenciaNombre == null && op.getAgencia() != null) {
+                agenciaNombre = op.getAgencia().getNombre();
+            }
+            if (numeroOperacion == null) {
+                numeroOperacion = op.getNumeroOperacion();
+            }
+            if (cuenta == null) {
+                cuenta = op.getCuenta();
+            }
         }
+
+        // Unir nombres de agencias para el badge
+        List<String> agenciaList = List.copyOf(agencias);
 
         return ClienteBandejaDTO.builder()
                 .id(cliente.getId())
                 .dni(cliente.getDni())
                 .nombreCompleto(cliente.getNombreCompleto())
-                .agencias(List.copyOf(agencias))
+                .agenciaNombre(agenciaNombre)
+                .numeroOperacion(numeroOperacion)
+                .cuenta(cuenta)
                 .estado(peorEstado)
                 .estadoCartera(peorEstadoCartera)
                 .montoTotal(montoTotal)

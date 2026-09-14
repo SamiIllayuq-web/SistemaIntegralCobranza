@@ -17,13 +17,15 @@ public class ClienteBusquedaDTO {
     public ClienteBusquedaDTO() {}
 
     public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
+    public void setNombre(String nombre) { this.nombre = (nombre != null) ? nombre.trim() : null; }
     public String getDni() { return dni; }
     public void setDni(String dni) { this.dni = dni; }
     public String getEstado() { return estado; }
     public void setEstado(String estado) { this.estado = estado; }
     public String getEstadoCartera() { return estadoCartera; }
-    public void setEstadoCartera(String estadoCartera) { this.estadoCartera = estadoCartera; }
+    public void setEstadoCartera(String estadoCartera) {
+        this.estadoCartera = (estadoCartera != null && estadoCartera.isBlank()) ? null : estadoCartera;
+    }
     public Integer getMinMora() { return minMora; }
     public void setMinMora(Integer minMora) { this.minMora = minMora; }
     public Integer getMaxMora() { return maxMora; }
@@ -36,7 +38,8 @@ public class ClienteBusquedaDTO {
     public void setEtapaProcesal(String etapaProcesal) { this.etapaProcesal = etapaProcesal; }
 
     public boolean hasFiltrosAdicionales() {
-        return estado != null || estadoCartera != null
+        return (estado != null && !estado.isBlank())
+                || (estadoCartera != null && !estadoCartera.isBlank())
                 || minMora != null || maxMora != null
                 || minMonto != null || maxMonto != null
                 || etapaProcesal != null;

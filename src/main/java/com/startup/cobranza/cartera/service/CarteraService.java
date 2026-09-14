@@ -461,9 +461,7 @@ public class CarteraService {
             operacion.setDepartamento(getCellString(row, columns, "departamento"));
             operacion.setProvincia(getCellString(row, columns, "provincia"));
             operacion.setDistrito(getCellString(row, columns, "distrito"));
-            operacion.setDireccion(getCellString(row, columns, "direccion"));
             operacion.setReferencia(getCellString(row, columns, "referencia"));
-            operacion.setTelefono(getCellString(row, columns, "telefono"));
             operacion.setMontoAprobado(getCellBigDecimal(row, columns, "montoAprobado"));
             operacion.setFechaAceptacionDemanda(getCellLocalDate(row, columns, "fechaAceptacionDemanda"));
             operacion.setFechaEnvioJudicial(getCellLocalDate(row, columns, "fechaEnvioJudicial"));

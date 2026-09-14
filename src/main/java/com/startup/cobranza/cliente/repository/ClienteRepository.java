@@ -13,13 +13,15 @@ import java.util.Optional;
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Long>, JpaSpecificationExecutor<Cliente> {
 
+    List<Cliente> findByNombreCompletoContainingIgnoreCaseAndActivoTrue(String nombre);
+
     List<Cliente> findByActivoTrue();
+
+    Page<Cliente> findByNombreCompletoContainingIgnoreCaseAndActivoTrue(String nombre, Pageable pageable);
 
     Page<Cliente> findByActivoTrue(Pageable pageable);
 
     Optional<Cliente> findByDni(String dni);
 
     List<Cliente> findByDniContainingIgnoreCase(String dni);
-
-    List<Cliente> findByNombreCompletoContainingIgnoreCaseAndActivoTrue(String nombre);
 }

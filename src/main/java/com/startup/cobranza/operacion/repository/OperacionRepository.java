@@ -39,9 +39,15 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
      * cuando hay filtros activos (estado, estadoCartera, mora, monto, etapaProcesal).
      * Retorna paginado los clienteIds únicos.
      */
+    /**
+     * Busca operaciones activas con filtros. Se usa para la bandeja de clientes
+     * cuando hay filtros activos (estado, estadoCartera, mora, monto, etapaProcesal).
+     * Retorna paginado los clienteIds únicos.
+     */
     @Query("""
         SELECT DISTINCT o.cliente.id
         FROM Operacion o
+        LEFT JOIN o.cliente c
         WHERE o.activo = true
           AND (:estado IS NULL OR o.estado = :estado)
           AND (:estadoCartera IS NULL OR o.estadoCartera = :estadoCartera)
@@ -50,6 +56,8 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
           AND (:minMonto IS NULL OR o.montoTotal >= :minMonto)
           AND (:maxMonto IS NULL OR o.montoTotal <= :maxMonto)
           AND (:etapaProcesal IS NULL OR o.etapaProcesal = :etapaProcesal)
+          AND (:nombre IS NULL OR c.nombreCompleto ILIKE CONCAT('%', :nombre, '%'))
+          AND (:dni IS NULL OR c.dni = :dni)
         """)
     Page<Long> findClienteIdsConFiltros(
             @Param("estado") String estado,
@@ -59,6 +67,8 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
             @Param("minMonto") BigDecimal minMonto,
             @Param("maxMonto") BigDecimal maxMonto,
             @Param("etapaProcesal") String etapaProcesal,
+            @Param("nombre") String nombre,
+            @Param("dni") String dni,
             Pageable pageable
     );
 

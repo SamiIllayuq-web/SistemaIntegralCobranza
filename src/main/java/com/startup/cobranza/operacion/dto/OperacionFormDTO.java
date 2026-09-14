@@ -42,9 +42,7 @@ public class OperacionFormDTO {
     private String departamento;
     private String provincia;
     private String distrito;
-    private String direccion;
     private String referencia;
-    private String telefono;
     private String montoAprobado;
     private String fechaAceptacionDemanda;
     private String fechaEnvioJudicial;
@@ -186,12 +184,8 @@ public class OperacionFormDTO {
     public void setProvincia(String provincia) { this.provincia = provincia; }
     public String getDistrito() { return distrito; }
     public void setDistrito(String distrito) { this.distrito = distrito; }
-    public String getDireccion() { return direccion; }
-    public void setDireccion(String direccion) { this.direccion = direccion; }
     public String getReferencia() { return referencia; }
     public void setReferencia(String referencia) { this.referencia = referencia; }
-    public String getTelefono() { return telefono; }
-    public void setTelefono(String telefono) { this.telefono = telefono; }
     public String getMontoAprobado() { return montoAprobado; }
     public void setMontoAprobado(String montoAprobado) { this.montoAprobado = montoAprobado; }
     public String getFechaAceptacionDemanda() { return fechaAceptacionDemanda; }
@@ -291,9 +285,7 @@ public class OperacionFormDTO {
         private String departamento;
         private String provincia;
         private String distrito;
-        private String direccion;
         private String referencia;
-        private String telefono;
         private String montoAprobado;
         private String fechaAceptacionDemanda;
         private String fechaEnvioJudicial;
@@ -361,9 +353,7 @@ public class OperacionFormDTO {
         public Builder departamento(String v) { departamento = v; return this; }
         public Builder provincia(String v) { provincia = v; return this; }
         public Builder distrito(String v) { distrito = v; return this; }
-        public Builder direccion(String v) { direccion = v; return this; }
         public Builder referencia(String v) { referencia = v; return this; }
-        public Builder telefono(String v) { telefono = v; return this; }
         public Builder montoAprobado(String v) { montoAprobado = v; return this; }
         public Builder fechaAceptacionDemanda(String v) { fechaAceptacionDemanda = v; return this; }
         public Builder fechaEnvioJudicial(String v) { fechaEnvioJudicial = v; return this; }
@@ -412,9 +402,7 @@ public class OperacionFormDTO {
             dto.setDepartamento(departamento);
             dto.setProvincia(provincia);
             dto.setDistrito(distrito);
-            dto.setDireccion(direccion);
             dto.setReferencia(referencia);
-            dto.setTelefono(telefono);
             dto.setMontoAprobado(montoAprobado);
             dto.setFechaAceptacionDemanda(fechaAceptacionDemanda);
             dto.setFechaEnvioJudicial(fechaEnvioJudicial);

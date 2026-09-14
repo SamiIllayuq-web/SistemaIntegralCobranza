@@ -8,7 +8,9 @@ public class ClienteBandejaDTO {
     private Long id;
     private String dni;
     private String nombreCompleto;
-    private List<String> agencias;
+    private String agenciaNombre;
+    private String numeroOperacion;
+    private String cuenta;
     private String estado;
     private String estadoCartera;
     private BigDecimal montoTotal;
@@ -18,14 +20,16 @@ public class ClienteBandejaDTO {
     public ClienteBandejaDTO() {}
 
     public ClienteBandejaDTO(Long id, String dni, String nombreCompleto,
-                             List<String> agencias,
+                             String agenciaNombre, String numeroOperacion, String cuenta,
                              String estado, String estadoCartera,
                              BigDecimal montoTotal, BigDecimal montoCapital,
                              long totalOperaciones) {
         this.id = id;
         this.dni = dni;
         this.nombreCompleto = nombreCompleto;
-        this.agencias = agencias;
+        this.agenciaNombre = agenciaNombre;
+        this.numeroOperacion = numeroOperacion;
+        this.cuenta = cuenta;
         this.estado = estado;
         this.estadoCartera = estadoCartera;
         this.montoTotal = montoTotal;
@@ -39,8 +43,12 @@ public class ClienteBandejaDTO {
     public void setDni(String dni) { this.dni = dni; }
     public String getNombreCompleto() { return nombreCompleto; }
     public void setNombreCompleto(String nombreCompleto) { this.nombreCompleto = nombreCompleto; }
-    public List<String> getAgencias() { return agencias; }
-    public void setAgencias(List<String> agencias) { this.agencias = agencias; }
+    public String getAgenciaNombre() { return agenciaNombre; }
+    public void setAgenciaNombre(String agenciaNombre) { this.agenciaNombre = agenciaNombre; }
+    public String getNumeroOperacion() { return numeroOperacion; }
+    public void setNumeroOperacion(String numeroOperacion) { this.numeroOperacion = numeroOperacion; }
+    public String getCuenta() { return cuenta; }
+    public void setCuenta(String cuenta) { this.cuenta = cuenta; }
     public String getEstado() { return estado; }
     public void setEstado(String estado) { this.estado = estado; }
     public String getEstadoCartera() { return estadoCartera; }
@@ -58,7 +66,9 @@ public class ClienteBandejaDTO {
         private Long id;
         private String dni;
         private String nombreCompleto;
-        private List<String> agencias;
+        private String agenciaNombre;
+        private String numeroOperacion;
+        private String cuenta;
         private String estado;
         private String estadoCartera;
         private BigDecimal montoTotal = BigDecimal.ZERO;
@@ -68,7 +78,9 @@ public class ClienteBandejaDTO {
         public Builder id(Long v) { id = v; return this; }
         public Builder dni(String v) { dni = v; return this; }
         public Builder nombreCompleto(String v) { nombreCompleto = v; return this; }
-        public Builder agencias(List<String> v) { agencias = v; return this; }
+        public Builder agenciaNombre(String v) { agenciaNombre = v; return this; }
+        public Builder numeroOperacion(String v) { numeroOperacion = v; return this; }
+        public Builder cuenta(String v) { cuenta = v; return this; }
         public Builder estado(String v) { estado = v; return this; }
         public Builder estadoCartera(String v) { estadoCartera = v; return this; }
         public Builder montoTotal(BigDecimal v) { montoTotal = v; return this; }
@@ -76,7 +88,7 @@ public class ClienteBandejaDTO {
         public Builder totalOperaciones(long v) { totalOperaciones = v; return this; }
 
         public ClienteBandejaDTO build() {
-            return new ClienteBandejaDTO(id, dni, nombreCompleto, agencias,
+            return new ClienteBandejaDTO(id, dni, nombreCompleto, agenciaNombre, numeroOperacion, cuenta,
                     estado, estadoCartera, montoTotal, montoCapital, totalOperaciones);
         }
     }
