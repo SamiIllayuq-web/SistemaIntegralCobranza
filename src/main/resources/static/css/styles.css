@@ -90,6 +90,30 @@ body {
 .sidebar.collapsed {
     width: var(--sidebar-collapsed);
 }
+.sidebar.collapsed .sidebar-title span,
+.sidebar.collapsed .nav-item > span,
+.sidebar.collapsed .nav-section-title,
+.sidebar.collapsed .user-info {
+    display: none;
+}
+.sidebar.collapsed .sidebar-header {
+    justify-content: center;
+    gap: 0;
+}
+.sidebar.collapsed .sidebar-logo {
+    justify-content: center;
+}
+.sidebar.collapsed .sidebar-toggle {
+    display: none;
+}
+.sidebar.collapsed .nav-item {
+    justify-content: center;
+    padding: 8px;
+    margin: 1px 4px;
+}
+.sidebar.collapsed .sidebar-footer {
+    justify-content: center;
+}
 
 .sidebar-header {
     display: flex;
@@ -146,7 +170,7 @@ body {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: var(--color-text-muted);
+    color: var(--color-text);
     white-space: nowrap;
 }
 
