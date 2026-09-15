@@ -157,7 +157,6 @@ public class ClienteService {
     }
 
     private Page<ClienteBandejaDTO> listarBandejaConFiltros(ClienteBusquedaDTO filtros, Pageable pageable) {
-        // WHERE base
         StringBuilder where = new StringBuilder("WHERE o.activo = true");
         String estado = filtros.getEstado();
         String estadoCartera = filtros.getEstadoCartera();
@@ -173,25 +172,25 @@ public class ClienteService {
             where.append(" AND o.estado = :estado");
         }
         if (estadoCartera != null && !estadoCartera.isBlank()) {
-            where.append(" AND o.estado_cartera = :estadoCartera");
+            where.append(" AND o.\"estado_cartera\" = :estadoCartera");
         }
         if (minMora != null) {
-            where.append(" AND o.dias_mora >= :minMora");
+            where.append(" AND o.\"dias_mora\" >= :minMora");
         }
         if (maxMora != null) {
-            where.append(" AND o.dias_mora <= :maxMora");
+            where.append(" AND o.\"dias_mora\" <= :maxMora");
         }
         if (minMonto != null) {
-            where.append(" AND o.monto_total >= :minMonto");
+            where.append(" AND o.\"monto_total\" >= :minMonto");
         }
         if (maxMonto != null) {
-            where.append(" AND o.monto_total <= :maxMonto");
+            where.append(" AND o.\"monto_total\" <= :maxMonto");
         }
         if (etapaProcesal != null && !etapaProcesal.isBlank()) {
-            where.append(" AND o.etapa_procesal = :etapaProcesal");
+            where.append(" AND o.\"etapa_procesal\" = :etapaProcesal");
         }
         if (nombre != null && !nombre.isBlank()) {
-            where.append(" AND UPPER(c.nombre_completo) LIKE UPPER(CONCAT('%', :nombre, '%'))");
+            where.append(" AND UPPER(c.\"nombre_completo\") LIKE UPPER(CONCAT('%', :nombre, '%'))");
         }
         if (dni != null && !dni.isBlank()) {
             where.append(" AND c.dni = :dni");
