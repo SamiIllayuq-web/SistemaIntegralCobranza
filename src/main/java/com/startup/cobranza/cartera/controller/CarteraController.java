@@ -89,6 +89,7 @@ public class CarteraController {
     public String expedientes(
             @RequestParam(value = "agenciaId", required = false) Long agenciaId,
             @RequestParam(value = "busqueda", required = false) String busqueda,
+            @RequestParam(value = "situacion", required = false) String situacion,
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "50") int size,
             Model model) {
@@ -98,16 +99,17 @@ public class CarteraController {
             agenciaId = null;
         }
 
-        log.debug("expedientes - agenciaId={}, busqueda={}", agenciaId, busqueda);
+        log.debug("expedientes - agenciaId={}, busqueda={}, situacion={}", agenciaId, busqueda, situacion);
 
         PageRequest pageable = PageRequest.of(page, size,
                 Sort.by("nombreCompleto").ascending());
         Page<ClienteExpedienteDTO> pagina = clienteService.listarClientesConExpedientes(
-                agenciaId, busqueda, pageable);
+                agenciaId, situacion, busqueda, pageable);
 
         model.addAttribute("pagina", pagina);
         model.addAttribute("agenciaId", agenciaId != null ? agenciaId : "");
         model.addAttribute("busqueda", busqueda != null ? busqueda : "");
+        model.addAttribute("situacion", situacion != null ? situacion : "");
         model.addAttribute("agencias", agenciaRepository.findByActivoTrue());
         return "cartera/expedientes";
     }

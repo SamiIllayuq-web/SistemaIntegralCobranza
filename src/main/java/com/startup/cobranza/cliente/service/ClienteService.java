@@ -388,12 +388,19 @@ public class ClienteService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ClienteExpedienteDTO> listarClientesConExpedientes(Long agenciaId, String busqueda, Pageable pageable) {
+    public Page<ClienteExpedienteDTO> listarClientesConExpedientes(Long agenciaId, String situacion, String busqueda, Pageable pageable) {
         StringBuilder where = new StringBuilder();
         where.append("WHERE c.activo = true AND o.activo = true AND o.numero_expediente IS NOT NULL AND o.numero_expediente <> ''");
 
         if (agenciaId != null) {
             where.append(" AND o.agencia_id = ").append(agenciaId);
+        }
+
+        if (situacion != null && !situacion.isBlank()) {
+            where.append(" AND UPPER(o.situacion) = '").append(situacion.toUpperCase()).append("'");
+        } else {
+            // Sin filtro de situacion: solo Judicial o Castigada
+            where.append(" AND UPPER(o.situacion) IN ('JUDICIAL', 'CASTIGADA')");
         }
 
         if (busqueda != null && !busqueda.isBlank()) {
@@ -404,8 +411,8 @@ public class ClienteService {
 
         String sql = """
             SELECT c.id, c.nombre_completo, c.dni, o.agencia_id, a.nombre,
-                   SUM(CASE WHEN o.situacion = 'Judicial' THEN 1 ELSE 0 END),
-                   SUM(CASE WHEN o.situacion = 'Castigada' THEN 1 ELSE 0 END),
+                   SUM(CASE WHEN UPPER(o.situacion) = 'JUDICIAL' THEN 1 ELSE 0 END),
+                   SUM(CASE WHEN UPPER(o.situacion) = 'CASTIGADA' THEN 1 ELSE 0 END),
                    COUNT(o.id)
             FROM operaciones o
             JOIN clientes c ON c.id = o.cliente_id

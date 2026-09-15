@@ -152,6 +152,7 @@ public class OperacionService {
         operacion.setFechaDesembolso(parseFecha(form.getFechaDesembolso()));
         operacion.setImporteDesembolso(parseImporte(form.getImporteDesembolso()));
         operacion.setEtapaProcesalTexto(form.getEtapaProcesalTexto());
+        operacion.setEtapaProcesal(form.getEtapaProcesal());
         operacion.setActoPendiente(form.getActoPendiente());
         operacion.setFechaUltimoEstadoProceso(parseFecha(form.getFechaUltimoEstadoProceso()));
         operacion.setMontoAprobado(parseImporte(form.getMontoAprobado()));
