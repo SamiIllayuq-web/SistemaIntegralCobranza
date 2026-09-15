@@ -202,8 +202,8 @@ public class ClienteService {
             SELECT c.id, c.nombre_completo, c.dni,
                    a.id, a.nombre,
                    o.numero_operacion, o.cuenta,
-                   o.estado, o.estado_cartera,
-                   o.monto_total, o.monto_capital,
+                   o.estado, o."estado_cartera",
+                   o."monto_total", o."monto_capital",
                    COUNT(o.id) OVER (PARTITION BY c.id) as total_ops
             FROM operaciones o
             JOIN clientes c ON c.id = o.cliente_id
