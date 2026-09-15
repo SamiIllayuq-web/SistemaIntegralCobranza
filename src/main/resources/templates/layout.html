@@ -61,14 +61,14 @@
                 </svg>
                 <span>Expedientes</span>
             </a>
-            <a th:href="@{/cartera/importar}" class="nav-item" id="nav-importar">
+            <a th:href="@{/cartera/importar}" class="nav-item" id="nav-importar" style="display:none">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/>
                     <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
                 </svg>
                 <span>Importar</span>
             </a>
-            <a th:href="@{/cartera/historial}" class="nav-item" id="nav-historial">
+            <a th:href="@{/cartera/historial}" class="nav-item" id="nav-historial" style="display:none">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="12" cy="12" r="10"/>
                     <polyline points="12 6 12 12 16 14"/>
@@ -114,8 +114,8 @@
 
         <!-- Admin -->
         <div class="nav-section" sec:authorize="hasRole('ADMIN')">
-            <div class="nav-section-title">Admin</div>
-            <a th:href="@{/usuarios}" class="nav-item" id="nav-usuarios">
+            <div class="nav-section-title" style="display:none">Admin</div>
+            <a th:href="@{/usuarios}" class="nav-item" id="nav-usuarios" style="display:none">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                     <circle cx="12" cy="7" r="4"/>
