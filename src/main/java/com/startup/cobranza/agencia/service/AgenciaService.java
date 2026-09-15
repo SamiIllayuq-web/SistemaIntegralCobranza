@@ -123,6 +123,7 @@ public class AgenciaService {
                     op.getNumeroOperacion(),
                     op.getNumeroExpediente(),
                     op.getSituacion(),
+                    op.getEtapaProcesal(),
                     op.getMontoTotal(),
                     op.getMoneda()
             ));
