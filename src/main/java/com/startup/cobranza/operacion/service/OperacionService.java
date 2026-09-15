@@ -18,6 +18,7 @@ import com.startup.cobranza.operacion.entity.BienEmbargado;
 import com.startup.cobranza.operacion.repository.BienEmbargadoRepository;
 import com.startup.cobranza.operacion.dto.BienEmbargadoDTO;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -343,16 +344,6 @@ public class OperacionService {
             String busqueda, Pageable pageable) {
         return operacionRepository.findCarteraConFiltros(
                 agenciaId, estado, busqueda, pageable)
-                .map(operacionMapper::toDTO);
-    }
-
-    /**
-     * Lista operaciones filtradas por estadoCartera y etapaProcesal — /cartera/estado-cartera.
-     */
-    public Page<OperacionDTO> listarPorEstadoCartera(
-            String estadoCartera, String etapaProcesal, Long agenciaId, Pageable pageable) {
-        return operacionRepository.findByEstadoCarteraConFiltros(
-                estadoCartera, etapaProcesal, agenciaId, pageable)
                 .map(operacionMapper::toDTO);
     }
 

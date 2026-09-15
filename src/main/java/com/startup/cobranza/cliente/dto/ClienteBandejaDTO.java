@@ -1,7 +1,6 @@
 package com.startup.cobranza.cliente.dto;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 public class ClienteBandejaDTO {
 
@@ -12,7 +11,6 @@ public class ClienteBandejaDTO {
     private String numeroOperacion;
     private String cuenta;
     private String estado;
-    private String estadoCartera;
     private BigDecimal montoTotal;
     private BigDecimal montoCapital;
     private long totalOperaciones;
@@ -21,7 +19,7 @@ public class ClienteBandejaDTO {
 
     public ClienteBandejaDTO(Long id, String dni, String nombreCompleto,
                              String agenciaNombre, String numeroOperacion, String cuenta,
-                             String estado, String estadoCartera,
+                             String estado,
                              BigDecimal montoTotal, BigDecimal montoCapital,
                              long totalOperaciones) {
         this.id = id;
@@ -31,7 +29,6 @@ public class ClienteBandejaDTO {
         this.numeroOperacion = numeroOperacion;
         this.cuenta = cuenta;
         this.estado = estado;
-        this.estadoCartera = estadoCartera;
         this.montoTotal = montoTotal;
         this.montoCapital = montoCapital;
         this.totalOperaciones = totalOperaciones;
@@ -51,8 +48,6 @@ public class ClienteBandejaDTO {
     public void setCuenta(String cuenta) { this.cuenta = cuenta; }
     public String getEstado() { return estado; }
     public void setEstado(String estado) { this.estado = estado; }
-    public String getEstadoCartera() { return estadoCartera; }
-    public void setEstadoCartera(String estadoCartera) { this.estadoCartera = estadoCartera; }
     public BigDecimal getMontoTotal() { return montoTotal; }
     public void setMontoTotal(BigDecimal montoTotal) { this.montoTotal = montoTotal; }
     public BigDecimal getMontoCapital() { return montoCapital; }
@@ -70,7 +65,6 @@ public class ClienteBandejaDTO {
         private String numeroOperacion;
         private String cuenta;
         private String estado;
-        private String estadoCartera;
         private BigDecimal montoTotal = BigDecimal.ZERO;
         private BigDecimal montoCapital = BigDecimal.ZERO;
         private long totalOperaciones;
@@ -82,14 +76,13 @@ public class ClienteBandejaDTO {
         public Builder numeroOperacion(String v) { numeroOperacion = v; return this; }
         public Builder cuenta(String v) { cuenta = v; return this; }
         public Builder estado(String v) { estado = v; return this; }
-        public Builder estadoCartera(String v) { estadoCartera = v; return this; }
         public Builder montoTotal(BigDecimal v) { montoTotal = v; return this; }
         public Builder montoCapital(BigDecimal v) { montoCapital = v; return this; }
         public Builder totalOperaciones(long v) { totalOperaciones = v; return this; }
 
         public ClienteBandejaDTO build() {
             return new ClienteBandejaDTO(id, dni, nombreCompleto, agenciaNombre, numeroOperacion, cuenta,
-                    estado, estadoCartera, montoTotal, montoCapital, totalOperaciones);
+                    estado, montoTotal, montoCapital, totalOperaciones);
         }
     }
 }

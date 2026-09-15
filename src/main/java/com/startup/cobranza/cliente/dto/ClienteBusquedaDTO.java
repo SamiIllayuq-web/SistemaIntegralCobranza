@@ -7,7 +7,6 @@ public class ClienteBusquedaDTO {
     private String nombre;
     private String dni;
     private String estado;
-    private String estadoCartera;
     private Integer minMora;
     private Integer maxMora;
     private BigDecimal minMonto;
@@ -22,10 +21,6 @@ public class ClienteBusquedaDTO {
     public void setDni(String dni) { this.dni = dni; }
     public String getEstado() { return estado; }
     public void setEstado(String estado) { this.estado = estado; }
-    public String getEstadoCartera() { return estadoCartera; }
-    public void setEstadoCartera(String estadoCartera) {
-        this.estadoCartera = (estadoCartera != null && estadoCartera.isBlank()) ? null : estadoCartera;
-    }
     public Integer getMinMora() { return minMora; }
     public void setMinMora(Integer minMora) { this.minMora = minMora; }
     public Integer getMaxMora() { return maxMora; }
@@ -39,7 +34,6 @@ public class ClienteBusquedaDTO {
 
     public boolean hasFiltrosAdicionales() {
         return (estado != null && !estado.isBlank())
-                || (estadoCartera != null && !estadoCartera.isBlank())
                 || minMora != null || maxMora != null
                 || minMonto != null || maxMonto != null
                 || etapaProcesal != null;
@@ -50,8 +44,7 @@ public class ClienteBusquedaDTO {
     public static class Builder {
         private String nombre;
         private String dni;
-            private String estado;
-        private String estadoCartera;
+        private String estado;
         private Integer minMora;
         private Integer maxMora;
         private BigDecimal minMonto;
@@ -61,7 +54,6 @@ public class ClienteBusquedaDTO {
         public Builder nombre(String v) { nombre = v; return this; }
         public Builder dni(String v) { dni = v; return this; }
         public Builder estado(String v) { estado = v; return this; }
-        public Builder estadoCartera(String v) { estadoCartera = v; return this; }
         public Builder minMora(Integer v) { minMora = v; return this; }
         public Builder maxMora(Integer v) { maxMora = v; return this; }
         public Builder minMonto(BigDecimal v) { minMonto = v; return this; }
@@ -73,7 +65,6 @@ public class ClienteBusquedaDTO {
             dto.setNombre(nombre);
             dto.setDni(dni);
             dto.setEstado(estado);
-            dto.setEstadoCartera(estadoCartera);
             dto.setMinMora(minMora);
             dto.setMaxMora(maxMora);
             dto.setMinMonto(minMonto);

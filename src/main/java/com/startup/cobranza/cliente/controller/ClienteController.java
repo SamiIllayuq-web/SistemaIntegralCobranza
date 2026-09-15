@@ -51,7 +51,6 @@ public class ClienteController {
                           @RequestParam(required = false) String nombre,
                           @RequestParam(required = false) String dni,
                           @RequestParam(required = false) String estado,
-                          @RequestParam(required = false) String estadoCartera,
                           @RequestParam(required = false) Integer minMora,
                           @RequestParam(required = false) Integer maxMora,
                           @RequestParam(required = false) BigDecimal minMonto,
@@ -65,7 +64,6 @@ public class ClienteController {
                 .nombre(nombre)
                 .dni(dni)
                 .estado(estado)
-                .estadoCartera(estadoCartera)
                 .minMora(minMora)
                 .maxMora(maxMora)
                 .minMonto(minMonto)

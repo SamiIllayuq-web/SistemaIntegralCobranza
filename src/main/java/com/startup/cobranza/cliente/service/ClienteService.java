@@ -38,7 +38,6 @@ import jakarta.persistence.PersistenceContext;
 public class ClienteService {
 
     private static final List<String> ESTADO_PRIORIDAD = List.of("VIGENTE", "VENCIDA", "PRESCRITA", "PAGADA");
-    private static final List<String> ESTADO_CARTERA_PRIORIDAD = List.of("ACTIVO", "CANCELADA", "DESASIGNADA", "VENDIDA", "DEVUELTA");
 
     private final ClienteRepository clienteRepository;
     private final OperacionRepository operacionRepository;
@@ -237,7 +236,6 @@ public class ClienteService {
         BigDecimal montoTotal = BigDecimal.ZERO;
         BigDecimal montoCapital = BigDecimal.ZERO;
         String peorEstado = null;
-        String peorEstadoCartera = null;
         String agenciaNombre = null;
         String numeroOperacion = null;
         String cuenta = null;
@@ -249,7 +247,6 @@ public class ClienteService {
             if (op.getMontoTotal() != null) montoTotal = montoTotal.add(op.getMontoTotal());
             if (op.getMontoCapital() != null) montoCapital = montoCapital.add(op.getMontoCapital());
             if (op.getEstado() != null) peorEstado = priorize(peorEstado, op.getEstado(), ESTADO_PRIORIDAD);
-            if (op.getEstadoCartera() != null) peorEstadoCartera = priorize(peorEstadoCartera, op.getEstadoCartera(), ESTADO_CARTERA_PRIORIDAD);
             // Tomar datos de la primera operación para la columna de la bandeja
             if (agenciaNombre == null && op.getAgencia() != null) {
                 agenciaNombre = op.getAgencia().getNombre();
@@ -273,7 +270,6 @@ public class ClienteService {
                 .numeroOperacion(numeroOperacion)
                 .cuenta(cuenta)
                 .estado(peorEstado)
-                .estadoCartera(peorEstadoCartera)
                 .montoTotal(montoTotal)
                 .montoCapital(montoCapital)
                 .totalOperaciones(ops.size())

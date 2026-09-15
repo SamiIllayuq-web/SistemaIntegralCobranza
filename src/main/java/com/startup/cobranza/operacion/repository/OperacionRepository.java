@@ -199,26 +199,6 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
     );
 
     /**
-     * Filtra operaciones por estadoCartera y etapaProcesal — usado para /cartera/estado-cartera.
-     */
-    @Query("""
-        SELECT o FROM Operacion o
-        JOIN FETCH o.cliente
-        LEFT JOIN FETCH o.agencia
-        WHERE o.activo = true
-          AND (:estadoCartera IS NULL OR o.estadoCartera = :estadoCartera)
-          AND (:etapaProcesal IS NULL OR o.etapaProcesal = :etapaProcesal)
-          AND (:agenciaId IS NULL OR o.agencia.id = :agenciaId)
-        ORDER BY o.cliente.nombreCompleto ASC, o.id ASC
-        """)
-    Page<Operacion> findByEstadoCarteraConFiltros(
-            @Param("estadoCartera") String estadoCartera,
-            @Param("etapaProcesal") String etapaProcesal,
-            @Param("agenciaId") Long agenciaId,
-            Pageable pageable
-    );
-
-    /**
      * Todas las operaciones activas para agruparlas por agencia.
      * JOIN FETCH evita N+1 al acceder a cliente y agencia.
      */
