@@ -57,17 +57,6 @@
                         <label class="form-label">DNI</label>
                         <input type="text" name="dni" class="form-control" th:value="${filtros.dni}" placeholder="DNI">
                     </div>
-                    <div>
-                        <label class="form-label">Estado Cartera</label>
-                        <select name="estadoCartera" class="form-select">
-                            <option value="">Todas</option>
-                            <option value="ACTIVO" th:selected="${filtros.estadoCartera == 'ACTIVO'}">Activo</option>
-                            <option value="CANCELADA" th:selected="${filtros.estadoCartera == 'CANCELADA'}">Cancelada</option>
-                            <option value="DESASIGNADA" th:selected="${filtros.estadoCartera == 'DESASIGNADA'}">Desasignada</option>
-                            <option value="VENDIDA" th:selected="${filtros.estadoCartera == 'VENDIDA'}">Vendida</option>
-                            <option value="DEVUELTA" th:selected="${filtros.estadoCartera == 'DEVUELTA'}">Devuelta</option>
-                        </select>
-                    </div>
                     <div style="display: flex; gap: .5rem; align-items: flex-end;">
                         <button type="submit" class="btn btn-primary" style="flex:1;">Filtrar</button>
                         <a th:href="@{/clientes}" class="btn btn-ghost">Limpiar</a>
@@ -166,15 +155,15 @@
                  style="display: flex; justify-content: center; padding: .75rem;">
                 <div class="pagination">
                     <a class="pagination-btn"
-                       th:href="@{/clientes(page=${pagina.number - 1}, size=${pagina.size}, nombre=${filtros.nombre}, dni=${filtros.dni}, estadoCartera=${filtros.estadoCartera})}"
+                       th:href="@{/clientes(page=${pagina.number - 1}, size=${pagina.size}, nombre=${filtros.nombre}, dni=${filtros.dni})}"
                        th:classappend="${pagina.first} ? 'disabled' : ''">‹</a>
                     <a class="pagination-btn"
                        th:each="i : ${#numbers.sequence(T(java.lang.Math).max(0, pagina.number - 2), T(java.lang.Math).min(pagina.number + 2, pagina.totalPages - 1))}"
-                       th:href="@{/clientes(page=${i}, size=${pagina.size}, nombre=${filtros.nombre}, dni=${filtros.dni}, estadoCartera=${filtros.estadoCartera})}"
+                       th:href="@{/clientes(page=${i}, size=${pagina.size}, nombre=${filtros.nombre}, dni=${filtros.dni})}"
                        th:text="${i + 1}"
                        th:classappend="${i == pagina.number} ? 'active' : ''"></a>
                     <a class="pagination-btn"
-                       th:href="@{/clientes(page=${pagina.number + 1}, size=${pagina.size}, nombre=${filtros.nombre}, dni=${filtros.dni}, estadoCartera=${filtros.estadoCartera})}"
+                       th:href="@{/clientes(page=${pagina.number + 1}, size=${pagina.size}, nombre=${filtros.nombre}, dni=${filtros.dni})}"
                        th:classappend="${pagina.last} ? 'disabled' : ''">›</a>
                 </div>
             </div>
