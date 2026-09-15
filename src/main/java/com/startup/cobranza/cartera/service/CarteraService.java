@@ -750,6 +750,7 @@ public class CarteraService {
                     op.getNumeroOperacion(),
                     op.getNumeroExpediente(),
                     op.getSituacion(),
+                    op.getEtapaProcesal(),
                     op.getMontoTotal(),
                     op.getMoneda()
             ));

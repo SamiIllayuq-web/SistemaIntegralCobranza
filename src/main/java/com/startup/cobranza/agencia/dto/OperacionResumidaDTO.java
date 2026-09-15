@@ -14,6 +14,7 @@ public class OperacionResumidaDTO {
     private String numeroOperacion;
     private String numeroExpediente;
     private String situacion;
+    private String etapaProcesal;
     private BigDecimal montoTotal;
     private String moneda;
 
@@ -21,7 +22,7 @@ public class OperacionResumidaDTO {
 
     public OperacionResumidaDTO(Long operacionId, Long clienteId, String clienteNombre,
                                  String clienteDni, String numeroOperacion, String numeroExpediente,
-                                 String situacion,
+                                 String situacion, String etapaProcesal,
                                  BigDecimal montoTotal, String moneda) {
         this.operacionId = operacionId;
         this.clienteId = clienteId;
@@ -30,6 +31,7 @@ public class OperacionResumidaDTO {
         this.numeroOperacion = numeroOperacion;
         this.numeroExpediente = numeroExpediente;
         this.situacion = situacion;
+        this.etapaProcesal = etapaProcesal;
         this.montoTotal = montoTotal;
         this.moneda = moneda;
     }
@@ -49,6 +51,8 @@ public class OperacionResumidaDTO {
     public void setNumeroExpediente(String numeroExpediente) { this.numeroExpediente = numeroExpediente; }
     public String getSituacion() { return situacion; }
     public void setSituacion(String situacion) { this.situacion = situacion; }
+    public String getEtapaProcesal() { return etapaProcesal; }
+    public void setEtapaProcesal(String etapaProcesal) { this.etapaProcesal = etapaProcesal; }
     public BigDecimal getMontoTotal() { return montoTotal; }
     public void setMontoTotal(BigDecimal montoTotal) { this.montoTotal = montoTotal; }
     public String getMoneda() { return moneda; }

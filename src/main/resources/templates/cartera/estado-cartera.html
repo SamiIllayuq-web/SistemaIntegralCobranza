@@ -102,8 +102,7 @@
                                     <th>DNI</th>
                                     <th>N° Operación</th>
                                     <th>N° Expediente</th>
-                                    <th>Situación</th>
-                                    <th>Monto Total</th>
+                                    <th>Etapa Procesal</th>
                                     <th class="col-actions">Acciones</th>
                                 </tr>
                             </thead>
@@ -126,14 +125,9 @@
                                         <span th:unless="${op.numeroExpediente != null}" class="text-muted">—</span>
                                     </td>
                                     <td>
-                                        <span th:if="${op.situacion != null}" class="badge badge-default"
-                                              th:text="${op.situacion}">-</span>
-                                        <span th:unless="${op.situacion != null}" class="text-muted">—</span>
-                                    </td>
-                                    <td>
-                                        <span th:if="${op.montoTotal != null}"
-                                              th:text="|${op.moneda != null ? op.moneda : 'S/'} ${#numbers.formatDecimal(op.montoTotal, 1, 'COMMA', 2, 'POINT')}|">-</span>
-                                        <span th:unless="${op.montoTotal != null}" class="text-muted">—</span>
+                                        <span th:if="${op.etapaProcesal != null}" class="badge badge-default"
+                                              th:text="${op.etapaProcesal}">-</span>
+                                        <span th:unless="${op.etapaProcesal != null}" class="text-muted">—</span>
                                     </td>
                                     <td class="col-actions">
                                         <a th:href="@{/operaciones/{id}(id=${op.operacionId})}"
