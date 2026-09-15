@@ -65,7 +65,7 @@ public class ClienteController {
                 .nombre(nombre)
                 .dni(dni)
                 .estado(estado)
-                .estadoCartera(estadoCartera != null && !estadoCartera.isBlank() ? estadoCartera.toUpperCase() : null)
+                .estadoCartera(estadoCartera)
                 .minMora(minMora)
                 .maxMora(maxMora)
                 .minMonto(minMonto)
@@ -73,7 +73,7 @@ public class ClienteController {
                 .etapaProcesal(etapaProcesal)
                 .build();
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by("nombreCompleto").ascending());
+        Pageable pageable = PageRequest.of(page, size, Sort.by("cliente.nombreCompleto").ascending());
         Page<ClienteBandejaDTO> pagina = clienteService.listarBandeja(filtros, pageable);
 
         model.addAttribute("pagina", pagina);
