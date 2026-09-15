@@ -157,46 +157,47 @@ public class ClienteService {
     }
 
     private Page<ClienteBandejaDTO> listarBandejaConFiltros(ClienteBusquedaDTO filtros, Pageable pageable) {
+        // WHERE base
         StringBuilder where = new StringBuilder("WHERE o.activo = true");
-        List<Object> params = new java.util.ArrayList<>();
-        int paramIdx = 0;
+        String estado = filtros.getEstado();
+        String estadoCartera = filtros.getEstadoCartera();
+        Integer minMora = filtros.getMinMora();
+        Integer maxMora = filtros.getMaxMora();
+        BigDecimal minMonto = filtros.getMinMonto();
+        BigDecimal maxMonto = filtros.getMaxMonto();
+        String etapaProcesal = filtros.getEtapaProcesal();
+        String nombre = filtros.getNombre();
+        String dni = filtros.getDni();
 
-        if (filtros.getEstado() != null && !filtros.getEstado().isBlank()) {
-            where.append(" AND o.estado = ?").append(++paramIdx);
-            params.add(filtros.getEstado());
+        if (estado != null && !estado.isBlank()) {
+            where.append(" AND o.estado = :estado");
         }
-        if (filtros.getEstadoCartera() != null && !filtros.getEstadoCartera().isBlank()) {
-            where.append(" AND o.estado_cartera = ?").append(++paramIdx);
-            params.add(filtros.getEstadoCartera());
+        if (estadoCartera != null && !estadoCartera.isBlank()) {
+            where.append(" AND o.estado_cartera = :estadoCartera");
         }
-        if (filtros.getMinMora() != null) {
-            where.append(" AND o.dias_mora >= ?").append(++paramIdx);
-            params.add(filtros.getMinMora());
+        if (minMora != null) {
+            where.append(" AND o.dias_mora >= :minMora");
         }
-        if (filtros.getMaxMora() != null) {
-            where.append(" AND o.dias_mora <= ?").append(++paramIdx);
-            params.add(filtros.getMaxMora());
+        if (maxMora != null) {
+            where.append(" AND o.dias_mora <= :maxMora");
         }
-        if (filtros.getMinMonto() != null) {
-            where.append(" AND o.monto_total >= ?").append(++paramIdx);
-            params.add(filtros.getMinMonto());
+        if (minMonto != null) {
+            where.append(" AND o.monto_total >= :minMonto");
         }
-        if (filtros.getMaxMonto() != null) {
-            where.append(" AND o.monto_total <= ?").append(++paramIdx);
-            params.add(filtros.getMaxMonto());
+        if (maxMonto != null) {
+            where.append(" AND o.monto_total <= :maxMonto");
         }
-        if (filtros.getEtapaProcesal() != null && !filtros.getEtapaProcesal().isBlank()) {
-            where.append(" AND o.etapa_procesal = ?").append(++paramIdx);
-            params.add(filtros.getEtapaProcesal());
+        if (etapaProcesal != null && !etapaProcesal.isBlank()) {
+            where.append(" AND o.etapa_procesal = :etapaProcesal");
         }
-        if (filtros.getNombre() != null && !filtros.getNombre().isBlank()) {
-            where.append(" AND UPPER(c.nombre_completo) LIKE UPPER(CONCAT('%', ?").append(++paramIdx).append(", '%'))");
-            params.add(filtros.getNombre());
+        if (nombre != null && !nombre.isBlank()) {
+            where.append(" AND UPPER(c.nombre_completo) LIKE UPPER(CONCAT('%', :nombre, '%'))");
         }
-        if (filtros.getDni() != null && !filtros.getDni().isBlank()) {
-            where.append(" AND c.dni = ?").append(++paramIdx);
-            params.add(filtros.getDni());
+        if (dni != null && !dni.isBlank()) {
+            where.append(" AND c.dni = :dni");
         }
+
+        String whereSql = where.toString();
 
         String sql = """
             SELECT c.id, c.nombre_completo, c.dni,
@@ -209,20 +210,26 @@ public class ClienteService {
             JOIN clientes c ON c.id = o.cliente_id
             LEFT JOIN agencias a ON a.id = o.agencia_id
             """
-            + where + """
+            + whereSql + """
             ORDER BY c.nombre_completo ASC
-            LIMIT ? OFFSET ?
+            LIMIT :limit OFFSET :offset
             """;
 
         int limit = pageable.getPageSize();
         int offset = (int) pageable.getOffset();
 
         jakarta.persistence.Query emQuery = entityManager.createNativeQuery(sql);
-        for (int i = 0; i < params.size(); i++) {
-            emQuery.setParameter(i + 1, params.get(i));
-        }
-        emQuery.setParameter(params.size() + 1, limit);
-        emQuery.setParameter(params.size() + 2, offset);
+        if (estado != null && !estado.isBlank()) emQuery.setParameter("estado", estado);
+        if (estadoCartera != null && !estadoCartera.isBlank()) emQuery.setParameter("estadoCartera", estadoCartera);
+        if (minMora != null) emQuery.setParameter("minMora", minMora);
+        if (maxMora != null) emQuery.setParameter("maxMora", maxMora);
+        if (minMonto != null) emQuery.setParameter("minMonto", minMonto);
+        if (maxMonto != null) emQuery.setParameter("maxMonto", maxMonto);
+        if (etapaProcesal != null && !etapaProcesal.isBlank()) emQuery.setParameter("etapaProcesal", etapaProcesal);
+        if (nombre != null && !nombre.isBlank()) emQuery.setParameter("nombre", nombre);
+        if (dni != null && !dni.isBlank()) emQuery.setParameter("dni", dni);
+        emQuery.setParameter("limit", limit);
+        emQuery.setParameter("offset", offset);
 
         @SuppressWarnings("unchecked")
         List<Object[]> rows = emQuery.getResultList();
@@ -231,23 +238,23 @@ public class ClienteService {
             return new PageImpl<>(List.of(), pageable, 0);
         }
 
-        // Extraer clienteIds para count total
-        String idsPlaceholder = rows.stream()
-                .map(row -> ((Number) row[0]).longValue())
-                .map(id -> id.toString())
-                .collect(Collectors.joining(","));
-
         String countSql = """
             SELECT COUNT(DISTINCT c.id)
             FROM operaciones o
             JOIN clientes c ON c.id = o.cliente_id
             """
-            + where;
+            + whereSql;
 
         jakarta.persistence.Query countQuery = entityManager.createNativeQuery(countSql);
-        for (int i = 0; i < params.size(); i++) {
-            countQuery.setParameter(i + 1, params.get(i));
-        }
+        if (estado != null && !estado.isBlank()) countQuery.setParameter("estado", estado);
+        if (estadoCartera != null && !estadoCartera.isBlank()) countQuery.setParameter("estadoCartera", estadoCartera);
+        if (minMora != null) countQuery.setParameter("minMora", minMora);
+        if (maxMora != null) countQuery.setParameter("maxMora", maxMora);
+        if (minMonto != null) countQuery.setParameter("minMonto", minMonto);
+        if (maxMonto != null) countQuery.setParameter("maxMonto", maxMonto);
+        if (etapaProcesal != null && !etapaProcesal.isBlank()) countQuery.setParameter("etapaProcesal", etapaProcesal);
+        if (nombre != null && !nombre.isBlank()) countQuery.setParameter("nombre", nombre);
+        if (dni != null && !dni.isBlank()) countQuery.setParameter("dni", dni);
         Number total = (Number) countQuery.getSingleResult();
 
         // Build DTOs — agrupar por cliente (primera fila de cada cliente)
