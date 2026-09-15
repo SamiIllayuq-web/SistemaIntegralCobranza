@@ -157,35 +157,122 @@ public class ClienteService {
     }
 
     private Page<ClienteBandejaDTO> listarBandejaConFiltros(ClienteBusquedaDTO filtros, Pageable pageable) {
-        // Sin sort en el pageable porque el ORDER BY de DISTINCT debe estar en el SELECT (PostgreSQL)
-        Pageable unsortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
-        Page<Long> clienteIdsPage = operacionRepository.findClienteIdsConFiltros(
-                filtros.getEstado(),
-                filtros.getEstadoCartera(),
-                filtros.getMinMora(),
-                filtros.getMaxMora(),
-                filtros.getMinMonto(),
-                filtros.getMaxMonto(),
-                filtros.getEtapaProcesal(),
-                filtros.getNombre(),
-                filtros.getDni(),
-                unsortedPageable
-        );
+        StringBuilder where = new StringBuilder("WHERE o.activo = true");
+        List<Object> params = new java.util.ArrayList<>();
+        int paramIdx = 0;
 
-        List<Long> clienteIds = clienteIdsPage.getContent();
-        if (clienteIds.isEmpty()) {
+        if (filtros.getEstado() != null && !filtros.getEstado().isBlank()) {
+            where.append(" AND o.estado = ?").append(++paramIdx);
+            params.add(filtros.getEstado());
+        }
+        if (filtros.getEstadoCartera() != null && !filtros.getEstadoCartera().isBlank()) {
+            where.append(" AND o.estado_cartera = ?").append(++paramIdx);
+            params.add(filtros.getEstadoCartera());
+        }
+        if (filtros.getMinMora() != null) {
+            where.append(" AND o.dias_mora >= ?").append(++paramIdx);
+            params.add(filtros.getMinMora());
+        }
+        if (filtros.getMaxMora() != null) {
+            where.append(" AND o.dias_mora <= ?").append(++paramIdx);
+            params.add(filtros.getMaxMora());
+        }
+        if (filtros.getMinMonto() != null) {
+            where.append(" AND o.monto_total >= ?").append(++paramIdx);
+            params.add(filtros.getMinMonto());
+        }
+        if (filtros.getMaxMonto() != null) {
+            where.append(" AND o.monto_total <= ?").append(++paramIdx);
+            params.add(filtros.getMaxMonto());
+        }
+        if (filtros.getEtapaProcesal() != null && !filtros.getEtapaProcesal().isBlank()) {
+            where.append(" AND o.etapa_procesal = ?").append(++paramIdx);
+            params.add(filtros.getEtapaProcesal());
+        }
+        if (filtros.getNombre() != null && !filtros.getNombre().isBlank()) {
+            where.append(" AND UPPER(c.nombre_completo) LIKE UPPER(CONCAT('%', ?").append(++paramIdx).append(", '%'))");
+            params.add(filtros.getNombre());
+        }
+        if (filtros.getDni() != null && !filtros.getDni().isBlank()) {
+            where.append(" AND c.dni = ?").append(++paramIdx);
+            params.add(filtros.getDni());
+        }
+
+        String sql = """
+            SELECT c.id, c.nombre_completo, c.dni,
+                   a.id, a.nombre,
+                   o.numero_operacion, o.cuenta,
+                   o.estado, o.estado_cartera,
+                   o.monto_total, o.monto_capital,
+                   COUNT(o.id) OVER (PARTITION BY c.id) as total_ops
+            FROM operaciones o
+            JOIN clientes c ON c.id = o.cliente_id
+            LEFT JOIN agencias a ON a.id = o.agencia_id
+            """
+            + where + """
+            ORDER BY c.nombre_completo ASC
+            LIMIT ? OFFSET ?
+            """;
+
+        int limit = pageable.getPageSize();
+        int offset = (int) pageable.getOffset();
+
+        jakarta.persistence.Query emQuery = entityManager.createNativeQuery(sql);
+        for (int i = 0; i < params.size(); i++) {
+            emQuery.setParameter(i + 1, params.get(i));
+        }
+        emQuery.setParameter(params.size() + 1, limit);
+        emQuery.setParameter(params.size() + 2, offset);
+
+        @SuppressWarnings("unchecked")
+        List<Object[]> rows = emQuery.getResultList();
+
+        if (rows.isEmpty()) {
             return new PageImpl<>(List.of(), pageable, 0);
         }
 
-        // 2) Lookup de los clientes
-        List<Cliente> clientes = clienteRepository.findAllById(clienteIds);
+        // Extraer clienteIds para count total
+        String idsPlaceholder = rows.stream()
+                .map(row -> ((Number) row[0]).longValue())
+                .map(id -> id.toString())
+                .collect(Collectors.joining(","));
 
-        // 3) Convertir a DTOs con datos aggregate de operaciones
-        List<ClienteBandejaDTO> dtos = clientes.stream()
-                .map(c -> toBandejaDTOConFiltros(c, filtros))
-                .toList();
+        String countSql = """
+            SELECT COUNT(DISTINCT c.id)
+            FROM operaciones o
+            JOIN clientes c ON c.id = o.cliente_id
+            """
+            + where;
 
-        return new PageImpl<>(dtos, pageable, clienteIdsPage.getTotalElements());
+        jakarta.persistence.Query countQuery = entityManager.createNativeQuery(countSql);
+        for (int i = 0; i < params.size(); i++) {
+            countQuery.setParameter(i + 1, params.get(i));
+        }
+        Number total = (Number) countQuery.getSingleResult();
+
+        // Build DTOs — agrupar por cliente (primera fila de cada cliente)
+        Map<Long, ClienteBandejaDTO> seen = new java.util.LinkedHashMap<>();
+        for (Object[] row : rows) {
+            Long cid = ((Number) row[0]).longValue();
+            if (seen.containsKey(cid)) continue;
+
+            ClienteBandejaDTO dto = ClienteBandejaDTO.builder()
+                    .id(cid)
+                    .dni((String) row[2])
+                    .nombreCompleto((String) row[1])
+                    .agenciaNombre((String) row[4])
+                    .numeroOperacion((String) row[5])
+                    .cuenta((String) row[6])
+                    .estado((String) row[7])
+                    .estadoCartera((String) row[8])
+                    .montoTotal(row[9] != null ? new BigDecimal(row[9].toString()) : BigDecimal.ZERO)
+                    .montoCapital(row[10] != null ? new BigDecimal(row[10].toString()) : BigDecimal.ZERO)
+                    .totalOperaciones(row[11] != null ? ((Number) row[11]).intValue() : 1)
+                    .build();
+            seen.put(cid, dto);
+        }
+
+        return new PageImpl<>(new java.util.ArrayList<>(seen.values()), pageable, total.longValue());
     }
 
     private List<Long> filtrarClienteIdsPorNombreODni(List<Long> clienteIds, ClienteBusquedaDTO filtros) {

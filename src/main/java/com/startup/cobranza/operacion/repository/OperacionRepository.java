@@ -51,7 +51,7 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
           AND (:minMonto IS NULL OR o.montoTotal >= :minMonto)
           AND (:maxMonto IS NULL OR o.montoTotal <= :maxMonto)
           AND (:etapaProcesal IS NULL OR o.etapaProcesal = :etapaProcesal)
-          AND (:nombre IS NULL OR c.nombreCompleto ILIKE CONCAT('%', :nombre, '%'))
+          AND (:nombre IS NULL OR UPPER(c.nombreCompleto) LIKE UPPER(CONCAT('%', :nombre, '%')))
           AND (:dni IS NULL OR c.dni = :dni)
         """)
     Page<Long> findClienteIdsConFiltros(
