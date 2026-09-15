@@ -110,9 +110,8 @@ CREATE TABLE IF NOT EXISTS operaciones (
     observacion_actos               text,
     comentario                     text,
 
-    -- Ubicacion (solo departamento y distrito)
+    -- Ubicacion (solo departamento, NO distrito)
     departamento                   varchar(100),
-    distrito                        varchar(100),
 
     -- Monto aprobado
     monto_aprobado                 numeric(15,2),
