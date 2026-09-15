@@ -12,6 +12,7 @@ public class ClienteBusquedaDTO {
     private BigDecimal minMonto;
     private BigDecimal maxMonto;
     private String etapaProcesal;
+    private String estadoCartera;
 
     public ClienteBusquedaDTO() {}
 
@@ -31,12 +32,15 @@ public class ClienteBusquedaDTO {
     public void setMaxMonto(BigDecimal maxMonto) { this.maxMonto = maxMonto; }
     public String getEtapaProcesal() { return etapaProcesal; }
     public void setEtapaProcesal(String etapaProcesal) { this.etapaProcesal = etapaProcesal; }
+    public String getEstadoCartera() { return estadoCartera; }
+    public void setEstadoCartera(String estadoCartera) { this.estadoCartera = estadoCartera; }
 
     public boolean hasFiltrosAdicionales() {
         return (estado != null && !estado.isBlank())
                 || minMora != null || maxMora != null
                 || minMonto != null || maxMonto != null
-                || etapaProcesal != null;
+                || etapaProcesal != null
+                || estadoCartera != null;
     }
 
     public static Builder builder() { return new Builder(); }
@@ -50,6 +54,7 @@ public class ClienteBusquedaDTO {
         private BigDecimal minMonto;
         private BigDecimal maxMonto;
         private String etapaProcesal;
+        private String estadoCartera;
 
         public Builder nombre(String v) { nombre = v; return this; }
         public Builder dni(String v) { dni = v; return this; }
@@ -59,6 +64,7 @@ public class ClienteBusquedaDTO {
         public Builder minMonto(BigDecimal v) { minMonto = v; return this; }
         public Builder maxMonto(BigDecimal v) { maxMonto = v; return this; }
         public Builder etapaProcesal(String v) { etapaProcesal = v; return this; }
+        public Builder estadoCartera(String v) { estadoCartera = v; return this; }
 
         public ClienteBusquedaDTO build() {
             ClienteBusquedaDTO dto = new ClienteBusquedaDTO();
@@ -70,6 +76,7 @@ public class ClienteBusquedaDTO {
             dto.setMinMonto(minMonto);
             dto.setMaxMonto(maxMonto);
             dto.setEtapaProcesal(etapaProcesal);
+            dto.setEstadoCartera(estadoCartera);
             return dto;
         }
     }

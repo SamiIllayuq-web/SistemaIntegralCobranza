@@ -210,4 +210,17 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
         ORDER BY o.agencia.nombre ASC NULLS LAST, o.cliente.nombreCompleto ASC
         """)
     List<Operacion> findAllActivasAgrupadasPorAgencia();
+
+    /**
+     * Todas las operaciones activas agrupadas por estadoCartera.
+     * JOIN FETCH evita N+1 al acceder a cliente y agencia.
+     */
+    @Query("""
+        SELECT o FROM Operacion o
+        JOIN FETCH o.cliente
+        LEFT JOIN FETCH o.agencia
+        WHERE o.activo = true
+        ORDER BY o.estadoCartera ASC, o.cliente.nombreCompleto ASC
+        """)
+    List<Operacion> findAllActivasAgrupadasPorEstadoCartera();
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.startup.cobranza.agencia.entity.Agencia;
 import com.startup.cobranza.agencia.repository.AgenciaRepository;
+import com.startup.cobranza.cartera.dto.EstadoCarteraAgrupadoDTO;
 import com.startup.cobranza.cartera.dto.ImportacionDTO;
 import com.startup.cobranza.cartera.entity.Importacion;
 import com.startup.cobranza.cartera.exception.CarteraException;
@@ -714,6 +715,47 @@ public class CarteraService {
                     return toDTO(i, agNombre);
                 })
                 .toList();
+    }
+
+    /**
+     * Agrupa todas las operaciones activas por estadoCartera.
+     * Retorna lista ordenada por estadoCartera.
+     */
+    public List<EstadoCarteraAgrupadoDTO> agruparPorEstadoCartera() {
+        List<Operacion> ops = operacionRepository.findAllActivasAgrupadasPorEstadoCartera();
+
+        java.util.Map<String, EstadoCarteraAgrupadoDTO> mapa = new java.util.LinkedHashMap<>();
+
+        for (Operacion op : ops) {
+            String estado = op.getEstadoCartera() != null ? op.getEstadoCartera() : "SIN ESTADO";
+
+            mapa.computeIfAbsent(estado, k -> new EstadoCarteraAgrupadoDTO(
+                    estado,
+                    0,
+                    BigDecimal.ZERO,
+                    new java.util.ArrayList<>()
+            ));
+
+            EstadoCarteraAgrupadoDTO grupo = mapa.get(estado);
+            grupo.setTotalOperaciones(grupo.getTotalOperaciones() + 1);
+
+            BigDecimal monto = op.getMontoTotal() != null ? op.getMontoTotal() : BigDecimal.ZERO;
+            grupo.setMontoTotal(grupo.getMontoTotal().add(monto));
+
+            grupo.getOperaciones().add(new com.startup.cobranza.agencia.dto.OperacionResumidaDTO(
+                    op.getId(),
+                    op.getCliente().getId(),
+                    op.getCliente().getNombreCompleto(),
+                    op.getCliente().getDni(),
+                    op.getNumeroOperacion(),
+                    op.getNumeroExpediente(),
+                    op.getSituacion(),
+                    op.getMontoTotal(),
+                    op.getMoneda()
+            ));
+        }
+
+        return new java.util.ArrayList<>(mapa.values());
     }
 
     private ImportacionDTO toDTO(Importacion entity, String agenciaNombre) {

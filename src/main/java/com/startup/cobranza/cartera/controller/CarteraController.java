@@ -1,6 +1,7 @@
 package com.startup.cobranza.cartera.controller;
 
 import com.startup.cobranza.agencia.repository.AgenciaRepository;
+import com.startup.cobranza.cartera.dto.EstadoCarteraAgrupadoDTO;
 import com.startup.cobranza.cartera.dto.ImportacionDTO;
 import com.startup.cobranza.cartera.entity.ActividadSistema;
 import com.startup.cobranza.cartera.exception.CarteraException;
@@ -112,5 +113,15 @@ public class CarteraController {
         model.addAttribute("situacion", situacion != null ? situacion : "");
         model.addAttribute("agencias", agenciaRepository.findByActivoTrue());
         return "cartera/expedientes";
+    }
+
+    @GetMapping("/estado-cartera")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SECRETARIO')")
+    public String estadoCartera(Model model) {
+        List<EstadoCarteraAgrupadoDTO> grupos = carteraService.agruparPorEstadoCartera();
+        long totalOps = grupos.stream().mapToLong(EstadoCarteraAgrupadoDTO::getTotalOperaciones).sum();
+        model.addAttribute("grupos", grupos);
+        model.addAttribute("totalOperacionesGlobal", totalOps);
+        return "cartera/estado-cartera";
     }
 }
