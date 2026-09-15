@@ -39,11 +39,6 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
      * cuando hay filtros activos (estado, estadoCartera, mora, monto, etapaProcesal).
      * Retorna paginado los clienteIds únicos.
      */
-    /**
-     * Busca operaciones activas con filtros. Se usa para la bandeja de clientes
-     * cuando hay filtros activos (estado, estadoCartera, mora, monto, etapaProcesal).
-     * Retorna paginado los clienteIds únicos.
-     */
     @Query("""
         SELECT DISTINCT o.cliente.id
         FROM Operacion o
