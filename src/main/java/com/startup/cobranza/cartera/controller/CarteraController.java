@@ -139,4 +139,20 @@ public class CarteraController {
         model.addAttribute("agencias", agenciaRepository.findByActivoTrue());
         return "cartera/estado-cartera";
     }
+
+    @GetMapping("/debug-estado-cartera")
+    public String debugEstadoCartera(
+            @RequestParam(value = "estadoCartera", required = false) String estadoCartera,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            Model model) {
+
+        PageRequest pageable = PageRequest.of(page, size);
+        Page<OperacionDTO> pagina = operacionService.listarPorEstadoCartera(
+                estadoCartera, null, null, pageable);
+
+        model.addAttribute("pagina", pagina);
+        model.addAttribute("estadoCartera", estadoCartera);
+        return "cartera/estado-cartera";
+    }
 }
