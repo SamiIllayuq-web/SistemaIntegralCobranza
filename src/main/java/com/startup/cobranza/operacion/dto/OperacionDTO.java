@@ -58,6 +58,7 @@ public class OperacionDTO {
     private String observacionActos;
     private String comentario;
     private String estadoCartera;
+    private String etapa;
     private LocalDate fechaDesembolso;
     private BigDecimal importeDesembolso;
     private String etapaProcesalTexto;
@@ -175,6 +176,8 @@ public class OperacionDTO {
     public void setComentario(String comentario) { this.comentario = comentario; }
     public String getEstadoCartera() { return estadoCartera; }
     public void setEstadoCartera(String estadoCartera) { this.estadoCartera = estadoCartera; }
+    public String getEtapa() { return etapa; }
+    public void setEtapa(String etapa) { this.etapa = etapa; }
     public LocalDate getFechaDesembolso() { return fechaDesembolso; }
     public void setFechaDesembolso(LocalDate fechaDesembolso) { this.fechaDesembolso = fechaDesembolso; }
     public BigDecimal getImporteDesembolso() { return importeDesembolso; }
@@ -259,6 +262,7 @@ public class OperacionDTO {
         private String observacionActos;
         private String comentario;
         private String estadoCartera;
+        private String etapa;
         private LocalDate fechaDesembolso;
         private BigDecimal importeDesembolso;
         private String etapaProcesalTexto;
@@ -326,6 +330,7 @@ public class OperacionDTO {
         public Builder estadoCartera(String v) { estadoCartera = v; return this; }
         public Builder fechaDesembolso(LocalDate v) { fechaDesembolso = v; return this; }
         public Builder importeDesembolso(BigDecimal v) { importeDesembolso = v; return this; }
+        public Builder etapa(String v) { etapa = v; return this; }
         public Builder etapaProcesalTexto(String v) { etapaProcesalTexto = v; return this; }
         public Builder etapaProcesal(String v) { etapaProcesal = v; return this; }
         public Builder actoPendiente(String v) { actoPendiente = v; return this; }
@@ -391,6 +396,7 @@ public class OperacionDTO {
             dto.setObservacionActos(observacionActos);
             dto.setComentario(comentario);
             dto.setEstadoCartera(estadoCartera);
+            dto.setEtapa(etapa);
             dto.setFechaDesembolso(fechaDesembolso);
             dto.setImporteDesembolso(importeDesembolso);
             dto.setEtapaProcesalTexto(etapaProcesalTexto);
