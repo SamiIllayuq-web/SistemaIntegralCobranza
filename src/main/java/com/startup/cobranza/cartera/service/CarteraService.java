@@ -345,7 +345,6 @@ public class CarteraService {
                     .busquedaBienes(busquedaBienes)
                     .montoDemandado(montoDemandado)
                     .escribanoLegal(escribanoLegal)
-                    .codigoExpCautelar(codigoExpCautelar)
                     .incidente(incidente)
                     .fechaPresentacion(getCellLocalDate(row, columns, "fechaPresentacion"))
                     .fechaInadmisiblePrincipal(getCellLocalDate(row, columns, "fechaInadmisiblePrincipal"))
@@ -377,8 +376,6 @@ public class CarteraService {
                     .fechaCastigo(getCellLocalDate(row, columns, "fechaCastigo"))
                     .tipoFondo(getCellString(row, columns, "tipoFondo"))
                     .coTitularAval(coTitularAval)
-                    .rango(getCellString(row, columns, "rango"))
-                    .numeroPartida(getCellString(row, columns, "numeroPartida"))
                     .numeroFichaRegistral(getCellString(row, columns, "numeroFichaRegistral"))
                     .activo(true)
                     .build();
@@ -403,7 +400,6 @@ public class CarteraService {
             operacion.setBusquedaBienes(busquedaBienes);
             operacion.setMontoDemandado(montoDemandado);
             operacion.setEscribanoLegal(escribanoLegal);
-            operacion.setCodigoExpCautelar(codigoExpCautelar);
             operacion.setIncidente(incidente);
             operacion.setFechaPresentacion(getCellLocalDate(row, columns, "fechaPresentacion"));
             operacion.setFechaInadmisiblePrincipal(getCellLocalDate(row, columns, "fechaInadmisiblePrincipal"));
@@ -434,8 +430,6 @@ public class CarteraService {
             operacion.setFechaCastigo(getCellLocalDate(row, columns, "fechaCastigo"));
             operacion.setTipoFondo(getCellString(row, columns, "tipoFondo"));
             operacion.setCoTitularAval(coTitularAval);
-            operacion.setRango(getCellString(row, columns, "rango"));
-            operacion.setNumeroPartida(getCellString(row, columns, "numeroPartida"));
             operacion.setNumeroFichaRegistral(getCellString(row, columns, "numeroFichaRegistral"));
         }
         operacion = operacionRepository.save(operacion);
@@ -445,8 +439,9 @@ public class CarteraService {
         if (partidaRegistral != null && !partidaRegistral.isBlank()) {
             BienEmbargado bien = BienEmbargado.builder()
                     .operacion(operacion)
+                    .codigoExpCautelar(getCellString(row, columns, "codigoExpCautelar"))
                     .detalleGarantia(getCellString(row, columns, "detalleBien"))
-                    .partidaRegistral(getCellString(row, columns, "numeroPartida"))
+                    .numeroPartida(getCellString(row, columns, "numeroPartida"))
                     .tipoBien(getCellString(row, columns, "tipoBien"))
                     .rango(getCellString(row, columns, "rango"))
                     .tipoPreferencia(getCellString(row, columns, "tipoPreferencia"))
@@ -457,8 +452,8 @@ public class CarteraService {
                     .fechaPresentacionRrpp(getCellLocalDate(row, columns, "fechaPresentacionRrpp"))
                     .asientoInscripcion(getCellString(row, columns, "asientoInscripcion"))
                     .fechaPresentacionMc(getCellString(row, columns, "fechaPresentacionMc"))
-                    .fechaInadmisible(getCellString(row, columns, "fechaInadmisibleMc"))
-                    .fechaAdmision(getCellString(row, columns, "fechaAdmisionMc"))
+                    .fechaInadmisibleMc(getCellString(row, columns, "fechaInadmisibleMc"))
+                    .fechaAdmisionMc(getCellString(row, columns, "fechaAdmisionMc"))
                     .comentarioMc(getCellString(row, columns, "comentarioMc"))
                     .detalleAcreedores(getCellString(row, columns, "detalleAcreedores"))
                     .titularPredio(getCellString(row, columns, "titularPredio"))

@@ -23,7 +23,6 @@ public class OperacionFormDTO {
     private String estado;
     private String etapa;
     private String observacion;
-    private String rango;
     private String numeroExpediente;
     private String tipoProceso;
     private String tipoJuzgado;
@@ -47,13 +46,11 @@ public class OperacionFormDTO {
     private String fechaCastigo;
     private String tipoFondo;
     private String coTitularAval;
-    private String numeroPartida;
     private String numeroFichaRegistral;
     // --- Campos judiciales (desde Excel) ---
     private String trans;
     private String busquedaBienes;
     private String escribanoLegal;
-    private String codigoExpCautelar;
     private String incidente;
     private BigDecimal montoDemandado;
     private String fechaPresentacion;
@@ -109,8 +106,6 @@ public class OperacionFormDTO {
     public void setEtapa(String etapa) { this.etapa = etapa; }
     public String getObservacion() { return observacion; }
     public void setObservacion(String observacion) { this.observacion = observacion; }
-    public String getRango() { return rango; }
-    public void setRango(String rango) { this.rango = rango; }
     public String getNumeroExpediente() { return numeroExpediente; }
     public void setNumeroExpediente(String numeroExpediente) { this.numeroExpediente = numeroExpediente; }
     public String getTipoProceso() { return tipoProceso; }
@@ -157,8 +152,6 @@ public class OperacionFormDTO {
     public void setTipoFondo(String tipoFondo) { this.tipoFondo = tipoFondo; }
     public String getCoTitularAval() { return coTitularAval; }
     public void setCoTitularAval(String coTitularAval) { this.coTitularAval = coTitularAval; }
-    public String getNumeroPartida() { return numeroPartida; }
-    public void setNumeroPartida(String numeroPartida) { this.numeroPartida = numeroPartida; }
     public String getNumeroFichaRegistral() { return numeroFichaRegistral; }
     public void setNumeroFichaRegistral(String numeroFichaRegistral) { this.numeroFichaRegistral = numeroFichaRegistral; }
     public String getTrans() { return trans; }
@@ -167,8 +160,6 @@ public class OperacionFormDTO {
     public void setBusquedaBienes(String busquedaBienes) { this.busquedaBienes = busquedaBienes; }
     public String getEscribanoLegal() { return escribanoLegal; }
     public void setEscribanoLegal(String escribanoLegal) { this.escribanoLegal = escribanoLegal; }
-    public String getCodigoExpCautelar() { return codigoExpCautelar; }
-    public void setCodigoExpCautelar(String codigoExpCautelar) { this.codigoExpCautelar = codigoExpCautelar; }
     public String getIncidente() { return incidente; }
     public void setIncidente(String incidente) { this.incidente = incidente; }
     public BigDecimal getMontoDemandado() { return montoDemandado; }
@@ -223,7 +214,6 @@ public class OperacionFormDTO {
         private String estado;
         private String etapa;
         private String observacion;
-        private String rango;
         private String numeroExpediente;
         private String tipoProceso;
         private String tipoJuzgado;
@@ -247,12 +237,10 @@ public class OperacionFormDTO {
         private String fechaCastigo;
         private String tipoFondo;
         private String coTitularAval;
-        private String numeroPartida;
         private String numeroFichaRegistral;
         private String trans;
         private String busquedaBienes;
         private String escribanoLegal;
-        private String codigoExpCautelar;
         private String incidente;
         private BigDecimal montoDemandado;
         private String fechaPresentacion;
@@ -288,7 +276,6 @@ public class OperacionFormDTO {
         public Builder estado(String v) { estado = v; return this; }
         public Builder etapa(String v) { etapa = v; return this; }
         public Builder observacion(String v) { observacion = v; return this; }
-        public Builder rango(String v) { rango = v; return this; }
         public Builder numeroExpediente(String v) { numeroExpediente = v; return this; }
         public Builder tipoProceso(String v) { tipoProceso = v; return this; }
         public Builder tipoJuzgado(String v) { tipoJuzgado = v; return this; }
@@ -312,12 +299,10 @@ public class OperacionFormDTO {
         public Builder fechaCastigo(String v) { fechaCastigo = v; return this; }
         public Builder tipoFondo(String v) { tipoFondo = v; return this; }
         public Builder coTitularAval(String v) { coTitularAval = v; return this; }
-        public Builder numeroPartida(String v) { numeroPartida = v; return this; }
         public Builder numeroFichaRegistral(String v) { numeroFichaRegistral = v; return this; }
         public Builder trans(String v) { trans = v; return this; }
         public Builder busquedaBienes(String v) { busquedaBienes = v; return this; }
         public Builder escribanoLegal(String v) { escribanoLegal = v; return this; }
-        public Builder codigoExpCautelar(String v) { codigoExpCautelar = v; return this; }
         public Builder incidente(String v) { incidente = v; return this; }
         public Builder montoDemandado(BigDecimal v) { montoDemandado = v; return this; }
         public Builder fechaPresentacion(String v) { fechaPresentacion = v; return this; }
@@ -355,7 +340,6 @@ public class OperacionFormDTO {
             dto.setEstado(estado);
             dto.setEtapa(etapa);
             dto.setObservacion(observacion);
-            dto.setRango(rango);
             dto.setNumeroExpediente(numeroExpediente);
             dto.setTipoProceso(tipoProceso);
             dto.setTipoJuzgado(tipoJuzgado);
@@ -379,12 +363,10 @@ public class OperacionFormDTO {
             dto.setFechaCastigo(fechaCastigo);
             dto.setTipoFondo(tipoFondo);
             dto.setCoTitularAval(coTitularAval);
-            dto.setNumeroPartida(numeroPartida);
             dto.setNumeroFichaRegistral(numeroFichaRegistral);
             dto.setTrans(trans);
             dto.setBusquedaBienes(busquedaBienes);
             dto.setEscribanoLegal(escribanoLegal);
-            dto.setCodigoExpCautelar(codigoExpCautelar);
             dto.setIncidente(incidente);
             dto.setMontoDemandado(montoDemandado);
             dto.setFechaPresentacion(fechaPresentacion);

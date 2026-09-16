@@ -132,7 +132,6 @@ public class OperacionService {
         operacion.setBusquedaBienes(form.getBusquedaBienes());
         operacion.setMontoDemandado(form.getMontoDemandado());
         operacion.setEscribanoLegal(form.getEscribanoLegal());
-        operacion.setCodigoExpCautelar(form.getCodigoExpCautelar());
         operacion.setIncidente(form.getIncidente());
         operacion.setFechaPresentacion(parseFecha(form.getFechaPresentacion()));
         operacion.setFechaInadmisiblePrincipal(parseFecha(form.getFechaInadmisiblePrincipal()));
@@ -163,7 +162,6 @@ public class OperacionService {
         operacion.setFechaCastigo(parseFecha(form.getFechaCastigo()));
         operacion.setTipoFondo(form.getTipoFondo());
         operacion.setCoTitularAval(form.getCoTitularAval());
-        operacion.setNumeroPartida(form.getNumeroPartida());
         operacion.setNumeroFichaRegistral(form.getNumeroFichaRegistral());
 
         // Bienes embargados
@@ -171,8 +169,9 @@ public class OperacionService {
             for (BienEmbargadoDTO bDto : form.getBienesEmbargados()) {
                 BienEmbargado bien = new BienEmbargado();
                 bien.setOperacion(operacion);
+                bien.setCodigoExpCautelar(bDto.getCodigoExpCautelar());
                 bien.setDetalleGarantia(bDto.getDetalleGarantia());
-                bien.setPartidaRegistral(bDto.getNumeroPartida());
+                bien.setNumeroPartida(bDto.getNumeroPartida());
                 bien.setTipoBien(bDto.getTipoBien());
                 bien.setDireccion(bDto.getDireccion());
                 bien.setDistrito(bDto.getDistrito());
@@ -183,8 +182,8 @@ public class OperacionService {
                 bien.setFechaPresentacionRrpp(bDto.getFechaPresentacionRrpp());
                 bien.setAsientoInscripcion(bDto.getAsientoInscripcion());
                 bien.setFechaPresentacionMc(bDto.getFechaPresentacionMc());
-                bien.setFechaInadmisible(bDto.getFechaInadmisible());
-                bien.setFechaAdmision(bDto.getFechaAdmision());
+                bien.setFechaInadmisibleMc(bDto.getFechaInadmisibleMc());
+                bien.setFechaAdmisionMc(bDto.getFechaAdmisionMc());
                 bien.setComentarioMc(bDto.getComentarioMc());
                 bien.setDetalleAcreedores(bDto.getDetalleAcreedores());
                 bien.setTipoPreferencia(bDto.getTipoPreferencia());
@@ -226,7 +225,6 @@ public class OperacionService {
         existing.setSituacion(form.getSituacion());
         existing.setEstado(form.getEstado());
         existing.setObservacion(form.getObservacion());
-        existing.setRango(form.getRango());
         existing.setNumeroExpediente(form.getNumeroExpediente());
         existing.setTipoProceso(form.getTipoProceso());
         existing.setTipoJuzgado(form.getTipoJuzgado());
@@ -237,7 +235,6 @@ public class OperacionService {
         existing.setBusquedaBienes(form.getBusquedaBienes());
         existing.setMontoDemandado(form.getMontoDemandado());
         existing.setEscribanoLegal(form.getEscribanoLegal());
-        existing.setCodigoExpCautelar(form.getCodigoExpCautelar());
         existing.setIncidente(form.getIncidente());
         existing.setFechaPresentacion(parseFecha(form.getFechaPresentacion()));
         existing.setFechaInadmisiblePrincipal(parseFecha(form.getFechaInadmisiblePrincipal()));
@@ -268,7 +265,6 @@ public class OperacionService {
         existing.setFechaCastigo(parseFecha(form.getFechaCastigo()));
         existing.setTipoFondo(form.getTipoFondo());
         existing.setCoTitularAval(form.getCoTitularAval());
-        existing.setNumeroPartida(form.getNumeroPartida());
         existing.setNumeroFichaRegistral(form.getNumeroFichaRegistral());
 
         // Sync bienes embargados
@@ -278,8 +274,9 @@ public class OperacionService {
                 BienEmbargado bien = new BienEmbargado();
                 bien.setId(bDto.getId());
                 bien.setOperacion(existing);
+                bien.setCodigoExpCautelar(bDto.getCodigoExpCautelar());
                 bien.setDetalleGarantia(bDto.getDetalleGarantia());
-                bien.setPartidaRegistral(bDto.getNumeroPartida());
+                bien.setNumeroPartida(bDto.getNumeroPartida());
                 bien.setTipoBien(bDto.getTipoBien());
                 bien.setDireccion(bDto.getDireccion());
                 bien.setDistrito(bDto.getDistrito());
@@ -290,8 +287,8 @@ public class OperacionService {
                 bien.setFechaPresentacionRrpp(bDto.getFechaPresentacionRrpp());
                 bien.setAsientoInscripcion(bDto.getAsientoInscripcion());
                 bien.setFechaPresentacionMc(bDto.getFechaPresentacionMc());
-                bien.setFechaInadmisible(bDto.getFechaInadmisible());
-                bien.setFechaAdmision(bDto.getFechaAdmision());
+                bien.setFechaInadmisibleMc(bDto.getFechaInadmisibleMc());
+                bien.setFechaAdmisionMc(bDto.getFechaAdmisionMc());
                 bien.setComentarioMc(bDto.getComentarioMc());
                 bien.setDetalleAcreedores(bDto.getDetalleAcreedores());
                 bien.setTipoPreferencia(bDto.getTipoPreferencia());

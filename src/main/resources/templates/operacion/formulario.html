@@ -200,19 +200,11 @@
                 <button type="button" class="btn btn-ghost btn-sm" onclick="agregarBien()">+ Agregar Bien</button>
             </div>
             <div class="card-body">
-                <!-- Campos del Expediente Cautelar (nivel Operación) -->
+                <!-- Número de ficha registral (nivel Operación) -->
                 <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px;">
-                    <div>
-                        <label class="form-label">Exp. Cautelar</label>
-                        <input type="text" class="form-control" th:field="*{codigoExpCautelar}"/>
-                    </div>
                     <div>
                         <label class="form-label">N° Ficha Registral</label>
                         <input type="text" class="form-control" th:field="*{numeroFichaRegistral}"/>
-                    </div>
-                    <div>
-                        <label class="form-label">N° Partida</label>
-                        <input type="text" class="form-control" th:field="*{numeroPartida}"/>
                     </div>
                 </div>
 
@@ -224,7 +216,6 @@
                         class="bien-card"
                         style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-bottom: 16px; position: relative;">
                         <input type="hidden" th:name="'bienesEmbargados[' + ${stat.index} + '].id'" th:value="${bien.id}"/>
-                        <input type="hidden" th:name="'bienesEmbargados[' + ${stat.index} + '].partidaRegistral'" th:value="${bien.partidaRegistral}"/>
                         <button type="button" onclick="eliminarBien(this)" style="position: absolute; top: 8px; right: 8px; background: none; border: none; cursor: pointer; color: #dc2626;">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                         </button>
@@ -232,6 +223,14 @@
                             <div>
                                 <label class="form-label">Detalle Garantía</label>
                                 <textarea class="form-control" rows="2" th:name="'bienesEmbargados[' + ${stat.index} + '].detalleGarantia'" th:text="${bien.detalleGarantia}"></textarea>
+                            </div>
+                            <div>
+                                <label class="form-label">Exp. Cautelar</label>
+                                <input type="text" class="form-control" th:name="'bienesEmbargados[' + ${stat.index} + '].codigoExpCautelar'" th:value="${bien.codigoExpCautelar}"/>
+                            </div>
+                            <div>
+                                <label class="form-label">N° Partida</label>
+                                <input type="text" class="form-control" th:name="'bienesEmbargados[' + ${stat.index} + '].numeroPartida'" th:value="${bien.numeroPartida}"/>
                             </div>
                             <div>
                                 <label class="form-label">Bien (Mueble/Inmueble)</label>

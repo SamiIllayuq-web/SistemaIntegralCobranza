@@ -28,7 +28,6 @@ public class OperacionMapper {
                 .situacion(entity.getSituacion())
                 .estado(entity.getEstado())
                 .observacion(entity.getObservacion())
-                .rango(entity.getRango())
                 .numeroExpediente(entity.getNumeroExpediente())
                 .tipoProceso(entity.getTipoProceso())
                 .tipoJuzgado(entity.getTipoJuzgado())
@@ -41,7 +40,6 @@ public class OperacionMapper {
                 .busquedaBienes(entity.getBusquedaBienes())
                 .montoDemandado(entity.getMontoDemandado())
                 .escribanoLegal(entity.getEscribanoLegal())
-                .codigoExpCautelar(entity.getCodigoExpCautelar())
                 .incidente(entity.getIncidente())
                 .fechaPresentacion(entity.getFechaPresentacion())
                 .fechaInadmisiblePrincipal(entity.getFechaInadmisiblePrincipal())
@@ -73,7 +71,6 @@ public class OperacionMapper {
                 .fechaCastigo(entity.getFechaCastigo())
                 .tipoFondo(entity.getTipoFondo())
                 .coTitularAval(entity.getCoTitularAval())
-                .numeroPartida(entity.getNumeroPartida())
                 .numeroFichaRegistral(entity.getNumeroFichaRegistral())
                 .build();
 
@@ -104,9 +101,9 @@ public class OperacionMapper {
         return BienEmbargadoDTO.builder()
                 .id(entity.getId())
                 .operacionId(entity.getOperacion() != null ? entity.getOperacion().getId() : null)
+                .codigoExpCautelar(entity.getCodigoExpCautelar())
                 .tipoBien(entity.getTipoBien())
-                .partidaRegistral(entity.getPartidaRegistral())
-                .numeroPartida(entity.getPartidaRegistral())
+                .numeroPartida(entity.getNumeroPartida())
                 .departamento(entity.getDepartamento())
                 .garantiaInscrita(entity.getGarantiaInscrita())
                 .fechaInscripcion(entity.getFechaInscripcion())
@@ -120,8 +117,8 @@ public class OperacionMapper {
                 .titularPredio(entity.getTitularPredio())
                 .fechaGeneracionMc(entity.getFechaGeneracionMc())
                 .fechaPresentacionMc(entity.getFechaPresentacionMc())
-                .fechaInadmisible(entity.getFechaInadmisible())
-                .fechaAdmision(entity.getFechaAdmision())
+                .fechaInadmisibleMc(entity.getFechaInadmisibleMc())
+                .fechaAdmisionMc(entity.getFechaAdmisionMc())
                 .comentarioMc(entity.getComentarioMc())
                 .build();
     }
@@ -141,7 +138,6 @@ public class OperacionMapper {
                 .situacion(dto.getSituacion())
                 .estado(dto.getEstado())
                 .observacion(dto.getObservacion())
-                .rango(dto.getRango())
                 .numeroExpediente(dto.getNumeroExpediente())
                 .tipoProceso(dto.getTipoProceso())
                 .tipoJuzgado(dto.getTipoJuzgado())
@@ -152,7 +148,6 @@ public class OperacionMapper {
                 .busquedaBienes(dto.getBusquedaBienes())
                 .montoDemandado(dto.getMontoDemandado())
                 .escribanoLegal(dto.getEscribanoLegal())
-                .codigoExpCautelar(dto.getCodigoExpCautelar())
                 .incidente(dto.getIncidente())
                 .fechaPresentacion(dto.getFechaPresentacion())
                 .fechaInadmisiblePrincipal(dto.getFechaInadmisiblePrincipal())
@@ -183,7 +178,6 @@ public class OperacionMapper {
                 .fechaCastigo(dto.getFechaCastigo())
                 .tipoFondo(dto.getTipoFondo())
                 .coTitularAval(dto.getCoTitularAval())
-                .numeroPartida(dto.getNumeroPartida())
                 .numeroFichaRegistral(dto.getNumeroFichaRegistral())
                 .build();
     }
@@ -208,7 +202,6 @@ public class OperacionMapper {
                 .situacion(entity.getSituacion())
                 .estado(entity.getEstado())
                 .observacion(entity.getObservacion())
-                .rango(entity.getRango())
                 .numeroExpediente(entity.getNumeroExpediente())
                 .tipoProceso(entity.getTipoProceso())
                 .tipoJuzgado(entity.getTipoJuzgado())
@@ -218,7 +211,6 @@ public class OperacionMapper {
                 .trans(entity.getTrans())
                 .busquedaBienes(entity.getBusquedaBienes())
                 .escribanoLegal(entity.getEscribanoLegal())
-                .codigoExpCautelar(entity.getCodigoExpCautelar())
                 .incidente(entity.getIncidente())
                 .montoDemandado(entity.getMontoDemandado())
                 .fechaPresentacion(entity.getFechaPresentacion() != null ? entity.getFechaPresentacion().toString() : null)
@@ -251,7 +243,6 @@ public class OperacionMapper {
                 .fechaCastigo(entity.getFechaCastigo() != null ? entity.getFechaCastigo().toString() : null)
                 .tipoFondo(entity.getTipoFondo())
                 .coTitularAval(entity.getCoTitularAval())
-                .numeroPartida(entity.getNumeroPartida())
                 .numeroFichaRegistral(entity.getNumeroFichaRegistral())
                 .bienesEmbargados(entity.getBienesEmbargados() != null
                         ? entity.getBienesEmbargados().stream().map(this::toBienEmbargadoDTO).toList()
@@ -274,7 +265,6 @@ public class OperacionMapper {
                 .situacion(form.getSituacion())
                 .estado(form.getEstado())
                 .observacion(form.getObservacion())
-                .rango(form.getRango())
                 .numeroExpediente(form.getNumeroExpediente())
                 .tipoProceso(form.getTipoProceso())
                 .tipoJuzgado(form.getTipoJuzgado())
@@ -284,7 +274,6 @@ public class OperacionMapper {
                 .trans(form.getTrans())
                 .busquedaBienes(form.getBusquedaBienes())
                 .escribanoLegal(form.getEscribanoLegal())
-                .codigoExpCautelar(form.getCodigoExpCautelar())
                 .incidente(form.getIncidente())
                 .montoDemandado(form.getMontoDemandado())
                 .fechaPresentacion(form.getFechaPresentacion() != null && !form.getFechaPresentacion().isEmpty() ? java.time.LocalDate.parse(form.getFechaPresentacion()) : null)
@@ -326,7 +315,6 @@ public class OperacionMapper {
                         ? java.time.LocalDate.parse(form.getFechaCastigo()) : null)
                 .tipoFondo(form.getTipoFondo())
                 .coTitularAval(form.getCoTitularAval())
-                .numeroPartida(form.getNumeroPartida())
                 .numeroFichaRegistral(form.getNumeroFichaRegistral())
                 .build();
     }

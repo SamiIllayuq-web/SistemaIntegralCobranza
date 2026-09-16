@@ -16,11 +16,14 @@ public class BienEmbargado {
     @JoinColumn(name = "operacion_id")
     private Operacion operacion;
 
+    @Column(name = "codigo_exp_cautelar")
+    private String codigoExpCautelar;
+
     @Column(name = "tipo_bien")
     private String tipoBien;
 
-    @Column(name = "partida_registral")
-    private String partidaRegistral;
+    @Column(name = "numero_partida")
+    private String numeroPartida;
 
     @Column(name = "detalle_garantia", columnDefinition = "TEXT")
     private String detalleGarantia;
@@ -52,11 +55,11 @@ public class BienEmbargado {
     @Column(name = "fecha_presentacion_mc", columnDefinition = "TEXT")
     private String fechaPresentacionMc;
 
-    @Column(name = "fecha_inadmisible", columnDefinition = "TEXT")
-    private String fechaInadmisible;
+    @Column(name = "fecha_inadmisible_mc", columnDefinition = "TEXT")
+    private String fechaInadmisibleMc;
 
-    @Column(name = "fecha_admision", columnDefinition = "TEXT")
-    private String fechaAdmision;
+    @Column(name = "fecha_admision_mc", columnDefinition = "TEXT")
+    private String fechaAdmisionMc;
 
     @Column(name = "comentario_mc", columnDefinition = "TEXT")
     private String comentarioMc;
@@ -88,10 +91,12 @@ public class BienEmbargado {
     public void setId(Long id) { this.id = id; }
     public Operacion getOperacion() { return operacion; }
     public void setOperacion(Operacion operacion) { this.operacion = operacion; }
+    public String getCodigoExpCautelar() { return codigoExpCautelar; }
+    public void setCodigoExpCautelar(String codigoExpCautelar) { this.codigoExpCautelar = codigoExpCautelar; }
     public String getTipoBien() { return tipoBien; }
     public void setTipoBien(String tipoBien) { this.tipoBien = tipoBien; }
-    public String getPartidaRegistral() { return partidaRegistral; }
-    public void setPartidaRegistral(String partidaRegistral) { this.partidaRegistral = partidaRegistral; }
+    public String getNumeroPartida() { return numeroPartida; }
+    public void setNumeroPartida(String numeroPartida) { this.numeroPartida = numeroPartida; }
     public String getDetalleGarantia() { return detalleGarantia; }
     public void setDetalleGarantia(String detalleGarantia) { this.detalleGarantia = detalleGarantia; }
     public String getDireccion() { return direccion; }
@@ -112,10 +117,10 @@ public class BienEmbargado {
     public void setAsientoInscripcion(String asientoInscripcion) { this.asientoInscripcion = asientoInscripcion; }
     public String getFechaPresentacionMc() { return fechaPresentacionMc; }
     public void setFechaPresentacionMc(String fechaPresentacionMc) { this.fechaPresentacionMc = fechaPresentacionMc; }
-    public String getFechaInadmisible() { return fechaInadmisible; }
-    public void setFechaInadmisible(String fechaInadmisible) { this.fechaInadmisible = fechaInadmisible; }
-    public String getFechaAdmision() { return fechaAdmision; }
-    public void setFechaAdmision(String fechaAdmision) { this.fechaAdmision = fechaAdmision; }
+    public String getFechaInadmisibleMc() { return fechaInadmisibleMc; }
+    public void setFechaInadmisibleMc(String fechaInadmisibleMc) { this.fechaInadmisibleMc = fechaInadmisibleMc; }
+    public String getFechaAdmisionMc() { return fechaAdmisionMc; }
+    public void setFechaAdmisionMc(String fechaAdmisionMc) { this.fechaAdmisionMc = fechaAdmisionMc; }
     public String getComentarioMc() { return comentarioMc; }
     public void setComentarioMc(String comentarioMc) { this.comentarioMc = comentarioMc; }
     public String getDetalleAcreedores() { return detalleAcreedores; }
@@ -138,8 +143,9 @@ public class BienEmbargado {
     public static class Builder {
         private Long id;
         private Operacion operacion;
+        private String codigoExpCautelar;
         private String tipoBien;
-        private String partidaRegistral;
+        private String numeroPartida;
         private String detalleGarantia;
         private String direccion;
         private String distrito;
@@ -150,8 +156,8 @@ public class BienEmbargado {
         private LocalDate fechaPresentacionRrpp;
         private String asientoInscripcion;
         private String fechaPresentacionMc;
-        private String fechaInadmisible;
-        private String fechaAdmision;
+        private String fechaInadmisibleMc;
+        private String fechaAdmisionMc;
         private String comentarioMc;
         private String detalleAcreedores;
         private String tipoPreferencia;
@@ -163,8 +169,9 @@ public class BienEmbargado {
 
         public Builder id(Long v) { id = v; return this; }
         public Builder operacion(Operacion v) { operacion = v; return this; }
+        public Builder codigoExpCautelar(String v) { codigoExpCautelar = v; return this; }
         public Builder tipoBien(String v) { tipoBien = v; return this; }
-        public Builder partidaRegistral(String v) { partidaRegistral = v; return this; }
+        public Builder numeroPartida(String v) { numeroPartida = v; return this; }
         public Builder detalleGarantia(String v) { detalleGarantia = v; return this; }
         public Builder direccion(String v) { direccion = v; return this; }
         public Builder distrito(String v) { distrito = v; return this; }
@@ -175,8 +182,8 @@ public class BienEmbargado {
         public Builder fechaPresentacionRrpp(LocalDate v) { fechaPresentacionRrpp = v; return this; }
         public Builder asientoInscripcion(String v) { asientoInscripcion = v; return this; }
         public Builder fechaPresentacionMc(String v) { fechaPresentacionMc = v; return this; }
-        public Builder fechaInadmisible(String v) { fechaInadmisible = v; return this; }
-        public Builder fechaAdmision(String v) { fechaAdmision = v; return this; }
+        public Builder fechaInadmisibleMc(String v) { fechaInadmisibleMc = v; return this; }
+        public Builder fechaAdmisionMc(String v) { fechaAdmisionMc = v; return this; }
         public Builder comentarioMc(String v) { comentarioMc = v; return this; }
         public Builder detalleAcreedores(String v) { detalleAcreedores = v; return this; }
         public Builder tipoPreferencia(String v) { tipoPreferencia = v; return this; }
@@ -190,8 +197,9 @@ public class BienEmbargado {
             BienEmbargado e = new BienEmbargado();
             e.setId(id);
             e.setOperacion(operacion);
+            e.setCodigoExpCautelar(codigoExpCautelar);
             e.setTipoBien(tipoBien);
-            e.setPartidaRegistral(partidaRegistral);
+            e.setNumeroPartida(numeroPartida);
             e.setDetalleGarantia(detalleGarantia);
             e.setDireccion(direccion);
             e.setDistrito(distrito);
@@ -202,8 +210,8 @@ public class BienEmbargado {
             e.setFechaPresentacionRrpp(fechaPresentacionRrpp);
             e.setAsientoInscripcion(asientoInscripcion);
             e.setFechaPresentacionMc(fechaPresentacionMc);
-            e.setFechaInadmisible(fechaInadmisible);
-            e.setFechaAdmision(fechaAdmision);
+            e.setFechaInadmisibleMc(fechaInadmisibleMc);
+            e.setFechaAdmisionMc(fechaAdmisionMc);
             e.setComentarioMc(comentarioMc);
             e.setDetalleAcreedores(detalleAcreedores);
             e.setTipoPreferencia(tipoPreferencia);

@@ -7,8 +7,8 @@ public class BienEmbargadoDTO {
 
     private Long id;
     private Long operacionId;
+    private String codigoExpCautelar;
     private String tipoBien;
-    private String partidaRegistral;
     private String numeroPartida;
     private String detalleGarantia;
     private String direccion;
@@ -19,6 +19,10 @@ public class BienEmbargadoDTO {
     private LocalDate fechaInscripcion;
     private LocalDate fechaPresentacionRrpp;
     private String asientoInscripcion;
+    private String fechaPresentacionMc;
+    private String fechaInadmisibleMc;
+    private String fechaAdmisionMc;
+    private String comentarioMc;
     private BigDecimal montoMc;
     private String monedaMc;
     private String rango;
@@ -26,10 +30,6 @@ public class BienEmbargadoDTO {
     private String tipoPreferencia;
     private String titularPredio;
     private LocalDate fechaGeneracionMc;
-    private String fechaPresentacionMc;
-    private String fechaInadmisible;
-    private String fechaAdmision;
-    private String comentarioMc;
 
     public BienEmbargadoDTO() {}
 
@@ -37,10 +37,10 @@ public class BienEmbargadoDTO {
     public void setId(Long id) { this.id = id; }
     public Long getOperacionId() { return operacionId; }
     public void setOperacionId(Long operacionId) { this.operacionId = operacionId; }
+    public String getCodigoExpCautelar() { return codigoExpCautelar; }
+    public void setCodigoExpCautelar(String codigoExpCautelar) { this.codigoExpCautelar = codigoExpCautelar; }
     public String getTipoBien() { return tipoBien; }
     public void setTipoBien(String tipoBien) { this.tipoBien = tipoBien; }
-    public String getPartidaRegistral() { return partidaRegistral; }
-    public void setPartidaRegistral(String partidaRegistral) { this.partidaRegistral = partidaRegistral; }
     public String getNumeroPartida() { return numeroPartida; }
     public void setNumeroPartida(String numeroPartida) { this.numeroPartida = numeroPartida; }
     public String getDetalleGarantia() { return detalleGarantia; }
@@ -61,6 +61,14 @@ public class BienEmbargadoDTO {
     public void setFechaPresentacionRrpp(LocalDate fechaPresentacionRrpp) { this.fechaPresentacionRrpp = fechaPresentacionRrpp; }
     public String getAsientoInscripcion() { return asientoInscripcion; }
     public void setAsientoInscripcion(String asientoInscripcion) { this.asientoInscripcion = asientoInscripcion; }
+    public String getFechaPresentacionMc() { return fechaPresentacionMc; }
+    public void setFechaPresentacionMc(String fechaPresentacionMc) { this.fechaPresentacionMc = fechaPresentacionMc; }
+    public String getFechaInadmisibleMc() { return fechaInadmisibleMc; }
+    public void setFechaInadmisibleMc(String fechaInadmisibleMc) { this.fechaInadmisibleMc = fechaInadmisibleMc; }
+    public String getFechaAdmisionMc() { return fechaAdmisionMc; }
+    public void setFechaAdmisionMc(String fechaAdmisionMc) { this.fechaAdmisionMc = fechaAdmisionMc; }
+    public String getComentarioMc() { return comentarioMc; }
+    public void setComentarioMc(String comentarioMc) { this.comentarioMc = comentarioMc; }
     public BigDecimal getMontoMc() { return montoMc; }
     public void setMontoMc(BigDecimal montoMc) { this.montoMc = montoMc; }
     public String getMonedaMc() { return monedaMc; }
@@ -75,22 +83,14 @@ public class BienEmbargadoDTO {
     public void setTitularPredio(String titularPredio) { this.titularPredio = titularPredio; }
     public LocalDate getFechaGeneracionMc() { return fechaGeneracionMc; }
     public void setFechaGeneracionMc(LocalDate fechaGeneracionMc) { this.fechaGeneracionMc = fechaGeneracionMc; }
-    public String getFechaPresentacionMc() { return fechaPresentacionMc; }
-    public void setFechaPresentacionMc(String fechaPresentacionMc) { this.fechaPresentacionMc = fechaPresentacionMc; }
-    public String getFechaInadmisible() { return fechaInadmisible; }
-    public void setFechaInadmisible(String fechaInadmisible) { this.fechaInadmisible = fechaInadmisible; }
-    public String getFechaAdmision() { return fechaAdmision; }
-    public void setFechaAdmision(String fechaAdmision) { this.fechaAdmision = fechaAdmision; }
-    public String getComentarioMc() { return comentarioMc; }
-    public void setComentarioMc(String comentarioMc) { this.comentarioMc = comentarioMc; }
 
     public static Builder builder() { return new Builder(); }
 
     public static class Builder {
         private Long id;
         private Long operacionId;
+        private String codigoExpCautelar;
         private String tipoBien;
-        private String partidaRegistral;
         private String numeroPartida;
         private String detalleGarantia;
         private String direccion;
@@ -101,6 +101,10 @@ public class BienEmbargadoDTO {
         private LocalDate fechaInscripcion;
         private LocalDate fechaPresentacionRrpp;
         private String asientoInscripcion;
+        private String fechaPresentacionMc;
+        private String fechaInadmisibleMc;
+        private String fechaAdmisionMc;
+        private String comentarioMc;
         private BigDecimal montoMc;
         private String monedaMc;
         private String rango;
@@ -108,15 +112,11 @@ public class BienEmbargadoDTO {
         private String tipoPreferencia;
         private String titularPredio;
         private LocalDate fechaGeneracionMc;
-        private String fechaPresentacionMc;
-        private String fechaInadmisible;
-        private String fechaAdmision;
-        private String comentarioMc;
 
         public Builder id(Long v) { id = v; return this; }
         public Builder operacionId(Long v) { operacionId = v; return this; }
+        public Builder codigoExpCautelar(String v) { codigoExpCautelar = v; return this; }
         public Builder tipoBien(String v) { tipoBien = v; return this; }
-        public Builder partidaRegistral(String v) { partidaRegistral = v; return this; }
         public Builder numeroPartida(String v) { numeroPartida = v; return this; }
         public Builder detalleGarantia(String v) { detalleGarantia = v; return this; }
         public Builder direccion(String v) { direccion = v; return this; }
@@ -127,6 +127,10 @@ public class BienEmbargadoDTO {
         public Builder fechaInscripcion(LocalDate v) { fechaInscripcion = v; return this; }
         public Builder fechaPresentacionRrpp(LocalDate v) { fechaPresentacionRrpp = v; return this; }
         public Builder asientoInscripcion(String v) { asientoInscripcion = v; return this; }
+        public Builder fechaPresentacionMc(String v) { fechaPresentacionMc = v; return this; }
+        public Builder fechaInadmisibleMc(String v) { fechaInadmisibleMc = v; return this; }
+        public Builder fechaAdmisionMc(String v) { fechaAdmisionMc = v; return this; }
+        public Builder comentarioMc(String v) { comentarioMc = v; return this; }
         public Builder montoMc(BigDecimal v) { montoMc = v; return this; }
         public Builder monedaMc(String v) { monedaMc = v; return this; }
         public Builder rango(String v) { rango = v; return this; }
@@ -134,17 +138,13 @@ public class BienEmbargadoDTO {
         public Builder tipoPreferencia(String v) { tipoPreferencia = v; return this; }
         public Builder titularPredio(String v) { titularPredio = v; return this; }
         public Builder fechaGeneracionMc(LocalDate v) { fechaGeneracionMc = v; return this; }
-        public Builder fechaPresentacionMc(String v) { fechaPresentacionMc = v; return this; }
-        public Builder fechaInadmisible(String v) { fechaInadmisible = v; return this; }
-        public Builder fechaAdmision(String v) { fechaAdmision = v; return this; }
-        public Builder comentarioMc(String v) { comentarioMc = v; return this; }
 
         public BienEmbargadoDTO build() {
             BienEmbargadoDTO dto = new BienEmbargadoDTO();
             dto.setId(id);
             dto.setOperacionId(operacionId);
+            dto.setCodigoExpCautelar(codigoExpCautelar);
             dto.setTipoBien(tipoBien);
-            dto.setPartidaRegistral(partidaRegistral);
             dto.setNumeroPartida(numeroPartida);
             dto.setDetalleGarantia(detalleGarantia);
             dto.setDireccion(direccion);
@@ -155,6 +155,10 @@ public class BienEmbargadoDTO {
             dto.setFechaInscripcion(fechaInscripcion);
             dto.setFechaPresentacionRrpp(fechaPresentacionRrpp);
             dto.setAsientoInscripcion(asientoInscripcion);
+            dto.setFechaPresentacionMc(fechaPresentacionMc);
+            dto.setFechaInadmisibleMc(fechaInadmisibleMc);
+            dto.setFechaAdmisionMc(fechaAdmisionMc);
+            dto.setComentarioMc(comentarioMc);
             dto.setMontoMc(montoMc);
             dto.setMonedaMc(monedaMc);
             dto.setRango(rango);
@@ -162,10 +166,6 @@ public class BienEmbargadoDTO {
             dto.setTipoPreferencia(tipoPreferencia);
             dto.setTitularPredio(titularPredio);
             dto.setFechaGeneracionMc(fechaGeneracionMc);
-            dto.setFechaPresentacionMc(fechaPresentacionMc);
-            dto.setFechaInadmisible(fechaInadmisible);
-            dto.setFechaAdmision(fechaAdmision);
-            dto.setComentarioMc(comentarioMc);
             return dto;
         }
     }

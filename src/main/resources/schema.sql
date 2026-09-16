@@ -64,8 +64,6 @@ CREATE TABLE IF NOT EXISTS operaciones (
     estado          varchar(100),
     etapa           varchar(100),
     observacion     text,
-    rango           varchar(50),
-
     -- Expediente / judicial
     numero_expediente     varchar(255),
     tipo_proceso          varchar(100),
@@ -76,7 +74,6 @@ CREATE TABLE IF NOT EXISTS operaciones (
     busqueda_bienes      varchar(10),
     monto_demandado      numeric(15,2),
     escribano_legal      varchar(500),
-    codigo_exp_cautelar  varchar(500),
     incidente            varchar(10),
 
     -- Fechas cuaderno principal
@@ -111,8 +108,7 @@ CREATE TABLE IF NOT EXISTS operaciones (
     -- Co-titular / Aval
     co_titular_aval   text,
 
-    -- Numero partida / ficha registral
-    numero_partida    text,
+    -- Numero ficha registral
     numero_ficha_registral text,
 
     -- Desembolso
@@ -153,7 +149,9 @@ CREATE TABLE IF NOT EXISTS bienes_embargados (
     id                        bigserial PRIMARY KEY,
     operacion_id              bigint,
     expediente_id             bigint,
+    codigo_exp_cautelar       varchar(500),
     tipo_bien                 varchar(100),
+    numero_partida            varchar(100),
     partida_registral         varchar(100),
     detalle_garantia          text,
     direccion                 text,
@@ -164,9 +162,9 @@ CREATE TABLE IF NOT EXISTS bienes_embargados (
     fecha_inscripcion         date,
     fecha_presentacion_rrpp   date,
     asiento_inscripcion       text,
-    fecha_presentacion_mc     date,
-    fecha_inadmisible         date,
-    fecha_admision           date,
+    fecha_presentacion_mc     text,
+    fecha_inadmisible_mc      date,
+    fecha_admision_mc         date,
     comentario_mc             text,
     detalle_acreedores        text,
     tipo_preferencia          varchar(100),

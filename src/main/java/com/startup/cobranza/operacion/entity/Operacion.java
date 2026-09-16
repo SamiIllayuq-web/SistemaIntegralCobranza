@@ -58,9 +58,6 @@ public class Operacion {
     @Column(name = "observacion", columnDefinition = "TEXT")
     private String observacion;
 
-    @Column(name = "rango")
-    private String rango;
-
     @Column(name = "numero_expediente")
     private String numeroExpediente;
 
@@ -93,9 +90,6 @@ public class Operacion {
 
     @Column(name = "escribano_legal", length = 500)
     private String escribanoLegal;
-
-    @Column(name = "codigo_exp_cautelar", length = 500)
-    private String codigoExpCautelar;
 
     @Column(name = "incidente")
     private String incidente;
@@ -164,10 +158,6 @@ public class Operacion {
     // ─── Co-titular / Aval ─────────────────────────────────────────────
     @Column(name = "co_titular_aval", columnDefinition = "TEXT")
     private String coTitularAval;
-
-    // ─── Número de partida registral (Exp. Cautelar) ──────────────────
-    @Column(name = "numero_partida", columnDefinition = "TEXT")
-    private String numeroPartida;
 
     // ─── Número de ficha registral ────────────────────────────────────
     @Column(name = "numero_ficha_registral", columnDefinition = "TEXT")
@@ -254,8 +244,6 @@ public class Operacion {
     public void setEtapa(String etapa) { this.etapa = etapa; }
     public String getObservacion() { return observacion; }
     public void setObservacion(String observacion) { this.observacion = observacion; }
-    public String getRango() { return rango; }
-    public void setRango(String rango) { this.rango = rango; }
     public String getNumeroExpediente() { return numeroExpediente; }
     public void setNumeroExpediente(String numeroExpediente) { this.numeroExpediente = numeroExpediente; }
     public String getTipoProceso() { return tipoProceso; }
@@ -276,8 +264,6 @@ public class Operacion {
     public void setMontoDemandado(BigDecimal montoDemandado) { this.montoDemandado = montoDemandado; }
     public String getEscribanoLegal() { return escribanoLegal; }
     public void setEscribanoLegal(String escribanoLegal) { this.escribanoLegal = escribanoLegal; }
-    public String getCodigoExpCautelar() { return codigoExpCautelar; }
-    public void setCodigoExpCautelar(String codigoExpCautelar) { this.codigoExpCautelar = codigoExpCautelar; }
     public String getIncidente() { return incidente; }
     public void setIncidente(String incidente) { this.incidente = incidente; }
     public LocalDate getFechaPresentacion() { return fechaPresentacion; }
@@ -340,8 +326,6 @@ public class Operacion {
     public void setTipoFondo(String tipoFondo) { this.tipoFondo = tipoFondo; }
     public String getCoTitularAval() { return coTitularAval; }
     public void setCoTitularAval(String coTitularAval) { this.coTitularAval = coTitularAval; }
-    public String getNumeroPartida() { return numeroPartida; }
-    public void setNumeroPartida(String numeroPartida) { this.numeroPartida = numeroPartida; }
     public String getNumeroFichaRegistral() { return numeroFichaRegistral; }
     public void setNumeroFichaRegistral(String numeroFichaRegistral) { this.numeroFichaRegistral = numeroFichaRegistral; }
     public List<BienEmbargado> getBienesEmbargados() { return bienesEmbargados; }
@@ -369,7 +353,6 @@ public class Operacion {
         private String estado;
         private String etapa;
         private String observacion;
-        private String rango;
         private String numeroExpediente;
         private String tipoProceso;
         private String tipoJuzgado;
@@ -380,7 +363,6 @@ public class Operacion {
         private String busquedaBienes;
         private BigDecimal montoDemandado;
         private String escribanoLegal;
-        private String codigoExpCautelar;
         private String incidente;
         private LocalDate fechaPresentacion;
         private LocalDate fechaInadmisiblePrincipal;
@@ -412,7 +394,6 @@ public class Operacion {
         private LocalDate fechaCastigo;
         private String tipoFondo;
         private String coTitularAval;
-        private String numeroPartida;
         private String numeroFichaRegistral;
         private List<BienEmbargado> bienesEmbargados;
         private Boolean activo;
@@ -430,7 +411,6 @@ public class Operacion {
         public Builder estado(String v) { estado = v; return this; }
         public Builder etapa(String v) { etapa = v; return this; }
         public Builder observacion(String v) { observacion = v; return this; }
-        public Builder rango(String v) { rango = v; return this; }
         public Builder numeroExpediente(String v) { numeroExpediente = v; return this; }
         public Builder tipoProceso(String v) { tipoProceso = v; return this; }
         public Builder tipoJuzgado(String v) { tipoJuzgado = v; return this; }
@@ -441,7 +421,6 @@ public class Operacion {
         public Builder busquedaBienes(String v) { busquedaBienes = v; return this; }
         public Builder montoDemandado(BigDecimal v) { montoDemandado = v; return this; }
         public Builder escribanoLegal(String v) { escribanoLegal = v; return this; }
-        public Builder codigoExpCautelar(String v) { codigoExpCautelar = v; return this; }
         public Builder incidente(String v) { incidente = v; return this; }
         public Builder fechaPresentacion(LocalDate v) { fechaPresentacion = v; return this; }
         public Builder fechaInadmisiblePrincipal(LocalDate v) { fechaInadmisiblePrincipal = v; return this; }
@@ -473,7 +452,6 @@ public class Operacion {
         public Builder fechaCastigo(LocalDate v) { fechaCastigo = v; return this; }
         public Builder tipoFondo(String v) { tipoFondo = v; return this; }
         public Builder coTitularAval(String v) { coTitularAval = v; return this; }
-        public Builder numeroPartida(String v) { numeroPartida = v; return this; }
         public Builder numeroFichaRegistral(String v) { numeroFichaRegistral = v; return this; }
         public Builder bienesEmbargados(List<BienEmbargado> v) { bienesEmbargados = v; return this; }
         public Builder activo(Boolean v) { activo = v; return this; }
@@ -493,7 +471,6 @@ public class Operacion {
             o.setEstado(estado);
             o.setEtapa(etapa);
             o.setObservacion(observacion);
-            o.setRango(rango);
             o.setNumeroExpediente(numeroExpediente);
             o.setTipoProceso(tipoProceso);
             o.setTipoJuzgado(tipoJuzgado);
@@ -504,7 +481,6 @@ public class Operacion {
             o.setBusquedaBienes(busquedaBienes);
             o.setMontoDemandado(montoDemandado);
             o.setEscribanoLegal(escribanoLegal);
-            o.setCodigoExpCautelar(codigoExpCautelar);
             o.setIncidente(incidente);
             o.setFechaPresentacion(fechaPresentacion);
             o.setFechaInadmisiblePrincipal(fechaInadmisiblePrincipal);
@@ -536,7 +512,6 @@ public class Operacion {
             o.setFechaCastigo(fechaCastigo);
             o.setTipoFondo(tipoFondo);
             o.setCoTitularAval(coTitularAval);
-            o.setNumeroPartida(numeroPartida);
             o.setNumeroFichaRegistral(numeroFichaRegistral);
             o.setBienesEmbargados(bienesEmbargados);
             o.setActivo(activo != null ? activo : true);
