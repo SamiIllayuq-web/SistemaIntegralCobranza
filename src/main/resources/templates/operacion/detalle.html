@@ -227,11 +227,11 @@
                     </div>
                     <div class="info-item">
                         <span class="info-label">Fecha Inscripción</span>
-                        <span class="info-value" th:text="${bien.fechaInscripcion != null ? #temporals.format(bien.fechaInscripcion, 'dd/MM/yyyy') : '-'}">-</span>
+                        <span class="info-value" th:text="${bien.fechaInscripcion != null ? bien.fechaInscripcion : '-'}">-</span>
                     </div>
                     <div class="info-item">
                         <span class="info-label">Fecha Present. RRPP</span>
-                        <span class="info-value" th:text="${bien.fechaPresentacionRrpp != null ? #temporals.format(bien.fechaPresentacionRrpp, 'dd/MM/yyyy') : '-'}">-</span>
+                        <span class="info-value" th:text="${bien.fechaPresentacionRrpp != null ? bien.fechaPresentacionRrpp : '-'}">-</span>
                     </div>
                     <div class="info-item">
                         <span class="info-label">Asiento</span>
