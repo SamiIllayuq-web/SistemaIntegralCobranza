@@ -25,6 +25,9 @@ public class BienEmbargado {
     @Column(name = "numero_partida")
     private String numeroPartida;
 
+    @Column(name = "numero_ficha_registral", columnDefinition = "TEXT")
+    private String numeroFichaRegistral;
+
     @Column(name = "detalle_garantia", columnDefinition = "TEXT")
     private String detalleGarantia;
 
@@ -97,6 +100,8 @@ public class BienEmbargado {
     public void setTipoBien(String tipoBien) { this.tipoBien = tipoBien; }
     public String getNumeroPartida() { return numeroPartida; }
     public void setNumeroPartida(String numeroPartida) { this.numeroPartida = numeroPartida; }
+    public String getNumeroFichaRegistral() { return numeroFichaRegistral; }
+    public void setNumeroFichaRegistral(String numeroFichaRegistral) { this.numeroFichaRegistral = numeroFichaRegistral; }
     public String getDetalleGarantia() { return detalleGarantia; }
     public void setDetalleGarantia(String detalleGarantia) { this.detalleGarantia = detalleGarantia; }
     public String getDireccion() { return direccion; }
@@ -146,6 +151,7 @@ public class BienEmbargado {
         private String codigoExpCautelar;
         private String tipoBien;
         private String numeroPartida;
+        private String numeroFichaRegistral;
         private String detalleGarantia;
         private String direccion;
         private String distrito;
@@ -172,6 +178,7 @@ public class BienEmbargado {
         public Builder codigoExpCautelar(String v) { codigoExpCautelar = v; return this; }
         public Builder tipoBien(String v) { tipoBien = v; return this; }
         public Builder numeroPartida(String v) { numeroPartida = v; return this; }
+        public Builder numeroFichaRegistral(String v) { numeroFichaRegistral = v; return this; }
         public Builder detalleGarantia(String v) { detalleGarantia = v; return this; }
         public Builder direccion(String v) { direccion = v; return this; }
         public Builder distrito(String v) { distrito = v; return this; }

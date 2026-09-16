@@ -376,7 +376,6 @@ public class CarteraService {
                     .fechaCastigo(getCellLocalDate(row, columns, "fechaCastigo"))
                     .tipoFondo(getCellString(row, columns, "tipoFondo"))
                     .coTitularAval(coTitularAval)
-                    .numeroFichaRegistral(getCellString(row, columns, "numeroFichaRegistral"))
                     .activo(true)
                     .build();
             operacionNueva = true;
@@ -430,7 +429,6 @@ public class CarteraService {
             operacion.setFechaCastigo(getCellLocalDate(row, columns, "fechaCastigo"));
             operacion.setTipoFondo(getCellString(row, columns, "tipoFondo"));
             operacion.setCoTitularAval(coTitularAval);
-            operacion.setNumeroFichaRegistral(getCellString(row, columns, "numeroFichaRegistral"));
         }
         operacion = operacionRepository.save(operacion);
 

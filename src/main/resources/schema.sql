@@ -108,9 +108,6 @@ CREATE TABLE IF NOT EXISTS operaciones (
     -- Co-titular / Aval
     co_titular_aval   text,
 
-    -- Numero ficha registral
-    numero_ficha_registral text,
-
     -- Desembolso
     fecha_desembolso     date,
     importe_desembolso   numeric(15,2),

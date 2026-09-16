@@ -125,14 +125,10 @@
                         <input type="text" class="form-control" th:field="*{etapa}">
                     </div>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
+                <div style="display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 16px;">
                     <div>
                         <label class="form-label">Observación</label>
                         <textarea class="form-control" th:field="*{observacion}" rows="2"></textarea>
-                    </div>
-                    <div>
-                        <label class="form-label">Rango</label>
-                        <input type="text" class="form-control" th:field="*{rango}">
                     </div>
                 </div>
             </div>
@@ -278,11 +274,11 @@
                             </div>
                             <div>
                                 <label class="form-label">Fech. Inadmisible MC</label>
-                                <input type="text" class="form-control" th:name="'bienesEmbargados[' + ${stat.index} + '].fechaInadmisible'" th:value="${bien.fechaInadmisible}"/>
+                                <input type="text" class="form-control" th:name="'bienesEmbargados[' + ${stat.index} + '].fechaInadmisibleMc'" th:value="${bien.fechaInadmisibleMc}"/>
                             </div>
                             <div>
                                 <label class="form-label">Fech. Admisión MC</label>
-                                <input type="text" class="form-control" th:name="'bienesEmbargados[' + ${stat.index} + '].fechaAdmision'" th:value="${bien.fechaAdmision}"/>
+                                <input type="text" class="form-control" th:name="'bienesEmbargados[' + ${stat.index} + '].fechaAdmisionMc'" th:value="${bien.fechaAdmisionMc}"/>
                             </div>
                             <div>
                                 <label class="form-label">Comentario</label>
@@ -476,11 +472,11 @@
             </div>
             <div>
                 <label class="form-label">Fech. Inadmisible MC</label>
-                <input type="text" class="form-control" name="bienesEmbargados[__INDEX__].fechaInadmisible" value=""/>
+                <input type="text" class="form-control" name="bienesEmbargados[__INDEX__].fechaInadmisibleMc" value=""/>
             </div>
             <div>
                 <label class="form-label">Fech. Admisión MC</label>
-                <input type="text" class="form-control" name="bienesEmbargados[__INDEX__].fechaAdmision" value=""/>
+                <input type="text" class="form-control" name="bienesEmbargados[__INDEX__].fechaAdmisionMc" value=""/>
             </div>
             <div>
                 <label class="form-label">Comentario</label>

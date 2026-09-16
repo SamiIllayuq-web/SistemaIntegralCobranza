@@ -10,6 +10,7 @@ public class BienEmbargadoDTO {
     private String codigoExpCautelar;
     private String tipoBien;
     private String numeroPartida;
+    private String numeroFichaRegistral;
     private String detalleGarantia;
     private String direccion;
     private String distrito;
@@ -43,6 +44,8 @@ public class BienEmbargadoDTO {
     public void setTipoBien(String tipoBien) { this.tipoBien = tipoBien; }
     public String getNumeroPartida() { return numeroPartida; }
     public void setNumeroPartida(String numeroPartida) { this.numeroPartida = numeroPartida; }
+    public String getNumeroFichaRegistral() { return numeroFichaRegistral; }
+    public void setNumeroFichaRegistral(String numeroFichaRegistral) { this.numeroFichaRegistral = numeroFichaRegistral; }
     public String getDetalleGarantia() { return detalleGarantia; }
     public void setDetalleGarantia(String detalleGarantia) { this.detalleGarantia = detalleGarantia; }
     public String getDireccion() { return direccion; }
@@ -92,6 +95,7 @@ public class BienEmbargadoDTO {
         private String codigoExpCautelar;
         private String tipoBien;
         private String numeroPartida;
+        private String numeroFichaRegistral;
         private String detalleGarantia;
         private String direccion;
         private String distrito;
@@ -118,6 +122,7 @@ public class BienEmbargadoDTO {
         public Builder codigoExpCautelar(String v) { codigoExpCautelar = v; return this; }
         public Builder tipoBien(String v) { tipoBien = v; return this; }
         public Builder numeroPartida(String v) { numeroPartida = v; return this; }
+        public Builder numeroFichaRegistral(String v) { numeroFichaRegistral = v; return this; }
         public Builder detalleGarantia(String v) { detalleGarantia = v; return this; }
         public Builder direccion(String v) { direccion = v; return this; }
         public Builder distrito(String v) { distrito = v; return this; }
@@ -146,6 +151,7 @@ public class BienEmbargadoDTO {
             dto.setCodigoExpCautelar(codigoExpCautelar);
             dto.setTipoBien(tipoBien);
             dto.setNumeroPartida(numeroPartida);
+            dto.setNumeroFichaRegistral(numeroFichaRegistral);
             dto.setDetalleGarantia(detalleGarantia);
             dto.setDireccion(direccion);
             dto.setDistrito(distrito);

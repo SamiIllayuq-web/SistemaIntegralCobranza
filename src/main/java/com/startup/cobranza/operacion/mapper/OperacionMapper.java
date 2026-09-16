@@ -71,7 +71,6 @@ public class OperacionMapper {
                 .fechaCastigo(entity.getFechaCastigo())
                 .tipoFondo(entity.getTipoFondo())
                 .coTitularAval(entity.getCoTitularAval())
-                .numeroFichaRegistral(entity.getNumeroFichaRegistral())
                 .build();
 
         if (entity.getCliente() != null) {
@@ -178,7 +177,6 @@ public class OperacionMapper {
                 .fechaCastigo(dto.getFechaCastigo())
                 .tipoFondo(dto.getTipoFondo())
                 .coTitularAval(dto.getCoTitularAval())
-                .numeroFichaRegistral(dto.getNumeroFichaRegistral())
                 .build();
     }
 
@@ -243,7 +241,6 @@ public class OperacionMapper {
                 .fechaCastigo(entity.getFechaCastigo() != null ? entity.getFechaCastigo().toString() : null)
                 .tipoFondo(entity.getTipoFondo())
                 .coTitularAval(entity.getCoTitularAval())
-                .numeroFichaRegistral(entity.getNumeroFichaRegistral())
                 .bienesEmbargados(entity.getBienesEmbargados() != null
                         ? entity.getBienesEmbargados().stream().map(this::toBienEmbargadoDTO).toList()
                         : null)
@@ -315,7 +312,6 @@ public class OperacionMapper {
                         ? java.time.LocalDate.parse(form.getFechaCastigo()) : null)
                 .tipoFondo(form.getTipoFondo())
                 .coTitularAval(form.getCoTitularAval())
-                .numeroFichaRegistral(form.getNumeroFichaRegistral())
                 .build();
     }
 }

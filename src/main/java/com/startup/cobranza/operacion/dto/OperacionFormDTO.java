@@ -46,7 +46,6 @@ public class OperacionFormDTO {
     private String fechaCastigo;
     private String tipoFondo;
     private String coTitularAval;
-    private String numeroFichaRegistral;
     // --- Campos judiciales (desde Excel) ---
     private String trans;
     private String busquedaBienes;
@@ -152,8 +151,6 @@ public class OperacionFormDTO {
     public void setTipoFondo(String tipoFondo) { this.tipoFondo = tipoFondo; }
     public String getCoTitularAval() { return coTitularAval; }
     public void setCoTitularAval(String coTitularAval) { this.coTitularAval = coTitularAval; }
-    public String getNumeroFichaRegistral() { return numeroFichaRegistral; }
-    public void setNumeroFichaRegistral(String numeroFichaRegistral) { this.numeroFichaRegistral = numeroFichaRegistral; }
     public String getTrans() { return trans; }
     public void setTrans(String trans) { this.trans = trans; }
     public String getBusquedaBienes() { return busquedaBienes; }
@@ -237,7 +234,6 @@ public class OperacionFormDTO {
         private String fechaCastigo;
         private String tipoFondo;
         private String coTitularAval;
-        private String numeroFichaRegistral;
         private String trans;
         private String busquedaBienes;
         private String escribanoLegal;
@@ -299,7 +295,6 @@ public class OperacionFormDTO {
         public Builder fechaCastigo(String v) { fechaCastigo = v; return this; }
         public Builder tipoFondo(String v) { tipoFondo = v; return this; }
         public Builder coTitularAval(String v) { coTitularAval = v; return this; }
-        public Builder numeroFichaRegistral(String v) { numeroFichaRegistral = v; return this; }
         public Builder trans(String v) { trans = v; return this; }
         public Builder busquedaBienes(String v) { busquedaBienes = v; return this; }
         public Builder escribanoLegal(String v) { escribanoLegal = v; return this; }
@@ -363,7 +358,6 @@ public class OperacionFormDTO {
             dto.setFechaCastigo(fechaCastigo);
             dto.setTipoFondo(tipoFondo);
             dto.setCoTitularAval(coTitularAval);
-            dto.setNumeroFichaRegistral(numeroFichaRegistral);
             dto.setTrans(trans);
             dto.setBusquedaBienes(busquedaBienes);
             dto.setEscribanoLegal(escribanoLegal);

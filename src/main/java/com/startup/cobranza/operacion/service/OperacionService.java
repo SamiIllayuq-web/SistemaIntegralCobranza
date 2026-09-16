@@ -162,7 +162,6 @@ public class OperacionService {
         operacion.setFechaCastigo(parseFecha(form.getFechaCastigo()));
         operacion.setTipoFondo(form.getTipoFondo());
         operacion.setCoTitularAval(form.getCoTitularAval());
-        operacion.setNumeroFichaRegistral(form.getNumeroFichaRegistral());
 
         // Bienes embargados
         if (form.getBienesEmbargados() != null && !form.getBienesEmbargados().isEmpty()) {
@@ -265,7 +264,6 @@ public class OperacionService {
         existing.setFechaCastigo(parseFecha(form.getFechaCastigo()));
         existing.setTipoFondo(form.getTipoFondo());
         existing.setCoTitularAval(form.getCoTitularAval());
-        existing.setNumeroFichaRegistral(form.getNumeroFichaRegistral());
 
         // Sync bienes embargados
         if (form.getBienesEmbargados() != null) {

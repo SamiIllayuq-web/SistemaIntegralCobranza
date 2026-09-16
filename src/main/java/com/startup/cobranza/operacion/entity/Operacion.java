@@ -159,10 +159,6 @@ public class Operacion {
     @Column(name = "co_titular_aval", columnDefinition = "TEXT")
     private String coTitularAval;
 
-    // ─── Número de ficha registral ────────────────────────────────────
-    @Column(name = "numero_ficha_registral", columnDefinition = "TEXT")
-    private String numeroFichaRegistral;
-
     // ─── Datos del desembolso ──────────────────────────────────────────
     @Column(name = "fecha_desembolso")
     private LocalDate fechaDesembolso;
@@ -326,8 +322,6 @@ public class Operacion {
     public void setTipoFondo(String tipoFondo) { this.tipoFondo = tipoFondo; }
     public String getCoTitularAval() { return coTitularAval; }
     public void setCoTitularAval(String coTitularAval) { this.coTitularAval = coTitularAval; }
-    public String getNumeroFichaRegistral() { return numeroFichaRegistral; }
-    public void setNumeroFichaRegistral(String numeroFichaRegistral) { this.numeroFichaRegistral = numeroFichaRegistral; }
     public List<BienEmbargado> getBienesEmbargados() { return bienesEmbargados; }
     public void setBienesEmbargados(List<BienEmbargado> bienesEmbargados) { this.bienesEmbargados = bienesEmbargados; }
     public Boolean getActivo() { return activo; }
@@ -394,7 +388,6 @@ public class Operacion {
         private LocalDate fechaCastigo;
         private String tipoFondo;
         private String coTitularAval;
-        private String numeroFichaRegistral;
         private List<BienEmbargado> bienesEmbargados;
         private Boolean activo;
 
@@ -452,7 +445,6 @@ public class Operacion {
         public Builder fechaCastigo(LocalDate v) { fechaCastigo = v; return this; }
         public Builder tipoFondo(String v) { tipoFondo = v; return this; }
         public Builder coTitularAval(String v) { coTitularAval = v; return this; }
-        public Builder numeroFichaRegistral(String v) { numeroFichaRegistral = v; return this; }
         public Builder bienesEmbargados(List<BienEmbargado> v) { bienesEmbargados = v; return this; }
         public Builder activo(Boolean v) { activo = v; return this; }
 
@@ -512,7 +504,6 @@ public class Operacion {
             o.setFechaCastigo(fechaCastigo);
             o.setTipoFondo(tipoFondo);
             o.setCoTitularAval(coTitularAval);
-            o.setNumeroFichaRegistral(numeroFichaRegistral);
             o.setBienesEmbargados(bienesEmbargados);
             o.setActivo(activo != null ? activo : true);
             return o;
