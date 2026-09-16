@@ -149,7 +149,7 @@ CREATE TABLE IF NOT EXISTS bienes_embargados (
     codigo_exp_cautelar       varchar(500),
     tipo_bien                 varchar(100),
     numero_partida            varchar(100),
-    partida_registral         varchar(100),
+    numero_ficha_registral     varchar(100),
     detalle_garantia          text,
     direccion                 text,
     distrito                  varchar(100),
