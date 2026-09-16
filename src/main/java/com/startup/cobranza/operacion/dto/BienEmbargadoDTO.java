@@ -46,8 +46,8 @@ public class BienEmbargadoDTO {
     public void setNumeroPartida(String numeroPartida) { this.numeroPartida = numeroPartida; }
     public String getNumeroFichaRegistral() { return numeroFichaRegistral; }
     public void setNumeroFichaRegistral(String numeroFichaRegistral) { this.numeroFichaRegistral = numeroFichaRegistral; }
-    public String getDetalleGarantia() { return detalleBien; }
-    public void setDetalleGarantia(String detalleBien) { this.detalleBien = detalleBien; }
+    public String getDetalleBien() { return detalleBien; }
+    public void setDetalleBien(String detalleBien) { this.detalleBien = detalleBien; }
     public String getDireccion() { return direccion; }
     public void setDireccion(String direccion) { this.direccion = direccion; }
     public String getDistrito() { return distrito; }
@@ -152,7 +152,7 @@ public class BienEmbargadoDTO {
             dto.setTipoBien(tipoBien);
             dto.setNumeroPartida(numeroPartida);
             dto.setNumeroFichaRegistral(numeroFichaRegistral);
-            dto.setDetalleGarantia(detalleBien);
+            dto.setDetalleBien(detalleBien);
             dto.setDireccion(direccion);
             dto.setDistrito(distrito);
             dto.setProvincia(provincia);
