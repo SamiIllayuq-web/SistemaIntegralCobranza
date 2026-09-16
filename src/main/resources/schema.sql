@@ -150,7 +150,7 @@ CREATE TABLE IF NOT EXISTS bienes_embargados (
     tipo_bien                 varchar(100),
     numero_partida            varchar(100),
     numero_ficha_registral     varchar(100),
-    detalle_garantia          text,
+    detalle_bien          text,
     direccion                 text,
     distrito                  varchar(100),
     provincia                 varchar(100),

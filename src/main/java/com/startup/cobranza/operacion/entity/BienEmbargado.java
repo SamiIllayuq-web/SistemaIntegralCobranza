@@ -28,8 +28,8 @@ public class BienEmbargado {
     @Column(name = "numero_ficha_registral", columnDefinition = "TEXT")
     private String numeroFichaRegistral;
 
-    @Column(name = "detalle_garantia", columnDefinition = "TEXT")
-    private String detalleGarantia;
+    @Column(name = "detalle_bien", columnDefinition = "TEXT")
+    private String detalleBien;
 
     @Column(name = "direccion", columnDefinition = "TEXT")
     private String direccion;
@@ -102,8 +102,8 @@ public class BienEmbargado {
     public void setNumeroPartida(String numeroPartida) { this.numeroPartida = numeroPartida; }
     public String getNumeroFichaRegistral() { return numeroFichaRegistral; }
     public void setNumeroFichaRegistral(String numeroFichaRegistral) { this.numeroFichaRegistral = numeroFichaRegistral; }
-    public String getDetalleGarantia() { return detalleGarantia; }
-    public void setDetalleGarantia(String detalleGarantia) { this.detalleGarantia = detalleGarantia; }
+    public String getDetalleGarantia() { return detalleBien; }
+    public void setDetalleGarantia(String detalleBien) { this.detalleBien = detalleBien; }
     public String getDireccion() { return direccion; }
     public void setDireccion(String direccion) { this.direccion = direccion; }
     public String getDistrito() { return distrito; }
@@ -152,7 +152,7 @@ public class BienEmbargado {
         private String tipoBien;
         private String numeroPartida;
         private String numeroFichaRegistral;
-        private String detalleGarantia;
+        private String detalleBien;
         private String direccion;
         private String distrito;
         private String provincia;
@@ -179,7 +179,7 @@ public class BienEmbargado {
         public Builder tipoBien(String v) { tipoBien = v; return this; }
         public Builder numeroPartida(String v) { numeroPartida = v; return this; }
         public Builder numeroFichaRegistral(String v) { numeroFichaRegistral = v; return this; }
-        public Builder detalleGarantia(String v) { detalleGarantia = v; return this; }
+        public Builder detalleBien(String v) { detalleBien = v; return this; }
         public Builder direccion(String v) { direccion = v; return this; }
         public Builder distrito(String v) { distrito = v; return this; }
         public Builder provincia(String v) { provincia = v; return this; }
@@ -207,7 +207,7 @@ public class BienEmbargado {
             e.setCodigoExpCautelar(codigoExpCautelar);
             e.setTipoBien(tipoBien);
             e.setNumeroPartida(numeroPartida);
-            e.setDetalleGarantia(detalleGarantia);
+            e.setDetalleGarantia(detalleBien);
             e.setDireccion(direccion);
             e.setDistrito(distrito);
             e.setProvincia(provincia);

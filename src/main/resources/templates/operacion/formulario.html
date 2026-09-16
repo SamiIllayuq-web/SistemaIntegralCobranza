@@ -227,8 +227,8 @@
                                 <input type="text" class="form-control" th:name="'bienesEmbargados[' + ${stat.index} + '].rango'" th:value="${bien.rango}"/>
                             </div>
                             <div>
-                                <label class="form-label">Detalle Garantía</label>
-                                <textarea class="form-control" rows="2" th:name="'bienesEmbargados[' + ${stat.index} + '].detalleGarantia'" th:text="${bien.detalleGarantia}"></textarea>
+                                <label class="form-label">Detalle Bien</label>
+                                <textarea class="form-control" rows="2" th:name="'bienesEmbargados[' + ${stat.index} + '].detalleBien'" th:text="${bien.detalleBien}"></textarea>
                             </div>
                             <div>
                                 <label class="form-label">Detalle Acreedores</label>
@@ -437,8 +437,8 @@
                 <input type="text" class="form-control" name="bienesEmbargados[__INDEX__].rango" value=""/>
             </div>
             <div>
-                <label class="form-label">Detalle Garantía</label>
-                <textarea class="form-control" rows="2" name="bienesEmbargados[__INDEX__].detalleGarantia"></textarea>
+                <label class="form-label">Detalle Bien</label>
+                <textarea class="form-control" rows="2" name="bienesEmbargados[__INDEX__].detalleBien"></textarea>
             </div>
             <div>
                 <label class="form-label">Detalle Acreedores</label>

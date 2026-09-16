@@ -11,7 +11,7 @@ public class BienEmbargadoDTO {
     private String tipoBien;
     private String numeroPartida;
     private String numeroFichaRegistral;
-    private String detalleGarantia;
+    private String detalleBien;
     private String direccion;
     private String distrito;
     private String provincia;
@@ -46,8 +46,8 @@ public class BienEmbargadoDTO {
     public void setNumeroPartida(String numeroPartida) { this.numeroPartida = numeroPartida; }
     public String getNumeroFichaRegistral() { return numeroFichaRegistral; }
     public void setNumeroFichaRegistral(String numeroFichaRegistral) { this.numeroFichaRegistral = numeroFichaRegistral; }
-    public String getDetalleGarantia() { return detalleGarantia; }
-    public void setDetalleGarantia(String detalleGarantia) { this.detalleGarantia = detalleGarantia; }
+    public String getDetalleGarantia() { return detalleBien; }
+    public void setDetalleGarantia(String detalleBien) { this.detalleBien = detalleBien; }
     public String getDireccion() { return direccion; }
     public void setDireccion(String direccion) { this.direccion = direccion; }
     public String getDistrito() { return distrito; }
@@ -96,7 +96,7 @@ public class BienEmbargadoDTO {
         private String tipoBien;
         private String numeroPartida;
         private String numeroFichaRegistral;
-        private String detalleGarantia;
+        private String detalleBien;
         private String direccion;
         private String distrito;
         private String provincia;
@@ -123,7 +123,7 @@ public class BienEmbargadoDTO {
         public Builder tipoBien(String v) { tipoBien = v; return this; }
         public Builder numeroPartida(String v) { numeroPartida = v; return this; }
         public Builder numeroFichaRegistral(String v) { numeroFichaRegistral = v; return this; }
-        public Builder detalleGarantia(String v) { detalleGarantia = v; return this; }
+        public Builder detalleBien(String v) { detalleBien = v; return this; }
         public Builder direccion(String v) { direccion = v; return this; }
         public Builder distrito(String v) { distrito = v; return this; }
         public Builder provincia(String v) { provincia = v; return this; }
@@ -152,7 +152,7 @@ public class BienEmbargadoDTO {
             dto.setTipoBien(tipoBien);
             dto.setNumeroPartida(numeroPartida);
             dto.setNumeroFichaRegistral(numeroFichaRegistral);
-            dto.setDetalleGarantia(detalleGarantia);
+            dto.setDetalleGarantia(detalleBien);
             dto.setDireccion(direccion);
             dto.setDistrito(distrito);
             dto.setProvincia(provincia);

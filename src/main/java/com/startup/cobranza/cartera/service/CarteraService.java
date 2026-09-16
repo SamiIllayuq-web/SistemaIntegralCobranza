@@ -440,7 +440,7 @@ public class CarteraService {
                     .codigoExpCautelar(getCellString(row, columns, "codigoExpCautelar"))
                     .numeroFichaRegistral(getCellString(row, columns, "numeroFichaRegistral"))
                     .numeroPartida(getCellString(row, columns, "numeroPartida"))
-                    .detalleGarantia(getCellString(row, columns, "detalleBien"))
+                    .detalleBien(getCellString(row, columns, "detalleBien"))
                     .tipoBien(getCellString(row, columns, "tipoBien"))
                     .rango(getCellString(row, columns, "rango"))
                     .tipoPreferencia(getCellString(row, columns, "tipoPreferencia"))
