@@ -5,6 +5,7 @@ import com.startup.cobranza.cartera.service.CarteraService;
 import com.startup.cobranza.cliente.dto.ClienteDTO;
 import com.startup.cobranza.cliente.exception.ClienteException;
 import com.startup.cobranza.cliente.service.ClienteService;
+import com.startup.cobranza.operacion.dto.BienEmbargadoDTO;
 import com.startup.cobranza.operacion.dto.OperacionDTO;
 import com.startup.cobranza.operacion.dto.OperacionFormDTO;
 import com.startup.cobranza.operacion.exception.OperacionException;
@@ -76,6 +77,7 @@ public class OperacionController {
                 // cliente no existe, se crea vacío
             }
         }
+        form.setBienesEmbargados(List.of(new BienEmbargadoDTO()));
         model.addAttribute("operacionForm", form);
         model.addAttribute("operacionId", null);
         model.addAttribute("agencias", agenciaRepository.findByActivoTrue());
