@@ -169,8 +169,9 @@ public class OperacionService {
                 BienEmbargado bien = new BienEmbargado();
                 bien.setOperacion(operacion);
                 bien.setCodigoExpCautelar(bDto.getCodigoExpCautelar());
-                bien.setDetalleGarantia(bDto.getDetalleGarantia());
                 bien.setNumeroPartida(bDto.getNumeroPartida());
+                bien.setNumeroFichaRegistral(bDto.getNumeroFichaRegistral());
+                bien.setDetalleBien(bDto.getDetalleBien());
                 bien.setTipoBien(bDto.getTipoBien());
                 bien.setDireccion(bDto.getDireccion());
                 bien.setDistrito(bDto.getDistrito());
@@ -273,8 +274,9 @@ public class OperacionService {
                 bien.setId(bDto.getId());
                 bien.setOperacion(existing);
                 bien.setCodigoExpCautelar(bDto.getCodigoExpCautelar());
-                bien.setDetalleGarantia(bDto.getDetalleGarantia());
                 bien.setNumeroPartida(bDto.getNumeroPartida());
+                bien.setNumeroFichaRegistral(bDto.getNumeroFichaRegistral());
+                bien.setDetalleBien(bDto.getDetalleBien());
                 bien.setTipoBien(bDto.getTipoBien());
                 bien.setDireccion(bDto.getDireccion());
                 bien.setDistrito(bDto.getDistrito());
