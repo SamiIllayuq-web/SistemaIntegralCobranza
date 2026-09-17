@@ -38,7 +38,6 @@ public class AdminService {
         entityManager.createNativeQuery("TRUNCATE TABLE operaciones RESTART IDENTITY CASCADE").executeUpdate();
         entityManager.createNativeQuery("TRUNCATE TABLE clientes RESTART IDENTITY CASCADE").executeUpdate();
         entityManager.createNativeQuery("TRUNCATE TABLE agencias RESTART IDENTITY CASCADE").executeUpdate();
-        entityManager.createNativeQuery("TRUNCATE TABLE auditoria_eventos RESTART IDENTITY CASCADE").executeUpdate();
 
         return new ResetResult(ops, bienes, clientes, importaciones, agencias);
     }
