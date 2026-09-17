@@ -504,7 +504,7 @@ public class Operacion {
             o.setFechaCastigo(fechaCastigo);
             o.setTipoFondo(tipoFondo);
             o.setCoTitularAval(coTitularAval);
-            o.setBienesEmbargados(bienesEmbargados);
+            o.setBienesEmbargados(bienesEmbargados != null ? bienesEmbargados : new ArrayList<>());
             o.setActivo(activo != null ? activo : true);
             return o;
         }
