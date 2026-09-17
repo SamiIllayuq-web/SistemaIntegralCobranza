@@ -1,14 +1,12 @@
 package com.startup.cobranza.config;
 
 import com.startup.cobranza.agencia.repository.AgenciaRepository;
-import com.startup.cobranza.cartera.entity.Importacion;
 import com.startup.cobranza.cartera.repository.ImportacionRepository;
-import com.startup.cobranza.cliente.entity.Cliente;
 import com.startup.cobranza.cliente.repository.ClienteRepository;
-import com.startup.cobranza.operacion.entity.BienEmbargado;
-import com.startup.cobranza.operacion.entity.Operacion;
 import com.startup.cobranza.operacion.repository.BienEmbargadoRepository;
 import com.startup.cobranza.operacion.repository.OperacionRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +21,9 @@ public class AdminService {
     private final ImportacionRepository importacionRepository;
     private final AgenciaRepository agenciaRepository;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @Transactional
     public ResetResult resetAllData() {
         long ops = operacionRepository.count();
@@ -31,11 +32,13 @@ public class AdminService {
         long importaciones = importacionRepository.count();
         long agencias = agenciaRepository.count();
 
-        bienEmbargadoRepository.deleteAllInBatch();
-        operacionRepository.deleteAllInBatch();
-        clienteRepository.deleteAllInBatch();
-        importacionRepository.deleteAllInBatch();
-        agenciaRepository.deleteAllInBatch();
+        // TRUNCATE resetea los sequences para que los IDs arranquen en 1
+        entityManager.createNativeQuery("TRUNCATE TABLE bienes_embargados RESTART IDENTITY CASCADE").executeUpdate();
+        entityManager.createNativeQuery("TRUNCATE TABLE importaciones RESTART IDENTITY CASCADE").executeUpdate();
+        entityManager.createNativeQuery("TRUNCATE TABLE operaciones RESTART IDENTITY CASCADE").executeUpdate();
+        entityManager.createNativeQuery("TRUNCATE TABLE clientes RESTART IDENTITY CASCADE").executeUpdate();
+        entityManager.createNativeQuery("TRUNCATE TABLE agencias RESTART IDENTITY CASCADE").executeUpdate();
+        entityManager.createNativeQuery("TRUNCATE TABLE auditoria_eventos RESTART IDENTITY CASCADE").executeUpdate();
 
         return new ResetResult(ops, bienes, clientes, importaciones, agencias);
     }
