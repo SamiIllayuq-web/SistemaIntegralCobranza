@@ -200,11 +200,8 @@
                     <div th:each="bien, stat : ${operacionForm.bienesEmbargados}"
                          th:data-index="${stat.index}"
                          class="bien-card"
-                         style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-bottom: 16px; position: relative;">
+                         style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
                         <input type="hidden" th:name="'bienesEmbargados[' + ${stat.index} + '].id'" th:value="${bien.id}"/>
-                        <button type="button" onclick="eliminarBien(this)" style="position: absolute; top: 8px; right: 8px; background: none; border: none; cursor: pointer; color: #dc2626;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                        </button>
                         <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
                             <div>
                                 <label class="form-label">Exp. Cautelar</label>
@@ -408,11 +405,6 @@
 </div>
 
 <script th:inline="javascript">
-
-function eliminarBien(btn) {
-    const card = btn.closest('.bien-card');
-    card.remove();
-}
 
 function toggleGuardar() {
     const cuenta = document.getElementById('cuenta');
